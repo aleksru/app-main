@@ -6,7 +6,8 @@ use PHPExcel_IOFactory;
 
 class ExelService
 {
-    static public function excelToArray($filePath, $header=true){
+    static public function excelToArray($filePath, $header=true)
+    {
         //Create excel reader after determining the file type
         $inputFileName = $filePath;
         /**  Identify the type of $inputFileName  **/

@@ -12,4 +12,9 @@ class PriceType extends Model
     {
         return config('app.price_types');
     }
+    
+    public function products()
+    {
+      return $this->belongsToMany(Product::class);
+    }
 }

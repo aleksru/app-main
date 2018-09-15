@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        debug(Service\ExelService::excelToArray(storage_path('app/'.File::first()->path)));
+        //debug(Service\ExelService::excelToArray(storage_path('app/'.File::first()->path)));
         return view('price-upload');
     }
     
