@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Product;
+use App\PriceType;
 
 class ApiProductController extends Controller
 {
@@ -19,6 +20,9 @@ class ApiProductController extends Controller
         return 1;
     }
 
+    /**
+     * @return json|pattern Product::take($count)->skip($skip)->get();
+     */
     public function api(Request $req)
     {
         $count = 10;
@@ -29,8 +33,21 @@ class ApiProductController extends Controller
         if ($req->get('page') && $req->get('page') > 0) {
             $skip  = $count * $req->get('page');
         }
-        
-        return Product::take($count)->skip($skip)->get();
+        $result = collect([]);
+        PriceType::where('name', $req->get('pricelist'))->first()
+                                                        ->products()
+                                                        ->take($count)
+                                                        ->skip($skip)
+                                                        ->select('article','product_name','price')
+                                                        ->get()
+                                                        ->each(function ($item, $key) use (&$result){
+                                                            $result->prepend([
+                                                                'article' => $item->article,
+                                                                'product_name' => $item->product_name,
+                                                                'price' => $item->price
+                                                            ]);
+                                                        });
+        return $result;
     }
     
     public function getDataApi()

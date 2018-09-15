@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\UploadPrice;
-use Illuminate\Support\Facades\Storage;
 use App\File;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        //debug(Service\ExelService::excelToArray(storage_path('app/'.File::first()->path)));
+        debug(\App\PriceType::where('name', 'moscow')->first()
+                                                     ->products()
+                                                     ->take(5)
+                                                     ->skip(5)
+                                                     ->select('article','product_name','price')
+                                                     ->get()
+                                                     ->each(function ($item, $key) {
+                                                         debug($item);
+                                                     })
+                                                     ->toArray());
         return view('price-upload');
     }
     
