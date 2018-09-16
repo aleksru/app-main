@@ -19,6 +19,10 @@ Route::get('product', 'ProductController@index')->name('product.index');
 
 Route::post('product', 'ProductController@uploadPrice')->name('upload-price');
 
+Route::resource('orders', 'OrderController');
+
+Route::get('orders-table', 'OrderController@datatable')->name('orders.datatable');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
