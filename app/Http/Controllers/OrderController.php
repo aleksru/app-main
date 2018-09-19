@@ -15,10 +15,10 @@ class OrderController extends Controller
      */
     public function index()
     {
-//       debug(json_encode([['art' => 'qwe', 'ssd' => 'sdasda'], ['art' => 'vfvf', 'ssd' => 'dsfdasf']]));
-//       Order::first()->update(['products' => json_encode([['art' => 'qwe', 'ssd' => 'sdasda'], ['art' => 'vfvf', 'ssd' => 'dsfdasf']])]);
-       //debug(json_decode(Order::first()->products, true)); 
-       debug(Order::first()->products); 
+//       Order::first()->update([
+//           'products' => [['art' => 'qwe', 'ssd' => 'sdasda']]
+//           ]);
+      // debug(Order::first()->products); 
         return view('orders');
     }
 

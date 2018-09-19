@@ -8,18 +8,6 @@ use App\PriceType;
 
 class ApiProductController extends Controller
 {
-
-    public function index()
-    {
-        //dump(Product::all(), storage_path().'\app\public\docs\\pr.xml');
-        //debug(file_get_contents(storage_path().'\app\public\docs\\pr.xml'));
-        //$xml = simplexml_load_string(file_get_contents(storage_path().'\app\public\docs\\pr.xml'), "SimpleXMLElement", LIBXML_NOCDATA);
-        //$json = json_encode($xml);
-        //$array = json_decode($json,TRUE);
-        //dump($this->excelToArray(storage_path().'\app\public\docs\\pr.xlsx'));
-        return 1;
-    }
-
     /**
      * @return json|pattern Product::take($count)->skip($skip)->get();
      */
@@ -48,17 +36,6 @@ class ApiProductController extends Controller
                                                             ]);
                                                         });
         return $result;
-    }
-    
-    public function getDataApi()
-    {
-//        $data = file_get_contents("http://ocart/lib/public/api/get-product?key=d345dskfjsdk3432DFFkfgkKSDFjfjm32400sdg324dsfsdfsdf&price=123&count=10&page=2");
-//        dump(json_decode($data, true));
-        $data = new \App\API\ProductApiSave();
-        (new \App\API\ApiGetProduct($data))->getDataApi();
-        dump($data);
-        
-        return 1;
     }
     
 }

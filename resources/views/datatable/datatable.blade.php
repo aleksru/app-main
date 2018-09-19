@@ -23,6 +23,7 @@
                 },
                 processing: false,
                 serverSide: true,
+                stateSave: true,
                 searchDelay: 500,
                 order: [[0, 'desc']],
                 ajax: {
@@ -129,7 +130,7 @@
                 }, null, { id: toastID });
             })
             setInterval( function () {
-                table.ajax.reload();
+                table.ajax.reload(null, false);
             }, 5000 );
         })  
     </script>
