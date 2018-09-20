@@ -15,7 +15,6 @@ class ApiOrdersController extends Controller
 
         Order::create($data);
         
-        
         return json_encode('ok');
     }
 }

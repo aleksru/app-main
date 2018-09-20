@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
         @if (count($errors) > 0)
             <div class="alert alert-danger">
               <ul>
@@ -11,7 +10,7 @@
               </ul>
             </div>
         @endif
-        <div class="box-body">
+        <div class="col-md-12">
             @include('datatable.datatable',[
                 'id' => 'orders-table',
                 'route' => route('orders.datatable'),
@@ -56,6 +55,11 @@
                         'width' => '5%',
                         'orderable' => 'false'
                     ],
+                    'created_at' => [
+                        'name' => 'Дата создания',
+                        'width' => '5%',
+                        'orderable' => 'false'
+                    ],
                     'actions' => [
                         'name' => 'Действия',
                         'width' => '5%',
@@ -65,7 +69,6 @@
                 ],
             ])
         </div>
-    </div> 
 @endsection
 
 @section('header_scripts')
