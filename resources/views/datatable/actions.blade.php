@@ -12,12 +12,9 @@
         {{ method_field('PUT') }}
         <input type="hidden" name='status' value="1">
     </form>
-    <a href="#" class="btn btn-xs btn-warning">
-        <i class="fa fa-user-plus" onclick="$('#set_user_{{ $orderId }}').submit();"></i> 
-    </a>
-    <a href="#" class="btn btn-xs btn-success">
-        <i class="fa fa-check-square-o" onclick="$('#set_complete_{{ $orderId }}').submit();"></i> 
-    </a>
+        <i class="fa fa-user-plus btn btn-xs btn-warning" onclick="$('#set_user_{{ $orderId }}').submit();"></i> 
+        <i class="fa fa-check-square-o btn btn-xs btn-success" onclick="$('#set_complete_{{ $orderId }}').submit();"></i> 
+
 @endif
 <!--@if (!empty($delete))
     <button class="btn btn-xs btn-danger btn-delete" data-route="{{ $delete['route'] }}"
