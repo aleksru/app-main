@@ -17,7 +17,7 @@
                 'columns' => [
                     'id' => [
                         'name' => 'ID',
-                        'width' => '2%',
+                        'width' => '1%',
                         'searchable' => true,
                     ],
                     'status' => [
@@ -27,22 +27,22 @@
                     ],
                     'store' => [
                         'name' => 'Магазин',
-                        'width' => '5%',
+                        'width' => '3%',
                         'searchable' => true,
                     ],
                     'name_customer' => [
                         'name' => 'Покупатель',
-                        'width' => '5%',
+                        'width' => '3%',
                         'searchable' => true,
                     ],
                     'phone' => [
                         'name' => 'Телефон',
-                        'width' => '5%',
+                        'width' => '3%',
                         'searchable' => true,
                     ],
                     'products' => [
                         'name' => 'Товары',
-                        'width' => '5%',
+                        'width' => '20%',
                         'searchable' => true,
                     ],
                     'comment' => [

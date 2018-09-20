@@ -98,13 +98,14 @@ class OrderController extends Controller
                             ->editColumn('actions', function (Order $order) { 
                                 return $order->status ? '' : view('datatable.actions', [
                                                                 'edit' => [
-                                                                    'route' => route('orders.update', $order->id)
+                                                                    'route' => route('orders.update', $order->id),
                                                                 ],
                                                                 'delete' => [
                                                                     'id' => $order->id,
                                                                     'name' => $order->store,
                                                                     'route' => route('orders.destroy', $order->id)
-                                                                ]
+                                                                ],
+                                                                'orderId' => (string)$order->id,
                                                             ]);         
                             })
                             ->editColumn('status', function (Order $order) { 
