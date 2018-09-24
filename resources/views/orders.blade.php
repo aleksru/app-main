@@ -10,6 +10,11 @@
               </ul>
             </div>
         @endif
+        <div class="alert alert-warning">
+          <ul>
+              <li>Товары: Количество-Артикул-Название-ЦенаЗаШт</li>
+          </ul>
+        </div>
         <div class="col-md-12">
             @include('datatable.datatable',[
                 'id' => 'orders-table',
