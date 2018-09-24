@@ -13,6 +13,8 @@
         <div class="alert alert-warning">
           <ul>
               <li>Товары: Количество-Артикул-Название-ЦенаЗаШт</li>
+              <li>Взять в работу - <i class="fa fa-user-plus btn btn-sm btn-warning"></i> </li>
+              <li>Завершить заказ - <i class="fa fa-check-square-o btn btn-sm btn-success"></i>  </li>
           </ul>
         </div>
         <div class="col-md-12">

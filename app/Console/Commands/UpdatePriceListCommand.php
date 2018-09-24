@@ -45,6 +45,9 @@ class UpdatePriceListCommand extends Command
         /**
          * добавление новых прайсов
          */
+        //счетчик
+        $counter = 0;
+        
         foreach (PriceType::getPriceTypesName() as $priceType){
            PriceType::firstOrCreate(['name' => $priceType]);
         }
@@ -80,6 +83,7 @@ class UpdatePriceListCommand extends Command
                     $product = Product::firstOrNew(['article' => $productPriceList[Product::PRICE_LIST_ARTICUL]]);
                     $product->product_name = $productPriceList[Product::PRICE_LIST_PRODUCT];
                     $product->save();
+                    ++$counter;
                     
                     $product->priceList()->attach($priceList->id, ['price' => $productPriceList[Product::PRICE_LIST_PRICE]]);
                 }
@@ -89,5 +93,6 @@ class UpdatePriceListCommand extends Command
                 $file->save();
             }
         }
+        Log::error("Обновелние цен завершено. Обновлено: ".$counter." товаров.");
     }
 }
