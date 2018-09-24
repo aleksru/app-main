@@ -31,6 +31,7 @@ class ApiSetOrderRequest extends FormRequest
             'total' =>'required',
             'comment' =>'required|string',
             'products' =>'required',
+            'quantity' => '',
             
         ];
     }

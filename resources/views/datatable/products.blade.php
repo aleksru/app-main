@@ -1,4 +1,4 @@
 @foreach ($products as $product)
-    {{$product['articul']."-".$product['name']."-".$product['price']."р."}} <br>
+    {{($product['quantity'] ?? '')."-".$product['articul']."-".$product['name']."-".$product['price']."р."}} <br>
 @endforeach
 
