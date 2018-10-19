@@ -9,11 +9,18 @@ use App\File;
 
 class ProductController extends Controller
 {
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('price-upload', ['priceLists' => PriceType::all()]);
     }
-    
+
+    /**
+     * @param UploadPrice $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function uploadPrice(UploadPrice $request)
     {
         $origName = $request->file('file')->getClientOriginalName();

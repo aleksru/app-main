@@ -9,23 +9,15 @@ use App\Order;
 class OrderController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * return \Illuminate\Http\Response
      */
     public function index()
     {
-//       Order::first()->update([
-//           'products' => [['art' => 'qwe', 'ssd' => 'sdasda']]
-//           ]);
-      // debug(Order::first()->products); 
         return view('orders');
     }
 
     /**
-     * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -33,10 +25,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
      */
     public function store(Request $request)
     {
@@ -44,10 +33,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
      */
     public function show($id)
     {
@@ -55,10 +41,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
      */
     public function edit($id)
     {
@@ -66,11 +49,9 @@ class OrderController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param UpdateOrderRequest $request
+     * @param Order $order
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
@@ -81,19 +62,18 @@ class OrderController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
      */
     public function destroy($id)
     {
         //
     }
-    
+
+    /**
+     * @return json
+     */
     public function datatable()
     {
-        //return datatables()->of(Order::all())->make(true);
         return datatables() ->of(Order::query())
                             ->editColumn('actions', function (Order $order) { 
                                 return $order->status ? '' : view('datatable.actions', [
