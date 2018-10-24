@@ -37,5 +37,12 @@ class ApiProductController extends Controller
                                                         });
         return $result;
     }
+
+    public function priceVersion(Request $req)
+    {
+        $getPrice = PriceType::where('name', $req->get('pricelist'))->first();
+
+        return [ $getPrice->name => $getPrice->version ];
+    }
     
 }

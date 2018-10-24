@@ -87,7 +87,11 @@ class UpdatePriceListCommand extends Command
                     
                     $product->priceList()->attach($priceList->id, ['price' => $productPriceList[Product::PRICE_LIST_PRICE]]);
                 }
-                
+
+                //обновляем версию прайс-листа
+                $priceList->version =  $priceList->version + 1;
+                $priceList->save();
+
                 //обновляем статус файла - обработан
                 $file->status = 1;
                 $file->save();

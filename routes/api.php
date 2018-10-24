@@ -19,4 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/get-product/', 'ApiProductController@api')->middleware('api.key');
 
+Route::get('/price-version/', 'ApiProductController@priceVersion')->middleware('api.key');
+
 Route::post('set-order', 'ApiOrdersController@api')->middleware('api.key');
