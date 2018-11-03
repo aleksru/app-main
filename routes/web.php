@@ -32,4 +32,6 @@ Route::group(['middleware' =>'auth'], function() {
     Route::get('404', function(){
         return 404;
     })->name('error');
+
+    Route::resource('clients', 'ClientController');
 });
