@@ -22,3 +22,5 @@ Route::get('/get-product/', 'ApiProductController@api')->middleware('api.key');
 Route::get('/price-version/', 'ApiProductController@priceVersion')->middleware('api.key');
 
 Route::post('set-order', 'ApiOrdersController@api')->middleware('api.key');
+
+Route::post('events/call', 'ApiMangoController@index');
