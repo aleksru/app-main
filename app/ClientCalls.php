@@ -4,13 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class ClientCalls extends Model
 {
     protected $guarded = ['id'];
-    
-    protected $casts = [
-      'products' => 'array',
-    ];
 
     /**
      * Получение клиента
