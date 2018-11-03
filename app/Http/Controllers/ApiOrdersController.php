@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use Illuminate\Http\Request;
 use App\Http\Requests\ApiSetOrderRequest;
 use App\Order;
@@ -12,6 +13,9 @@ class ApiOrdersController extends Controller
     {
         $data = $req->validated();
         $data['products'] = json_decode($req->products, true);
+
+        //ищем клиента, если не находим создаем
+        $data['client_id'] = Client::firstOrCreate(['phone' => $data['phone']])->id;
 
         Order::create($data);
         

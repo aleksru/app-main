@@ -14,7 +14,7 @@ class ChangeOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->integer('client_id')->unsigned()->after('user_id');
+            $table->integer('client_id')->unsigned()->nullable()->after('user_id');
             $table->foreign('client_id')
                   ->references('id')->on('clients')
                   ->onDelete('cascade');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use Illuminate\Http\Request;
 
 class ClientCallController extends Controller
@@ -43,9 +44,9 @@ class ClientCallController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($client)
     {
-        //
+        return 1;
     }
 
     /**

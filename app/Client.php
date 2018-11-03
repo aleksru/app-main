@@ -14,7 +14,7 @@ class Client extends Model
      */
     public function calls()
     {
-        return $this->hasMany(ClientCalls::class);
+        return $this->hasMany(ClientCall::class);
     }
 
     /**
@@ -24,5 +24,15 @@ class Client extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Получение клиента по номеру телефона
+     * @param $query
+     * @param $phone
+     */
+    public function scopeGetOnPhone($query, $phone)
+    {
+        return $query->where('phone', $phone);
     }
 }

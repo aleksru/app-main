@@ -128,10 +128,10 @@
                             toast.error('Ошибка сервера! Пожалуйста, свяжитесь с администратором.');
                         })
                 }, null, { id: toastID });
-            })
-//            setInterval( function () {
-//                table.ajax.reload(null, false);
-//            }, 5000 );
+            });
+            setInterval( function () {
+                table.ajax.reload(null, false);
+            }, 5000 );
         })  
     </script>
 @endpush

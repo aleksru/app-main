@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -43,9 +44,18 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Client $client)
     {
-        //
+        return view('front.client.show', [
+            'client' => $client->load([
+                'orders' => function($query) {
+                    $query->orderBy('created_at', 'desc');
+                },
+                'calls' => function($query) {
+                    $query->orderBy('created_at', 'desc');
+                }
+            ])
+        ]);
     }
 
     /**

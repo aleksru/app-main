@@ -99,7 +99,13 @@ class OrderController extends Controller
                                                     'products' => $order->products,
                                             ]);         
                             })
-                            ->rawColumns(['actions', 'status', 'products'])
+                            ->editColumn('name_customer', function (Order $order) {
+                                return view('datatable.customer', [
+                                    'route' => route('clients.show', $order->client->id),
+                                    'name_customer' => $order->name_customer
+                                ]);
+                            })
+                            ->rawColumns(['actions', 'status', 'products', 'name_customer'])
                             ->make(true);
     }
 }
