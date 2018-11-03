@@ -22,7 +22,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('total', 8, 2);
             $table->text('comment')->nullable();
             $table->integer('status')->nullable();
-            $table->json('products');
+            $table->text('products');
             $table->timestamps();
         });
     }
