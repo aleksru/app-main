@@ -10,8 +10,11 @@ window.Popper = require('popper.js').default;
 
 try {
     window.$ = window.jQuery = require('jquery');
-    require('bootstrap');
-    require('admin-lte');
+    require('bootstrap-sass');
+    require('datatables.net');
+    require ('admin-lte');
+    require('jquery-slimscroll');
+
 } catch (e) {}
 
 /**

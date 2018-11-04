@@ -6,7 +6,7 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/dist/js';
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
 
 .navbar-laravel {
   background-color: #fff;
@@ -17,3 +17,4 @@ $fa-font-path: "../fonts/" !default;
 @import '~font-awesome/scss/font-awesome';
 @import '~admin-lte/dist/css/AdminLTE.css';
 @import '~admin-lte/dist/css/skins/_all-skins.css';
+@import "~datatables.net-bs/css/dataTables.bootstrap.css";

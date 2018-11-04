@@ -11,7 +11,7 @@
           href="{{ asset('css/app.css') }}">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+<div id="app" class="wrapper">
     <header class="main-header">
 
         <!-- Logo -->
@@ -250,9 +250,7 @@
         <!-- Main content -->
         <section class="content container-fluid">
 
-            <!--------------------------
-              | Your Page Content Here |
-              -------------------------->
+            @yield('content')
 
         </section>
         <!-- /.content -->
@@ -348,7 +346,8 @@
 </div>
 <!-- AdminLTE App -->
 <script src="{{ asset('js/app.js') }}"></script>
-
+@yield('scripts')
+@stack('scripts')
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
