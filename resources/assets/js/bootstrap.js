@@ -10,9 +10,18 @@ window.Popper = require('popper.js').default;
 
 try {
     window.$ = window.jQuery = require('jquery');
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    require('bootstrap-sass');
+    require('datatables.net');
+    require ('admin-lte');
+    require('jquery-slimscroll');
 
-    require('bootstrap');
 } catch (e) {}
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

@@ -1,5 +1,15 @@
-@extends('layouts.app')
-
+@extends('layouts.adminlte.app')
+@section('content_header')
+    <section class="content-header">
+        <h1>
+            Заказы
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+            <li class="active">Here</li>
+        </ol>
+    </section>
+@endsection
 @section('content')
         @if (count($errors) > 0)
             <div class="alert alert-danger">
@@ -78,6 +88,13 @@
         </div>
 @endsection
 
-@section('header_scripts')
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-@endsection
+@push('scripts')
+<script>
+    @if (session()->has('success'))
+        toast.success('{{ session()->get('success') }}')
+    @endif
+    @if (session()->has('error'))
+        toast.error('{{ session()->get('error') }}')
+    @endif
+</script>
+@endpush

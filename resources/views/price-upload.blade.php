@@ -1,5 +1,16 @@
-@extends('layouts.app')
-
+@extends('layouts.adminlte.app')
+@section('content_header')
+    <section class="content-header">
+        <h1>
+            Загрузка прайс-листа
+            {{--<small>Optional description</small>--}}
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+            <li class="active">Here</li>
+        </ol>
+    </section>
+@endsection
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -28,7 +39,7 @@
                          Нет доступных прайс-листов
                        @endforelse
                   </li>
-                  <li>Обязательные столбцы для заполнения: 
+                  <li>Обязательные столбцы для заполнения:
                                     {{\App\Product::PRICE_LIST_ARTICUL}},
                                     {{\App\Product::PRICE_LIST_PRODUCT}},
                                     {{\App\Product::PRICE_LIST_PRICE}}
@@ -40,7 +51,7 @@
                   {{ csrf_field() }}
                   <div class="form-group">
                     <label for="exampleFormControlFile1">Загрузка прайс листа</label>
-                    <input type="file" class="form-control-file" name="file">  
+                    <input type="file" class="form-control-file" name="file">
                   </div>
                      <button class="btn btn-primary" type="submit">Загрузить</button>
                 </form>

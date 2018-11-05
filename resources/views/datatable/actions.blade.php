@@ -5,15 +5,15 @@
     <form id="set_user_{{ $orderId }}" method="post" action="{{ $edit['route'] }}">
         {{ csrf_field() }}
         {{ method_field('PUT') }}
-        <input type="hidden" name='user_id' value="1">
+        <input type="hidden" name='user_id' value="{{ Auth::user()->id }}">
     </form>
     <form id="set_complete_{{ $orderId }}" method="post" action="{{ $edit['route'] }}">
         {{ csrf_field() }}
         {{ method_field('PUT') }}
         <input type="hidden" name='status' value="1">
     </form>
-        <i class="fa fa-user-plus btn btn-xs btn-warning" onclick="$('#set_user_{{ $orderId }}').submit();"></i> 
-        <i class="fa fa-check-square-o btn btn-xs btn-success" onclick="$('#set_complete_{{ $orderId }}').submit();"></i> 
+<i class="fa fa-user-plus btn btn-xs btn-warning" onclick="$('#set_user_{{ $orderId }}').submit();"></i>
+<i class="fa fa-check-square-o btn btn-xs btn-success" onclick="$('#set_complete_{{ $orderId }}').submit();"></i>
 
 @endif
 <!--@if (!empty($delete))
