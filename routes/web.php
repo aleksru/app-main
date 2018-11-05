@@ -18,7 +18,7 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::group(['middleware' =>'auth'], function() {
     Route::get('/', function () {
         return redirect()->route('orders.index');
-    });
+    })->name('main.index');
 
     Route::get('product', 'ProductController@index')->name('product.index');
 
