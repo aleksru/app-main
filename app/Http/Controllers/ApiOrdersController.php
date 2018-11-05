@@ -13,6 +13,7 @@ class ApiOrdersController extends Controller
     {
         $data = $req->validated();
         $data['products'] = json_decode($req->products, true);
+        $data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
 
         //ищем клиента, если не находим создаем
         $data['client_id'] = Client::firstOrCreate(['phone' => $data['phone']])->id;
