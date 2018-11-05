@@ -88,6 +88,13 @@
         </div>
 @endsection
 
-@section('header_scripts')
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-@endsection
+@push('scripts')
+<script>
+    @if (session()->has('success'))
+        toast.success('{{ session()->get('success') }}')
+    @endif
+    @if (session()->has('error'))
+        toast.error('{{ session()->get('error') }}')
+    @endif
+</script>
+@endpush

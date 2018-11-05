@@ -9,6 +9,7 @@ window.$ = window.jQuery = require('jquery');
 window.Vue = require('vue');
 
 require('./bootstrap');
+window.toast = require('./notifications');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

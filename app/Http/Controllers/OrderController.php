@@ -55,10 +55,9 @@ class OrderController extends Controller
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
-        $message = 'Успено обновлена';
         $order->update($request->validated());
 
-        return redirect()->route('orders.index');//->with(['errors' => collect([$message])]);
+        return redirect()->route('orders.index')->with(['success' => 'Успено обновлена']);
     }
 
     /**
