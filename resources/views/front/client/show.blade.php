@@ -30,7 +30,10 @@
                 <div class="tab-pane" id="timeline">
                     <ul class="list-group">
                         @foreach($client->orders as $order)
-                            <li class="list-group-item">ID: {{ $order->id }} Дата: {{ $order->created_at }}</li>
+                            <li class="list-group-item">
+                                <strong>ID:</strong>{{ $order->id }}
+                                <strong>Дата:</strong> {{ $order->created_at }}
+                            </li>
                         @endforeach
                     </ul>
                 </div>
@@ -39,7 +42,12 @@
                 <div class="tab-pane" id="settings">
                     <ul class="list-group">
                         @foreach($client->calls as $call)
-                            <li class="list-group-item">Дата: {{ $call->created_at }} Комментарий: {{ $call->description ?? '' }}</li>
+                            <li class="list-group-item">
+                                <strong>Тип:</strong> {{ $call->typeCall }}
+                                <strong>Источник:</strong> {{ $call->store->name ?? 'Не определено' }}
+                                <strong>Дата:</strong> {{ $call->created_at }}
+                                <strong>Комментарий:</strong> {{ $call->description ?? '' }}
+                            </li>
                         @endforeach
                     </ul>
                 </div>

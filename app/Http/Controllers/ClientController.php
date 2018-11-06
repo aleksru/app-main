@@ -53,7 +53,8 @@ class ClientController extends Controller
                 },
                 'calls' => function($query) {
                     $query->orderBy('created_at', 'desc');
-                }
+                },
+                'calls.store:id,name'
             ])
         ]);
     }
