@@ -10,7 +10,7 @@ class Product extends Model
     
     const PRICE_LIST_ARTICUL = 'Артикул';
     const PRICE_LIST_PRODUCT = 'Товар';
-    const PRICE_LIST_PRICE = 'Итоговая мин. цена';
+    const PRICE_LIST_PRICE = 'Цена';
 
     /**
      * пустой массив товаров
