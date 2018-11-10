@@ -19,6 +19,7 @@ try {
     require('datatables.net');
     require ('admin-lte');
     require('jquery-slimscroll');
+    require('select2');
 
 } catch (e) {}
 

@@ -68,6 +68,18 @@
                         <input type="password" class="form-control" name="password" placeholder="Пароль">
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">Права</label>
+
+                    <select class="col-sm-10 js-example-basic-multiple" name="roles[]" multiple="multiple">
+                        @if (isset($user))
+                            @foreach ($user->roles as $role)
+                                <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
             </form>
         </div>
         <div class="box-footer">
@@ -77,13 +89,21 @@
         </div>
     </div>
 @endsection
+
 @push('scripts')
-<script>
-    @if (session()->has('success'))
-        toast.success('{{ session()->get('success') }}')
-    @endif
-    @if (session()->has('error'))
-        toast.error('{{ session()->get('error') }}')
-    @endif
-</script>
+    <script>
+        @if (session()->has('success'))
+            toast.success('{{ session()->get('success') }}')
+        @endif
+        @if (session()->has('error'))
+            toast.error('{{ session()->get('error') }}')
+        @endif
+
+        let roles = {!!   json_encode(\App\Role::select('id', 'name as text')->get()->toArray()) !!}
+        $(function() {
+            $('.js-example-basic-multiple').select2({
+                data: roles
+            });
+        });
+    </script>
 @endpush

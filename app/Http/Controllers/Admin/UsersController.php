@@ -34,8 +34,10 @@ class UsersController extends Controller
     {
         $data = $userRequest->validated();
         $data['password'] = Hash::make($data['password']);
+        $user = User::create($data);
+        $user->roles()->sync(isset($data['roles']) ? $data['roles'] : []);
 
-        return redirect()->route('admin.users.edit', User::create($data)->id)->with(['success' => 'Успешно создан!']);
+        return redirect()->route('admin.users.edit', $user->id)->with(['success' => 'Успешно создан!']);
     }
 
     /**
@@ -54,12 +56,13 @@ class UsersController extends Controller
      */
     public function update(UserRequest $userRequest, User $user)
     {
-       $data = array_diff($userRequest->validated(), array(''));
+       $data = array_filter($userRequest->validated());
 
        if (isset($data['password'])) {
            $data['password'] = Hash::make($data['password']);
        }
         $user->update($data);
+        $user->roles()->sync(isset($data['roles']) ? $data['roles'] : []);
 
         return redirect()->route('admin.users.edit', $user->id)->with(['success' => 'Успешно обновлен!']);
     }

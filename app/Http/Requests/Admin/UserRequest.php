@@ -32,6 +32,7 @@ class UserRequest extends FormRequest
             'email' => 'string|email|max:255|unique:users,email'.$email,
             'password' => 'string|min:6'.$passRequired,
             'description' => 'string|nullable',
+            'roles' => 'array',
         ];
     }
 }
