@@ -75,7 +75,7 @@ class OrderController extends Controller
     {
         return datatables() ->of(Order::query())
                             ->editColumn('actions', function (Order $order) { 
-                                return $order->status ? '' : view('datatable.actions', [
+                                return $order->status ? '' : view('datatable.actions_order', [
                                                                 'edit' => [
                                                                     'route' => route('orders.update', $order->id),
                                                                 ],
