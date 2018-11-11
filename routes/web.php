@@ -17,16 +17,17 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['middleware' =>'auth'], function() {
     Route::get('/', function () {
-        return redirect()->route('orders.index');
+        return view('welcome');
     })->name('main.index');
 
     Route::get('product', 'ProductController@index')->name('product.index');
 
     Route::post('product', 'ProductController@uploadPrice')->name('upload-price');
 
-    Route::resource('orders', 'OrderController');
 
+    Route::resource('orders', 'OrderController');
     Route::get('orders-table', 'OrderController@datatable')->name('orders.datatable');
+
 
     //Route::get('/home', 'HomeController@index')->name('home');
     Route::get('404', function(){
@@ -37,7 +38,7 @@ Route::group(['middleware' =>'auth'], function() {
 });
 
 //Админка
-Route::group(['middleware' =>'auth', 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
+Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
     Route::resource('users', 'UsersController');
     Route::get('users-table', 'UsersController@datatable')->name('users.datatable');
     Route::get('logs', 'LogController@index')->name('logs.index');

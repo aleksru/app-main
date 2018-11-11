@@ -75,7 +75,7 @@
                     <select class="col-sm-10 js-example-basic-multiple" name="roles[]" multiple="multiple">
                         @if (isset($user))
                             @foreach ($user->roles as $role)
-                                <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
+                                <option value="{{ $role->id }}" selected>{{ $role->description }}</option>
                             @endforeach
                         @endif
                     </select>
@@ -99,7 +99,7 @@
             toast.error('{{ session()->get('error') }}')
         @endif
 
-        let roles = {!!   json_encode(\App\Role::select('id', 'name as text')->get()->toArray()) !!}
+        let roles = {!!   json_encode(\App\Role::select('id', 'description as text')->get()->toArray()) !!}
         $(function() {
             $('.js-example-basic-multiple').select2({
                 data: roles

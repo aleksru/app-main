@@ -8,10 +8,16 @@ use App\Order;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Order::class);
+        $this->middleware('can:view,App\Order')->only('index');
+    }
+
     /**
      * return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(UpdateOrderRequest $request)
     {
         return view('orders');
     }

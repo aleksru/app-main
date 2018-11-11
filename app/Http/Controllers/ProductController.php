@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\UploadPrice;
 use App\PriceType;
@@ -14,6 +15,8 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $this->authorize(Product::class);
+
         return view('price-upload', ['priceLists' => PriceType::all()]);
     }
 
@@ -23,6 +26,8 @@ class ProductController extends Controller
      */
     public function uploadPrice(UploadPrice $request)
     {
+        $this->authorize(Product::class);
+
         $origName = $request->file('file')->getClientOriginalName();
         $path = $request->file('file')->store('prices');
         File::create(['name' => $origName, 'path' => $path]);

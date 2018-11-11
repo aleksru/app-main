@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Order;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateOrderRequest extends FormRequest
