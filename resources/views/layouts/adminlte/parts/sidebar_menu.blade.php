@@ -5,7 +5,10 @@
         <li><a href="{{ route('product.index') }}"><i class="fa fa-upload"></i> <span>Загрузка прайса</span></a></li>
     @endcan
 
-    <li><a href="{{ route('orders.index') }}"><i class="fa fa-newspaper-o"></i> <span>Заказы</span></a></li>
+    @can('view', App\Order::class)
+        <li><a href="{{ route('orders.index') }}"><i class="fa fa-newspaper-o"></i> <span>Заказы</span></a></li>
+    @endcan
+
     @if (Auth::user()->is_admin)
         <li class="treeview">
             <a href="#"><i class="fa fa-link"></i> <span>Админка</span>

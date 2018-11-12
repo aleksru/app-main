@@ -3,7 +3,9 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -46,6 +48,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof AuthorizationException || $exception instanceof HttpException && $exception->getStatusCode() === 403) {
+
+            return redirect()->back()->with(['error' => 'Не достаточно прав на выполнение действия!']);
+        }
+
         return parent::render($request, $exception);
     }
 }

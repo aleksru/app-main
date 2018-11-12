@@ -20,11 +20,11 @@ Route::group(['middleware' =>'auth'], function() {
         return view('welcome');
     })->name('main.index');
 
+    //загрузка прайса
     Route::get('product', 'ProductController@index')->name('product.index');
-
     Route::post('product', 'ProductController@uploadPrice')->name('upload-price');
 
-
+    //заказы
     Route::resource('orders', 'OrderController');
     Route::get('orders-table', 'OrderController@datatable')->name('orders.datatable');
 
@@ -34,6 +34,7 @@ Route::group(['middleware' =>'auth'], function() {
         return 404;
     })->name('error');
 
+    //клиенты
     Route::resource('clients', 'ClientController');
 });
 

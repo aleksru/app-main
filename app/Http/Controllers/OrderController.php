@@ -79,7 +79,7 @@ class OrderController extends Controller
      */
     public function datatable()
     {
-        return datatables() ->of(Order::query())
+        return datatables() ->of(Order::with('client'))
                             ->editColumn('actions', function (Order $order) { 
                                 return $order->status ? '' : view('datatable.actions_order', [
                                                                 'edit' => [

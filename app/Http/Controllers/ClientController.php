@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    public function __construct ()
+    {
+        $this->middleware('role:read_orders|change_orders');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -39,10 +44,8 @@ class ClientController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Client $client
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(Client $client)
     {

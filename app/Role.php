@@ -17,14 +17,4 @@ class Role extends Model
     {
         return $this->belongsToMany(Role::class);
     }
-
-    /**
-     * Привилегии роли
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function privilege()
-    {
-        return $this->belongsToMany(Privilege::class);
-    }
 }

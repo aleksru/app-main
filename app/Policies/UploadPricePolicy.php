@@ -21,12 +21,12 @@ class UploadPricePolicy
 
     public function index(User $user)
     {
-        return $user->roles->pluck('name')->contains('upload_price');
+        return $user->roles->pluck('name')->contains('change_price_list');
     }
 
     public function uploadPrice(User $user)
     {
-        return $user->roles->pluck('name')->contains('upload_price');
+        return $user->roles->pluck('name')->contains('change_price_list');
     }
 
 

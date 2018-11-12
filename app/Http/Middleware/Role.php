@@ -17,10 +17,11 @@ class Role
         if ($request->user()->is_admin) {
             return $next($request);
         }
-        if (!$request->user()->roles->pluck('name')->contains($role)){
-            abort(403);
+        if (count(array_diff($request->user()->roles->pluck('name')->toArray(), explode('|',$role))) < count($request->user()->roles->pluck('name')->toArray())){
+            return $next($request);
         }
 
-        return $next($request);
+        abort(403);
+
     }
 }

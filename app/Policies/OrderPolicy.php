@@ -16,8 +16,7 @@ class OrderPolicy
      */
     public function view(User $user)
     {
-        $permissions = $user->roles->privilege()->pluck('name');
-        return $permissions->contains('read_orders') || $permissions->contains('modify_orders');
+        return $user->roles->pluck('name')->contains('read_orders') || $user->roles->pluck('name')->contains('change_orders');
     }
 
     /**
@@ -40,7 +39,7 @@ class OrderPolicy
      */
     public function update(User $user, Order $order)
     {
-        return $user->roles->pluck('name')->contains('modify_orders');
+        return $user->roles->pluck('name')->contains('change_orders');
     }
 
     /**
