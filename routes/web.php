@@ -49,4 +49,7 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     Route::get('stores-table', 'StoreController@datatable')->name('stores.datatable');
 
     Route::resource('delivery-periods', 'DeliveryPeriodsController')->only('index', 'store', 'destroy');
+
+    Route::resource('order-statuses', 'OrderStatusesController')->except('show');
+    Route::get('order-statuses-table', 'OrderStatusesController@datatable')->name('order-statuses.datatable');
 });
