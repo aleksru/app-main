@@ -56,21 +56,21 @@ class UpdatePriceListCommand extends Command
         if ( !$files->isEmpty() ) {
             foreach ($files as $file) {
                 $priceList = PriceType::where('name', explode('_', $file->name)[0])->first();
-                //открыть для исключения файла из последующих обработок
-//                    //обновляем статус файла - обработан
-//                    $file->status = 1;
-//                    $file->save();
 
                 if (!$priceList){
                     Log::error("Не найден прайс: ".$file->name." ИМЯ ПРАЙС ЛИСТА НЕ ОБНАРУЖЕНО. см config/app/price_types");
                     //обновляем статус файла - обработан
                     $file->status = 1;
                     $file->save();
+
                     continue;
                 }
                 
                 //отсоединяем все продукты от прайса
                 $priceList->products()->detach();
+
+                //обнуляем счетчик
+                $counter = 0;
                 
                 foreach (ExelService::excelToArray(storage_path('app/'.$file->path)) as $productPriceList) {
                     if (!isset($productPriceList[Product::PRICE_LIST_ARTICUL])|| 
@@ -95,8 +95,11 @@ class UpdatePriceListCommand extends Command
                 //обновляем статус файла - обработан
                 $file->status = 1;
                 $file->save();
+
+                Log::error("Обновление прайса ".$priceList->name." завершено. Обновлено: ".$counter." товаров.");
             }
         }
-        Log::error("Обновелние цен завершено. Обновлено: ".$counter." товаров.");
+
+        Log::error("Обновление цен завершено.");
     }
 }
