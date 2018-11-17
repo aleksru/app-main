@@ -29,6 +29,7 @@
                         <li><a href="{{ route('admin.stores.index') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> <span>Магазины</span> </a></li>
                         <li><a href="{{ route('admin.delivery-periods.index') }}"><i class="fa fa-truck" aria-hidden="true"></i> <span>Время доставки</span> </a></li>
                         <li><a href="{{ route('admin.order-statuses.index') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Статусы заказа</span> </a></li>
+                        <li><a href="{{ route('admin.suppliers.index') }}"><i class="fa fa-shopping-bag" aria-hidden="true"></i> <span>Поставщики</span> </a></li>
                     </ul>
                 </li>
             </ul>

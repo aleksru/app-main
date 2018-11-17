@@ -52,4 +52,7 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
 
     Route::resource('order-statuses', 'OrderStatusesController')->except('show');
     Route::get('order-statuses-table', 'OrderStatusesController@datatable')->name('order-statuses.datatable');
+
+    Route::resource('suppliers', 'SupplierController')->except('show');
+    Route::get('suppliers-table', 'SupplierController@datatable')->name('suppliers.datatable');
 });
