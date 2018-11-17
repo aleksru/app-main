@@ -19,6 +19,8 @@ window.toast = require('./notifications');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
+Vue.component('PeriodsForm', require('./components/Admin/Form/PeriodsForm.vue'));
+
 const app = new Vue({
     el: '#app'
 });

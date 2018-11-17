@@ -45,6 +45,8 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
 
     Route::get('logs', 'LogController@index')->name('logs.index');
 
-    Route::resource('stores', 'StoreController');
+    Route::resource('stores', 'StoreController')->except('show');
     Route::get('stores-table', 'StoreController@datatable')->name('stores.datatable');
+
+    Route::resource('delivery-periods', 'DeliveryPeriodsController')->only('index', 'store', 'destroy');
 });

@@ -15,6 +15,7 @@ class CreateDeliveryPeriodsTable extends Migration
     {
         Schema::create('delivery_periods', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('period');
             $table->timestamps();
         });
     }
