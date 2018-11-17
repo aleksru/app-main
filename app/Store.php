@@ -16,4 +16,14 @@ class Store extends Model
     {
         return $this->hasMany(ClientCall::class);
     }
+
+    /**
+     * Оставляем только цифры в номере телефона
+     *
+     * @param $value
+     */
+    public function setPhoneAttribute($value)
+    {
+        $this->attributes['phone'] = preg_replace('/[^0-9]/', '', $value);
+    }
 }

@@ -42,5 +42,9 @@ Route::group(['middleware' =>'auth'], function() {
 Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
     Route::resource('users', 'UsersController');
     Route::get('users-table', 'UsersController@datatable')->name('users.datatable');
+
     Route::get('logs', 'LogController@index')->name('logs.index');
+
+    Route::resource('stores', 'StoreController');
+    Route::get('stores-table', 'StoreController@datatable')->name('stores.datatable');
 });
