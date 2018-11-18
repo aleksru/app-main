@@ -40,19 +40,29 @@ Route::group(['middleware' =>'auth'], function() {
 
 //Админка
 Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
+    //Пользователи
     Route::resource('users', 'UsersController');
     Route::get('users-table', 'UsersController@datatable')->name('users.datatable');
 
+    //Лог админки
     Route::get('logs', 'LogController@index')->name('logs.index');
 
+    //Магазины
     Route::resource('stores', 'StoreController')->except('show');
     Route::get('stores-table', 'StoreController@datatable')->name('stores.datatable');
 
+    //Периоды доставки
     Route::resource('delivery-periods', 'DeliveryPeriodsController')->only('index', 'store', 'destroy');
 
+    //Статусы заказов
     Route::resource('order-statuses', 'OrderStatusesController')->except('show');
     Route::get('order-statuses-table', 'OrderStatusesController@datatable')->name('order-statuses.datatable');
 
+    //Поставщики
     Route::resource('suppliers', 'SupplierController')->except('show');
     Route::get('suppliers-table', 'SupplierController@datatable')->name('suppliers.datatable');
+
+    //Операторы
+    Route::resource('operators', 'OperatorController')->except('show');
+    Route::get('operators-table', 'OperatorController@datatable')->name('operators.datatable');
 });
