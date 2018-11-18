@@ -129,9 +129,14 @@
                         })
                 }, null, { id: toastID });
             });
-            setInterval( function () {
-                table.ajax.reload(null, false);
-            }, 5000 );
+
+// вынесено
+// если нужно динамически обновлять данные - в шаблон добавить скрипт
+//            $(function () {
+//                setInterval( function () {
+//                    $('#idTable').DataTable().ajax.reload(null, false);
+//                }, 5000 );
+//            });
         })  
     </script>
 @endpush

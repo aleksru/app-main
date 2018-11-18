@@ -96,5 +96,11 @@
     @if (session()->has('error'))
         toast.error('{{ session()->get('error') }}')
     @endif
+
+    $(function () {
+        setInterval( function () {
+            $('#orders-table').DataTable().ajax.reload(null, false);
+        }, 5000 );
+    });
 </script>
 @endpush
