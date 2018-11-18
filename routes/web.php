@@ -65,4 +65,8 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Операторы
     Route::resource('operators', 'OperatorController')->except('show');
     Route::get('operators-table', 'OperatorController@datatable')->name('operators.datatable');
+
+    //Курьеры
+    Route::resource('couriers', 'CourierController')->except('show');
+    Route::get('couriers-table', 'CourierController@datatable')->name('couriers.datatable');
 });
