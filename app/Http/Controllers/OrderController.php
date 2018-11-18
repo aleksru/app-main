@@ -19,7 +19,7 @@ class OrderController extends Controller
      */
     public function index(UpdateOrderRequest $request)
     {
-        return view('orders');
+        return view('front.orders.orders');
     }
 
     /**
@@ -35,15 +35,15 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
      * @param $id
      */
-    public function show($id)
+    public function show(Order $order)
     {
-        //
+        return view('front.orders.show', [ 'order' => $order ]);
     }
 
     /**
