@@ -63,7 +63,7 @@ class SupplierController extends Controller
     {
         $supplier->delete();
 
-        return response()->json(['message' => 'Пользователь удален']);
+        return response()->json(['message' => 'Поставщик удален']);
     }
 
     /**

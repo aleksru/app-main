@@ -64,7 +64,7 @@ class OrderStatusesController extends Controller
     {
         $orderStatus->delete();
 
-        return response()->json(['message' => 'Пользователь удален']);
+        return response()->json(['message' => 'Статус удален']);
     }
 
     /**

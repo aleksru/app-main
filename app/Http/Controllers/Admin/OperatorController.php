@@ -63,7 +63,7 @@ class OperatorController extends Controller
     {
         $operator->delete();
 
-        return response()->json(['message' => 'Пользователь удален']);
+        return response()->json(['message' => 'Оператор удален']);
     }
 
     /**

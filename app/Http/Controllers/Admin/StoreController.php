@@ -63,7 +63,7 @@ class StoreController extends Controller
     {
         $store->delete();
 
-        return response()->json(['message' => 'Пользователь удален']);
+        return response()->json(['message' => 'Магазин удален']);
     }
 
 
