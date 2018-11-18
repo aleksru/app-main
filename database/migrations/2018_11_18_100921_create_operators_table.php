@@ -17,7 +17,6 @@ class CreateOperatorsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('sip_login')->unique()->nullable();
-            $table->index('sip_login');
             $table->timestamps();
         });
     }

@@ -79,7 +79,7 @@ class OrderController extends Controller
      */
     public function datatable()
     {
-        return datatables() ->of(Order::with('client'))
+        return datatables() ->of(Order::with('client', 'status'))
                             ->editColumn('actions', function (Order $order) { 
                                 return $order->status ? '' : view('datatable.actions_order', [
                                                                 'edit' => [
@@ -95,8 +95,7 @@ class OrderController extends Controller
                             })
                             ->editColumn('status', function (Order $order) { 
                                 return view('datatable.status', [
-                                                    'status' => $order->user_id,
-                                                    'status_code' => $order->status,
+                                                    'status' => $order->status
                                             ]);         
                             })
                             ->editColumn('products', function (Order $order) {
