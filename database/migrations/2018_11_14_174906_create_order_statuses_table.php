@@ -17,6 +17,7 @@ class CreateOrderStatusesTable extends Migration
             $table->increments('id');
             $table->string('status')->unique();
             $table->string('description')->nullable();
+            $table->string('color')->nullable();
             $table->timestamps();
         });
     }

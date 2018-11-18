@@ -28,6 +28,7 @@ class OrderStatusRequest extends FormRequest
         return [
             'status' => 'required|string|unique:order_statuses,status'.$status,
             'description' => 'string|nullable',
+            'color' => 'string|nullable',
         ];
     }
 }

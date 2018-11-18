@@ -54,6 +54,22 @@
                         <input type="text" class="form-control" name="description" placeholder="Описание" value="{{ old('description', $status->description ?? '') }}">
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="description" class="col-sm-2 control-label">Описание</label>
+
+                    <div class="col-sm-10">
+                        <select class="form-control" name="color">
+                            <option value="{{ old('color', $status->color ?? '') }}"
+                                    class="btn btn-{{ old('color', $status->color ?? '') }}"
+                                    selected>{{ old('color', $status->color ?? '') }}
+                            </option>
+                            @foreach(get_class_colors() as $color)
+                                <option value="{{ $color }}" class="btn btn-{{$color}}">{{$color}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="box-footer">

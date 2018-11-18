@@ -73,6 +73,10 @@ class OrderStatusesController extends Controller
     public function datatable()
     {
         return datatables() ->of(OrderStatus::query())
+            ->editColumn('color', function (OrderStatus $orderStatus) {
+                return
+                    '<h4><span class="label label-'.$orderStatus->color.'">'.$orderStatus->color.'</span></h4>';
+            })
             ->editColumn('actions', function (OrderStatus $orderStatus) {
                 return view('datatable.actions', [
                     'edit' => [
@@ -85,7 +89,7 @@ class OrderStatusesController extends Controller
                     ]
                 ]);
             })
-            ->rawColumns(['actions'])
+            ->rawColumns(['actions', 'color'])
             ->make(true);
     }
 }

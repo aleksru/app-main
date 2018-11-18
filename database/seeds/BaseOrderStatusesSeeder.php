@@ -5,8 +5,9 @@ use Illuminate\Database\Seeder;
 class BaseOrderStatusesSeeder extends Seeder
 {
     private $statuses = [
-        ['status' =>'Завершен'],
-        ['status' =>'В работе'],
+        ['status' =>'Завершен', 'color' => 'default'],
+        ['status' =>'В работе', 'color' => 'primary'],
+        ['status' =>'Новый', 'color' => 'success'],
     ];
     /**
      * Run the database seeds.

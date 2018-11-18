@@ -47,6 +47,11 @@
                         'width' => '10%',
                         'searchable' => true,
                     ],
+                    'color' => [
+                        'name' => 'Цвет',
+                        'width' => '10%',
+                        'searchable' => false,
+                    ],
                     'description' => [
                         'name' => 'Описание',
                         'width' => '10%',
