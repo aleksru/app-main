@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\Courier;
+use App\Models\DeliveryPeriod;
 use App\Models\OrderStatus;
 use App\Models\Metro;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +18,7 @@ class Order extends Model
 
     /**
      * Получение клиента
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function client()
@@ -41,5 +44,25 @@ class Order extends Model
     public function metro()
     {
         return $this->belongsTo(Metro::class);
+    }
+
+    /**
+     * Курьер
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function courier()
+    {
+        return $this->belongsTo(Courier::class);
+    }
+
+    /**
+     * Время доставки
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function deliveryPeriod()
+    {
+        return $this->belongsTo(DeliveryPeriod::class);
     }
 }
