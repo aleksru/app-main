@@ -26,4 +26,26 @@ class Product extends Model
     {
       return $this->belongsToMany(PriceType::class);
     }
+
+    /**
+     * Заказы
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
+    /**
+     * Поиск по артикулу
+     *
+     * @param $query
+     * @param $article
+     * @return mixed
+     */
+    public function scopeByActicle($query, $article)
+    {
+        return $query->where('article', $article);
+    }
 }

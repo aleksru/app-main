@@ -25,9 +25,15 @@ class UpdateOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => '',
-            'status' => '',
-            
+            'user_id' => 'integer',
+            'status_id' => 'integer|nullable',
+            'client_id' => 'integer|nullable',
+            'courier_id' => 'integer|nullable',
+            'delivery_period_id' => 'integer|nullable',
+            'operator_id' => 'integer|nullable',
+            'store' => 'string',
+            'comment' => 'string|nullable',
+            'date_delivery' => 'date|nullable',
         ];
     }
 }

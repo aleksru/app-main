@@ -4,16 +4,19 @@ namespace App;
 
 use App\Models\Courier;
 use App\Models\DeliveryPeriod;
+use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Models\Metro;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $guarded = ['id'];
+    protected $fillable = ['user_id', 'client_id','store','comment','status_id', 'courier_id',
+                            'delivery_period_id','operator_id','date_delivery','products_text'
+    ];
     
     protected $casts = [
-      'products' => 'array',
+      'products_text' => 'array',
     ];
 
     /**
@@ -65,4 +68,25 @@ class Order extends Model
     {
         return $this->belongsTo(DeliveryPeriod::class);
     }
+
+    /**
+     * Оператор
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function operator()
+    {
+        return $this->belongsTo(Operator::class);
+    }
+
+    /**
+     * Товары
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('price', 'quantity', 'imei', 'price_opt', 'courier_payment', 'delta');
+    }
+
 }

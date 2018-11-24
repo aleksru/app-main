@@ -16,9 +16,12 @@
 $fa-font-path: "../fonts/" !default;
 @import '~font-awesome/scss/font-awesome';
 @import "~select2/dist/css/select2.css";
+// Vue multiselect
+@import "~vue-multiselect/dist/vue-multiselect.min.css";
 @import '~admin-lte/dist/css/AdminLTE.css';
 @import '~admin-lte/dist/css/skins/_all-skins.css';
 @import "~datatables.net-bs/css/dataTables.bootstrap.css";
 @import "~datatables.net-dt/css/jquery.dataTables.css";
 @import "~izitoast/dist/css/iziToast.css";
+
 

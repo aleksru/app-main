@@ -11,6 +11,10 @@ window.Vue = require('vue');
 require('./bootstrap');
 window.toast = require('./notifications');
 
+// import vSelect from 'vue-select';
+// Vue.component('vue-select', vSelect);
+Vue.component('vue-select', require('./components/VueSelect.vue'));
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -20,6 +24,8 @@ window.toast = require('./notifications');
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 Vue.component('PeriodsForm', require('./components/Admin/Form/PeriodsForm.vue'));
+
+Vue.component('ProductsTable', require('./components/ProductsTable.vue'));
 
 const app = new Vue({
     el: '#app'

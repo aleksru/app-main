@@ -4,9 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApiSetOrderRequest extends FormRequest
+class ClientRequest extends FormRequest
 {
-    protected $redirect = 'error';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -14,7 +13,7 @@ class ApiSetOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return TRUE;
+        return true;
     }
 
     /**
@@ -25,13 +24,9 @@ class ApiSetOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_customer' =>'required|string',
-            'store' =>'required|string',
-            'phone' =>'required|string',
-            'comment' =>'required|string',
-            'products' =>'required',
-            'quantity' => '',
-            
+            'name' => 'required|string',
+            'phone' => 'required|string',
+            'description' => 'string|nullable',
         ];
     }
 }

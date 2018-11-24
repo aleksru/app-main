@@ -23,6 +23,9 @@ Route::group(['middleware' =>'auth'], function() {
     //загрузка прайса
     Route::get('product', 'ProductController@index')->name('product.index');
     Route::post('product', 'ProductController@uploadPrice')->name('upload-price');
+    Route::post('product-orders', 'ProductController@updateProductsOrder')->name('update.product-orders');
+    Route::post('product-search', 'ProductController@search')->name('product.search');
+
 
     //заказы
     Route::resource('orders', 'OrderController');
@@ -36,6 +39,7 @@ Route::group(['middleware' =>'auth'], function() {
 
     //клиенты
     Route::resource('clients', 'ClientController');
+    Route::post('create-client-order', 'ClientController@createOrderClient')->name('create.user-order');
 });
 
 //Админка

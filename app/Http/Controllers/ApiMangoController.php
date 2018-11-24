@@ -54,7 +54,7 @@ class ApiMangoController extends Controller
                         'phone' => $data['from']['number'],
                         'total' =>'0',
                         'comment' =>'-',
-                        'products' => Product::EMPTY_PRODUCTS
+                        //'products' => Product::EMPTY_PRODUCTS
                     ]);
                 }
                 //фиксируем звонок

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Http\Requests\ClientRequest;
+use App\Order;
+use App\Product;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -33,14 +36,14 @@ class ClientController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ClientRequest $clientRequest
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(ClientRequest $clientRequest)
     {
-        //
+        Client::create($clientRequest->validated());
+
+        return redirect()->back()->with(['success' => 'Успешно создан!']);
     }
 
     /**
@@ -74,15 +77,15 @@ class ClientController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param ClientRequest $clientRequest
+     * @param Client $client
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(ClientRequest $clientRequest, Client $client)
     {
-        //
+        $client->update($clientRequest->validated());
+
+        return redirect()->back()->with(['success' => 'Успешно обновлен!']);
     }
 
     /**
@@ -94,5 +97,31 @@ class ClientController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Создание клиента и заказа
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function createOrderClient(Request $request)
+    {
+        if (! $request->get('phone')){
+            return redirect()->back()->with(['error' => 'Не заполнено поле!']);
+        }
+
+        $client = Client::getOnPhone($request->get('phone'))->first();
+        if (! $client) {
+            $client = Client::create(['phone' => $request->get('phone')]);
+        }
+
+        $order = Order::create([
+            'client_id' => $client->id,
+            'store' => '',
+            'comment' =>'-',
+        ]);
+
+        return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно создан!']);
     }
 }

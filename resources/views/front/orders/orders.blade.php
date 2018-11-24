@@ -23,9 +23,12 @@
         <div class="alert alert-warning">
           <ul>
               <li>Товары: Количество-Артикул-Название-ЦенаЗаШт</li>
-              <li>Взять в работу - <i class="fa fa-user-plus btn btn-sm btn-warning"></i> </li>
-              <li>Завершить заказ - <i class="fa fa-check-square-o btn btn-sm btn-success"></i>  </li>
           </ul>
+        </div>
+        <div class="box-header">
+            <a href="{{route('orders.create')}}"><button class="btn btn-sm btn-primary pull-right">
+                    <i class="fa fa-plus"></i> Новый заказ
+                </button></a>
         </div>
         <div class="col-md-12">
             @include('datatable.datatable',[
@@ -67,11 +70,6 @@
                         'width' => '5%',
                         'searchable' => true,
                     ],
-                    'total' => [
-                        'name' => 'Общая стоимость',
-                        'width' => '5%',
-                        'orderable' => 'false'
-                    ],
                     'created_at' => [
                         'name' => 'Дата создания',
                         'width' => '5%',
@@ -79,7 +77,7 @@
                     ],
                     'actions' => [
                         'name' => 'Действия',
-                        'width' => '5%',
+                        'width' => '2%',
                         'orderable' => 'false'
                     ],
 

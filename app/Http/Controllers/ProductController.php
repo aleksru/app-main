@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\UploadPrice;
@@ -33,6 +34,33 @@ class ProductController extends Controller
         File::create(['name' => $origName, 'path' => $path]);
 
         return redirect()->route('product.index')->with(['message' => 'Файл успешно загружен']);
+    }
+
+    public function updateProductsOrder(Request $request)
+    {
+        $products = $request->get('products');
+        $orderID = $request->get('order');
+
+        $toSync = [];
+
+        foreach ($products as $product) {
+            $toSync[$product['id']] = $product['pivot'];
+        }
+
+        Order::find($orderID)->products()->sync($toSync);
+
+        return 1;
+    }
+
+    /**
+     * Поиск товара
+     *
+     * @param Request $request
+     * @return json
+     */
+    public function search(Request $request)
+    {
+        return Product::where('product_name', 'LIKE', '%'.$request->get('query').'%')->select('id', 'product_name')->get();
     }
     
     

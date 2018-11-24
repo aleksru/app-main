@@ -33,6 +33,17 @@ class Client extends Model
      */
     public function scopeGetOnPhone($query, $phone)
     {
-        return $query->where('phone', $phone);
+        return $query->where('phone', preg_replace('/[^0-9]/', '', $phone));
+    }
+
+    /**
+     * Оставляем только цифры в номере телефона
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setPhoneAttribute($value)
+    {
+        $this->attributes['phone'] = preg_replace('/[^0-9]/', '', $value);
     }
 }
