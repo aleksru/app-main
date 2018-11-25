@@ -11,8 +11,10 @@ window.Vue = require('vue');
 require('./bootstrap');
 window.toast = require('./notifications');
 
-// import vSelect from 'vue-select';
-// Vue.component('vue-select', vSelect);
+//подключаем селекты чистый и обертку
+import vSelect from 'vue-select';
+Vue.component('v-select', vSelect)
+
 Vue.component('vue-select', require('./components/VueSelect.vue'));
 
 /**

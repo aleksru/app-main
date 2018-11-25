@@ -78,6 +78,28 @@ class OrderController extends Controller
     }
 
     /**
+     * Обновление товаров в заказе
+     *
+     * @param Request $request
+     * @return int
+     */
+    public function updateProductsOrder(Request $request)
+    {
+        $products = $request->get('products');
+        $orderID = $request->get('order');
+
+        $toSync = [];
+
+        foreach ($products as $product) {
+            $toSync[$product['id']] = $product['pivot'];
+        }
+
+        Order::find($orderID)->products()->sync($toSync);
+
+        return 1;
+    }
+
+    /**
      * @return json
      */
     public function datatable()

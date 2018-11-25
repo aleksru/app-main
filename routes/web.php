@@ -23,13 +23,13 @@ Route::group(['middleware' =>'auth'], function() {
     //загрузка прайса
     Route::get('product', 'ProductController@index')->name('product.index');
     Route::post('product', 'ProductController@uploadPrice')->name('upload-price');
-    Route::post('product-orders', 'ProductController@updateProductsOrder')->name('update.product-orders');
     Route::post('product-search', 'ProductController@search')->name('product.search');
 
 
     //заказы
     Route::resource('orders', 'OrderController');
     Route::get('orders-table', 'OrderController@datatable')->name('orders.datatable');
+    Route::post('product-orders', 'OrderController@updateProductsOrder')->name('update.product-orders');
 
 
     //Route::get('/home', 'HomeController@index')->name('home');

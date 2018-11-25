@@ -1,5 +1,8 @@
 
 <script>
+
+    let emptyProduct = {'product_name': '', pivot:{'courier_payment': 0, 'delta': 0, 'imei': '',  'order_id': 0, 'price': 0, 'price_opt': 0, 'product_id': 0, 'quantity': 0}};
+
     export default {
         props: {
             initial_data: Array,
@@ -62,6 +65,10 @@
 
             deleteProduct(index) {
                 this.products.splice(index, 1);
+            },
+
+            addProduct(prod = _.cloneDeep(emptyProduct)) {
+                this.products.push(prod);
             }
         },
 
@@ -80,7 +87,44 @@
                 }
 
                 return summ;
+            },
+
+            courier_payments() {
+                let summ = 0;
+
+                for(let i = 0; i < this.products.length; i++){
+                    if (this.products[i]) {
+                        summ += parseInt(this.products[i].pivot.courier_payment);
+                    }
+                }
+
+                return summ;
+            },
+
+            summ_opt() {
+                let summ = 0;
+
+                for(let i = 0; i < this.products.length; i++){
+                    if (this.products[i]) {
+                        summ += parseInt(this.products[i].pivot.price_opt) * this.products[i].pivot.quantity;
+                    }
+                }
+
+                return summ;
+            },
+
+            summ_price_products() {
+                let summ = 0;
+
+                for(let i = 0; i < this.products.length; i++){
+                    if (this.products[i]) {
+                        summ += parseInt(this.products[i].pivot.price)* this.products[i].pivot.quantity;
+                    }
+                }
+
+                return summ;
             }
+
         }
     }
 </script>

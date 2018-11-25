@@ -48,17 +48,19 @@
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Сумма</td>
                     <td>
-                        @{{ profit }}
+                        <button class="btn btn-success pull-right" @click.prevent="addProduct()">
+                            <i class="fa fa-plus"></i>Добавить
+                        </button>
                     </td>
+                    <td></td>
+                    <td></td>
+                    <td>Итого</td>
+                    <td>@{{ summ_price_products }}</td>
+                    <td>@{{ summ_opt }}</td>
+                    <td>  </td>
+                    <td> @{{ courier_payments }} </td>
+                    <td> @{{ profit }} </td>
                 </tr>
             </tbody>
         </table>
