@@ -14,6 +14,7 @@ class RenameProductsInOrderTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
+            $table->text('products')->nullable()->change();
             $table->renameColumn('products', 'products_text');
         });
     }
