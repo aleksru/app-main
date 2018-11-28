@@ -116,9 +116,11 @@
 
     <input type="hidden" class="form-control"  value="{{ Auth::user()->id }}" name="user_id">
 
-    <button form="order-form" type="submit" class="btn btn-primary pull-right">
-        <i class="fa fa-save"></i> Сохранить
-    </button>
+    <div class="col-sm-12">
+        <button form="order-form" type="submit" class="btn btn-primary pull-right">
+            <i class="fa fa-save"></i> Сохранить
+        </button>
+    </div>
 </form>
 
 

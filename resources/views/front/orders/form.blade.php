@@ -24,47 +24,50 @@
         @endif
     </div>
 
-    <div class="col-sm-12 col-md-6">
-        <div class="box box-solid">
-            <div class="box-body">
-                <h4> Заказ </h4>
-                @include('front.orders.parts.edit_form')
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="box box-solid">
+                <div class="box-body">
+                    <h4> Заказ </h4>
+                    @include('front.orders.parts.edit_form')
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+            <div class="box box-solid">
+                <div class="box-body">
+                    <h4> Клиент
+                        {{--<a href="{{ route('clients.show', $order->client->id) }}">--}}
+                            {{--<i class="fa fa-address-card" aria-hidden="true"></i>--}}
+                        {{--</a>--}}
+                    </h4>
+                    @include('front.orders.parts.widget_user', ['client' => $order->client ?? null])
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-sm-12 col-md-6">
-        <div class="box box-solid">
-            <div class="box-body">
-                <h4> Клиент
-                    {{--<a href="{{ route('clients.show', $order->client->id) }}">--}}
-                        {{--<i class="fa fa-address-card" aria-hidden="true"></i>--}}
-                    {{--</a>--}}
-                </h4>
-                @include('front.orders.parts.widget_user', ['client' => $order->client ?? null])
-            </div>
-        </div>
-    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            {{--<div class="box box-solid">--}}
 
-    <div class="col-sm-12 col-md-12">
-        <div class="box box-solid">
-            <div class="box-body">
-                <h4> Товары </h4>
-                {{--@component('layouts.forms.vue-select', [--}}
-                       {{--'name' => 'departure_city_id',--}}
-                       {{--'label' => 'Город отправления',--}}
-                       {{--'multiple' => false,--}}
-                       {{--'value' =>  [] ?? null,--}}
-                       {{--'valueColumn' => 'id',--}}
-                       {{--'labelColumn' => 'name',--}}
-                       {{--'empty' => true,--}}
-                       {{--//'search' => route('api.cities.search'),--}}
-                       {{--'options' => \App\Models\Operator::all(),--}}
-                       {{--'placeholder' => 'Выберите город',--}}
-                   {{--])--}}
-                {{--@endcomponent--}}
-                @include('front.orders.parts.products-table', ['order' => $order])
-            </div>
+                    {{--@component('layouts.forms.vue-select', [--}}
+                           {{--'name' => 'departure_city_id',--}}
+                           {{--'label' => 'Город отправления',--}}
+                           {{--'multiple' => false,--}}
+                           {{--'value' =>  [] ?? null,--}}
+                           {{--'valueColumn' => 'id',--}}
+                           {{--'labelColumn' => 'name',--}}
+                           {{--'empty' => true,--}}
+                           {{--//'search' => route('api.cities.search'),--}}
+                           {{--'options' => \App\Models\Operator::all(),--}}
+                           {{--'placeholder' => 'Выберите город',--}}
+                       {{--])--}}
+                    {{--@endcomponent--}}
+                    @include('front.orders.parts.products-table', ['order' => $order])
+                </div>
+            {{--</div>--}}
         </div>
     </div>
 

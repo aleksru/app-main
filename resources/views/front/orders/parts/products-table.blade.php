@@ -1,7 +1,24 @@
 <products-table :initial_data="{{ json_encode($order->products, true) }}" :initial_order="{{ json_encode($order->id, true) }}" inline-template>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Товары</h3>
 
-    <div class="col-xs-12 table-responsive">
-        <table class="table table-striped">
+        <div class="box-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+                {{--<input type="text" name="table_search" class="form-control pull-right" placeholder="Search">--}}
+
+                <div class="input-group-btn">
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary pull-right" @click.prevent="submit()">
+                            <i class="fa fa-save"></i> Сохранить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-body table-responsive no-padding">
+        <table class="table table-hover">
             <thead>
             <tr>
                 <th>#</th>
@@ -17,28 +34,28 @@
             </thead>
             <tbody>
                 <tr v-for="(product, index) in products">
-                    <td> @{{ index + 1  }} </td>
+                    <td>@{{ index + 1  }}</td>
                     <td>
                         {{--@{{  products[index].pivot.quantity }} --}}
-                        <input type="number" min="1" v-model="products[index].pivot.quantity">
+                        <input type="number" class="form-control" min="1" v-model="products[index].pivot.quantity">
                     </td>
                     <td> @{{  products[index].product_name }} </td>
                     <td>
                         {{--@{{  products[index].pivot.imei }}--}}
-                        <input type="text" v-model="products[index].pivot.imei">
+                        <input type="text" class="form-control" v-model="products[index].pivot.imei">
                     </td>
                     <td>
                         {{--@{{  products[index].pivot.price }}--}}
-                        <input type="number" min="1" v-model="products[index].pivot.price">
+                        <input type="number" class="form-control" min="1" v-model="products[index].pivot.price">
                     </td>
                     <td>
                         {{--@{{  products[index].pivot.price_opt }}--}}
-                        <input type="number" min="1" v-model="products[index].pivot.price_opt">
+                        <input type="number" class="form-control" min="1" v-model="products[index].pivot.price_opt">
                     </td>
                     <td> Поставщик  </td>
                     <td>
                         {{--@{{  products[index].pivot.courier_payment }}--}}
-                        <input type="number" min="1" v-model="products[index].pivot.courier_payment">
+                        <input type="number" class="form-control" min="1" v-model="products[index].pivot.courier_payment">
                     </td>
                     <td>
                         @{{  delta(index) }}
@@ -65,8 +82,7 @@
             </tbody>
         </table>
 
-        <button class="btn btn-primary pull-right" @click.prevent="submit()">
-            <i class="fa fa-save"></i> Сохранить
-        </button>
+
     </div>
+</div>
 </products-table>
