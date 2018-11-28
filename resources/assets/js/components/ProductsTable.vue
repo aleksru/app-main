@@ -1,7 +1,7 @@
 
 <script>
 
-    let emptyProduct = {'product_name': '', pivot:{'courier_payment': 0, 'delta': 0, 'imei': '',  'order_id': 0, 'price': 0, 'price_opt': 0, 'product_id': 0, 'quantity': 0}};
+    let emptyProduct = {id: null, product_name: '', pivot:{courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 0}};
 
     export default {
         props: {
@@ -11,6 +11,8 @@
         data() {
             return {
                 products: Array,
+                productSearch: [],
+                selectedProduct: ''
             }
         },
         methods: {
@@ -68,8 +70,19 @@
             },
 
             addProduct(prod = _.cloneDeep(emptyProduct)) {
+                prod.product_name = this.selectedProduct.product_name;
+                prod.id = this.selectedProduct.id;
+                prod.pivot.product_id = this.selectedProduct.id;
+                prod.pivot.order_id = this.initial_order;
                 this.products.push(prod);
-            }
+            },
+
+            async onSearchProduct(search, loading){
+                if(search.length > 2) {
+                    let response = await axios.post('/product-search', {query: search});
+                    this.productSearch =  response.data.products;
+                }
+            },
         },
 
         mounted() {

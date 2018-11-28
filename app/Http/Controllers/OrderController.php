@@ -85,6 +85,7 @@ class OrderController extends Controller
      */
     public function updateProductsOrder(Request $request)
     {
+        debug($request->all());
         $products = $request->get('products');
         $orderID = $request->get('order');
 
@@ -94,6 +95,7 @@ class OrderController extends Controller
             $toSync[$product['id']] = $product['pivot'];
         }
 
+        debug($toSync);
         Order::find($orderID)->products()->sync($toSync);
 
         return 1;

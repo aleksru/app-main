@@ -70,7 +70,9 @@
                             <i class="fa fa-plus"></i>Добавить
                         </button>
                     </td>
-                    <td></td>
+                    <td>
+
+                    </td>
                     <td></td>
                     <td>Итого</td>
                     <td>@{{ summ_price_products }}</td>
@@ -81,7 +83,7 @@
                 </tr>
             </tbody>
         </table>
-
+        <v-select label="product_name" v-model="selectedProduct" :filterable="false" :options="productSearch" @search="onSearchProduct" >
 
     </div>
 </div>

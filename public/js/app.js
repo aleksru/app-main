@@ -70365,10 +70365,16 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 //
 
 
-var emptyProduct = { 'product_name': '', pivot: { 'courier_payment': 0, 'delta': 0, 'imei': '', 'order_id': 0, 'price': 0, 'price_opt': 0, 'product_id': 0, 'quantity': 0 } };
+var emptyProduct = { id: null, product_name: '', pivot: { courier_payment: 0, delta: 0, imei: '', order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 0 } };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -70377,7 +70383,9 @@ var emptyProduct = { 'product_name': '', pivot: { 'courier_payment': 0, 'delta':
     },
     data: function data() {
         return {
-            products: Array
+            products: Array,
+            productSearch: [],
+            selectedProduct: ''
         };
     },
 
@@ -70432,8 +70440,46 @@ var emptyProduct = { 'product_name': '', pivot: { 'courier_payment': 0, 'delta':
         addProduct: function addProduct() {
             var prod = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _.cloneDeep(emptyProduct);
 
+            prod.product_name = this.selectedProduct.product_name;
+            prod.id = this.selectedProduct.id;
+            prod.pivot.product_id = this.selectedProduct.id;
+            prod.pivot.order_id = this.initial_order;
             this.products.push(prod);
-        }
+        },
+        onSearchProduct: function () {
+            var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(search, loading) {
+                var response;
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                if (!(search.length > 2)) {
+                                    _context.next = 5;
+                                    break;
+                                }
+
+                                _context.next = 3;
+                                return axios.post('/product-search', { query: search });
+
+                            case 3:
+                                response = _context.sent;
+
+                                this.productSearch = response.data.products;
+
+                            case 5:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function onSearchProduct(_x2, _x3) {
+                return _ref.apply(this, arguments);
+            }
+
+            return onSearchProduct;
+        }()
     },
 
     mounted: function mounted() {
