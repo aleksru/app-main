@@ -96,7 +96,7 @@ class OrderController extends Controller
 
         Order::find($orderID)->products()->sync($toSync);
 
-        return 1;
+        return response()->json(['message' => 'Товары успешно обновлены!']);
     }
 
     /**

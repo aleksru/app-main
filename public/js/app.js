@@ -70393,14 +70393,8 @@ var emptyProduct = { id: null, product_name: '', pivot: { courier_payment: 0, de
 
     methods: {
         submit: function submit() {
-            //                if(!this.dones){
-            //                    return toast.error('Проверьте все поля!');
-            //
-            //                }
             axios.post('/product-orders', { 'products': this.products, 'order': this.initial_order }).then(function (response) {
-                //                    this.periods = response.data.periods;
-                //                    toast.success(response.data.message);
-
+                toast.success(response.data.message);
             }).catch(function (error) {
                 if (error.response.status === 422) {
                     //this.errors = error.response.data.errors || {};

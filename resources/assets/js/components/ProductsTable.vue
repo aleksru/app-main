@@ -19,13 +19,8 @@
         },
         methods: {
             submit(){
-//                if(!this.dones){
-//                    return toast.error('Проверьте все поля!');
-//
-//                }
                 axios.post('/product-orders', {'products': this.products, 'order': this.initial_order}).then(response => {
-//                    this.periods = response.data.periods;
-//                    toast.success(response.data.message);
+                    toast.success(response.data.message);
 
                 }).catch(error => {
                     if (error.response.status === 422) {
