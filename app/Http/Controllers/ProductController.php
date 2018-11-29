@@ -46,6 +46,21 @@ class ProductController extends Controller
     {
         return response()->json(['products' =>Product::where('product_name', 'LIKE', '%'.$request->get('query').'%')->select('id', 'product_name')->get()]);
     }
+
+    /**
+     * Создание товара кастомного товара
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function create(Request $request)
+    {
+        $article = Product::where('article', 'LIKE', '%'.Product::PREFIX_CUSTOM_PRODUCT.'%')->orderBy('id', 'desc')->first();
+        $article = $article ? ((int)$article->article + 1).Product::PREFIX_CUSTOM_PRODUCT : '1000'.Product::PREFIX_CUSTOM_PRODUCT;
+        $product = Product::create(['product_name' => $request->get('product'), 'article' => $article]);
+
+        return response()->json(['product' => $product, 'message' => 'Товар создан и добавлен в заказ!']);
+    }
     
     
     

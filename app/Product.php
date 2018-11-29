@@ -13,6 +13,11 @@ class Product extends Model
     const PRICE_LIST_PRICE = 'Цена';
 
     /**
+     * Префикс товаров созданных вручную
+     */
+    const PREFIX_CUSTOM_PRODUCT = '-custom';
+
+    /**
      * пустой массив товаров
      * для заполнения в базу
      */

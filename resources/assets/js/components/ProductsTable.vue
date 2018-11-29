@@ -12,7 +12,9 @@
             return {
                 products: Array,
                 productSearch: [],
-                selectedProduct: ''
+                selectedProduct: null,
+                showCreateProduct: false,
+                newProductName: null,
             }
         },
         methods: {
@@ -32,33 +34,6 @@
                 });
             },
 
-            deletePeriod(index){
-
-//                if(!this.periods[index].id){
-//                    return this.periods.splice(index, 1);
-//                }
-//
-//                let id      = this.periods[index].id;
-//                let name    = this.periods[index].period;
-//
-//                let toastID = 'toast-delete-' + id;
-//
-//                toast.confirm('Вы действительно хотите удалить элемент "' + name + '"?', () => {
-//                    let loading = toast.loading('Идет удаление "' + name + '"');
-//                    axios.delete('delivery-periods/'+ id)
-//                        .then((response) => {
-//                            toast.hide(loading);
-//                            this.periods.splice(index, 1);
-//                            toast.success(response.data.message);
-//                        })
-//                        .catch((error) => {
-//                            console.log(error);
-//                            toast.hide(loading);
-//                            toast.error('Ошибка сервера! Пожалуйста, свяжитесь с администратором.');
-//                        })
-//                }, null, { id: toastID });
-            },
-
             delta(index) {
                 return this.products[index].pivot.delta = this.products[index].pivot.quantity * (this.products[index].pivot.price
                                                             - this.products[index].pivot.price_opt)
@@ -70,17 +45,43 @@
             },
 
             addProduct(prod = _.cloneDeep(emptyProduct)) {
-                prod.product_name = this.selectedProduct.product_name;
-                prod.id = this.selectedProduct.id;
-                prod.pivot.product_id = this.selectedProduct.id;
-                prod.pivot.order_id = this.initial_order;
-                this.products.push(prod);
+                if (this.selectedProduct) {
+                    prod.product_name = this.selectedProduct.product_name;
+                    prod.id = this.selectedProduct.id;
+                    prod.pivot.product_id = this.selectedProduct.id;
+                    prod.pivot.order_id = this.initial_order;
+
+                    this.products.push(prod);
+                    this.selectedProduct = null;
+                }
             },
 
             async onSearchProduct(search, loading){
                 if(search.length > 2) {
                     let response = await axios.post('/product-search', {query: search});
                     this.productSearch =  response.data.products;
+                    if (this.productSearch.length === 0) {
+                        this.showCreateProduct = true;
+                    }
+                }
+            },
+
+            async createProduct(){
+                if (this.newProductName) {
+                    let response = await axios.post('/product-create', {product: this.newProductName});
+                    let prod = _.cloneDeep(emptyProduct);
+
+                    prod.product_name = response.data.product.product_name;
+                    prod.id = response.data.product.id;
+                    prod.pivot.product_id = response.data.product.id;
+                    prod.pivot.order_id = this.initial_order;
+
+                    this.products.push(prod);
+                    this.showCreateProduct = false;
+                    this.newProductName = null;
+
+                    toast.success(response.data.message);
+
                 }
             },
         },

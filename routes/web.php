@@ -24,6 +24,7 @@ Route::group(['middleware' =>'auth'], function() {
     Route::get('product', 'ProductController@index')->name('product.index');
     Route::post('product', 'ProductController@uploadPrice')->name('upload-price');
     Route::post('product-search', 'ProductController@search')->name('product.search');
+    Route::post('product-create', 'ProductController@create')->name('product.create');
 
 
     //заказы
