@@ -70424,6 +70424,7 @@ var emptyProduct = { id: null, product_name: '', pivot: { courier_payment: 0, de
 
                 this.products.push(prod);
                 this.selectedProduct = null;
+                this.showCreateProduct = false;
             }
         },
         onSearchProduct: function () {
@@ -70445,6 +70446,7 @@ var emptyProduct = { id: null, product_name: '', pivot: { courier_payment: 0, de
                                 response = _context.sent;
 
                                 this.productSearch = response.data.products;
+
                                 if (this.productSearch.length === 0) {
                                     this.showCreateProduct = true;
                                 }

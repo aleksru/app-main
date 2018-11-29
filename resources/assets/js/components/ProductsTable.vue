@@ -53,6 +53,7 @@
 
                     this.products.push(prod);
                     this.selectedProduct = null;
+                    this.showCreateProduct = false;
                 }
             },
 
@@ -60,6 +61,7 @@
                 if(search.length > 2) {
                     let response = await axios.post('/product-search', {query: search});
                     this.productSearch =  response.data.products;
+
                     if (this.productSearch.length === 0) {
                         this.showCreateProduct = true;
                     }

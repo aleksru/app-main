@@ -70,27 +70,27 @@
                 <tbody>
                     <tr v-for="(product, index) in products">
                         <td>@{{ index + 1  }}</td>
-                        <td>
+                        <td style="width: 5%">
                             {{--@{{  products[index].pivot.quantity }} --}}
-                            <input type="number" class="form-control" min="1" v-model="products[index].pivot.quantity">
+                            <input type="number" min="1" style="width: 100%" v-model="products[index].pivot.quantity">
                         </td>
                         <td> @{{  products[index].product_name }} </td>
                         <td>
                             {{--@{{  products[index].pivot.imei }}--}}
                             <input type="text" class="form-control" v-model="products[index].pivot.imei">
                         </td>
-                        <td>
+                        <td style="width: 10%">
                             {{--@{{  products[index].pivot.price }}--}}
-                            <input type="number" class="form-control" min="1" v-model="products[index].pivot.price">
+                            <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.price">
                         </td>
-                        <td>
+                        <td style="width: 10%">
                             {{--@{{  products[index].pivot.price_opt }}--}}
-                            <input type="number" class="form-control" min="1" v-model="products[index].pivot.price_opt">
+                            <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.price_opt">
                         </td>
                         <td> Поставщик  </td>
-                        <td>
+                        <td style="width: 10%">
                             {{--@{{  products[index].pivot.courier_payment }}--}}
-                            <input type="number" class="form-control" min="1" v-model="products[index].pivot.courier_payment">
+                            <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.courier_payment">
                         </td>
                         <td>
                             @{{  delta(index) }}
