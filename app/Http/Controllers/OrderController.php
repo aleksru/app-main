@@ -16,10 +16,9 @@ class OrderController extends Controller
     }
 
     /**
-     * @param UpdateOrderRequest $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(UpdateOrderRequest $request)
+    public function index()
     {
         return view('front.orders.orders');
     }
@@ -68,7 +67,6 @@ class OrderController extends Controller
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
-        debug($request->validated());
         $order->update($request->validated());
 
         return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно обновлен!']);
@@ -121,7 +119,6 @@ class OrderController extends Controller
                                             ]);         
                             })
                             ->editColumn('products', function (Order $order) {
-                                debug($order->products);
                                 return view('datatable.products', [
                                                     'products' => $order->products_text ?? [],
                                             ]);         

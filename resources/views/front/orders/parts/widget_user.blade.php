@@ -17,7 +17,7 @@
             <label for="name" class="col-sm-2 control-label">Телефон</label>
 
             <div class="col-sm-10">
-                <input type="text" class="form-control"  value="{{ $client->phone ?? '' }}" name="phone">
+                <input type="text" id="phone" class="form-control"  value="{{ $client->phone ?? '' }}" name="phone">
             </div>
         </div>
         <div class="form-group">
@@ -53,3 +53,11 @@
 
         </div>
     </form>
+
+    @push('scripts')
+    <script>
+        $(function(){
+            $('#phone').mask('+7 (000) 000-0000');
+        });
+    </script>
+    @endpush

@@ -20,6 +20,7 @@ try {
     require ('admin-lte');
     require('jquery-slimscroll');
     require('select2');
+    require('jquery-mask-plugin');
 
 } catch (e) {}
 

@@ -39,7 +39,7 @@
                     <label for="name" class="col-sm-2 control-label">Телефон</label>
 
                     <div class="col-sm-6">
-                        <input type="text" class="form-control"  value="" name="phone">
+                        <input type="text" id="phone" class="form-control" value="" name="phone">
                     </div>
                 </div>
 
@@ -64,5 +64,8 @@
         toast.error('{{ session()->get('error') }}')
     @endif
 
+    $(function(){
+        $('#phone').mask('+7 (000) 000-0000');
+    });
 </script>
 @endpush
