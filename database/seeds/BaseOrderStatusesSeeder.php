@@ -17,7 +17,7 @@ class BaseOrderStatusesSeeder extends Seeder
     public function run()
     {
         foreach ($this->statuses as $status) {
-            \App\Models\OrderStatus::firstOrCreate($status);
+            \App\Models\OrderStatus::firstOrCreate(['status' =>$status['status']], ['color' => $status['color']]);
         }
     }
 }
