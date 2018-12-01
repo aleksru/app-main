@@ -34,6 +34,8 @@ class UpdateOrderRequest extends FormRequest
             'store' => 'string',
             'comment' => 'string|nullable',
             'date_delivery' => 'date|nullable',
+            'metro_id' => 'integer|nullable',
+            'address' => 'required|string'
         ];
     }
 }

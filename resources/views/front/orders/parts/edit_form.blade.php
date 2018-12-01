@@ -58,68 +58,37 @@
                 <option value="{{ null }}">  </option>
             </select>
         </div>
+
     </div>
+
     <div class="row">
+        <div class="col-sm-4">
+            <label for="metro" class="control-label">Метро</label>
+            <select class="js-example-metros-single form-control" name="metro_id">
+                <option value="{{ $order->metro->id ?? null }}" selected>{{ $order->metro->name ?? 'Не выбрана' }}</option>
+                <option value="{{ null }}">  </option>
+            </select>
+        </div>
+
         <div class="col-sm-8">
-            <label for="name" class="control-label">Комментарий</label>
-            <textarea class="form-control" rows="4" name="comment" placeholder="Комментарий ..."> {{ $order->comment ?? '' }}</textarea>
+            <label for="address" class="control-label">Адрес доставки</label>
+            <input type="text" class="form-control"  value="{{ $order->address ?? ''  }}" name="address">
         </div>
     </div>
 
-    {{--<div class="row">--}}
-        {{--<div class="col-sm-12">--}}
-            {{--<label for="name" class="control-label"></label>--}}
-                {{--<div class="box box-default collapsed-box">--}}
-                    {{--<div class="box-header with-border">--}}
-                        {{--<h3 class="box-title">Товары в заказе</h3>--}}
+    <div class="row">
+        <div class="col-sm-8">
+            <label for="name" class="control-label">Комментарий</label>
+            <textarea class="form-control" rows="2" name="comment" placeholder="Комментарий ..."> {{ $order->comment ?? '' }}</textarea>
+        </div>
+        <br><br>
+        <div class="col-sm-4">
+            <button form="order-form" type="submit" class="btn btn-primary pull-right ">
+                <i class="fa fa-save"></i> Сохранить
+            </button>
+        </div>
 
-                        {{--<div class="box-tools pull-right">--}}
-                            {{--<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>--}}
-                            {{--</button>--}}
-                        {{--</div>--}}
-                        {{--<!-- /.box-tools -->--}}
-                    {{--</div>--}}
-                    {{--<!-- /.box-header -->--}}
-                    {{--<div class="box-body" style="display: none;">--}}
-                        {{--@if (isset($order) && $order->products)--}}
-                            {{--<div class="col-xs-12 table-responsive">--}}
-                            {{--<table class="table table-striped">--}}
-                                {{--<thead>--}}
-                                    {{--<tr>--}}
-                                        {{--<th>Кол-во</th>--}}
-                                        {{--<th>Товар</th>--}}
-                                        {{--<th>Цена</th>--}}
-                                    {{--</tr>--}}
-                                {{--</thead>--}}
-                                {{--<tbody>--}}
-                                    {{--@foreach ($order->products as $product)--}}
-                                        {{--<tr>--}}
-                                            {{--<td>{{ $product["quantity"] ?? '' }}</td>--}}
-                                            {{--<td>{{ $product["name"] ?? '' }}</td>--}}
-                                            {{--<td>{{ $product["price"] ?? '' }} p.</td>--}}
-                                        {{--</tr>--}}
-                                    {{--@endforeach--}}
-                                {{--</tbody>--}}
-                            {{--</table>--}}
-                        {{--</div>--}}
-                        {{--@else--}}
-                            {{--Отсутствуют--}}
-                        {{--@endif--}}
-                    {{--</div>--}}
-                    {{--<!-- /.box-body -->--}}
-                {{--</div>--}}
-                {{--<!-- /.box -->--}}
-
-        {{--</div>--}}
-    {{--</div>--}}
-
-
-    <input type="hidden" class="form-control"  value="{{ Auth::user()->id }}" name="user_id">
-
-    <div class="col-sm-12">
-        <button form="order-form" type="submit" class="btn btn-primary pull-right">
-            <i class="fa fa-save"></i> Сохранить
-        </button>
+        <input type="hidden" class="form-control"  value="{{ Auth::user()->id }}" name="user_id">
     </div>
 </form>
 
@@ -166,6 +135,15 @@
                 data: operators,
                 allowClear: true,
                 placeholder: "Выберите оператора...",
+            });
+        });
+
+        let metros = {!!   json_encode(\App\Models\Metro::select('id', 'name as text')->get()->toArray()) !!}
+        $(function() {
+            $('.js-example-metros-single').select2({
+                data: metros,
+                allowClear: true,
+                placeholder: "Выберите станцию метро...",
             });
         });
     </script>

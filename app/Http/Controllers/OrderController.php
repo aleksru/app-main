@@ -68,6 +68,7 @@ class OrderController extends Controller
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
+        debug($request->validated());
         $order->update($request->validated());
 
         return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно обновлен!']);
