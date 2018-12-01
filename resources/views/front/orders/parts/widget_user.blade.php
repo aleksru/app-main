@@ -1,5 +1,8 @@
+<div class="box box-solid">
+    <div class="box-body">
+        <h4> Клиент <a href="{{ route('clients.show', $client->id) }}"><i class="fa fa-id-card" aria-hidden="true"></i></a> </h4>
 
-    <form id="user-form" role="form" method="post" class="form-horizontal" action="{{ isset($client) ? route('clients.update', $client->id) :  route('clients.store') }}">
+        <form id="user-form" role="form" method="post" class="form-horizontal" action="{{ isset($client) ? route('clients.update', $client->id) :  route('clients.store') }}">
         {{ csrf_field() }}
 
         @if (isset($client))
@@ -53,11 +56,13 @@
 
         </div>
     </form>
+    </div>
+</div>
 
-    @push('scripts')
+@push('scripts')
     <script>
         $(function(){
             $('#phone').mask('+7 (000) 000-0000');
         });
     </script>
-    @endpush
+@endpush

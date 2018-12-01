@@ -1,97 +1,102 @@
-<form id="order-form" role="form" method="post" class="form-horizontal" action="{{ isset($order) ? route('orders.update', $order->id) :  route('orders.store') }}">
-    {{ csrf_field() }}
+<div class="box box-solid">
+    <div class="box-body">
+        <h4> Заказ </h4>
 
-    @if (isset($order))
-        {{ method_field('PUT') }}
-    @endif
+        <form id="order-form" role="form" method="post" class="form-horizontal" action="{{ isset($order) ? route('orders.update', $order->id) :  route('orders.store') }}">
+            {{ csrf_field() }}
 
-    <div class="row">
-        <div class="col-sm-4">
-            <label for="name" class="control-label">№ ЗАКАЗА</label>
-            <input type="text" class="form-control"  value="{{ $order->id ?? '' }}" disabled>
-        </div>
+            @if (isset($order))
+                {{ method_field('PUT') }}
+            @endif
 
-        <div class="col-sm-4">
-            <label for="name" class="control-label">Дата заказа</label>
-            <input type="text" class="form-control"  value="{{ $order->created_at ?? '' }}" disabled>
-        </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">№ ЗАКАЗА</label>
+                    <input type="text" class="form-control"  value="{{ $order->id ?? '' }}" disabled>
+                </div>
 
-        <div class="col-sm-4">
-            <label for="name" class="control-label">Источник</label>
-            <input type="text" class="form-control"  value="{{ $order->store ?? '' }}" name="store">
-        </div>
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Дата заказа</label>
+                    <input type="text" class="form-control"  value="{{ $order->created_at ?? '' }}" disabled>
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Источник*</label>
+                    <input type="text" class="form-control"  value="{{ old('store', $order->store ?? '' ) }}" name="store">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Статус</label>
+                    <select class="js-example-basic-single form-control" name="status_id">
+                            <option value="{{ $order->status->id ?? null }}" selected>{{ $order->status->status ?? 'Не выбран' }}</option>
+                            <option value="{{ null }}">  </option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Оператор</label>
+                    <select class="js-example-operator-single form-control" name="operator_id">
+                        <option value="{{ $order->operator->id ?? null }}" selected>{{ $order->operator->name ?? 'Не выбран' }}</option>
+                        <option value="{{ null }}">  </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Курьер</label>
+                    <select class="js-example-couriers-single form-control" name="courier_id">
+                        <option value="{{ $order->courier->id ?? null }}" selected>{{ $order->courier->name ?? 'Не выбран' }}</option>
+                        <option value="{{ null }}">  </option>
+                    </select>
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Дата доставки</label>
+                    <input type="date" class="form-control"  value="{{  old('date_delivery', $order->date_delivery ?? null )  }}" name="date_delivery">
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Время доставки</label>
+                    <select class="js-example-period-single form-control" name="delivery_period_id">
+                        <option value="{{ $order->deliveryPeriod->id ?? null }}" selected>{{ $order->deliveryPeriod->period ?? 'Не выбран' }}</option>
+                        <option value="{{ null }}">  </option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="metro" class="control-label">Метро</label>
+                    <select class="js-example-metros-single form-control" name="metro_id">
+                        <option value="{{ $order->metro->id ?? null }}" selected>{{ $order->metro->name ?? 'Не выбрана' }}</option>
+                        <option value="{{ null }}">  </option>
+                    </select>
+                </div>
+
+                <div class="col-sm-8">
+                    <label for="address" class="control-label">Адрес доставки*</label>
+                    <input type="text" class="form-control"  value="{{ old('address', $order->address ?? '')  }}" name="address">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8">
+                    <label for="name" class="control-label">Комментарий</label>
+                    <textarea class="form-control" rows="2" name="comment" placeholder="Комментарий ..."> {{ old('comment', $order->comment ?? '') }}</textarea>
+                </div>
+                <br><br>
+                <div class="col-sm-4">
+                    <button form="order-form" type="submit" class="btn btn-primary pull-right ">
+                        <i class="fa fa-save"></i> Сохранить
+                    </button>
+                </div>
+
+                <input type="hidden" class="form-control"  value="{{ Auth::user()->id }}" name="user_id">
+            </div>
+        </form>
     </div>
-    <div class="row">
-        <div class="col-sm-4">
-            <label for="name" class="control-label">Статус</label>
-            <select class="js-example-basic-single form-control" name="status_id">
-                    <option value="{{ $order->status->id ?? null }}" selected>{{ $order->status->status ?? 'Не выбран' }}</option>
-                    <option value="{{ null }}">  </option>
-            </select>
-        </div>
-        <div class="col-sm-4">
-            <label for="name" class="control-label">Оператор</label>
-            <select class="js-example-operator-single form-control" name="operator_id">
-                <option value="{{ $order->operator->id ?? null }}" selected>{{ $order->operator->name ?? 'Не выбран' }}</option>
-                <option value="{{ null }}">  </option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4">
-            <label for="name" class="control-label">Курьер</label>
-            <select class="js-example-couriers-single form-control" name="courier_id">
-                <option value="{{ $order->courier->id ?? null }}" selected>{{ $order->courier->name ?? 'Не выбран' }}</option>
-                <option value="{{ null }}">  </option>
-            </select>
-        </div>
-
-        <div class="col-sm-4">
-            <label for="name" class="control-label">Дата доставки</label>
-            <input type="date" class="form-control"  value="{{ $order->date_delivery ?? null  }}" name="date_delivery">
-        </div>
-
-        <div class="col-sm-4">
-            <label for="name" class="control-label">Время доставки</label>
-            <select class="js-example-period-single form-control" name="delivery_period_id">
-                <option value="{{ $order->deliveryPeriod->id ?? null }}" selected>{{ $order->deliveryPeriod->period ?? 'Не выбран' }}</option>
-                <option value="{{ null }}">  </option>
-            </select>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-sm-4">
-            <label for="metro" class="control-label">Метро</label>
-            <select class="js-example-metros-single form-control" name="metro_id">
-                <option value="{{ $order->metro->id ?? null }}" selected>{{ $order->metro->name ?? 'Не выбрана' }}</option>
-                <option value="{{ null }}">  </option>
-            </select>
-        </div>
-
-        <div class="col-sm-8">
-            <label for="address" class="control-label">Адрес доставки</label>
-            <input type="text" class="form-control"  value="{{ $order->address ?? ''  }}" name="address">
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-8">
-            <label for="name" class="control-label">Комментарий</label>
-            <textarea class="form-control" rows="2" name="comment" placeholder="Комментарий ..."> {{ $order->comment ?? '' }}</textarea>
-        </div>
-        <br><br>
-        <div class="col-sm-4">
-            <button form="order-form" type="submit" class="btn btn-primary pull-right ">
-                <i class="fa fa-save"></i> Сохранить
-            </button>
-        </div>
-
-        <input type="hidden" class="form-control"  value="{{ Auth::user()->id }}" name="user_id">
-    </div>
-</form>
-
+</div>
 
 @push('scripts')
     <script>
