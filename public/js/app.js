@@ -70374,7 +70374,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 
 
-var emptyProduct = { id: null, product_name: '', pivot: { courier_payment: 0, delta: 0, imei: '', order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 0 } };
+var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: { courier_payment: 0, delta: 0, imei: '', order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 0 } };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -70387,12 +70387,17 @@ var emptyProduct = { id: null, product_name: '', pivot: { courier_payment: 0, de
             productSearch: [],
             selectedProduct: null,
             showCreateProduct: false,
-            newProductName: null
+            newProductName: null,
+            dataSuppliers: {}
         };
     },
 
     methods: {
         submit: function submit() {
+            for (var i = 0; i < this.products.length; i++) {
+                this.products[i].pivot.supplier_id = this.products[i].supplier_in_order[0] ? this.products[i].supplier_in_order[0].id : null;
+            }
+
             axios.post('/product-orders', { 'products': this.products, 'order': this.initial_order }).then(function (response) {
                 toast.success(response.data.message);
             }).catch(function (error) {

@@ -9,7 +9,7 @@
                 <label for="name" class="col-sm-2">Найти товар</label>
 
                 <div class="col-sm-6">
-                    <v-select label="product_name" v-model="selectedProduct" :filterable="false" :options="productSearch" @search="onSearchProduct">
+                    <v-select label="product_name" v-model="selectedProduct" :filterable="false" :options="productSearch" @search="onSearchProduct"></v-select>
                 </div>
                 <div class="col-sm-2">
                     <button class="btn btn-success" @click.prevent="addProduct()">
@@ -69,33 +69,35 @@
                 </thead>
                 <tbody>
                     <tr v-for="(product, index) in products">
-                        <td>@{{ index + 1  }}</td>
+                        <td style="width: 2%">@{{ index + 1  }}</td>
                         <td style="width: 5%">
                             {{--@{{  products[index].pivot.quantity }} --}}
                             <input type="number" min="1" style="width: 100%" v-model="products[index].pivot.quantity">
                         </td>
-                        <td> @{{  products[index].product_name }} </td>
-                        <td>
-                            {{--@{{  products[index].pivot.imei }}--}}
+                        <td style="width: 15%"> @{{  products[index].product_name }} </td>
+                        <td style="width: 10%">
+                            {{--imei --}}
                             <input type="text" class="form-control" v-model="products[index].pivot.imei">
                         </td>
                         <td style="width: 10%">
-                            {{--@{{  products[index].pivot.price }}--}}
+                            {{--price --}}
                             <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.price">
                         </td>
                         <td style="width: 10%">
-                            {{--@{{  products[index].pivot.price_opt }}--}}
+                            {{--price_opt --}}
                             <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.price_opt">
                         </td>
-                        <td> Поставщик  </td>
                         <td style="width: 10%">
-                            {{--@{{  products[index].pivot.courier_payment }}--}}
+                            <v-select label="name" v-model="products[index].supplier_in_order[0]" :options= {{ json_encode( \App\Models\Supplier::select('id', 'name')->get()) }}></v-select>
+                        </td>
+                        <td style="width: 10%">
+                            {{--courier_payment --}}
                             <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.courier_payment">
                         </td>
-                        <td>
+                        <td style="width: 5%">
                             @{{  delta(index) }}
                         </td>
-                        <td>
+                        <td style="width: 5%">
                             <i class="btn btn-danger fa fa-trash" @click.prevent="deleteProduct(index)"></i>
                         </td>
                     </tr>

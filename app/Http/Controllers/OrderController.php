@@ -16,7 +16,8 @@ class OrderController extends Controller
     }
 
     /**
-     * return \Illuminate\Http\Response
+     * @param UpdateOrderRequest $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(UpdateOrderRequest $request)
     {
@@ -24,7 +25,7 @@ class OrderController extends Controller
     }
 
     /**
-     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
@@ -32,7 +33,8 @@ class OrderController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UpdateOrderRequest $updateOrderRequest
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(UpdateOrderRequest $updateOrderRequest)
     {
@@ -42,7 +44,8 @@ class OrderController extends Controller
     }
 
     /**
-     * @param $id
+     * @param Order $order
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(Order $order)
     {
@@ -50,11 +53,12 @@ class OrderController extends Controller
     }
 
     /**
-     * @param $id
+     * @param Order $order
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Order $order)
     {
-        return view('front.orders.form', [ 'order' => $order->load('client') ]);
+        return view('front.orders.form', [ 'order' => $order->load('client', 'products.supplierInOrder') ]);
     }
 
     /**

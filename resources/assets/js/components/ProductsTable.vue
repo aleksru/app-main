@@ -1,7 +1,7 @@
 
 <script>
 
-    let emptyProduct = {id: null, product_name: '', pivot:{courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 0}};
+    let emptyProduct = {id: null, product_name: '', supplier_in_order: {},  pivot:{courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 0}};
 
     export default {
         props: {
@@ -15,10 +15,15 @@
                 selectedProduct: null,
                 showCreateProduct: false,
                 newProductName: null,
+                dataSuppliers: {},
             }
         },
         methods: {
             submit(){
+                for(let i = 0; i < this.products.length; i++){
+                    this.products[i].pivot.supplier_id = this.products[i].supplier_in_order[0] ? this.products[i].supplier_in_order[0].id : null;
+                }
+
                 axios.post('/product-orders', {'products': this.products, 'order': this.initial_order}).then(response => {
                     toast.success(response.data.message);
 
@@ -81,6 +86,7 @@
 
                 }
             },
+
         },
 
         mounted() {
@@ -134,7 +140,7 @@
                 }
 
                 return summ;
-            }
+            },
 
         }
     }

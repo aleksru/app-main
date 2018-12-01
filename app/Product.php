@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -52,5 +53,15 @@ class Product extends Model
     public function scopeByActicle($query, $article)
     {
         return $query->where('article', $article);
+    }
+
+    /**
+     * Поставщики в заказе
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function supplierInOrder()
+    {
+        return $this->belongsToMany(Supplier::class, 'order_product', 'product_id', 'supplier_id');
     }
 }
