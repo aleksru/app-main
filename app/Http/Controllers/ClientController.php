@@ -118,7 +118,7 @@ class ClientController extends Controller
 
         $order = Order::create([
             'client_id' => $client->id,
-            'store' => '',
+            'store_text' => '',
             'comment' =>'-',
         ]);
 
