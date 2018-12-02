@@ -45,7 +45,7 @@
                         'width' => '2%',
                         'searchable' => true,
                     ],
-                    'store' => [
+                    'store_text' => [
                         'name' => 'Магазин',
                         'width' => '3%',
                         'searchable' => true,

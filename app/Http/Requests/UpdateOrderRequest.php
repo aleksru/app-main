@@ -31,11 +31,12 @@ class UpdateOrderRequest extends FormRequest
             'courier_id' => 'integer|nullable',
             'delivery_period_id' => 'integer|nullable',
             'operator_id' => 'integer|nullable',
-            'store' => 'string',
+            'store_id' => 'required|integer',
             'comment' => 'string|nullable',
             'date_delivery' => 'date|nullable',
             'metro_id' => 'integer|nullable',
-            'address' => 'required|string'
+            'address' => 'required|string',
+            'store_text' => 'string|nullable',
         ];
     }
 }

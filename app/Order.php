@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['user_id', 'client_id','store','comment','status_id', 'courier_id',
-                            'delivery_period_id','operator_id','date_delivery','products_text', 'metro_id', 'address'
+    protected $fillable = ['user_id', 'client_id','store_text','comment','status_id', 'courier_id',
+                            'delivery_period_id','operator_id','date_delivery','products_text', 'metro_id', 'address',
+                            'store_id'
     ];
     
     protected $casts = [
@@ -88,5 +89,16 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class)->withPivot('price', 'quantity', 'imei', 'price_opt', 'supplier_id', 'courier_payment', 'delta');
     }
+
+    /**
+     * Магазин заказа
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
+
 
 }

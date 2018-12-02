@@ -21,8 +21,13 @@
                 </div>
 
                 <div class="col-sm-4">
-                    <label for="name" class="control-label">Источник*</label>
-                    <input type="text" class="form-control"  value="{{ old('store', $order->store ?? '' ) }}" name="store">
+                    {{--<label for="name" class="control-label">Источник*</label>--}}
+                    {{--<input type="text" class="form-control"  value="{{ old('store', $order->store ?? '' ) }}" name="store">--}}
+                    <label for="name" class="control-label">Источник</label>
+                    <select class="js-example-stores-single form-control" name="store_id">
+                        <option value="{{ $order->store->id ?? null }}" selected>{{ $order->store->name ?? 'Не выбран' }}</option>
+                        <option value="{{ null }}">  </option>
+                    </select>
                 </div>
             </div>
             <div class="row">
@@ -149,6 +154,15 @@
                 data: metros,
                 allowClear: true,
                 placeholder: "Выберите станцию метро...",
+            });
+        });
+
+        let stores = {!!   json_encode(\App\Store::select('id', 'name as text')->get()->toArray()) !!}
+        $(function() {
+            $('.js-example-stores-single').select2({
+                data: stores,
+                allowClear: true,
+                placeholder: "Выберите магазин...",
             });
         });
     </script>
