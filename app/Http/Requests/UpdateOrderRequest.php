@@ -37,6 +37,7 @@ class UpdateOrderRequest extends FormRequest
             'metro_id' => 'integer|nullable',
             'address' => 'required|string',
             'store_text' => 'string|nullable',
+            'flag_denial_acc' => 'string|nullable'
         ];
     }
 }

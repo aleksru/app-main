@@ -67,7 +67,9 @@ class OrderController extends Controller
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
-        $order->update($request->validated());
+        $data = $request->validated();
+        $data['flag_denial_acc'] = isset($data['flag_denial_acc']) ? $data['flag_denial_acc'] : null;
+        $order->update($data);
 
         return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно обновлен!']);
     }

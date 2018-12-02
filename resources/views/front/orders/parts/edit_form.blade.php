@@ -90,8 +90,12 @@
                     <label for="name" class="control-label">Комментарий</label>
                     <textarea class="form-control" rows="2" name="comment" placeholder="Комментарий ..."> {{ old('comment', $order->comment ?? '') }}</textarea>
                 </div>
-                <br><br>
+                <br>
                 <div class="col-sm-4">
+                    <label>
+                        <input type="checkbox" name="flag_denial_acc"
+                              @if($order->flag_denial_acc) checked @endif>Отказ от акс-ов
+                    </label>
                     <button form="order-form" type="submit" class="btn btn-primary pull-right ">
                         <i class="fa fa-save"></i> Сохранить
                     </button>
