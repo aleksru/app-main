@@ -74,4 +74,7 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Курьеры
     Route::resource('couriers', 'CourierController')->except('show');
     Route::get('couriers-table', 'CourierController@datatable')->name('couriers.datatable');
+
+    //Прайс-листы
+    Route::resource('price-types', 'PriceTypeController')->only('index', 'store', 'destroy');
 });
