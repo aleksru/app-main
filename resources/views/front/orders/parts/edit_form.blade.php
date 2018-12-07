@@ -1,6 +1,10 @@
 <div class="box box-solid">
     <div class="box-body">
-        <h4> Заказ </h4>
+        <h4> Заказ
+            <a href="{{ route('docs.market-check',$order->id) }}">
+                <i class="fa fa-file-excel-o btn btn-info pull-right" aria-hidden="true">   Скачать счет</i>
+            </a>
+        </h4>
 
         <form id="order-form" role="form" method="post" class="form-horizontal" action="{{ isset($order) ? route('orders.update', $order->id) :  route('orders.store') }}">
             {{ csrf_field() }}
