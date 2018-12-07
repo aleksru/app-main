@@ -26,10 +26,11 @@ class ApiSetOrderRequest extends FormRequest
     {
         return [
             'name_customer' =>'required|string',
-            'store' =>'required|string',
+            'store_text' =>'required|string',
+            'store_id' =>'required|string',
             'phone' =>'required|string',
-            'comment' =>'required|string',
-            'products' =>'required',
+            'comment' =>'string|nullable',
+            'products' =>'string|nullable',
             'quantity' => '',
             
         ];
