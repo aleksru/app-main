@@ -29,6 +29,10 @@ class DocumentController extends Controller
      */
     public function getMarketCheck(Order $order)
     {
+        if ($order->products->isEmpty()) {
+            return redirect()->back()->with(['error' => 'В заказе отсутствуют товары!']);
+        }
+
         $this->builder->download(new MarketCheckData($order), 'invoice');
     }
 }
