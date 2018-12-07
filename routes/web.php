@@ -41,6 +41,12 @@ Route::group(['middleware' =>'auth'], function() {
     //клиенты
     Route::resource('clients', 'ClientController');
     Route::post('create-client-order', 'ClientController@createOrderClient')->name('create.user-order');
+
+    //документы
+    Route::group( ['prefix' => 'docs', 'as' => 'docs.'], function (){
+        Route::get('market-check/{order}', 'DocumentController@getMarketCheck')->name('market-check');
+    });
+
 });
 
 //Админка
