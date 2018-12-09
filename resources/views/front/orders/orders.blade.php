@@ -26,6 +26,9 @@
           </ul>
         </div>
         <div class="box-header">
+            <a href="{{route('docs.report')}}">
+                    <i class="fa fa-file-text-o"></i> Ежедневный отчет
+                </a>
             <a href="{{route('orders.create')}}"><button class="btn btn-sm btn-primary pull-right">
                     <i class="fa fa-plus"></i> Новый заказ
                 </button></a>

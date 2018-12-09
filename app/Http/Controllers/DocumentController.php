@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Service\DocumentBuilder\Builder;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\MarketCheckData;
+use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\RouteMap;
 use App\Models\Courier;
 use App\Order;
@@ -75,5 +76,19 @@ class DocumentController extends Controller
         }
 
         $this->builder->download(new RouteMap($courier, $request->get('date')), 'route_map');
+    }
+
+    /**
+     * Отчет по заказам
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function reportDayOrders(Request $request)
+    {
+        if (Order::toDay($request->get('date'))->count() === 0 ) {
+            return redirect()->back()->with(['error' => 'Отсутствуют заказы за выбранный период!']);
+        }
+
+        $this->builder->download(new Report($request->get('date')), 'day_report');
     }
 }

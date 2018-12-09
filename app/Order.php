@@ -114,5 +114,19 @@ class Order extends Model
         return $query->whereDate('date_delivery', $date);
     }
 
+    /**
+     * Фильтр по дате
+     * @param $query
+     * @return mixed
+     */
+    public function scopeToDay($query, $date=null)
+    {
+        if (!$date) {
+            $date = date('Y-m-d');
+        }
+
+        return $query->whereDate('created_at', $date);
+    }
+
 
 }
