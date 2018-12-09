@@ -70988,7 +70988,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 
 
-var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: { courier_payment: 0, delta: 0, imei: '', order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 0 } };
+var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: { courier_payment: 0, delta: 0, imei: '', order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 1 } };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {

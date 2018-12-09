@@ -1,7 +1,7 @@
 
 <script>
 
-    let emptyProduct = {id: null, product_name: '', supplier_in_order: {},  pivot:{courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 0}};
+    let emptyProduct = {id: null, product_name: '', supplier_in_order: {},  pivot:{courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 1}};
 
     export default {
         props: {

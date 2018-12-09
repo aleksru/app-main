@@ -100,5 +100,19 @@ class Order extends Model
         return $this->belongsTo(Store::class);
     }
 
+    /**
+     * Фильтр по дате доставки
+     * @param $query
+     * @return mixed
+     */
+    public function scopeDeliveryToday($query, $date=null)
+    {
+        if (!$date) {
+            $date = date('Y-m-d');
+        }
+
+        return $query->whereDate('date_delivery', $date);
+    }
+
 
 }

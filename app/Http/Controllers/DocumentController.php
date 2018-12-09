@@ -6,7 +6,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Service\DocumentBuilder\Builder;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\MarketCheckData;
+use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\RouteMap;
+use App\Models\Courier;
 use App\Order;
+use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
@@ -34,5 +37,43 @@ class DocumentController extends Controller
         }
 
         $this->builder->download(new MarketCheckData($order), 'invoice');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index()
+    {
+        return view('front.print-form.index');
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function form(Request $request)
+    {
+        $dateDelivery = $request->get('date_delivery');
+        $courier = Courier::find($request->get('courier'));
+        $courier = $courier ? $courier->load(['orders' => function($query) use ($dateDelivery){
+            $query->deliveryToday($dateDelivery);
+        }]) : null;
+
+        return view('front.print-form.index', ['courier' => $courier, 'toDate' => $dateDelivery]);
+    }
+
+    /**
+     * Маршрутный лист курьера
+     *
+     * @param Courier $courier
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function getRouteMap(Courier $courier, Request $request)
+    {
+        if ($courier->orders()->deliveryToday($request->get('date'))->count() === 0 ) {
+            return redirect()->back()->with(['error' => 'На курьера не назначено заказов!']);
+        }
+
+        $this->builder->download(new RouteMap($courier, $request->get('date')), 'route_map');
     }
 }

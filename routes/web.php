@@ -45,6 +45,9 @@ Route::group(['middleware' =>'auth'], function() {
     //документы
     Route::group( ['prefix' => 'docs', 'as' => 'docs.'], function (){
         Route::get('market-check/{order}', 'DocumentController@getMarketCheck')->name('market-check');
+        Route::get('route-map/{courier}', 'DocumentController@getRouteMap')->name('route-map');
+        Route::get('print-form/', 'DocumentController@index')->name('index');
+        Route::post('print-form/', 'DocumentController@form')->name('form');
     });
 
 });

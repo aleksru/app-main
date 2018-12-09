@@ -27,6 +27,7 @@ class Builder
      */
     private $templates = [
         'invoice' => 'market_check.xlsx',
+        'route_map' => 'route_map.xlsx'
     ];
 
     /**
