@@ -138,6 +138,11 @@ class OrderController extends Controller
                                 return $order->client->phone ?? '';
 
                             })
+
+                            ->editColumn('store_text', function (Order $order) {
+                                return $order->store->name ?? $order->store_text;
+
+                            })
                             ->rawColumns(['actions', 'status', 'products', 'name_customer'])
                             ->make(true);
     }
