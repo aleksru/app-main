@@ -15,6 +15,8 @@ class RouteMap implements DataInterface
      */
     private $data = [
         'courier_name' => '',
+        'day' => '',
+        'month' => '',
         'product' => []
     ];
 
@@ -59,7 +61,10 @@ class RouteMap implements DataInterface
      */
     public function prepareData()
     {
-        $this->data['courier_name' ] = $this->courier->name;
+        $this->data['courier_name'] = $this->courier->name;
+        $this->data['month'] = $this->toDate ? get_rus_month(date("m", strtotime($this->toDate)) - 1) :
+                                                get_rus_month((int)date('m') - 1);
+        $this->data['day'] = $this->toDate ? date("d", strtotime($this->toDate)) : date('d');
 
         $numb = 1;
         foreach ($this->courier->orders()->deliveryToday($this->toDate)->with('products')->get() as $order) {
