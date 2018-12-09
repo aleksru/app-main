@@ -29,12 +29,12 @@ class PriceTypeController extends Controller
     }
 
     /**
-     * @param OrderStatus $orderStatus
+     * @param PriceType $priceType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(OrderStatus $orderStatus)
+    public function destroy(PriceType $priceType)
     {
-        $orderStatus->delete();
+        $priceType->delete();
 
         return response()->json(['message' => 'Прайс-лист удален']);
     }

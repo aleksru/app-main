@@ -48,9 +48,9 @@ class UpdatePriceListCommand extends Command
         //счетчик
         $counter = 0;
         
-        foreach (PriceType::getPriceTypesName() as $priceType){
-           PriceType::firstOrCreate(['name' => $priceType]);
-        }
+//        foreach (PriceType::getPriceTypesName() as $priceType){
+//           PriceType::firstOrCreate(['name' => $priceType]);
+//        }
         
         $files = File::where('status', 0)->get();
         if ( !$files->isEmpty() ) {
