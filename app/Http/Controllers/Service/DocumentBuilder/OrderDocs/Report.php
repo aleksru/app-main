@@ -70,11 +70,14 @@ class Report implements DataInterface
         $numb = 1;
         foreach (Order::toDay($this->toDate)->with('products')->get() as $order) {
             $this->product['product.order'] = $order->id;
-            $this->product['product.type'] = $order->store_text ?? '';
+            $this->product['product.type'] = $order->comment ?? '';
             $this->product['product.store'] = $order->store ? $order->store->name : '';
 
             if ($order->products->isEmpty()) {
                 $this->product['product.index'] = $numb;
+                $this->product['product.name'] = '';
+                $this->product['product.quantity'] = '';
+                $this->product['product.price'] = '';
                 array_push($this->data['product'], $this->product);
                 ++$numb;
                 continue;
