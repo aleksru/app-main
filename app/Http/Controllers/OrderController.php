@@ -109,7 +109,11 @@ class OrderController extends Controller
      */
     public function datatable()
     {
-        return datatables() ->of(Order::with('client', 'status'))
+        return datatables() ->of(Order::with('status', 'store', 'client')->join('clients as c', 'client_id', '=', 'c.id')
+                                                                                  ->selectRaw('orders.*, c.phone as phone'))
+                            ->filterColumn('phone', function ($query, $keyword) {
+                                return $query->whereRaw('LOWER(c.phone) like ?', "{$keyword}%");
+                            })
                             ->editColumn('actions', function (Order $order) { 
                                 return view('datatable.actions_order', [
                                     'order' => $order,

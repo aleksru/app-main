@@ -46,17 +46,20 @@
                     'status' => [
                         'name' => 'Статус',
                         'width' => '2%',
-                        'searchable' => true,
+                        'searchable' => false,
+                        'orderable' => 'false'
                     ],
                     'store_text' => [
                         'name' => 'Магазин',
                         'width' => '3%',
                         'searchable' => true,
+                        'orderable' => 'false'
                     ],
                     'name_customer' => [
                         'name' => 'Покупатель',
                         'width' => '3%',
-                        'searchable' => true,
+                        'searchable' => false,
+                        'orderable' => 'false'
                     ],
                     'phone' => [
                         'name' => 'Телефон',
@@ -66,12 +69,14 @@
                     'products' => [
                         'name' => 'Товары',
                         'width' => '20%',
-                        'searchable' => true,
+                        'searchable' => false,
+                        'orderable' => 'false'
                     ],
                     'comment' => [
                         'name' => 'Комментарий',
                         'width' => '5%',
                         'searchable' => true,
+                        'orderable' => 'false'
                     ],
                     'created_at' => [
                         'name' => 'Дата создания',
