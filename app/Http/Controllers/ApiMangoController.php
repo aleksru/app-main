@@ -48,12 +48,11 @@ class ApiMangoController extends Controller
                     $client = Client::create(['phone' => $data['from']['number']]);
 
                     Order::create([
-                        'name_customer' => 'Входящий Звонок',
                         'client_id' => $client->id,
                         'store_text' => $store->name ?? 'Не определен',
                         'phone' => $data['from']['number'],
                         'total' =>'0',
-                        'comment' =>'-',
+                        'comment' =>'Входящий Звонок',
                         'store_id' => $store->id ?? null,
                         //'products' => Product::EMPTY_PRODUCTS
                     ]);
