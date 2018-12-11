@@ -23,10 +23,18 @@ class ClientRequest extends FormRequest
      */
     public function rules()
     {
+        $phone = $this->route('client') ? ",{$this->route('client')->id},id" : '';
+
         return [
             'name' => 'required|string',
-            'phone' => 'required|string',
+            'phone' => 'required|string|unique:clients,phone'.$phone,
             'description' => 'string|nullable',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('phone'))
+            $this->merge(['phone' => preg_replace('/[^0-9]/', '', $this->phone)]);
     }
 }
