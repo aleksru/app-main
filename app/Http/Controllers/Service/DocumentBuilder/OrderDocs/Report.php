@@ -32,12 +32,26 @@ class Report implements DataInterface
      */
     private $product = [
         'product.index' => 1,
-        'product.order' => 0,
-        'product.name' => 0,
-        'product.quantity' => '',
-        'product.price' => '',
-        'product.type' => '',
+        'product.date' => '',
+        'product.operator' => '',
         'product.store' => '',
+        'product.order' => 0,
+        'product.type' => '',
+        'product.client_name' => '',
+        'product.delivery_time' => '',
+        'product.address' => '',
+        'product.client_phone' => '',
+
+
+        'product.name' => '',
+        'product.imei' => '',
+        'product.quantity' => '',
+        'product.price_opt' => '',
+        'product.price' => '',
+        'product.courier_payment' => '',
+        'product.profit' => '',
+        'product.courier_name' => '',
+        'product.supplier' => '',
         'product.test' => '',
 
     ];
@@ -48,8 +62,8 @@ class Report implements DataInterface
     private $toDate = null;
 
     /**
-     * RouteMap constructor.
-     * @param Courier $courier
+     * Report constructor.
+     * @param string|null $date
      */
     public function __construct (string $date = null)
     {
@@ -68,27 +82,47 @@ class Report implements DataInterface
         $this->data['year'] = $this->toDate ? date("Y", strtotime($this->toDate)) : date('Y');
 
         $numb = 1;
-        foreach (Order::toDay($this->toDate)->with('products')->get() as $order) {
+        foreach (Order::toDay($this->toDate)->with('products', 'operator', 'client', 'deliveryPeriod', 'courier')->get() as $order) {
+            $this->product['product.date'] = date("d.m.Y", strtotime($this->toDate));
+            $this->product['product.operator'] = $order->operator ? $order->operator->name : '';
             $this->product['product.order'] = $order->id;
             $this->product['product.type'] = $order->comment ?? '';
             $this->product['product.store'] = $order->store ? $order->store->name : '';
+            $this->product['product.client_name'] = $order->client ? $order->client->name : '';
+            $this->product['product.delivery_time'] = $order->deliveryPeriod ? $order->deliveryPeriod->period : '';
+            $this->product['product.address'] = $order->address ??  '';
+            $this->product['product.client_phone'] = $order->client ? $order->client->phone : '';
 
             if ($order->products->isEmpty()) {
                 $this->product['product.index'] = $numb;
                 $this->product['product.name'] = '';
+                $this->product['product.imei'] = '';
                 $this->product['product.quantity'] = '';
+                $this->product['product.price_opt'] = '';
                 $this->product['product.price'] = '';
+                $this->product['product.courier_payment'] = '';
+                $this->product['product.profit'] = '';
+                $this->product['product.courier_name'] = '';
+                $this->product['product.supplier'] = '';
+
                 array_push($this->data['product'], $this->product);
                 ++$numb;
                 continue;
             }
 
             foreach ($order->products as $product) {
+
                 $this->product['product.index'] = $numb;
-                $this->product['product.name'] = $product->product_name;
+                $this->product['product.name'] = $product->product_name ?? '';
+                $this->product['product.imei'] = $product->pivot->imei ?? '';
                 $this->product['product.quantity'] = $product->pivot->quantity ?? '';
+                $this->product['product.price_opt'] = $product->pivot->price_opt ?? '';
                 $this->product['product.price'] = $product->pivot->price ?? '';
-                $this->product['product.test'] = '';
+                $this->product['product.courier_payment'] = $product->pivot->courier_payment ?? '';
+                $this->product['product.profit'] = (int)$product->pivot->price - (int)$product->pivot->price_opt;
+                $this->product['product.courier_name'] = $product->courier->name ?? '';
+                $this->product['product.supplier'] = '';
+
                 ++$numb;
                 array_push($this->data['product'], $this->product);
             }
