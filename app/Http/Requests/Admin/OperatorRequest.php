@@ -23,7 +23,7 @@ class OperatorRequest extends FormRequest
      */
     public function rules()
     {
-        $sipLogin = $this->route('operator') ? ",{$this->route('operator')->sip_login},sip_login" : '';
+        $sipLogin = $this->route('operator') ? ",{$this->route('operator')->id},id" : '';
 
         return [
             'name' => 'required|string',
