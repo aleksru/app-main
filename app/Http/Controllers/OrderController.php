@@ -92,14 +92,17 @@ class OrderController extends Controller
     {
         $products = $request->get('products');
         $orderID = $request->get('order');
+        $order = Order::find($orderID);
 
-        $toSync = [];
-
-        foreach ($products as $product) {
-            $toSync[$product['id']] = $product['pivot'];
+        if (! $order) {
+            response()->json(['message' => 'Заказ не найден!']);
         }
 
-        Order::find($orderID)->products()->sync($toSync);
+        $order->products()->detach();
+
+        foreach ($products as $product) {
+            $order->products()->attach([$product['id'] => $product['pivot']]);
+        }
 
         return response()->json(['message' => 'Товары успешно обновлены!']);
     }
