@@ -30,6 +30,7 @@ class DocumentController extends Controller
 
     /**
      * @param Order $order
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function getMarketCheck(Order $order)
     {

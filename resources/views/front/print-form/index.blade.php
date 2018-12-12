@@ -21,7 +21,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-6 col-md-6">
             <div class="box box-default">
                 <div class="box-header with-border">
                     <h3 class="box-title">Курьер</h3>
@@ -42,6 +42,27 @@
                         </div>
                         <div class="col-sm-12">
                             <button form="cour" type="submit" class="btn btn-primary pull-right ">
+                                Сформировать
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Ежедневный отчет</h3>
+                </div>
+                <form id="report" role="report" method="post" class="form-horizontal" action="{{ route('docs.report') }}">
+                    {{ csrf_field() }}
+                    <div class="box-body">
+                        <div class="col-sm-8">
+                            <label for="name" class="control-label">Дата</label>
+                            <input type="date" class="form-control"  value="" name="date">
+                        </div>
+                        <div class="col-sm-12">
+                            <button form="report" type="submit" class="btn btn-primary pull-right ">
                                 Сформировать
                             </button>
                         </div>

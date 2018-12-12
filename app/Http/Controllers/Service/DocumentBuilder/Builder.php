@@ -48,11 +48,12 @@ class Builder
     public function download(DataInterface $data, string $type)
     {
         $docType = $this->templates[$type];
+        $dataDoc = $data->prepareData()->getData();
 
         $this->exelDocCreator->download(
             $data->getFileName(),
             self::$storageTemplates.$docType,
-            $data->prepareData()->getData(),
+            $dataDoc,
             self::FORMAT_DOC_EXEL
         );
     }

@@ -46,7 +46,7 @@ Route::group(['middleware' =>'auth'], function() {
     Route::group( ['prefix' => 'docs', 'as' => 'docs.'], function (){
         Route::get('market-check/{order}', 'DocumentController@getMarketCheck')->name('market-check');
         Route::get('route-map/{courier}', 'DocumentController@getRouteMap')->name('route-map');
-        Route::get('report', 'DocumentController@reportDayOrders')->name('report');
+        Route::post('report', 'DocumentController@reportDayOrders')->name('report');
         Route::get('print-form/', 'DocumentController@index')->name('index');
         Route::post('print-form/', 'DocumentController@form')->name('form');
     });
