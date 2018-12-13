@@ -75,6 +75,22 @@ class OrderController extends Controller
     }
 
     /**
+     * Динамическое изменение статуса заказа
+     *
+     * @param Request $request
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateStatus(Request $request, Order $order)
+    {
+        $statusId = Order::statusFinallyId();
+
+        $order->update(['status_id' => $statusId]);
+
+        return response()->json(['message' => 'Заказ переведен в статус "Завершен"']);
+    }
+
+    /**
      * @param $id
      */
     public function destroy($id)

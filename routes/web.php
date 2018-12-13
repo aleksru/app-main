@@ -31,6 +31,7 @@ Route::group(['middleware' =>'auth'], function() {
     Route::resource('orders', 'OrderController');
     Route::get('orders-table', 'OrderController@datatable')->name('orders.datatable');
     Route::post('product-orders', 'OrderController@updateProductsOrder')->name('update.product-orders');
+    Route::post('orders/{order}/set-status', 'OrderController@updateStatus')->name('orders.set-status');
 
 
     //Route::get('/home', 'HomeController@index')->name('home');

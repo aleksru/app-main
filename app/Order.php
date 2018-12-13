@@ -8,6 +8,7 @@ use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Models\Metro;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -126,6 +127,18 @@ class Order extends Model
         }
 
         return $query->whereDate('created_at', $date);
+    }
+
+    /**
+     * Получение id статуса Завершен
+     *
+     * @return integer|null
+     */
+    public static function statusFinallyId()
+    {
+         $statusID = DB::table('order_statuses')->where('status', 'LIKE', '%завершен%')->first();
+
+         return $statusID ? $statusID->id : null;
     }
 
 

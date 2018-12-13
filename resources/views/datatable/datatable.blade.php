@@ -130,6 +130,36 @@
                 }, null, { id: toastID });
             });
 
+
+            /**
+             * Обработчик на обновления статуса
+             */
+            $('#{{ $id }}').on('click', '.btn-status', function () {
+                let id      = $(this).data('id');
+                let name    = $(this).data('name');
+                let route   = $(this).data('route');
+
+                let toastID = 'toast-delete-' + id;
+
+                if ($('#' + toastID).length > 0)
+                    return false;
+
+                toast.confirm('Вы действительно хотите закрыть заказ "' + name + '"?', function () {
+                    let loading = toast.loading('Изменение статуса "' + name + '"');
+                    axios.post(route)
+                        .then((response) => {
+                        table.ajax.reload(() => {
+                        toast.hide(loading);
+                    toast.success(response.data.message);
+                }, false);
+                })
+                    .catch((error) => {
+                        toast.hide(loading);
+                    toast.error('Ошибка сервера! Пожалуйста, свяжитесь с администратором.');
+                })
+                }, null, { id: toastID });
+            });
+
 // вынесено
 // если нужно динамически обновлять данные - в шаблон добавить скрипт
 //            $(function () {
