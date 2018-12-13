@@ -42,6 +42,7 @@ class Report implements DataInterface
         'product.delivery_time' => '0',
         'product.address' => '0',
         'product.client_phone' => '0',
+        'product.status' => '0',
 
 
         'product.name' => '0',
@@ -84,8 +85,8 @@ class Report implements DataInterface
 
         $numb = 1;
 
-        foreach (Order::toDay($this->toDate)->with('products', 'operator', 'client', 'deliveryPeriod', 'courier', 'metro')->get() as $order) {
-            $this->product['product.date'] =  $this->data['day'].' '.$this->data['month'].' '.$this->data['year'];
+        foreach (Order::toDay($this->toDate)->with('products', 'operator', 'client', 'deliveryPeriod', 'courier', 'metro', 'status')->get() as $order) {
+            $this->product['product.date'] =  $this->toDate ? date("d.m.Y", strtotime($this->toDate)) : date('d.m.Y');
             $this->product['product.operator'] = $order->operator ? $order->operator->name : '';
             $this->product['product.order'] = $order->id;
             $this->product['product.type'] = $order->comment ?? '';
@@ -96,6 +97,7 @@ class Report implements DataInterface
                                                     .' '. ($order->address ?? '');
             $this->product['product.client_phone'] = $order->client ? $order->client->phone : '';
             $this->product['product.courier_name'] = $order->courier->name ?? '';
+            $this->product['product.status'] = $order->status? $order->status->status : '';
 
             if ($order->products->isEmpty()) {
                 $this->product['product.index'] = $numb;
