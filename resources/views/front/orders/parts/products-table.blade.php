@@ -88,7 +88,9 @@
                             <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.price_opt">
                         </td>
                         <td style="width: 10%">
-                            <v-select label="name" v-model="products[index].supplier_in_order[0]" :options= {{ json_encode( \App\Models\Supplier::select('id', 'name')->get()) }}></v-select>
+                            <v-select label="name"
+                                      :options="{{ json_encode(\App\Models\Supplier::select('id', 'name')->get()) }}">
+                            </v-select>
                         </td>
                         <td style="width: 10%">
                             {{--courier_payment --}}
