@@ -70988,7 +70988,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 
 
-var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: { courier_payment: 0, delta: 0, imei: '', order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 1 } };
+var emptyProduct = { id: null, product: {}, supplier_in_order: {}, courier_payment: 0, delta: 0, imei: '', order_id: 0, price: 0, price_opt: 0, product_id: null, quantity: 1 };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -71008,11 +71008,14 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
 
     methods: {
         submit: function submit() {
+            var _this = this;
+
             for (var i = 0; i < this.products.length; i++) {
-                this.products[i].pivot.supplier_id = this.products[i].supplier_in_order[0] ? this.products[i].supplier_in_order[0].id : null;
+                this.products[i].supplier_id = this.products[i].supplier ? this.products[i].supplier.id : null;
             }
 
-            axios.post('/product-orders', { 'products': this.products, 'order': this.initial_order }).then(function (response) {
+            axios.post('/product-orders/' + this.initial_order, { 'products': this.products }).then(function (response) {
+                _this.products = response.data.products;
                 toast.success(response.data.message);
             }).catch(function (error) {
                 if (error.response.status === 422) {
@@ -71021,7 +71024,7 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
             });
         },
         delta: function delta(index) {
-            return this.products[index].pivot.delta = this.products[index].pivot.quantity * (this.products[index].pivot.price - this.products[index].pivot.price_opt) - this.products[index].pivot.courier_payment;
+            return this.products[index].delta = this.products[index].quantity * (this.products[index].price - this.products[index].price_opt) - this.products[index].courier_payment;
         },
         deleteProduct: function deleteProduct(index) {
             this.products.splice(index, 1);
@@ -71030,10 +71033,9 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
             var prod = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _.cloneDeep(emptyProduct);
 
             if (this.selectedProduct) {
-                prod.product_name = this.selectedProduct.product_name;
-                prod.id = this.selectedProduct.id;
-                prod.pivot.product_id = this.selectedProduct.id;
-                prod.pivot.order_id = this.initial_order;
+                prod.product.product_name = this.selectedProduct.product_name;
+                prod.product.id = this.selectedProduct.id;
+                prod.product_id = this.selectedProduct.id;
 
                 this.products.push(prod);
                 this.selectedProduct = null;
@@ -71086,7 +71088,7 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 if (!this.newProductName) {
-                                    _context2.next = 13;
+                                    _context2.next = 12;
                                     break;
                                 }
 
@@ -71098,10 +71100,9 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
                                 prod = _.cloneDeep(emptyProduct);
 
 
-                                prod.product_name = response.data.product.product_name;
-                                prod.id = response.data.product.id;
-                                prod.pivot.product_id = response.data.product.id;
-                                prod.pivot.order_id = this.initial_order;
+                                prod.product.product_name = response.data.product.product_name;
+                                prod.product.product_id = response.data.product.id;
+                                prod.product_id = response.data.product.id;
 
                                 this.products.push(prod);
                                 this.showCreateProduct = false;
@@ -71109,7 +71110,7 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
 
                                 toast.success(response.data.message);
 
-                            case 13:
+                            case 12:
                             case 'end':
                                 return _context2.stop();
                         }
@@ -71136,7 +71137,7 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
 
             for (var i = 0; i < this.products.length; i++) {
                 if (this.products[i]) {
-                    summ += this.products[i].pivot.delta;
+                    summ += this.products[i].delta;
                 }
             }
 
@@ -71147,7 +71148,7 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
 
             for (var i = 0; i < this.products.length; i++) {
                 if (this.products[i]) {
-                    summ += parseInt(this.products[i].pivot.courier_payment);
+                    summ += parseInt(this.products[i].courier_payment);
                 }
             }
 
@@ -71158,7 +71159,7 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
 
             for (var i = 0; i < this.products.length; i++) {
                 if (this.products[i]) {
-                    summ += parseInt(this.products[i].pivot.price_opt) * this.products[i].pivot.quantity;
+                    summ += parseInt(this.products[i].price_opt) * this.products[i].quantity;
                 }
             }
 
@@ -71169,7 +71170,7 @@ var emptyProduct = { id: null, product_name: '', supplier_in_order: {}, pivot: {
 
             for (var i = 0; i < this.products.length; i++) {
                 if (this.products[i]) {
-                    summ += parseInt(this.products[i].pivot.price) * this.products[i].pivot.quantity;
+                    summ += parseInt(this.products[i].price) * this.products[i].quantity;
                 }
             }
 

@@ -7,6 +7,7 @@ use App\Models\DeliveryPeriod;
 use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Models\Metro;
+use App\Models\Realization;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -82,13 +83,13 @@ class Order extends Model
     }
 
     /**
-     * Товары
+     * Продажи
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function products()
+    public function realizations()
     {
-        return $this->belongsToMany(Product::class)->withPivot('price', 'quantity', 'imei', 'price_opt', 'supplier_id', 'courier_payment', 'delta');
+        return $this->belongsToMany(Realization::class);
     }
 
     /**

@@ -1,4 +1,4 @@
-<products-table :initial_data="{{ json_encode($order->products, true) }}" :initial_order="{{ json_encode($order->id, true) }}" inline-template>
+<products-table :initial_data="{{ json_encode($order->realizations, true) }}" :initial_order="{{ json_encode($order->id, true) }}" inline-template>
 <div>
     <div class="box box-default">
         <div class="box-header with-border">
@@ -72,29 +72,31 @@
                         <td style="width: 2%">@{{ index + 1  }}</td>
                         <td style="width: 5%">
                             {{--@{{  products[index].pivot.quantity }} --}}
-                            <input type="number" min="1" style="width: 100%" v-model="products[index].pivot.quantity">
+                            <input type="number" min="1" style="width: 100%" v-model="products[index].quantity ? products[index].quantity : products[index].quantity = 1">
                         </td>
-                        <td style="width: 15%"> @{{  products[index].product_name }} </td>
+                        {{--Model --}}
+                        <td style="width: 15%"> @{{  products[index].product.product_name }} </td>
                         <td style="width: 10%">
                             {{--imei --}}
-                            <input type="text" class="form-control" v-model="products[index].pivot.imei">
+                            <input type="text" class="form-control" v-model="products[index].imei">
                         </td>
                         <td style="width: 10%">
                             {{--price --}}
-                            <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.price">
+                            <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].price">
                         </td>
                         <td style="width: 10%">
                             {{--price_opt --}}
-                            <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.price_opt">
+                            <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].price_opt">
                         </td>
                         <td style="width: 10%">
                             <v-select label="name"
-                                      :options="{{ json_encode(\App\Models\Supplier::select('id', 'name')->get()) }}">
+                                :options="{{ json_encode(\App\Models\Supplier::select('id', 'name')->get()) }}"
+                                v-model="products[index].supplier">
                             </v-select>
                         </td>
                         <td style="width: 10%">
                             {{--courier_payment --}}
-                            <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].pivot.courier_payment">
+                            <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].courier_payment">
                         </td>
                         <td style="width: 5%">
                             @{{  delta(index) }}

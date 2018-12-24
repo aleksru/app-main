@@ -30,7 +30,7 @@ Route::group(['middleware' =>'auth'], function() {
     //заказы
     Route::resource('orders', 'OrderController');
     Route::get('orders-table', 'OrderController@datatable')->name('orders.datatable');
-    Route::post('product-orders', 'OrderController@updateProductsOrder')->name('update.product-orders');
+    Route::post('product-orders/{order}', 'OrderController@updateProductsOrder')->name('update.product-orders');
     Route::post('orders/{order}/set-status', 'OrderController@updateStatus')->name('orders.set-status');
 
 

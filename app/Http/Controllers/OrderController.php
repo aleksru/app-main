@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Models\Realization;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Order;
@@ -57,7 +58,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        return view('front.orders.form', [ 'order' => $order->load('client', 'products.supplierInOrder') ]);
+        return view('front.orders.form', [ 'order' => $order->load('client', 'realizations.product:id,product_name', 'realizations.supplier') ]);
     }
 
     /**
@@ -102,25 +103,24 @@ class OrderController extends Controller
      * Обновление товаров в заказе
      *
      * @param Request $request
-     * @return int
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function updateProductsOrder(Request $request)
+    public function updateProductsOrder(Request $request, Order $order)
     {
         $products = $request->get('products');
-        $orderID = $request->get('order');
-        $order = Order::find($orderID);
-
-        if (! $order) {
-            response()->json(['message' => 'Заказ не найден!']);
-        }
-
-        $order->products()->detach();
-
+        $realizations = [];
         foreach ($products as $product) {
-            $order->products()->attach([$product['id'] => $product['pivot']]);
+            $realizations[] = Realization::updateOrCreate(['id' => $product['id']], $product)->id;
         }
 
-        return response()->json(['message' => 'Товары успешно обновлены!']);
+        $allRealizations = $order->realizations()->pluck('id')->toArray();
+
+        Realization::destroy(array_diff($allRealizations, $realizations));
+
+        $order->realizations()->sync($realizations);
+
+        return response()->json(['message' => 'Товары успешно обновлены!', 'products' => $order->realizations()->with('product:id,product_name', 'supplier')->get()]);
     }
 
     /**

@@ -1,7 +1,7 @@
 
 <script>
 
-    let emptyProduct = {id: null, product_name: '', supplier_in_order: {},  pivot:{courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: 0, quantity: 1}};
+    let emptyProduct = {id: null, product: {}, supplier_in_order: {},  courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: null, quantity: 1};
 
     export default {
         props: {
@@ -21,10 +21,11 @@
         methods: {
             submit(){
                 for(let i = 0; i < this.products.length; i++){
-                    this.products[i].pivot.supplier_id = this.products[i].supplier_in_order[0] ? this.products[i].supplier_in_order[0].id : null;
+                    this.products[i].supplier_id = this.products[i].supplier ? this.products[i].supplier.id : null;
                 }
 
-                axios.post('/product-orders', {'products': this.products, 'order': this.initial_order}).then(response => {
+                axios.post('/product-orders/' + this.initial_order, {'products': this.products}).then(response => {
+                    this.products = response.data.products;
                     toast.success(response.data.message);
 
                 }).catch(error => {
@@ -35,9 +36,9 @@
             },
 
             delta(index) {
-                return this.products[index].pivot.delta = this.products[index].pivot.quantity * (this.products[index].pivot.price
-                                                            - this.products[index].pivot.price_opt)
-                                                            - this.products[index].pivot.courier_payment;
+                return this.products[index].delta = this.products[index].quantity * (this.products[index].price
+                                                            - this.products[index].price_opt)
+                                                            - this.products[index].courier_payment;
             },
 
             deleteProduct(index) {
@@ -46,10 +47,9 @@
 
             addProduct(prod = _.cloneDeep(emptyProduct)) {
                 if (this.selectedProduct) {
-                    prod.product_name = this.selectedProduct.product_name;
-                    prod.id = this.selectedProduct.id;
-                    prod.pivot.product_id = this.selectedProduct.id;
-                    prod.pivot.order_id = this.initial_order;
+                    prod.product.product_name = this.selectedProduct.product_name;
+                    prod.product.id = this.selectedProduct.id;
+                    prod.product_id = this.selectedProduct.id;
 
                     this.products.push(prod);
                     this.selectedProduct = null;
@@ -73,10 +73,9 @@
                     let response = await axios.post('/product-create', {product: this.newProductName});
                     let prod = _.cloneDeep(emptyProduct);
 
-                    prod.product_name = response.data.product.product_name;
-                    prod.id = response.data.product.id;
-                    prod.pivot.product_id = response.data.product.id;
-                    prod.pivot.order_id = this.initial_order;
+                    prod.product.product_name = response.data.product.product_name;
+                    prod.product.product_id = response.data.product.id;
+                    prod.product_id = response.data.product.id;
 
                     this.products.push(prod);
                     this.showCreateProduct = false;
@@ -99,7 +98,7 @@
 
                 for(let i = 0; i < this.products.length; i++){
                     if (this.products[i]) {
-                        summ += this.products[i].pivot.delta;
+                        summ += this.products[i].delta;
                     }
                 }
 
@@ -111,7 +110,7 @@
 
                 for(let i = 0; i < this.products.length; i++){
                     if (this.products[i]) {
-                        summ += parseInt(this.products[i].pivot.courier_payment);
+                        summ += parseInt(this.products[i].courier_payment);
                     }
                 }
 
@@ -123,7 +122,7 @@
 
                 for(let i = 0; i < this.products.length; i++){
                     if (this.products[i]) {
-                        summ += parseInt(this.products[i].pivot.price_opt) * this.products[i].pivot.quantity;
+                        summ += parseInt(this.products[i].price_opt) * this.products[i].quantity;
                     }
                 }
 
@@ -135,7 +134,7 @@
 
                 for(let i = 0; i < this.products.length; i++){
                     if (this.products[i]) {
-                        summ += parseInt(this.products[i].pivot.price)* this.products[i].pivot.quantity;
+                        summ += parseInt(this.products[i].price)* this.products[i].quantity;
                     }
                 }
 

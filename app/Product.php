@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Realization;
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,13 +35,13 @@ class Product extends Model
     }
 
     /**
-     * Заказы
+     * Реализация
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function orders()
+    public function realizations()
     {
-        return $this->belongsToMany(Order::class);
+        return $this->hasMany(Realization::class);
     }
 
     /**
@@ -55,13 +56,4 @@ class Product extends Model
         return $query->where('article', $article);
     }
 
-    /**
-     * Поставщики в заказе
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function supplierInOrder()
-    {
-        return $this->belongsToMany(Supplier::class, 'order_product', 'product_id', 'supplier_id');
-    }
 }
