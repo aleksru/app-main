@@ -118,6 +118,7 @@ class Order extends Model
 
     /**
      * Фильтр по дате
+     *
      * @param $query
      * @return mixed
      */
@@ -140,6 +141,16 @@ class Order extends Model
          $statusID = DB::table('order_statuses')->where('status', 'LIKE', '%завершен%')->first();
 
          return $statusID ? $statusID->id : null;
+    }
+
+    /**
+     * Логи
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function logs()
+    {
+        return $this->morphMany('App\Model\Log', 'logtable');
     }
 
 
