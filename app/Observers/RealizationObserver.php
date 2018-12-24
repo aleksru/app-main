@@ -6,6 +6,19 @@ use App\Realization;
 
 class RealizationObserver
 {
+
+    protected $logger;
+
+    public function __construct (LoggerService $loggerService)
+    {
+        $this->logger = $loggerService;
+    }
+
+    public function __destruct ()
+    {
+        $this->logger->saveLog();
+    }
+
     /**
      * Handle the realization "created" event.
      *

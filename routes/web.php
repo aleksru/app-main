@@ -52,6 +52,11 @@ Route::group(['middleware' =>'auth'], function() {
         Route::post('print-form/', 'DocumentController@form')->name('form');
     });
 
+    //логи
+    Route::group( ['prefix' => 'logs', 'as' => 'logs.'], function (){
+        Route::get('order/{order}', 'LogController@order')->name('order');
+    });
+
 });
 
 //Админка

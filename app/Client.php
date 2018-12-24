@@ -46,4 +46,14 @@ class Client extends Model
     {
         $this->attributes['phone'] = preg_replace('/[^0-9]/', '', $value);
     }
+
+    /**
+     * Логи
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function logs()
+    {
+        return $this->morphMany(Log::class, 'logtable');
+    }
 }

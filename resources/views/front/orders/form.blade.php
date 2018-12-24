@@ -4,6 +4,7 @@
         <h1>
             Заказы
             <small>Страница заказа</small>
+            <small> <a href="{{ route('logs.order', $order->id) }}">Лог заказа</a> </small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
@@ -39,8 +40,6 @@
             @include('front.orders.parts.products-table', ['order' => $order])
         </div>
     </div>
-
-
 
 @endsection
 

@@ -150,7 +150,7 @@ class Order extends Model
      */
     public function logs()
     {
-        return $this->morphMany('App\Model\Log', 'logtable');
+        return $this->morphMany(Log::class, 'logtable');
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Log;
 use App\Product;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,5 +31,15 @@ class Realization extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    /**
+     * Логи
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function logs()
+    {
+        return $this->morphMany(Log::class, 'logtable');
     }
 }

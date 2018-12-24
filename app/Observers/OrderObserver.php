@@ -2,62 +2,48 @@
 
 namespace App\Observers;
 
+use App\Logging\LoggerService;
 use App\Order;
 
 class OrderObserver
 {
+    protected $logger;
+
+    public function __construct (LoggerService $loggerService)
+    {
+        $this->logger = $loggerService;
+    }
+
+    public function __destruct ()
+    {
+        $this->logger->saveLog();
+    }
+
     /**
-     * Handle the order "created" event.
-     *
-     * @param  \App\Order  $order
-     * @return void
+     * @param Order $order
      */
     public function created(Order $order)
     {
-        debug('created', $order);
+        $this->logger->setOriginModel($order);
+        $this->logger->setType($this->logger::TYPE_SET);
     }
 
     /**
-     * Handle the order "updated" event.
-     *
-     * @param  \App\Order  $order
-     * @return void
+     * @param Order $order
      */
     public function updated(Order $order)
     {
-        debug('updated', $order);
+        $this->logger->setType($this->logger::TYPE_UPDATE);
+        $this->logger->setOriginModel($order);
     }
 
     /**
-     * Handle the order "deleted" event.
-     *
-     * @param  \App\Order  $order
-     * @return void
+     * @param Order $order
      */
     public function deleted(Order $order)
     {
-        debug('deleted', $order);
+        $this->logger->setType($this->logger::TYPE_UPDATE);
+        $this->logger->setOriginModel($order);
     }
 
-    /**
-     * Handle the order "restored" event.
-     *
-     * @param  \App\Order  $order
-     * @return void
-     */
-    public function restored(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Handle the order "force deleted" event.
-     *
-     * @param  \App\Order  $order
-     * @return void
-     */
-    public function forceDeleted(Order $order)
-    {
-        //
-    }
 }
