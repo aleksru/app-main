@@ -50,4 +50,41 @@ class LogObserver
         $this->logger->setOriginModel($model);
     }
 
+    /**
+     * @param Model $model
+     * @param $relationName
+     * @param $pivotIds
+     * @param $pivotIdsAttributes
+     */
+    public function pivotAttached(Model $model, $relationName, $pivotIds, $pivotIdsAttributes)
+    {
+        $this->logger->setCustomChanges(['ADDED PRODUCTS' => $pivotIds]);
+        $this->logger->setType($this->logger::TYPE_SET);
+        $this->logger->setOriginModel($model);
+    }
+
+    /**
+     * @param Model $model
+     * @param $relationName
+     * @param $pivotIds
+     */
+    public function pivotDetached(Model $model, $relationName, $pivotIds)
+    {
+        $this->logger->setType($this->logger::TYPE_UNSET);
+        $this->logger->setCustomChanges(['DELETE PRODUCTS' => $pivotIds]);
+        $this->logger->setOriginModel($model);
+    }
+
+    /**
+     * @param Model $model
+     * @param $relationName
+     * @param $pivotIds
+     * @param $pivotIdsAttributes
+     */
+    public function pivotUpdated(Model $model, $relationName, $pivotIds, $pivotIdsAttributes)
+    {
+        $this->logger->setType($this->logger::TYPE_UPDATE);
+        $this->logger->setOriginModel($model);
+    }
+
 }

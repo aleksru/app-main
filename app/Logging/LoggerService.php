@@ -10,6 +10,7 @@ class LoggerService
 {
     private $originModel;
     private $type;
+    private $customChanges = array();
 
     const TYPE_SET = 'Добавлено';
     const TYPE_UNSET = 'Удалено';
@@ -38,6 +39,17 @@ class LoggerService
     }
 
     /**
+     * @param string $type
+     * @return $this
+     */
+    public function setCustomChanges(array $changes)
+    {
+        $this->customChanges = $changes;
+
+        return $this;
+    }
+
+    /**
      * Сохранение в базу
      */
     public function saveLog()
@@ -55,6 +67,10 @@ class LoggerService
      */
     private function getStrChangesOnModel()
     {
+        if (! empty($this->customChanges)) {
+            return json_encode($this->customChanges, true);
+        }
+
         $changes = empty($this->originModel->getChanges()) ? $this->originModel->getAttributes() : $this->originModel->getChanges();
 
         return json_encode($changes, true);

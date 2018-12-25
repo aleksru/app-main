@@ -8,11 +8,14 @@ use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Models\Metro;
 use App\Models\Realization;
+use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
+    use PivotEventTrait;
+
     protected $fillable = ['user_id', 'client_id','store_text','comment','status_id', 'courier_id',
                             'delivery_period_id','operator_id','date_delivery','products_text', 'metro_id', 'address',
                             'store_id', 'flag_denial_acc'

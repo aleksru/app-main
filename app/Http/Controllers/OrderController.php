@@ -115,8 +115,13 @@ class OrderController extends Controller
         }
 
         $allRealizations = $order->realizations()->pluck('id')->toArray();
+        $arrDiff = array_diff($allRealizations, $realizations);
 
-        Realization::destroy(array_diff($allRealizations, $realizations));
+        Realization::destroy($arrDiff);
+        //генерируем событие для лога
+        if (!empty($arrDiff)) {
+            $order->realizations()->detach($arrDiff);
+        }
 
         $order->realizations()->sync($realizations);
 
