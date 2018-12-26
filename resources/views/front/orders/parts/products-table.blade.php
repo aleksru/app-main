@@ -71,8 +71,8 @@
                     <tr v-for="(product, index) in products">
                         <td style="width: 2%">@{{ index + 1  }}</td>
                         <td style="width: 5%">
-                            {{--@{{  products[index].pivot.quantity }} --}}
-                            <input type="number" min="1" style="width: 100%" v-model="products[index].quantity ? products[index].quantity : products[index].quantity = 1">
+                            {{--@{{  quantity }} --}}
+                            <input type="number" min="1" style="width: 100%" v-model="products[index].quantity">
                         </td>
                         {{--Model --}}
                         <td style="width: 15%"> @{{  products[index].product.product_name }} </td>

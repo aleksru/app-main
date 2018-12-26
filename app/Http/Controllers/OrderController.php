@@ -110,20 +110,21 @@ class OrderController extends Controller
     {
         $products = $request->get('products');
         $realizations = [];
+        $realizationsId = [];
+
         foreach ($products as $product) {
-            $realizations[] = Realization::updateOrCreate(['id' => $product['id']], $product)->id;
+            $realization = Realization::updateOrCreate(['id' => $product['id']], $product);
+            $realizations[] = $realization;
+            $realizationsId[] = $realization->id;
         }
 
         $allRealizations = $order->realizations()->pluck('id')->toArray();
-        $arrDiff = array_diff($allRealizations, $realizations);
+        $arrDiff = array_diff($allRealizations, $realizationsId);
+
+        //save realizations
+        $order->realizations()->saveMany($realizations);
 
         Realization::destroy($arrDiff);
-        //генерируем событие для лога
-        if (!empty($arrDiff)) {
-            $order->realizations()->detach($arrDiff);
-        }
-
-        $order->realizations()->sync($realizations);
 
         return response()->json(['message' => 'Товары успешно обновлены!', 'products' => $order->realizations()->with('product:id,product_name', 'supplier')->get()]);
     }

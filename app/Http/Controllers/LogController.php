@@ -11,7 +11,11 @@ class LogController extends Controller
     {
         dump($order->logs);
         dump($order->client->logs);
-        dump($order->realizations()->with('logs')->get());
+        dump($order->realizations()->withTrashed()->with('logs')->get());
+//        foreach($order->realizations()->withTrashed()->get() as $log) {
+//            dump($log->logs);
+//        }
+
         return 1;
     }
 
