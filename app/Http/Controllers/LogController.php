@@ -7,16 +7,26 @@ use App\Order;
 
 class LogController extends Controller
 {
+    /**
+     * @param Order $order
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function order(Order $order)
     {
-        dump($order->logs);
-        dump($order->client->logs);
-        dump($order->realizations()->withTrashed()->with('logs')->get());
-//        foreach($order->realizations()->withTrashed()->get() as $log) {
-//            dump($log->logs);
-//        }
+        $fullLogsCollect = collect([]);
 
-        return 1;
+        $fullLogsCollect = $fullLogsCollect->merge($order->logs);
+        $fullLogsCollect = $fullLogsCollect->merge($order->client->logs);
+
+        foreach($order->realizations()->withTrashed()->has('logs')->get() as $item) {
+            $fullLogsCollect = $fullLogsCollect->merge($item->logs);
+        }
+
+        $fullLogsCollect = $fullLogsCollect->sortByDesc(function($item, $key){
+            return $item->created_at;
+        });
+
+        return view('front.logs.index', ['logs' => $fullLogsCollect]);
     }
 
 }
