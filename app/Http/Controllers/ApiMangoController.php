@@ -51,7 +51,6 @@ class ApiMangoController extends Controller
                         'client_id' => $client->id,
                         'store_text' => $store->name ?? 'Не определен',
                         'phone' => $data['from']['number'],
-                        'total' =>'0',
                         'comment' =>'Входящий Звонок',
                         'store_id' => $store->id ?? null,
                         //'products' => Product::EMPTY_PRODUCTS
