@@ -19,7 +19,7 @@ class CreateRealizationsTable extends Migration
             $table->integer('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('set null');
 
-            $table->integer('order_id')->unsigned();
+            $table->integer('order_id')->unsigned()->nullable();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
             $table->decimal('price', 15, 2)->nullable();
