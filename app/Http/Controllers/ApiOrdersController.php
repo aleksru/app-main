@@ -37,7 +37,7 @@ class ApiOrdersController extends Controller
                     continue;
                 }
 
-                $order->realizations()->create(['quantity' => (int)$product['quantity'], 'price' => (float)$product['price']]);
+                $order->realizations()->create(['quantity' => (int)$product['quantity'], 'price' => (float)$product['price'], 'product_id' => $productModel->id]);
             }
         }
         
