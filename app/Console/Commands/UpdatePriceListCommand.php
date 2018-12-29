@@ -76,8 +76,8 @@ class UpdatePriceListCommand extends Command
                     if (!isset($productPriceList[Product::PRICE_LIST_ARTICUL])|| 
                         !isset($productPriceList[Product::PRICE_LIST_PRODUCT])|| 
                         !isset($productPriceList[Product::PRICE_LIST_PRICE])){
-                        Log::error("Ошибка прайс-листа. Отсутстувую свойства в таблице. Имя файла ".$file->name);
-                        continue;      
+                        Log::error("Ошибка файла. Отсутствуют свойства в таблице. Имя файла ".$file->name);
+                        break;
                     }
                     //ищем\создаем сущность продукта
                     $product = Product::firstOrNew(['article' => $productPriceList[Product::PRICE_LIST_ARTICUL]]);
