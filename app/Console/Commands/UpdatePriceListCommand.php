@@ -58,7 +58,7 @@ class UpdatePriceListCommand extends Command
                 $priceList = PriceType::where('name', explode('_', $file->name)[0])->first();
 
                 if (!$priceList){
-                    Log::error("Не найден прайс: ".$file->name." ИМЯ ПРАЙС ЛИСТА НЕ ОБНАРУЖЕНО. см config/app/price_types");
+                    Log::error("Не найден прайс: ".$file->name." ИМЯ ПРАЙС-ЛИСТА НЕ ОБНАРУЖЕНО.");
                     //обновляем статус файла - обработан
                     $file->status = 1;
                     $file->save();
@@ -76,7 +76,7 @@ class UpdatePriceListCommand extends Command
                     if (!isset($productPriceList[Product::PRICE_LIST_ARTICUL])|| 
                         !isset($productPriceList[Product::PRICE_LIST_PRODUCT])|| 
                         !isset($productPriceList[Product::PRICE_LIST_PRICE])){
-                        Log::error("НЕ НАЙДЕНО СВОЙСТВО В ФАЙЛЕ ".$file->name." ".$productPriceList[Product::PRICE_LIST_ARTICUL]);
+                        Log::error("Ошибка прайс-листа. Отсутстувую свойства в таблице. Имя файла ".$file->name);
                         continue;      
                     }
                     //ищем\создаем сущность продукта
