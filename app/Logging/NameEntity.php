@@ -7,9 +7,9 @@ namespace App\Logging;
 abstract class NameEntity
 {
     private static $entyties = [
-        'App\Models\Realization' => 'Продукты',
+        'App\Models\Realization' => 'Продукт',
         'App\Order' => 'Заказ',
-        'App\Client' => 'Клиет',
+        'App\Client' => 'Клиент',
     ];
 
     /**
