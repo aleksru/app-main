@@ -26,7 +26,7 @@
           </ul>
         </div>
         <div class="box-header">
-            <a href="{{route('orders.create')}}"><button class="btn btn-sm btn-primary pull-right">
+            <a href="{{route('orders.create')}}" target="_blank"><button class="btn btn-sm btn-primary pull-right">
                     <i class="fa fa-plus"></i> Новый заказ
                 </button></a>
         </div>

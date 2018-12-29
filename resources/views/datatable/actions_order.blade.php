@@ -1,5 +1,5 @@
 
-<a href="{{ route('orders.edit', $order->id) }}">
+<a href="{{ route('orders.edit', $order->id) }}" target="_blank">
     <i class="fa fa fa-sign-in btn btn-xs btn-success"></i>
 </a>
 
