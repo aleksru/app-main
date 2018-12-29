@@ -10,6 +10,7 @@ use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\RouteMap;
 use App\Models\Courier;
 use App\Order;
+use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
@@ -34,7 +35,7 @@ class DocumentController extends Controller
      */
     public function getMarketCheck(Order $order)
     {
-        if ($order->products->isEmpty()) {
+        if ($order->realizations()->count() === 0) {
             return redirect()->back()->with(['error' => 'В заказе отсутствуют товары!']);
         }
 
@@ -81,15 +82,19 @@ class DocumentController extends Controller
 
     /**
      * Отчет по заказам
+     *
      * @param Request $request
+     * @param OrderRepository $orderRepository
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function reportDayOrders(Request $request)
+    public function reportDayOrders(Request $request, OrderRepository $orderRepository)
     {
-        if (Order::toDay($request->get('date'))->count() === 0 ) {
+        $orders = $orderRepository->getOrdersToDateWithRelations($request->get('date'), $request->get('date_end'));
+
+        if($orders->isEmpty()) {
             return redirect()->back()->with(['error' => 'Отсутствуют заказы за выбранный период!']);
         }
 
-        $this->builder->download(new Report($request->get('date')), 'day_report');
+        $this->builder->download(new Report($orders), 'day_report');
     }
 }

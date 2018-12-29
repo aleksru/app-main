@@ -120,6 +120,7 @@ class Order extends Model
      * Фильтр по дате
      *
      * @param $query
+     * @param null $date
      * @return mixed
      */
     public function scopeToDay($query, $date=null)
@@ -129,6 +130,19 @@ class Order extends Model
         }
 
         return $query->whereDate('created_at', $date);
+    }
+
+    /**
+     * Фильтр по интервалу дат
+     *
+     * @param $query
+     * @param $date
+     * @param $dateEnd
+     * @return mixed
+     */
+    public function scopeDateInterval($query, $date, $dateEnd)
+    {
+        return $query->whereDate('created_at', '>=', $date)->whereDate('created_at', '<=', $dateEnd);
     }
 
     /**

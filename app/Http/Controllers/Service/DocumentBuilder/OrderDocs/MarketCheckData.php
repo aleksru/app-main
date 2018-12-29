@@ -68,14 +68,14 @@ class MarketCheckData implements DataInterface
         $this->data['site'] = $this->order->store ? $this->order->store->name : '';
 
         $numb = 1;
-        foreach ($this->order->products as $product) {
+        foreach ($this->order->realizations as $product) {
             $this->products['product.index'] = $numb;
-            $this->products['product.name'] = $product->product_name;
-            $this->products['product.imei'] = $product->pivot->imei ?? '';
-            $this->products['product.quantity'] =  $product->pivot->quantity ?? '';
-            $this->products['product.price'] = $product->pivot->price ?? '';
-            $this->products['product.summ'] = $product->pivot->price && $product->pivot->quantity ?
-                                                    ((int)$product->pivot->price * (int)$product->pivot->quantity) : 0;
+            $this->products['product.name'] = $product->product->product_name;
+            $this->products['product.imei'] = $product->imei ?? '';
+            $this->products['product.quantity'] =  $product->quantity ?? '';
+            $this->products['product.price'] = $product->price ?? '';
+            $this->products['product.summ'] = $product->price && $product->quantity ?
+                                                    ((int)$product->price * (int)$product->quantity) : 0;
             $this->products['product.test'] = '';
             ++$numb;
 

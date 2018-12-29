@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: aleksru
- * Date: 09.12.2018
- * Time: 22:18
- */
 
 namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs;
 
-
 use App\Http\Controllers\Service\DocumentBuilder\DataInterface;
-use App\Models\Supplier;
 use App\Order;
+use Illuminate\Database\Eloquent\Collection;
 
 class Report implements DataInterface
 {
@@ -61,15 +54,15 @@ class Report implements DataInterface
     /**
      * @var null
      */
-    private $toDate = null;
+    private $orders;
 
     /**
      * Report constructor.
      * @param string|null $date
      */
-    public function __construct (string $date = null)
+    public function __construct (Collection $orders)
     {
-        $this->toDate = $date;
+        $this->orders = $orders;
     }
 
     /**
@@ -78,15 +71,14 @@ class Report implements DataInterface
      */
     public function prepareData()
     {
-        $this->data['month'] = $this->toDate ? get_rus_month(date("m", strtotime($this->toDate)) - 1) :
-            get_rus_month((int)date('m') - 1);
-        $this->data['day'] = $this->toDate ? date("d", strtotime($this->toDate)) : date('d');
-        $this->data['year'] = $this->toDate ? date("Y", strtotime($this->toDate)) : date('Y');
+        $this->data['month'] = get_rus_month((int)date('m') - 1);
+        $this->data['day'] = date('d');
+        $this->data['year'] =  date('Y');
 
         $numb = 1;
 
-        foreach (Order::toDay($this->toDate)->with('products', 'operator', 'client', 'deliveryPeriod', 'courier', 'metro', 'status')->get() as $order) {
-            $this->product['product.date'] =  $this->toDate ? date("d.m.Y", strtotime($this->toDate)) : date('d.m.Y');
+        foreach ($this->orders as $order) {
+            $this->product['product.date'] =  date("d.m.Y", strtotime($order->created_at));
             $this->product['product.operator'] = $order->operator ? $order->operator->name : '';
             $this->product['product.order'] = $order->id;
             $this->product['product.type'] = $order->comment ?? '';
@@ -99,7 +91,7 @@ class Report implements DataInterface
             $this->product['product.courier_name'] = $order->courier->name ?? '';
             $this->product['product.status'] = $order->status? $order->status->status : '';
 
-            if ($order->products->isEmpty()) {
+            if ($order->realizations->isEmpty()) {
                 $this->product['product.index'] = $numb;
                 $this->product['product.name'] = '';
                 $this->product['product.imei'] = '';
@@ -116,17 +108,17 @@ class Report implements DataInterface
                 continue;
             }
 
-            foreach ($order->products as $product) {
+            foreach ($order->realizations as $product) {
 
                 $this->product['product.index'] = $numb;
-                $this->product['product.name'] = $product->product_name ?? '';
-                $this->product['product.imei'] = $product->pivot->imei ?? '';
-                $this->product['product.quantity'] = $product->pivot->quantity ?? '';
-                $this->product['product.price_opt'] = $product->pivot->price_opt ?? '';
-                $this->product['product.price'] = $product->pivot->price ?? '';
-                $this->product['product.courier_payment'] = $product->pivot->courier_payment ?? '';
-                $this->product['product.profit'] = (int)$product->pivot->price - (int)$product->pivot->price_opt - (int)$product->pivot->courier_payment;
-                $this->product['product.supplier'] = Supplier::find($product->pivot->supplier_id)->name ?? '';
+                $this->product['product.name'] = $product->product->product_name ?? '';
+                $this->product['product.imei'] = $product->imei ?? '';
+                $this->product['product.quantity'] = $product->quantity ?? '';
+                $this->product['product.price_opt'] = $product->price_opt ?? '';
+                $this->product['product.price'] = $product->price ?? '';
+                $this->product['product.courier_payment'] = $product->courier_payment ?? '';
+                $this->product['product.profit'] = (int)$product->price - (int)$product->price_opt - (int)$product->courier_payment;
+                $this->product['product.supplier'] = $product->supplier ? $product->supplier->name : '';
 
                 ++$numb;
                 array_push($this->data['product'], $this->product);
@@ -151,6 +143,6 @@ class Report implements DataInterface
      */
     public function getFileName()
     {
-        return 'Отчет от '.($this->toDate ? $this->toDate : date("d.m.Y")).'.xlsx';
+        return 'Отчет от '.(date("d.m.Y")).'.xlsx';
     }
 }

@@ -58,8 +58,12 @@
                     {{ csrf_field() }}
                     <div class="box-body">
                         <div class="col-sm-8">
-                            <label for="name" class="control-label">Дата</label>
+                            <label for="name" class="control-label">Дата начала</label>
                             <input type="date" class="form-control"  value="" name="date">
+                        </div>
+                        <div class="col-sm-8">
+                            <label for="name" class="control-label">Дата окончания</label>
+                            <input type="date" class="form-control"  value="" name="date_end">
                         </div>
                         <div class="col-sm-12">
                             <button form="report" type="submit" class="btn btn-primary pull-right ">
