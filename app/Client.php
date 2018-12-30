@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\ClientPhone;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
@@ -55,5 +57,25 @@ class Client extends Model
     public function logs()
     {
         return $this->morphMany(Log::class, 'logtable');
+    }
+
+    /**
+     * Доп номера телефонов
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function additionalPhones()
+    {
+        return $this->hasMany(ClientPhone::class);
+    }
+
+    /**
+     * Получить все номера клиента
+     *
+     * @return Collection
+     */
+    public function getAllPhonesAttribute()
+    {
+        return $this->additionalPhones->pluck('phone')->push($this->phone);
     }
 }

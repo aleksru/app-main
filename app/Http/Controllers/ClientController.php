@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\Http\Requests\ClientRequest;
+use App\Models\ClientPhone;
 use App\Order;
 use App\Product;
+use App\Repositories\ClientRepository;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -85,6 +87,40 @@ class ClientController extends Controller
     {
         $client->update($clientRequest->validated());
 
+        $mainPhone = false;
+        if($clientRequest->get('main-phone')) {
+            foreach($clientRequest->get('main-phone') as $key => $value) {
+                $mainPhone = $key;
+            }
+        }
+
+        $additionalPhones = $clientRequest->get('additional_phones');
+        foreach($additionalPhones as $key => $additionalPhone) {
+            if ($key === 'new' && $additionalPhone) {
+                $valid = ClientPhone::where('phone', preg_replace('/[^0-9]/', '', $additionalPhone))->count();
+                if($valid !== 0) {
+                    return redirect()->back()->with(['error' => $additionalPhone.' уже существует!']);
+                }
+
+                $client->additionalPhones()->create(['phone' => $additionalPhone]);
+                continue;
+            }
+            $clientPhone = ClientPhone::find($key);
+            if($clientPhone) {
+                if (!$additionalPhone){
+                    $clientPhone->delete();
+                    continue;
+                }
+
+                $valid = ClientPhone::where('phone', preg_replace('/[^0-9]/', '', $additionalPhone))->where('id', '<>', $clientPhone->id)->count();
+                if($valid !== 0) {
+                    return redirect()->back()->with(['error' => $additionalPhone.' уже существует!']);
+                }
+
+                $clientPhone->update(['phone' => $additionalPhone, 'main' => ($clientPhone->id === $mainPhone ? 1 : 0)]);
+            }
+        }
+
         return redirect()->back()->with(['success' => 'Успешно обновлен!']);
     }
 
@@ -103,15 +139,17 @@ class ClientController extends Controller
      * Создание клиента и заказа
      *
      * @param Request $request
+     * @param ClientRepository $clientRepository
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function createOrderClient(Request $request)
+    public function createOrderClient(Request $request, ClientRepository $clientRepository)
     {
         if (! $request->get('phone')){
             return redirect()->back()->with(['error' => 'Не заполнено поле!']);
         }
 
-        $client = Client::getOnPhone($request->get('phone'))->first();
+        $client = $clientRepository->getClientByPhone($request->get('phone'));
+
         if (! $client) {
             $client = Client::create(['phone' => $request->get('phone')]);
         }

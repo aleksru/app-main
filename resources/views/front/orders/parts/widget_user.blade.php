@@ -20,15 +20,36 @@
             <label for="name" class="col-sm-2 control-label">Телефон</label>
 
             <div class="col-sm-10">
-                <input type="text" id="phone" class="form-control"  value="{{ $client->phone ?? '' }}" name="phone">
+                <input type="text" id="phone" class="form-control mask-phone"  value="{{ $client->phone ?? '' }}" name="phone">
+
             </div>
         </div>
         <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Описание</label>
 
             <div class="col-sm-10">
-                <textarea class="form-control" rows="4"name="description">{{ $client->description ?? '' }}</textarea>
+                <textarea class="form-control" rows="2"name="description">{{ $client->description ?? '' }}</textarea>
             </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Доп телефоны</label>
+
+            <div class="col-sm-4">
+                <input type="text" class="form-control mask-phone"  value="" name="additional_phones[new]" placeholder="Добавить новый номер">
+            </div>
+            @foreach($client->additionalPhones as $additionalPhone)
+                <div class="col-sm-4">
+                    {{--<input type="text" class="form-control mask-phone"  value="{{ $additionalPhone->phone ?? '' }}" name="additional_phones[{{ $additionalPhone->id }}]">--}}
+                    <div class="input-group @if($additionalPhone->main) has-success @endif">
+                        <span class="input-group-addon">
+                          <input type="checkbox" class="main-check" name="main-phone[{{ $additionalPhone->id }}]" @if($additionalPhone->main) checked @endif>
+                        </span>
+                        <input type="text" class="form-control mask-phone"  value="{{ $additionalPhone->phone ?? '' }}" name="additional_phones[{{ $additionalPhone->id }}]">
+                    </div>
+                </div>
+
+            @endforeach
         </div>
 
         @if (isset($client))
@@ -38,9 +59,7 @@
                 <div class="col-sm-2">
                     <span class="pull-left badge bg-aqua">{{ $client->calls()->count() ?? 0 }}</span>
                 </div>
-            </div>
 
-            <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">Заказы</label>
 
                 <div class="col-sm-2">
@@ -62,7 +81,20 @@
 @push('scripts')
     <script>
         $(function(){
-            $('#phone').mask('+7 (000) 000-0000');
+            $('.mask-phone').mask('+7 (000) 000-0000');
+
+            $('.main-check').click(function(){
+                if(!$(this).is(':checked')) {
+                    $(this).prop('checked', false);
+                    $(this).parent().parent().removeClass('has-success');
+                }else{
+                    $('.input-group').removeClass('has-success');
+                    $('.main-check').prop('checked', false);
+                    $(this).prop('checked', true);
+                    $(this).parent().parent().addClass('has-success');
+                }
+            });
+
         });
     </script>
 @endpush

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\ClientCall;
 use App\Product;
+use App\Repositories\ClientRepository;
 use App\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -12,7 +13,14 @@ use App\Order;
 
 class ApiMangoController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Фикс звонков
+     *
+     * @param Request $request
+     * @param ClientRepository $clientRepository
+     * @return array
+     */
+    public function index(Request $request, ClientRepository $clientRepository)
     {
         $data = json_decode($request->json, true);
 
@@ -26,7 +34,7 @@ class ApiMangoController extends Controller
 //        ];
 //        $data = $dataRequest['json'];
 
-        //исходящий
+//исходящий
 //        $dataRequest = [
 //            'json' => ["seq" => 1,"call_state" => "Appeared","location" => "abonent",
 //              "from" => ["extension" => "111"],
@@ -40,13 +48,12 @@ class ApiMangoController extends Controller
             //проверка на входящий звонок
             if ($data['location'] === 'ivr') {
                 //ищем клиента по номеру телефона
-                $client = Client::getOnPhone($data['from']['number'])->first();
+                $client = $clientRepository->getClientByPhone($data['from']['number']);
                 //ищем магазин
                 $store = Store::where('phone', $data['to']['number'])->first();
                 //если новый клиент - создаем заявку
                 if ( !$client ){
                     $client = Client::create(['phone' => $data['from']['number']]);
-
                     Order::create([
                         'client_id' => $client->id,
                         'store_text' => $store->name ?? 'Не определен',
@@ -57,8 +64,7 @@ class ApiMangoController extends Controller
                     ]);
                 }
                 //фиксируем звонок
-                ClientCall::create([
-                    'client_id' => $client->id,
+                $client->calls()->create([
                     'type' => ClientCall::incomingCall,
                     'store_id' => $store->id ?? NULL
                 ]);
@@ -67,13 +73,10 @@ class ApiMangoController extends Controller
             //проверка на исходящий вызов
             if ($data['location'] ==='abonent' && array_key_exists('extension', $data['from'])){
                 //ищем клиента по номеру телефона
-                $client = Client::getOnPhone($data['to']['number'])->first();
+                $client = $clientRepository->getClientByPhone($data['to']['number']);
                 if ($client) {
                     //фиксируем звонок
-                    ClientCall::create([
-                        'client_id' => $client->id,
-                        'type' => ClientCall::outgoingCall,
-                    ]);
+                    $client->calls()->create(['type' => ClientCall::outgoingCall]);
                 }
 
             }

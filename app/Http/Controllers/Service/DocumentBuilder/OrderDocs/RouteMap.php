@@ -68,6 +68,10 @@ class RouteMap implements DataInterface
 
         $numb = 1;
         foreach ($this->courier->orders()->deliveryToday($this->toDate)->with('realizations')->get() as $order) {
+            $clientPhones = $order->client->phone;
+            foreach($order->client->additionalPhones as $additionalPhone){
+                $clientPhones = $clientPhones.', '. ($additionalPhone->main ? 'Основной: '.$additionalPhone->phone : $additionalPhone->phone);
+            }
             foreach ($order->realizations as $product) {
                 for ($i = 0; $i < $product->quantity; $i++) {
                     $this->product['product.index'] = $numb;
@@ -75,7 +79,7 @@ class RouteMap implements DataInterface
                     $this->product['product.delivery_time'] = $order->deliveryPeriod->period ?? '';
                     $this->product['product.address'] = ($order->metro ? 'м.'.$order->metro->name.',' : '' )
                         .' '. ($order->address ?? '');
-                    $this->product['product.client_phone'] = $order->client->phone ?? '';
+                    $this->product['product.client_phone'] = $clientPhones ?? '';
                     $this->product['product.name'] = $product->product->product_name;
                     $this->product['product.imei'] = $product->imei ?? '';
                     $this->product['product.test'] = '';

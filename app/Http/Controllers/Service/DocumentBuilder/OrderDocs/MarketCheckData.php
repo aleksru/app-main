@@ -58,10 +58,15 @@ class MarketCheckData implements DataInterface
      */
     public function prepareData()
     {
+        $clientPhones = $this->order->client->phone;
+        foreach($this->order->client->additionalPhones as $additionalPhone){
+            $clientPhones = $clientPhones.', '. ($additionalPhone->main ? 'Основной: '.$additionalPhone->phone : $additionalPhone->phone);
+        }
+
         $this->data['id' ] = $this->order->id;
         $this->data['date' ] = date("d.m.Y");
         $this->data['client_name' ] = $this->order->client->name ?? '';
-        $this->data['client_phone' ] = $this->order->client->phone ?? '';
+        $this->data['client_phone' ] =  $clientPhones;
         $this->data['client_address' ] = ($this->order->metro ? 'м.'.$this->order->metro->name.',' : '' )
                                             .' '. ($this->order->address ?? '');
         $this->data['delivery_period' ] = $this->order->deliveryPeriod->period ?? '';
