@@ -8,6 +8,7 @@ use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Models\Metro;
 use App\Models\Realization;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -15,12 +16,17 @@ class Order extends Model
 {
     protected $fillable = ['user_id', 'client_id','store_text','comment','status_id', 'courier_id',
                             'delivery_period_id','operator_id','date_delivery','products_text', 'metro_id', 'address',
-                            'store_id', 'flag_denial_acc', 'order_id'
+                            'store_id', 'flag_denial_acc', 'order_id', 'communication_time'
     ];
     
     protected $casts = [
       'products_text' => 'array',
     ];
+
+    protected $dates = [
+        'communication_time'
+    ];
+
 
     /**
      * Получение клиента
@@ -165,6 +171,12 @@ class Order extends Model
     public function logs()
     {
         return $this->morphMany(Log::class, 'logtable');
+    }
+
+    public function setCommunicationTimeAttribute($value)
+    {
+//        debug(Carbon::createFromFormat('Y-m-d H:i:s',$value)->toDateTimeString());
+        $this->attributes['communication_time'] = $value;
     }
 
 
