@@ -55,7 +55,7 @@
                     'name_customer' => [
                         'name' => 'Покупатель',
                         'width' => '3%',
-                        'searchable' => false,
+                        'searchable' => true,
                         'orderable' => 'false'
                     ],
                     'phone' => [
@@ -72,7 +72,7 @@
                     'comment' => [
                         'name' => 'Комментарий',
                         'width' => '5%',
-                        'searchable' => true,
+                        'searchable' => false,
                         'orderable' => 'false'
                     ],
                     'created_at' => [
