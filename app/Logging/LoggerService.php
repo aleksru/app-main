@@ -71,7 +71,10 @@ class LoggerService
             return json_encode($this->customChanges, true);
         }
 
-        $changes = empty($this->originModel->getChanges()) ? $this->originModel->getAttributes() : $this->originModel->getChanges();
+        $getChanges = $this->originModel->getChanges();
+        $getChanges['model_id'] = $this->originModel->id;
+
+        $changes = empty($this->originModel->getChanges()) ? $this->originModel->getAttributes() : $getChanges;
 
         return json_encode($changes, true);
     }

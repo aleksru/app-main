@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Client;
+use App\Log;
 use Illuminate\Database\Eloquent\Model;
 
 class ClientPhone extends Model
@@ -39,5 +40,15 @@ class ClientPhone extends Model
     public function scopeFindByPhone($query, $phone)
     {
         return $query->where('phone', preg_replace('/[^0-9]/', '', $phone));
+    }
+
+    /**
+     * Логи
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function logs()
+    {
+        return $this->morphMany(Log::class, 'logtable');
     }
 }

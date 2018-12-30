@@ -21,6 +21,9 @@ class LogController extends Controller
         foreach($order->realizations()->withTrashed()->has('logs')->get() as $item) {
             $fullLogsCollect = $fullLogsCollect->merge($item->logs);
         }
+        foreach($order->client->additionalPhones()->has('logs')->get() as $item) {
+            $fullLogsCollect = $fullLogsCollect->merge($item->logs);
+        }
 
         $fullLogsCollect = $fullLogsCollect->sortByDesc(function($item, $key){
             return $item->created_at;
