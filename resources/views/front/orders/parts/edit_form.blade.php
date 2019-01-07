@@ -51,7 +51,8 @@
                 </div>
                 <div class="col-sm-5">
                     <label for="name" class="control-label">Перезвон</label>
-                    <input type="datetime-local" class="form-control"  value="{{  old('communication_time', $order->communication_time->format('Y-m-d\TH:i:s') ?? null )  }}" name="communication_time">
+                    <input type="datetime-local" class="form-control"  value="{{
+                        old('communication_time', $order->communication_time ? $order->communication_time->format('Y-m-d\TH:i') : null )  }}" name="communication_time">
                 </div>
             </div>
             <div class="row">

@@ -173,9 +173,12 @@ class Order extends Model
         return $this->morphMany(Log::class, 'logtable');
     }
 
+    /**
+     * @param $value
+     */
     public function setCommunicationTimeAttribute($value)
     {
-//        debug(Carbon::createFromFormat('Y-m-d H:i:s',$value)->toDateTimeString());
+        $value = $value ? Carbon::createFromFormat('Y-m-d\TH:i', $value) : null;
         $this->attributes['communication_time'] = $value;
     }
 

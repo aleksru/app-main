@@ -63,6 +63,11 @@
                         'width' => '3%',
                         'searchable' => true,
                     ],
+                    'communication_time' => [
+                        'name' => 'Время перезвона',
+                        'width' => '3%',
+                        'searchable' => true,
+                    ],
                     'products' => [
                         'name' => 'Товары',
                         'width' => '20%',
