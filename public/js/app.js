@@ -70993,7 +70993,8 @@ var emptyProduct = { id: null, product: {}, supplier_in_order: {}, courier_payme
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
         initial_data: Array,
-        initial_order: ''
+        initial_order: '',
+        initial_price_delivery: 0
     },
     data: function data() {
         return {
@@ -71144,7 +71145,7 @@ var emptyProduct = { id: null, product: {}, supplier_in_order: {}, courier_payme
             return summ;
         },
         courier_payments: function courier_payments() {
-            var summ = 0;
+            var summ = parseInt(this.initial_price_delivery);
 
             for (var i = 0; i < this.products.length; i++) {
                 if (this.products[i]) {

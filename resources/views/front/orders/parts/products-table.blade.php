@@ -1,4 +1,7 @@
-<products-table :initial_data="{{ json_encode($order->realizations, true) }}" :initial_order="{{ json_encode($order->id, true) }}" inline-template>
+<products-table :initial_data="{{ json_encode($order->realizations, true) }}"
+                :initial_order="{{ json_encode($order->id, true) }}"
+                :initial_price_delivery="{{ json_encode($order->deliveryType->price ?? 0, true) }}"
+                inline-template>
 <div>
     <div class="box box-default">
         <div class="box-header with-border">

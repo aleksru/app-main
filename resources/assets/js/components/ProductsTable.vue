@@ -6,7 +6,8 @@
     export default {
         props: {
             initial_data: Array,
-            initial_order: ''
+            initial_order: '',
+            initial_price_delivery: 0,
         },
         data() {
             return {
@@ -106,7 +107,7 @@
             },
 
             courier_payments() {
-                let summ = 0;
+                let summ = parseInt(this.initial_price_delivery);
 
                 for(let i = 0; i < this.products.length; i++){
                     if (this.products[i]) {
