@@ -54,6 +54,14 @@
                         </select>
                     </div>
                 @endif
+
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Тип доставки</label>
+                    <select class="js-example-delivery-type-single form-control" name="delivery_type_id">
+                        <option value="{{ $order->deliveryType->id ?? null }}" selected>{{ $order->deliveryType->type ?? 'Не выбран' }}</option>
+                        <option value="{{ null }}">  </option>
+                    </select>
+                </div>
             </div>
 
             <div class="row">
@@ -201,6 +209,15 @@
                 data: denialReasons,
                 allowClear: true,
                 placeholder: "Причина отказа...",
+            });
+        });
+
+        let deliveryType = {!!   json_encode(\App\Models\DeliveryType::select('id', 'type as text')->get()->toArray()) !!}
+        $(function() {
+            $('.js-example-delivery-type-single').select2({
+                data: deliveryType,
+                allowClear: true,
+                placeholder: "Тип доставки",
             });
         });
     </script>

@@ -96,4 +96,7 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
 
     //Причины отказа
     Route::resource('denial-reasons', 'DenialReasonController')->only('index', 'store', 'destroy');
+
+    //Типы доставки
+    Route::resource('delivery-types', 'DeliveryTypeController')->only('index', 'store', 'destroy');
 });
