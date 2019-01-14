@@ -35,6 +35,7 @@
                         <li><a href="{{ route('admin.operators.index') }}"><i class="fa fa-headphones" aria-hidden="true"></i> <span>Операторы</span> </a></li>
                         <li><a href="{{ route('admin.couriers.index') }}"><i class="fa fa-street-view" aria-hidden="true"></i> <span>Курьеры</span> </a></li>
                         <li><a href="{{ route('admin.price-types.index') }}"><i class="fa fa-money" aria-hidden="true"></i> <span>Прайс-листы</span> </a></li>
+                        <li><a href="{{ route('admin.denial-reasons.index') }}"><i class="fa fa-hand-paper-o" aria-hidden="true"></i> <span>Причины отказа</span> </a></li>
                     </ul>
                 </li>
             </ul>

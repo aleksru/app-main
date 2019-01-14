@@ -73,6 +73,11 @@ class OrderController extends Controller
         $data['flag_denial_acc'] = isset($data['flag_denial_acc']) ? $data['flag_denial_acc'] : null;
         $order->update($data);
 
+        if($order->status && stripos($order->status->status, 'отказ') === false || !$order->status) {
+            $order->denial_reason_id = null;
+            $order->save();
+        }
+
         return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно обновлен!']);
     }
 

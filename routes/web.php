@@ -93,4 +93,7 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
 
     //Прайс-листы
     Route::resource('price-types', 'PriceTypeController')->only('index', 'store', 'destroy');
+
+    //Причины отказа
+    Route::resource('denial-reasons', 'DenialReasonController')->only('index', 'store', 'destroy');
 });

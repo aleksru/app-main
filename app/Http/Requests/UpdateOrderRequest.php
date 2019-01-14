@@ -39,6 +39,7 @@ class UpdateOrderRequest extends FormRequest
             'store_text' => 'string|nullable',
             'flag_denial_acc' => 'string|nullable',
             'communication_time' => 'date|nullable',
+            'denial_reason_id' => 'nullable|integer'
 
         ];
     }

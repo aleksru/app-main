@@ -14,8 +14,8 @@
             @endif
 
             <div class="row">
-                <div class="col-sm-4">
-                    <label for="name" class="control-label">№ ЗАКАЗА</label>
+                <div class="col-sm-2">
+                    <label for="name" class="control-label">№</label>
                     <input type="text" class="form-control"  value="{{ $order->id ?? '' }}" disabled>
                 </div>
 
@@ -34,15 +34,31 @@
                     </select>
                 </div>
             </div>
+
             <div class="row">
+
                 <div class="col-sm-4">
                     <label for="name" class="control-label">Статус</label>
                     <select class="js-example-basic-single form-control" name="status_id">
-                            <option value="{{ $order->status->id ?? null }}" selected>{{ $order->status->status ?? 'Не выбран' }}</option>
-                            <option value="{{ null }}">  </option>
+                        <option value="{{ $order->status->id ?? null }}" selected>{{ $order->status->status ?? 'Не выбран' }}</option>
+                        <option value="{{ null }}">  </option>
                     </select>
                 </div>
-                <div class="col-sm-3">
+
+                @if($order->status && stripos($order->status->status, 'отказ') !== false)
+                    <div class="col-sm-4">
+                        <label for="name" class="control-label">Причина отказа</label>
+                        <select class="js-example-reasons-single form-control" name="denial_reason_id">
+                            <option value="{{ $order->denialReason->id ?? null }}" selected>{{ $order->denialReason->reason ?? 'Не выбран' }}</option>
+                            <option value="{{ null }}">  </option>
+                        </select>
+                    </div>
+                @endif
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-5">
                     <label for="name" class="control-label">Оператор</label>
                     <select class="js-example-operator-single form-control" name="operator_id">
                         <option value="{{ $order->operator->id ?? null }}" selected>{{ $order->operator->name ?? 'Не выбран' }}</option>
@@ -97,7 +113,7 @@
             <div class="row">
                 <div class="col-sm-8">
                     <label for="name" class="control-label">Комментарий</label>
-                    <textarea class="form-control" rows="2" name="comment" placeholder="Комментарий ..."> {{ old('comment', $order->comment ?? '') }}</textarea>
+                    <textarea class="form-control" rows="4" name="comment" placeholder="Комментарий ..."> {{ old('comment', $order->comment ?? '') }}</textarea>
                 </div>
                 <br>
                 <div class="col-sm-4">
@@ -176,6 +192,15 @@
                 data: stores,
                 allowClear: true,
                 placeholder: "Выберите магазин...",
+            });
+        });
+
+        let denialReasons = {!!   json_encode(\App\Models\DenialReason::select('id', 'reason as text')->get()->toArray()) !!}
+        $(function() {
+            $('.js-example-reasons-single').select2({
+                data: denialReasons,
+                allowClear: true,
+                placeholder: "Причина отказа...",
             });
         });
     </script>
