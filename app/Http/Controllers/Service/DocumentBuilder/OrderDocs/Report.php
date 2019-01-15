@@ -116,7 +116,7 @@ class Report implements DataInterface
                 $this->product['product.quantity'] = $product->quantity ?? '';
                 $this->product['product.price_opt'] = $product->price_opt ?? '';
                 $this->product['product.price'] = $product->price ?? '';
-                $this->product['product.courier_payment'] = $product->courier_payment ?? '';
+                $this->product['product.courier_payment'] = $product->courier_payment ?  $product->courier_payment + ($order->deliveryType->price ?? 0) : $order->deliveryType->price ?? 0;
                 $this->product['product.profit'] = (int)$product->price - (int)$product->price_opt - (int)$product->courier_payment;
                 $this->product['product.supplier'] = $product->supplier ? $product->supplier->name : '';
 
