@@ -16,14 +16,19 @@ class LogController extends Controller
         $fullLogsCollect = collect([]);
 
         $fullLogsCollect = $fullLogsCollect->merge($order->logs);
-        $fullLogsCollect = $fullLogsCollect->merge($order->client->logs);
+
+        if($order->client) {
+            $fullLogsCollect = $fullLogsCollect->merge($order->client->logs);
+
+            foreach($order->client->additionalPhones()->has('logs')->get() as $item) {
+                $fullLogsCollect = $fullLogsCollect->merge($item->logs);
+            }
+        }
 
         foreach($order->realizations()->withTrashed()->has('logs')->get() as $item) {
             $fullLogsCollect = $fullLogsCollect->merge($item->logs);
         }
-        foreach($order->client->additionalPhones()->has('logs')->get() as $item) {
-            $fullLogsCollect = $fullLogsCollect->merge($item->logs);
-        }
+
 
         $fullLogsCollect = $fullLogsCollect->sortByDesc(function($item, $key){
             return $item->created_at;

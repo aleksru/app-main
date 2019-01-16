@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\PrepareLogsCommand;
+use App\Console\Commands\UpdatePriceListCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-       'App\Console\Commands\UpdatePriceListCommand'
+        PrepareLogsCommand::class,
+        UpdatePriceListCommand::class
     ];
 
     /**
@@ -25,6 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('update-price-lists')->everyTenMinutes();
+        $schedule->command('logs:prepare')->everyFiveMinutes();
     }
 
     /**
