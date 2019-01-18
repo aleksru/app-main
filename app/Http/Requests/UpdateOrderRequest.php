@@ -40,7 +40,8 @@ class UpdateOrderRequest extends FormRequest
             'flag_denial_acc' => 'string|nullable',
             'communication_time' => 'date|nullable',
             'denial_reason_id' => 'nullable|integer',
-            'delivery_type_id' => 'nullable|integer'
+            'delivery_type_id' => 'nullable|integer',
+            'flag_send_sms' => 'nullable|integer',
 
         ];
     }
