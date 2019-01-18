@@ -27,4 +27,15 @@ class Log extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Не обработанные логи
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeNoPrepared($query)
+    {
+        return $query->where('status', 0);
+    }
 }
