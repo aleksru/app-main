@@ -125,10 +125,19 @@
                 </div>
                 <br>
                 <div class="col-sm-4">
+                    <div class="form-group">
                     <label>
                         <input type="checkbox" name="flag_denial_acc"
                               @if($order->flag_denial_acc) checked @endif>Отказ от акс-ов
                     </label>
+                    </div>
+                    <div class="form-group col-sm-11">
+                        <label>SMS</label>
+                        <select class="form-control" name="flag_send_sms">
+                            <option value="0">Не отправлено</option>
+                            <option value="1"  @if($order->flag_send_sms) selected @endif>Отправлено</option>
+                        </select>
+                    </div>
                     <button form="order-form" type="submit" class="btn btn-primary pull-right ">
                         <i class="fa fa-save"></i> Сохранить
                     </button>
