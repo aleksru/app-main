@@ -15,6 +15,6 @@ class PriceType extends Model
     
     public function products()
     {
-      return $this->belongsToMany(Product::class)->withPivot('price');
+      return $this->belongsToMany(Product::class)->withPivot(['price'])->withTimestamps();
     }
 }

@@ -26,6 +26,11 @@ Route::group(['middleware' =>'auth'], function() {
     Route::post('product-search', 'ProductController@search')->name('product.search');
     Route::post('product-create', 'ProductController@create')->name('product.create');
 
+    //прайсы
+    Route::resource('price-lists', 'PriceListController')->only(['index', 'show']);
+    Route::get('price-lists-datatable', 'PriceListController@datatable')->name('price-lists.datatable');
+    Route::get('price-lists-datatable/{price_list}', 'PriceListController@showDatatable')->name('price-lists.show.datatable');
+
 
     //заказы
     Route::resource('orders', 'OrderController');

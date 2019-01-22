@@ -31,7 +31,7 @@ class Product extends Model
      */
     public function priceList()
     {
-      return $this->belongsToMany(PriceType::class);
+      return $this->belongsToMany(PriceType::class)->withTimestamps();
     }
 
     /**

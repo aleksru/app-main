@@ -5,6 +5,10 @@
         <li><a href="{{ route('product.index') }}"><i class="fa fa-upload"></i> <span>Загрузка прайса</span></a></li>
     @endcan
 
+    @can('index', App\Product::class)
+        <li><a href="{{ route('price-lists.index') }}"><i class="fa fa-credit-card"></i> <span>Прайс-листы</span></a></li>
+    @endcan
+
     @can('view', App\Order::class)
         <li><a href="{{ route('orders.index') }}"><i class="fa fa-newspaper-o"></i> <span>Заказы</span></a></li>
         <li><a href="{{ route('docs.index') }}"><i class="fa fa-print" aria-hidden="true"></i> <span>Принт-форм</span> </a></li>
