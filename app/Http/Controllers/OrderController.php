@@ -149,6 +149,9 @@ class OrderController extends Controller
                             ->filterColumn('name_customer', function ($query, $keyword) {
                                 return $query->whereRaw('LOWER(c.name) like ?', "%{$keyword}%");
                             })
+                            ->editColumn('id', function (Order $order) {
+                                return '<a href="'.route('orders.show', $order->id).'" target="_blank"><h4>'.$order->id.'</h4></a>';
+                            })
                             ->editColumn('actions', function (Order $order) { 
                                 return view('datatable.actions_order', [
                                     'order' => $order,
@@ -183,7 +186,7 @@ class OrderController extends Controller
                             ->setRowClass(function (Order $order) {
                                 return $order->status ? 'label-'.$order->status->color : 'label-success';
                             })
-                            ->rawColumns(['actions', 'status', 'products', 'name_customer'])
+                            ->rawColumns(['actions', 'status', 'products', 'name_customer', 'id'])
                             ->make(true);
     }
 }
