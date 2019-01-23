@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserGroupsEnums;
 use App\User;
 use App\Order;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -16,7 +17,7 @@ class OrderPolicy
      */
     public function view(User $user)
     {
-        return $user->roles->pluck('name')->contains('read_orders') || $user->roles->pluck('name')->contains('change_orders');
+        return $user->roles->pluck('name')->contains('read_orders') || $user->roles->pluck('name')->contains('change_orders') || $user->group->name === UserGroupsEnums::OPERATOR;
     }
 
     /**
@@ -39,7 +40,7 @@ class OrderPolicy
      */
     public function update(User $user, Order $order)
     {
-        return $user->roles->pluck('name')->contains('change_orders');
+        return $user->roles->pluck('name')->contains('change_orders') || $user->group->name === UserGroupsEnums::OPERATOR;
     }
 
     /**

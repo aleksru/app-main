@@ -33,6 +33,8 @@ class UserRequest extends FormRequest
             'password' => 'string|min:6'.$passRequired,
             'description' => 'string|nullable',
             'roles' => 'array',
+            'group_id' => 'integer|nullable',
+            'account_id' => 'integer|nullable',
         ];
     }
 }

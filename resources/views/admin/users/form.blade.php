@@ -80,6 +80,29 @@
                         @endif
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label for="group" class="col-sm-2 control-label">Группа</label>
+
+                    <select class="col-sm-10 js-group-basic-single" name="group_id">
+                        @if ($user->group)
+                            <option value="{{ $user->group_id }}" selected>{{ $user->group->description }}</option>
+                        @endif
+                        <option value="{{ null }}">Нет</option>
+                    </select>
+                </div>
+                @if($optionsAccount)
+                    <div class="form-group">
+                        <label for="group" class="col-sm-2 control-label">Профиль</label>
+
+                        <select class="col-sm-10 js-profile-basic-single" name="account_id">
+                            @if ($user->account)
+                                <option value="{{ $user->account->id ?? '' }}" selected>{{ $user->account->name ?? '' }}</option>
+                            @endif
+                            <option value="{{ null }}">Нет</option>
+                        </select>
+                    </div>
+                @endif
             </form>
         </div>
         <div class="box-footer">
@@ -105,5 +128,25 @@
                 data: roles
             });
         });
+
+        let groups = {!!   json_encode(\App\Models\UserGroup::select('id', 'description as text')->get()->toArray()) !!}
+        $(function() {
+            $('.js-group-basic-single').select2({
+                data: groups,
+                allowClear: true,
+                placeholder: "Выберите группу...",
+            });
+        });
+
+        @if($optionsAccount)
+            let optionsAccount = {!! json_encode($optionsAccount::select('id', 'name as text')->get()->toArray()) !!}
+            $(function() {
+                    $('.js-profile-basic-single').select2({
+                        data: optionsAccount,
+                        allowClear: true,
+                        placeholder: "Выберите профиль...",
+                    });
+            });
+        @endif
     </script>
 @endpush

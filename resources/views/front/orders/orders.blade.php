@@ -63,10 +63,15 @@
                         'width' => '3%',
                         'searchable' => true,
                     ],
+                    'additional_phones' => [
+                        'name' => 'Доп телефоны',
+                        'width' => '3%',
+                        'searchable' => true,
+                    ],
                     'communication_time' => [
                         'name' => 'Время перезвона',
                         'width' => '3%',
-                        'searchable' => true,
+                        'searchable' => false,
                     ],
                     'products' => [
                         'name' => 'Товары',

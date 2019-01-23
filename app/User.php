@@ -2,13 +2,16 @@
 
 namespace App;
 
+use App\Enums\UserGroupsEnums;
+use App\Models\Traits\UserDynamicType;
+use App\Models\UserGroup;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, UserDynamicType;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'is_admin', 'description'
+        'name', 'email', 'password', 'is_admin', 'description', 'group_id'
     ];
 
     /**
@@ -45,5 +48,25 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * Группа пользователя
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function group()
+    {
+        return $this->belongsTo(UserGroup::class);
+    }
+
+    /**
+     * Проверка на оператора
+     *
+     * @return bool
+     */
+    public function isOperator()
+    {
+        return $this->group ? $this->group->name === UserGroupsEnums::OPERATOR : false;
     }
 }

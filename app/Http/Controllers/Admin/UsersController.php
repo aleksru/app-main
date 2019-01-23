@@ -46,7 +46,7 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.form', ['user' => $user]);
+        return view('admin.users.form', ['user' => $user, 'optionsAccount' => $user->getRelationByAccount()]);
     }
 
     /**
@@ -56,11 +56,41 @@ class UsersController extends Controller
      */
     public function update(UserRequest $userRequest, User $user)
     {
-       $data = array_filter($userRequest->validated());
+        $data = $userRequest->validated();
 
-       if (isset($data['password'])) {
+        if (!$data['password']) {
+            unset($data['password']);
+        }
+
+        if (isset($data['password']) && $data['password']) {
            $data['password'] = Hash::make($data['password']);
-       }
+        }
+
+
+        if(array_key_exists('account_id', $data) && isset($data['group_id'])) {
+            $modelAccount = $user->getRelationByAccount();
+
+            if($user->account && $user->account->id !== $data['account_id']) {
+                $oldModel = $user->account;
+                $oldModel->user_id = null;
+                $oldModel->save();
+            }
+
+            $modelAccount = $modelAccount::find($data['account_id']);
+
+            if($modelAccount){
+                $user->account()->save($modelAccount);
+            }
+        }
+
+        if(!isset($data['group_id'])){
+            if($user->account) {
+                $oldModel = $user->account;
+                $oldModel->user_id = null;
+                $oldModel->save();
+            }
+        }
+
         $user->update($data);
         $user->roles()->sync(isset($data['roles']) ? $data['roles'] : []);
 

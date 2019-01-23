@@ -78,4 +78,20 @@ class Client extends Model
     {
         return $this->additionalPhones->pluck('phone')->push($this->phone);
     }
+
+    /**
+     * Получить все доп номера клиента
+     *
+     * @return Collection
+     */
+    public function getAllAdditionalPhonesAttribute()
+    {
+        $phones = '';
+
+        $this->additionalPhones->each(function ($item, $key) use (&$phones){
+            $phones = $phones.' '.$item->phone;
+        });
+
+        return $phones;
+    }
 }

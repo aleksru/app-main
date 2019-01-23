@@ -69,7 +69,7 @@
                 <div class="col-sm-5">
                     <label for="name" class="control-label">Оператор</label>
                     <select class="js-example-operator-single form-control" name="operator_id">
-                        <option value="{{ $order->operator->id ?? null }}" selected>{{ $order->operator->name ?? 'Не выбран' }}</option>
+                        <option value="{{ $operator->id ?? '' }}" selected>{{ $operator->name ?? 'Не выбран' }}</option>
                         <option value="{{ null }}">  </option>
                     </select>
                 </div>

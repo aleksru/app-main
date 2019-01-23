@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Models\ClientPhone;
 use App\Models\Realization;
+use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Order;
@@ -58,7 +60,12 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        return view('front.orders.form', [ 'order' => $order->load('client', 'realizations.product:id,product_name', 'realizations.supplier') ]);
+        $operator = $order->operator ? $order->operator : (Auth()->user()->isOperator() ? Auth()->user()->account : null);
+
+        return view('front.orders.form', [
+            'order' => $order->load('client', 'realizations.product:id,product_name', 'realizations.supplier'),
+            'operator' => $operator
+        ]);
     }
 
     /**
@@ -140,53 +147,80 @@ class OrderController extends Controller
      */
     public function datatable()
     {
-        return datatables() ->of(Order::with('status', 'store', 'client')->join('clients as c', 'client_id', '=', 'c.id')
-                                                                                  ->selectRaw('orders.*, c.phone as phone')
-                                                                                  ->selectRaw('orders.*, c.name as name_customer'))
-                            ->filterColumn('phone', function ($query, $keyword) {
-                                return $query->whereRaw('LOWER(c.phone) like ?', "{$keyword}%");
-                            })
-                            ->filterColumn('name_customer', function ($query, $keyword) {
-                                return $query->whereRaw('LOWER(c.name) like ?', "%{$keyword}%");
-                            })
-                            ->editColumn('id', function (Order $order) {
-                                return '<a href="'.route('orders.show', $order->id).'" target="_blank"><h4>'.$order->id.'</h4></a>';
-                            })
-                            ->editColumn('actions', function (Order $order) { 
-                                return view('datatable.actions_order', [
-                                    'order' => $order,
-                                ]);
-                            })
-                            ->editColumn('status', function (Order $order) { 
-                                return view('datatable.status', [
-                                                    'status' => $order->status
-                                            ]);         
-                            })
-                            ->editColumn('products', function (Order $order) {
-                                return view('datatable.products', [
-                                                    'products' => $order->products_text ?? [],
-                                            ]);         
-                            })
-                            ->editColumn('name_customer', function (Order $order) {
-                                if ($order->client){
-                                    return view('datatable.customer', [
-                                        'route' => route('clients.show', $order->client->id),
-                                        'name_customer' => $order->client->name ?? 'Не указано'
-                                    ]);
-                                }
-                            })
-                            ->editColumn('phone', function (Order $order) {
-                                return $order->client->phone ?? '';
+        return datatables() ->of(
+            Order::with(
+                'status',
+                'store',
+                'client',
+                'client.additionalPhones',
+                'realizations:order_id,product_id')
+                                                    ->selectRaw('orders.*')
+                                                    ->selectRaw('c.phone as phone')
+                                                    ->selectRaw('c.name as name_customer')
+                                                    ->join('clients as c', 'client_id', '=', 'c.id'))
 
-                            })
-                            ->editColumn('store_text', function (Order $order) {
-                                return $order->store->name ?? $order->store_text;
+            ->filterColumn('phone', function ($query, $keyword) {
+                if (preg_match('/[0-9]{4}/', $keyword)){
+                    return $query->whereRaw('c.phone like ?', "%{$keyword}%");
+                }
+            })
+            ->filterColumn('additional_phones', function ($query, $keyword) {
+                if (preg_match('/[0-9]{4}/', $keyword)) {
+                    $clientPhones = ClientPhone::where('phone', 'LIKE', "%{$keyword}%")->pluck('client_id');
 
-                            })
-                            ->setRowClass(function (Order $order) {
-                                return $order->status ? 'label-'.$order->status->color : 'label-success';
-                            })
-                            ->rawColumns(['actions', 'status', 'products', 'name_customer', 'id'])
-                            ->make(true);
+                    return $query->whereIn('orders.client_id', $clientPhones);
+                }
+            })
+            ->filterColumn('name_customer', function ($query, $keyword) {
+                if (preg_match('/[A-Za-z]{3}/', $keyword)) {
+                    return $query->whereRaw('LOWER(c.name) like ?', "{$keyword}%");
+                }
+            })
+            ->editColumn('additional_phones', function (Order $order) {
+                return $order->client->allAdditionalPhones;
+            })
+            ->editColumn('id', function (Order $order) {
+                return '<a href="'.route('orders.show', $order->id).'" target="_blank"><h4>'.$order->id.'</h4></a>';
+            })
+            ->editColumn('actions', function (Order $order) {
+                return view('datatable.actions_order', [
+                    'order' => $order,
+                ]);
+            })
+            ->editColumn('status', function (Order $order) {
+                return view('datatable.status', [
+                                    'status' => $order->status
+                ]);
+            })
+            ->editColumn('products', function (Order $order) {
+                if(!$order->realizations->isEmpty()){
+                    $products = Product::find($order->realizations->pluck('product_id'))->pluck('product_name')->toArray();
+                }
+                return !empty($products) ? implode(', ', $products) :
+                    view('datatable.products', [
+                                    'products' => $order->products_text ?? [],
+                    ]);
+            })
+            ->editColumn('name_customer', function (Order $order) {
+                if ($order->client){
+                    return view('datatable.customer', [
+                        'route' => route('clients.show', $order->client->id),
+                        'name_customer' => $order->client->name ?? 'Не указано'
+                    ]);
+                }
+            })
+            ->editColumn('phone', function (Order $order) {
+                return $order->client->phone ?? '';
+
+            })
+            ->editColumn('store_text', function (Order $order) {
+                return $order->store->name ?? $order->store_text;
+
+            })
+            ->setRowClass(function (Order $order) {
+                return $order->status ? 'label-'.$order->status->color : 'label-success';
+            })
+            ->rawColumns(['actions', 'status', 'products', 'name_customer', 'id'])
+            ->make(true);
     }
 }
