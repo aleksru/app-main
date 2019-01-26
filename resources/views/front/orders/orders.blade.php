@@ -72,6 +72,11 @@
                         'width' => '3%',
                         'searchable' => false,
                     ],
+                    'courier' => [
+                        'name' => 'Курьер',
+                        'width' => '3%',
+                        'searchable' => false,
+                    ],
                     'products' => [
                         'name' => 'Товары',
                         'width' => '20%',

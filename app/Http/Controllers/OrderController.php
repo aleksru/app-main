@@ -153,6 +153,7 @@ class OrderController extends Controller
                 'store',
                 'client',
                 'client.additionalPhones',
+                'courier',
                 'realizations:order_id,product_id')
                                                     ->selectRaw('orders.*')
                                                     ->selectRaw('c.phone as phone')
@@ -180,6 +181,9 @@ class OrderController extends Controller
             })
             ->editColumn('additional_phones', function (Order $order) {
                 return $order->client->allAdditionalPhones;
+            })
+            ->editColumn('courier', function (Order $order) {
+                return $order->courier->name ?? '';
             })
             ->editColumn('id', function (Order $order) {
                 return '<a href="'.route('orders.show', $order->id).'" target="_blank"><h4>'.$order->id.'</h4></a>';
