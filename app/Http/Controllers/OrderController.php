@@ -157,7 +157,9 @@ class OrderController extends Controller
                                                     ->selectRaw('orders.*')
                                                     ->selectRaw('c.phone as phone')
                                                     ->selectRaw('c.name as name_customer')
-                                                    ->join('clients as c', 'client_id', '=', 'c.id'))
+                                                    ->selectRaw('o_status.status as status_text')
+                                                    ->join('clients as c', 'client_id', '=', 'c.id')
+                                                    ->leftJoin('order_statuses as o_status', 'status_id', '=', 'o_status.id'))
 
             ->filterColumn('phone', function ($query, $keyword) {
                 if (preg_match('/[0-9]{4}/', $keyword)){
@@ -187,7 +189,7 @@ class OrderController extends Controller
                     'order' => $order,
                 ]);
             })
-            ->editColumn('status', function (Order $order) {
+            ->editColumn('status_text', function (Order $order) {
                 return view('datatable.status', [
                                     'status' => $order->status
                 ]);
@@ -220,7 +222,7 @@ class OrderController extends Controller
             ->setRowClass(function (Order $order) {
                 return $order->status ? 'label-'.$order->status->color : 'label-success';
             })
-            ->rawColumns(['actions', 'status', 'products', 'name_customer', 'id'])
+            ->rawColumns(['actions', 'status_text', 'products', 'name_customer', 'id'])
             ->make(true);
     }
 }

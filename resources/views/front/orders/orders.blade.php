@@ -40,11 +40,10 @@
                         'width' => '1%',
                         'searchable' => true,
                     ],
-                    'status' => [
+                    'status_text' => [
                         'name' => 'Статус',
                         'width' => '2%',
                         'searchable' => false,
-                        'orderable' => 'false'
                     ],
                     'store_text' => [
                         'name' => 'Магазин',
