@@ -31,7 +31,7 @@
                     <ul class="list-group">
                         @foreach($client->orders as $order)
                             <li class="list-group-item">
-                                <strong>ID:</strong>{{ $order->id }}
+                                <strong>ID:</strong><a href=" {{ route('orders.edit', $order->id) }}"> {{ $order->id }} </a>
                                 <strong>Дата:</strong> {{ $order->created_at }}
                             </li>
                         @endforeach
