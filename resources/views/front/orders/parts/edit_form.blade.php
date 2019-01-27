@@ -112,9 +112,32 @@
                     </select>
                 </div>
 
-                <div class="col-sm-8">
-                    <label for="address" class="control-label">Адрес доставки*</label>
-                    <input type="text" class="form-control"  value="{{ old('address', $order->address ?? '')  }}" name="address">
+                <div class="col-sm-4">
+                    <label for="address" class="control-label">Город</label>
+                    <input type="text" class="form-control"  value="{{ old('address_city', $order->address_city ?? '')  }}" name="address_city">
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="address" class="control-label">Улица</label>
+                    <input type="text" class="form-control"  value="{{ old('address_street', $order->address_street ?? '')  }}" name="address_street">
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-4">
+                    <label for="address" class="control-label">Дом</label>
+                    <input type="text" class="form-control"  value="{{ old('address_home', $order->address_home ?? '')  }}" name="address_home">
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="address" class="control-label">Квартира</label>
+                    <input type="text" class="form-control"  value="{{ old('address_apartment', $order->address_apartment ?? '')  }}" name="address_apartment">
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="address" class="control-label">Адрес прочее</label>
+                    <input type="text" class="form-control"  value="{{ old('address_other', $order->address_other ?? '')  }}" name="address_other">
                 </div>
             </div>
 

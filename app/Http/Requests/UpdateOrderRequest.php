@@ -35,14 +35,17 @@ class UpdateOrderRequest extends FormRequest
             'comment' => 'string|nullable',
             'date_delivery' => 'date|nullable',
             'metro_id' => 'integer|nullable',
-            'address' => 'required|string',
             'store_text' => 'string|nullable',
             'flag_denial_acc' => 'string|nullable',
             'communication_time' => 'date|nullable',
             'denial_reason_id' => 'nullable|integer',
             'delivery_type_id' => 'nullable|integer',
             'flag_send_sms' => 'nullable|integer',
-
+            'address_city' => 'string|nullable',
+            'address_street' => 'string|nullable',
+            'address_home' => 'string|nullable',
+            'address_apartment' => 'string|nullable',
+            'address_other' => 'string|nullable'
         ];
     }
 }

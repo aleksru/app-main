@@ -86,7 +86,7 @@ class Report implements DataInterface
             $this->product['product.client_name'] = $order->client ? $order->client->name ?? '' : '';
             $this->product['product.delivery_time'] = $order->deliveryPeriod ? $order->deliveryPeriod->period : '';
             $this->product['product.address'] = ($order->metro ? 'м.'.$order->metro->name.',' : '' )
-                                                    .' '. ($order->address ?? '');
+                                                    .' '. ($order->fullAddress ?? '');
             $this->product['product.client_phone'] = $order->client ? $order->client->phone : '';
             $this->product['product.courier_name'] = $order->courier->name ?? '';
             $this->product['product.status'] = $order->status? $order->status->status : '';

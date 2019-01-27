@@ -78,7 +78,7 @@ class RouteMap implements DataInterface
                     $this->product['product.client_name'] =  $order->client->name ?? '';
                     $this->product['product.delivery_time'] = $order->deliveryPeriod->period ?? '';
                     $this->product['product.address'] = ($order->metro ? 'м.'.$order->metro->name.',' : '' )
-                        .' '. ($order->address ?? '');
+                        .' '. ($order->fullAddress ?? '');
                     $this->product['product.client_phone'] = $clientPhones ?? '';
                     $this->product['product.name'] = $product->product->product_name;
                     $this->product['product.imei'] = $product->imei ?? '';

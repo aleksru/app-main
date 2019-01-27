@@ -68,7 +68,7 @@ class MarketCheckData implements DataInterface
         $this->data['client_name' ] = $this->order->client->name ?? '';
         $this->data['client_phone' ] =  $clientPhones;
         $this->data['client_address' ] = ($this->order->metro ? 'м.'.$this->order->metro->name.',' : '' )
-                                            .' '. ($this->order->address ?? '');
+                                            .' '. ($this->order->fullAddress ?? '');
         $this->data['delivery_period' ] = $this->order->deliveryPeriod->period ?? '';
         $this->data['site'] = $this->order->store ? $this->order->store->name : '';
 
