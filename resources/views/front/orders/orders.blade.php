@@ -66,6 +66,7 @@
                         'name' => 'Доп телефоны',
                         'width' => '3%',
                         'searchable' => true,
+                        'orderable' => 'false'
                     ],
                     'communication_time' => [
                         'name' => 'Время перезвона',
@@ -76,6 +77,8 @@
                         'name' => 'Курьер',
                         'width' => '3%',
                         'searchable' => false,
+                        'orderable' => 'false'
+
                     ],
                     'products' => [
                         'name' => 'Товары',
