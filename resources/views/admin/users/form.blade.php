@@ -80,18 +80,19 @@
                         @endif
                     </select>
                 </div>
+                @if (isset($user))
+                    <div class="form-group">
+                        <label for="group" class="col-sm-2 control-label">Группа</label>
 
-                <div class="form-group">
-                    <label for="group" class="col-sm-2 control-label">Группа</label>
-
-                    <select class="col-sm-10 js-group-basic-single" name="group_id">
-                        @if ($user->group)
-                            <option value="{{ $user->group_id }}" selected>{{ $user->group->description }}</option>
-                        @endif
-                        <option value="{{ null }}">Нет</option>
-                    </select>
-                </div>
-                @if($optionsAccount)
+                        <select class="col-sm-10 js-group-basic-single" name="group_id">
+                            @if ($user->group)
+                                <option value="{{ $user->group_id }}" selected>{{ $user->group->description }}</option>
+                            @endif
+                            <option value="{{ null }}">Нет</option>
+                        </select>
+                    </div>
+                @endif
+                @if(isset($optionsAccount))
                     <div class="form-group">
                         <label for="group" class="col-sm-2 control-label">Профиль</label>
 
@@ -138,7 +139,7 @@
             });
         });
 
-        @if($optionsAccount)
+        @if(isset($optionsAccount))
             let optionsAccount = {!! json_encode($optionsAccount::select('id', 'name as text')->get()->toArray()) !!}
             $(function() {
                     $('.js-profile-basic-single').select2({
