@@ -80,18 +80,18 @@
                         @endif
                     </select>
                 </div>
-                @if (isset($user))
+
                     <div class="form-group">
                         <label for="group" class="col-sm-2 control-label">Группа</label>
 
                         <select class="col-sm-10 js-group-basic-single" name="group_id">
-                            @if ($user->group)
+                            @if (isset($user) && $user->group)
                                 <option value="{{ $user->group_id }}" selected>{{ $user->group->description }}</option>
                             @endif
                             <option value="{{ null }}">Нет</option>
                         </select>
                     </div>
-                @endif
+
                 @if(isset($optionsAccount))
                     <div class="form-group">
                         <label for="group" class="col-sm-2 control-label">Профиль</label>
