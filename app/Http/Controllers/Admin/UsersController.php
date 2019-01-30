@@ -67,23 +67,23 @@ class UsersController extends Controller
         }
 
 
-        if(array_key_exists('account_id', $data) && isset($data['group_id'])) {
+        if(array_key_exists('account_id', $data) && $user->group) {
             $modelAccount = $user->getRelationByAccount();
+            $modelAccount = $modelAccount::find($data['account_id']);
 
             if($user->account && $user->account->id !== $data['account_id']) {
                 $oldModel = $user->account;
                 $oldModel->user_id = null;
                 $oldModel->save();
+                $modelAccount ? $user->account()->save($modelAccount) : null;
             }
 
-            $modelAccount = $modelAccount::find($data['account_id']);
-
-            if($modelAccount){
-                $user->account()->save($modelAccount);
+            if(!$user->account){
+                $modelAccount ? $user->account()->save($modelAccount) : null;
             }
         }
 
-        if(!isset($data['group_id'])){
+        if(!isset($data['group_id']) && $user->group) {
             if($user->account) {
                 $oldModel = $user->account;
                 $oldModel->user_id = null;

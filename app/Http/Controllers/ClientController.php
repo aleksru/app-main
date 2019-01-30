@@ -12,11 +12,6 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    public function __construct ()
-    {
-        $this->middleware('role:read_orders|change_orders');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -43,6 +38,7 @@ class ClientController extends Controller
      */
     public function store(ClientRequest $clientRequest)
     {
+        $this->authorize('update', Order::class);
         Client::create($clientRequest->validated());
 
         return redirect()->back()->with(['success' => 'Успешно создан!']);
@@ -54,6 +50,8 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
+        $this->authorize('view', Order::class);
+
         return view('front.client.show', [
             'client' => $client->load([
                 'orders' => function($query) {
@@ -85,6 +83,7 @@ class ClientController extends Controller
      */
     public function update(ClientRequest $clientRequest, Client $client)
     {
+        $this->authorize('update', Order::class);
         $client->update($clientRequest->validated());
 
         $mainPhone = false;
@@ -144,6 +143,8 @@ class ClientController extends Controller
      */
     public function createOrderClient(Request $request, ClientRepository $clientRepository)
     {
+        $this->authorize('update', Order::class);
+
         if (! $request->get('phone')){
             return redirect()->back()->with(['error' => 'Не заполнено поле!']);
         }

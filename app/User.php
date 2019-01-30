@@ -69,4 +69,14 @@ class User extends Authenticatable
     {
         return $this->group ? $this->group->name === UserGroupsEnums::OPERATOR : false;
     }
+
+    /**
+     * Получение имени группы пользователя
+     *
+     * @return null|string
+     */
+    public function getUserGroupName()
+    {
+        return $this->group ? $this->group->name : null;
+    }
 }

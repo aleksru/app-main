@@ -12,17 +12,13 @@ use App\Order;
 
 class OrderController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Order::class);
-        $this->middleware('can:view,App\Order')->only('index');
-    }
-
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
+        $this->authorize('view', Order::class);
+
         return view('front.orders.orders');
     }
 
@@ -31,6 +27,8 @@ class OrderController extends Controller
      */
     public function create()
     {
+        $this->authorize('update', Order::class);
+
         return view('front.orders.create');
     }
 
@@ -40,6 +38,7 @@ class OrderController extends Controller
      */
     public function store(UpdateOrderRequest $updateOrderRequest)
     {
+        $this->authorize('update', Order::class);
         Order::create($updateOrderRequest->validated());
 
         return redirect()->route('orders.edit', Order::create($updateOrderRequest->validated())->id)->with(['success' => 'Заказ успешно создан!']);
@@ -51,7 +50,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return view('front.orders.form', [ 'order' => $order ]);
+        //return view('front.orders.form', [ 'order' => $order ]);
     }
 
     /**
@@ -60,6 +59,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
+        $this->authorize('view', $order, Order::class);
         $operator = $order->operator ? $order->operator : (Auth()->user()->isOperator() ? Auth()->user()->account : null);
 
         return view('front.orders.form', [
@@ -75,6 +75,7 @@ class OrderController extends Controller
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
+        $this->authorize('update', Order::class);
         $data = $request->validated();
 
         $data['flag_denial_acc'] = isset($data['flag_denial_acc']) ? $data['flag_denial_acc'] : null;
@@ -97,6 +98,7 @@ class OrderController extends Controller
      */
     public function updateStatus(Request $request, Order $order)
     {
+        $this->authorize('update', Order::class);
         $statusId = Order::statusFinallyId();
 
         $order->update(['status_id' => $statusId]);
@@ -121,6 +123,7 @@ class OrderController extends Controller
      */
     public function updateProductsOrder(Request $request, Order $order)
     {
+        $this->authorize('update', Order::class);
         $products = $request->get('products');
         $realizations = [];
         $realizationsId = [];

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Client;
 use App\Order;
+use App\Policies\ClientPolicy;
 use App\Policies\OrderPolicy;
 use App\Policies\UploadPricePolicy;
 use App\Product;
@@ -19,7 +21,8 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
         Product::class => UploadPricePolicy::class,
-        Order::class => OrderPolicy::class
+        Order::class => OrderPolicy::class,
+        Client::class => ClientPolicy::class,
     ];
 
     /**
