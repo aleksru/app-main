@@ -122,5 +122,11 @@
             $('#orders-table').DataTable().ajax.reload(null, false);
         }, 5000 );
     });
+
+    $('#orders-table').on( 'draw.dt', function () {
+        $('.row-link').click(function(){
+            window.open($(this).find('a').first().attr('href'), '_blank');
+        });
+    } );
 </script>
 @endpush

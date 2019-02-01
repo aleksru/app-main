@@ -189,7 +189,7 @@ class OrderController extends Controller
                 return $order->courier->name ?? '';
             })
             ->editColumn('id', function (Order $order) {
-                return '<a href="'.route('orders.show', $order->id).'" target="_blank"><h4>'.$order->id.'</h4></a>';
+                return '<a href="'.route('orders.edit', $order->id).'" target="_blank"><h4>'.$order->id.'</h4></a>';
             })
             ->editColumn('actions', function (Order $order) {
                 return view('datatable.actions_order', [
@@ -227,7 +227,10 @@ class OrderController extends Controller
 
             })
             ->setRowClass(function (Order $order) {
-                return $order->status ? 'label-'.$order->status->color : 'label-success';
+                $class = 'row-link';
+                $class = $class . ($order->status ? ' label-' . $order->status->color : ' label-success');
+
+                return $class;
             })
             ->rawColumns(['actions', 'status_text', 'products', 'name_customer', 'id'])
             ->make(true);
