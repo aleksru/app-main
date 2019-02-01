@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Client;
+use App\Models\StockUser;
 use App\Order;
 use App\Policies\ClientPolicy;
 use App\Policies\OrderPolicy;
+use App\Policies\StockPolicy;
 use App\Policies\UploadPricePolicy;
 use App\Product;
 use Illuminate\Support\Facades\Gate;
@@ -23,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         Product::class => UploadPricePolicy::class,
         Order::class => OrderPolicy::class,
         Client::class => ClientPolicy::class,
+        StockUser::class => StockPolicy::class,
     ];
 
     /**

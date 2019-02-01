@@ -33,7 +33,7 @@
         <div class="col-md-12">
             @include('datatable.datatable',[
                 'id' => 'orders-table',
-                'route' => route('orders.datatable'),
+                'route' => $routeDatatable ?? route('orders.datatable'),
                 'columns' => [
                     'id' => [
                         'name' => 'ID',

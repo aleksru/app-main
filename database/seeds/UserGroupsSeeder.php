@@ -7,6 +7,7 @@ class UserGroupsSeeder extends Seeder
 {
     private $groups = [
         ['name' => 'operator', 'description' =>'Операторы'],
+        ['name' => 'stock', 'description' =>'Склад'],
     ];
 
     public function run()

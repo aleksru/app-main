@@ -5,13 +5,21 @@ namespace App\Models\Traits;
 
 use App\Enums\UserGroupsEnums;
 use App\Models\Operator;
+use App\Models\StockUser;
 use Illuminate\Database\Eloquent\Builder;
 
 trait UserDynamicType
 {
+    /**
+     * Группы и модели
+     *
+     * @var array
+     */
     private $accountRelations = [
         UserGroupsEnums::OPERATOR => Operator::class,
+        UserGroupsEnums::STOCK => StockUser::class,
     ];
+
     /**
      * Получение профиля пользователя в зависимости от его группы
      *
@@ -19,15 +27,11 @@ trait UserDynamicType
      */
     public function account()
     {
-        if(!$this->group) {
+        if(!$this->group || !array_key_exists($this->group->name, $this->accountRelations)) {
             return null;
         }
 
-        switch ($this->group->name){
-            case UserGroupsEnums::OPERATOR:
-                return $this->hasOne(Operator::class);
-            default: null;
-        }
+        return $this->hasOne($this->accountRelations[$this->group->name]);
     }
 
     /**

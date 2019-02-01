@@ -62,6 +62,9 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('order/{order}', 'LogController@order')->name('order');
     });
 
+    //Склад
+    Route::resource('stock', 'StockController')->only('index');
+    Route::get('stock-table', 'StockController@datatable')->name('stock.datatable');
 });
 
 //Админка
@@ -104,4 +107,8 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
 
     //Типы доставки
     Route::resource('delivery-types', 'DeliveryTypeController')->only('index', 'store', 'destroy');
+
+    //Склад
+    Route::resource('stock', 'StockUserController')->except('show');
+    Route::get('stock-table', 'StockUserController@datatable')->name('stock.datatable');
 });
