@@ -8,6 +8,14 @@
                 @endforeach
             </tr>
         </thead>
+
+        <tfoot>
+        <tr>
+            @foreach ($columns as $name => $column)
+                <th class=""></th>
+            @endforeach
+        </tr>
+        </tfoot>
     </table>
 </div>
 
