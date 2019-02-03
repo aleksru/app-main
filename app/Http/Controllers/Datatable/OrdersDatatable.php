@@ -62,6 +62,31 @@ class OrdersDatatable
                     return $query->whereRaw('c.phone like ?', "%{$keyword}%");
                 }
             })
+            ->filterColumn('store_text', function ($query, $keyword) {
+                if (preg_match('/[0-9]/', $keyword)){
+                    return $query->whereRaw('orders.store_id = ' . $keyword);
+                }
+            })
+            ->filterColumn('status_text', function ($query, $keyword) {
+                if (preg_match('/[0-9]/', $keyword)){
+                    return $query->whereRaw('orders.status_id = ' . $keyword);
+                }
+            })
+            ->filterColumn('courier', function ($query, $keyword) {
+                if (preg_match('/[0-9]/', $keyword)){
+                    return $query->whereRaw('orders.courier_id = ' . $keyword);
+                }
+            })
+            ->filterColumn('id', function ($query, $keyword) {
+                if (preg_match('/[0-9]/', $keyword)){
+                    return $query->whereRaw('orders.id = ' . $keyword);
+                }
+            })
+            ->filterColumn('created_at', function ($query, $keyword) {
+                if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $keyword)){
+                    return $query->whereDate('orders.created_at', $keyword);
+                }
+            })
             ->filterColumn('additional_phones', function ($query, $keyword) {
                 if (preg_match('/[0-9]{4}/', $keyword)) {
                     $clientPhones = ClientPhone::where('phone', 'LIKE', "%{$keyword}%")->pluck('client_id');
