@@ -65,7 +65,13 @@
     @endif
 
     $(function(){
-        $('#phone').mask('+7 (000) 000-0000');
+        $('#phone').mask('+0 (000) 000-0000',{
+            onChange: function(val, e, field){
+                if(val.indexOf('+') >= 0) {
+                    val.charAt(val.indexOf('+') + 1) !== 7 ? field.val( val.replace(val.charAt(val.indexOf('+') + 1), 7) )  : '';
+                }
+            },
+        });
     });
 </script>
 @endpush
