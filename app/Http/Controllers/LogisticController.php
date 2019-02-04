@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Datatable\OrdersDatatable;
-use App\Models\OrderStatus;
-use App\Models\StockUser;
-use App\Order;
-use \Illuminate\Database\Eloquent\Builder;
 
-class StockController extends Controller
+use App\Http\Controllers\Datatable\OrdersDatatable;
+use App\Models\Logist;
+use App\Models\OrderStatus;
+
+class LogisticController extends Controller
 {
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $this->authorize('view', StockUser::class);
+        $this->authorize('view', Logist::class);
 
-        return view('front.orders.orders', ['routeDatatable' => route('stock.datatable')]);
+        return view('front.orders.orders', ['routeDatatable' => route('logistics.datatable')]);
     }
 
     /**

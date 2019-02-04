@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Datatable\OrdersDatatable;
+use App\Http\Requests\CommentLogistRequst;
 use App\Models\Realization;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -144,6 +145,21 @@ class OrderController extends Controller
         Realization::destroy($arrDiff);
 
         return response()->json(['message' => 'Товары успешно обновлены!', 'products' => $order->realizations()->with('product:id,product_name', 'supplier')->get()]);
+    }
+
+    /**
+     * Добавление комментария логиста
+     *
+     * @param CommentLogistRequst $commentLogistRequst
+     * @param Order $order
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function commentLogist(CommentLogistRequst $commentLogistRequst, Order $order)
+    {
+        $this->authorize('commentLogist', Order::class);
+        $order->update($commentLogistRequst->validated());
+
+        return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно обновлен!']);
     }
 
     /**

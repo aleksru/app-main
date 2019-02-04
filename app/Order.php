@@ -19,7 +19,7 @@ class Order extends Model
     protected $fillable = ['user_id', 'client_id','store_text','comment','status_id', 'courier_id',
                             'delivery_period_id','operator_id','date_delivery','products_text', 'metro_id', 'address',
                             'store_id', 'flag_denial_acc', 'order_id', 'communication_time', 'denial_reason_id', 'delivery_type_id', 'flag_send_sms',
-                            'address_city', 'address_street', 'address_home', 'address_apartment', 'address_other'
+                            'address_city', 'address_street', 'address_home', 'address_apartment', 'address_other', 'comment_logist'
     ];
     
     protected $casts = [

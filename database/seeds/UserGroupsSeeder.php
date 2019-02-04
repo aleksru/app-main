@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\DB;
 class UserGroupsSeeder extends Seeder
 {
     private $groups = [
-        ['name' => 'operator', 'description' =>'Операторы'],
-        ['name' => 'stock', 'description' =>'Склад'],
+        ['name' => \App\Enums\UserGroupsEnums::OPERATOR, 'description' =>'Операторы'],
+        ['name' => \App\Enums\UserGroupsEnums::STOCK, 'description' =>'Склад'],
+        ['name' => \App\Enums\UserGroupsEnums::LOGIST, 'description' =>'Логистика'],
     ];
 
     public function run()

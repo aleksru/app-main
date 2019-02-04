@@ -37,6 +37,7 @@ Route::group(['middleware' =>'auth'], function() {
     Route::get('orders-table', 'OrderController@datatable')->name('orders.datatable');
     Route::post('product-orders/{order}', 'OrderController@updateProductsOrder')->name('update.product-orders');
     Route::post('orders/{order}/set-status', 'OrderController@updateStatus')->name('orders.set-status');
+    Route::post('orders/{order}/comment-logist', 'OrderController@commentLogist')->name('orders.comment-logist');
 
 
     //Route::get('/home', 'HomeController@index')->name('home');
@@ -65,6 +66,10 @@ Route::group(['middleware' =>'auth'], function() {
     //Склад
     Route::resource('stock', 'StockController')->only('index');
     Route::get('stock-table', 'StockController@datatable')->name('stock.datatable');
+
+    //Логистика
+    Route::resource('logistics', 'LogisticController')->only('index');
+    Route::get('logistics-table', 'LogisticController@datatable')->name('logistics.datatable');
 });
 
 //Админка
@@ -111,4 +116,8 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Склад
     Route::resource('stock', 'StockUserController')->except('show');
     Route::get('stock-table', 'StockUserController@datatable')->name('stock.datatable');
+
+    //Логисты
+    Route::resource('logists', 'LogistController')->except('show');
+    Route::get('logists-table', 'LogistController@datatable')->name('logists.datatable');
 });

@@ -18,6 +18,10 @@
         <li><a href="{{ route('stock.index') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Склад</span></a></li>
     @endcan
 
+    @can('view', App\Models\Logist::class)
+        <li><a href="{{ route('logistics.index') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Логистика</span></a></li>
+    @endcan
+
     @if (Auth::user()->is_admin)
         <li class="treeview">
             <a href="#"><i class="fa fa-link"></i> <span>Админка</span>
@@ -46,6 +50,7 @@
                         <li><a href="{{ route('admin.denial-reasons.index') }}"><i class="fa fa-hand-paper-o" aria-hidden="true"></i> <span>Причины отказа</span> </a></li>
                         <li><a href="{{ route('admin.delivery-types.index') }}"><i class="fa fa-car" aria-hidden="true"></i> <span>Типы доставки</span> </a></li>
                         <li><a href="{{ route('admin.stock.index') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Склад</span> </a></li>
+                        <li><a href="{{ route('admin.logists.index') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Логисты</span> </a></li>
                     </ul>
                 </li>
             </ul>

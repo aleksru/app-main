@@ -2,13 +2,11 @@
 
 namespace App\Policies;
 
-use App\Client;
-use App\Enums\RoleOrderEnums;
 use App\Enums\UserGroupsEnums;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ClientPolicy
+class LogisticPolicy
 {
     use HandlesAuthorization;
 
@@ -18,19 +16,9 @@ class ClientPolicy
      */
     public function view(User $user)
     {
-        return $user->roles->pluck('name')->contains(RoleOrderEnums::READ_ORDER)
-            || $user->roles->pluck('name')->contains(RoleOrderEnums::CHANGE_ORDER)
-            || $user->isOperator();
+        return $user->roles->pluck('name')->contains('view_logistics') || $user->isLogist();
     }
 
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function update(User $user)
-    {
-        return $user->roles->pluck('name')->contains('change_orders') || $user->isOperator();
-    }
 
     /**
      * @param $user

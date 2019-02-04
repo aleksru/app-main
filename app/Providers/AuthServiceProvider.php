@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Client;
+use App\Models\Logist;
 use App\Models\StockUser;
 use App\Order;
 use App\Policies\ClientPolicy;
+use App\Policies\LogisticPolicy;
 use App\Policies\OrderPolicy;
 use App\Policies\StockPolicy;
 use App\Policies\UploadPricePolicy;
@@ -26,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         Order::class => OrderPolicy::class,
         Client::class => ClientPolicy::class,
         StockUser::class => StockPolicy::class,
+        Logist::class => LogisticPolicy::class,
     ];
 
     /**
