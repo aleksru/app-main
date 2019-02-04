@@ -75,8 +75,12 @@
                 </div>
                 <div class="col-sm-5">
                     <label for="name" class="control-label">Перезвон</label>
-                    <input type="datetime-local" class="form-control"  value="{{
-                        old('communication_time', $order->communication_time ? $order->communication_time->format('Y-m-d\TH:i') : null )  }}" name="communication_time">
+                    <select name="communication_time" class="form-control">
+                        <option value=""></option>
+                        @for( $i = 1; $i < 24; $i++)
+                            <option value="{{ $i }}">+ {{ $i }} ч.</option>
+                        @endfor
+                    </select>
                 </div>
             </div>
             <div class="row">

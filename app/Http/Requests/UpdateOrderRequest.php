@@ -37,7 +37,7 @@ class UpdateOrderRequest extends FormRequest
             'metro_id' => 'integer|nullable',
             'store_text' => 'string|nullable',
             'flag_denial_acc' => 'string|nullable',
-            'communication_time' => 'date|nullable',
+            'communication_time' => 'integer|nullable',
             'denial_reason_id' => 'nullable|integer',
             'delivery_type_id' => 'nullable|integer',
             'flag_send_sms' => 'nullable|integer',

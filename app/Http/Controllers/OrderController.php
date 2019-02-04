@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Models\Realization;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Order;
@@ -77,6 +78,7 @@ class OrderController extends Controller
         $data = $request->validated();
 
         $data['flag_denial_acc'] = isset($data['flag_denial_acc']) ? $data['flag_denial_acc'] : null;
+        $data['communication_time'] = isset($data['communication_time']) ? Carbon::now()->addHours($data['communication_time']) : null;
         $order->update($data);
 
         if($order->status && stripos($order->status->status, 'отказ') === false || !$order->status) {

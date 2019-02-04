@@ -177,15 +177,6 @@ class Order extends Model
     }
 
     /**
-     * @param $value
-     */
-    public function setCommunicationTimeAttribute($value)
-    {
-        $value = $value ? Carbon::createFromFormat('Y-m-d\TH:i', $value) : null;
-        $this->attributes['communication_time'] = $value;
-    }
-
-    /**
      * Причина отказа
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
