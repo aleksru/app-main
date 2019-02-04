@@ -78,7 +78,12 @@ class OrderController extends Controller
         $data = $request->validated();
 
         $data['flag_denial_acc'] = isset($data['flag_denial_acc']) ? $data['flag_denial_acc'] : null;
-        $data['communication_time'] = isset($data['communication_time']) ? Carbon::now()->addHours($data['communication_time']) : null;
+
+        $data['communication_time'] =  isset($data['communication_time']) ? Carbon::now()->addMinutes((integer)($data['communication_time'] * 60)) : null;
+        if(!$data['communication_time']) {
+            unset($data['communication_time']);
+        }
+
         $order->update($data);
 
         if($order->status && stripos($order->status->status, 'отказ') === false || !$order->status) {

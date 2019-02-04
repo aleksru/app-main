@@ -77,7 +77,8 @@
                     <label for="name" class="control-label">Перезвон</label>
                     <select name="communication_time" class="form-control">
                         <option value=""></option>
-                        @for( $i = 1; $i < 24; $i++)
+                        <option value="0.5">+ 30 мин</option>
+                        @for( $i = 1; $i <= 24; $i++)
                             <option value="{{ $i }}">+ {{ $i }} ч.</option>
                         @endfor
                     </select>
