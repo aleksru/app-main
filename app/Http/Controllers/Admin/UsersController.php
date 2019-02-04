@@ -71,7 +71,7 @@ class UsersController extends Controller
             $modelAccount = $user->getRelationByAccount();
             $modelAccount = $modelAccount::find($data['account_id']);
 
-            if($user->account && $user->account->id !== $data['account_id']) {
+            if($user->account && $user->account->id != $data['account_id']) {
                 $oldModel = $user->account;
                 $oldModel->user_id = null;
                 $oldModel->save();
