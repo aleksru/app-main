@@ -76,7 +76,10 @@
                 <div class="col-sm-5">
                     <label for="name" class="control-label">Перезвон</label>
                     <select name="communication_time" class="form-control">
-                        <option value=""></option>
+                        @if($order->communication_time)
+                            <option disabled selected>{{  $order->communication_time }}</option>
+                        @endif
+                        <option value="">Нет</option>
                         <option value="0.5">+ 30 мин</option>
                         @for( $i = 1; $i <= 24; $i++)
                             <option value="{{ $i }}">+ {{ $i }} ч.</option>
