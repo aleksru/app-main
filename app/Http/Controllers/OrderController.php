@@ -58,7 +58,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        $this->authorize('view', $order, Order::class);
+        $this->authorize('show', $order, Order::class);
         $operator = $order->operator ? $order->operator : (Auth()->user()->isOperator() ? Auth()->user()->account : null);
 
         return view('front.orders.form', [
@@ -125,7 +125,6 @@ class OrderController extends Controller
      */
     public function updateProductsOrder(Request $request, Order $order)
     {
-        $this->authorize('update', Order::class);
         $products = $request->get('products');
         $realizations = [];
         $realizationsId = [];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Datatable\OrdersDatatable;
+use App\Models\OrderStatus;
 use App\Models\StockUser;
 use App\Order;
 use \Illuminate\Database\Eloquent\Builder;
@@ -25,9 +26,9 @@ class StockController extends Controller
      */
     public function datatable(OrdersDatatable $ordersDatatable)
     {
-        //$builder = $ordersDatatable->getOrderQuery();
-        //$builder->where('orders.id', 111);
-        //$ordersDatatable->setQuery($builder);
+        $builder = $ordersDatatable->getOrderQuery();
+        $builder->whereIn('orders.status_id', OrderStatus::getIdsStatuesForStock());
+        $ordersDatatable->setQuery($builder);
 
         return $ordersDatatable->datatable();
     }

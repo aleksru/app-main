@@ -18,7 +18,17 @@ class OrderPolicy
     public function view(User $user)
     {
         return $user->roles->pluck('name')->contains('read_orders') || $user->roles->pluck('name')->contains('change_orders')
-                    || $user->getUserGroupName() === UserGroupsEnums::OPERATOR || $user->getUserGroupName() === UserGroupsEnums::STOCK;
+                    || $user->getUserGroupName() === UserGroupsEnums::OPERATOR;
+    }
+
+    /**
+     * @param User $user
+     * @return mixed
+     */
+    public function show(User $user)
+    {
+        return $user->roles->pluck('name')->contains('read_orders') || $user->roles->pluck('name')->contains('change_orders')
+            || $user->getUserGroupName() === UserGroupsEnums::OPERATOR || $user->getUserGroupName() === UserGroupsEnums::STOCK;
     }
 
     /**
@@ -52,8 +62,7 @@ class OrderPolicy
      */
     public function update(User $user)
     {
-        return $user->roles->pluck('name')->contains('change_orders') || $user->getUserGroupName() === UserGroupsEnums::OPERATOR
-            || $user->getUserGroupName() === UserGroupsEnums::STOCK;
+        return $user->roles->pluck('name')->contains('change_orders') || $user->getUserGroupName() === UserGroupsEnums::OPERATOR;
     }
 
     /**

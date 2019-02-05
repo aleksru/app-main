@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderStatus extends Model
@@ -21,5 +22,15 @@ class OrderStatus extends Model
         }
 
         return $color;
+    }
+
+    /**
+     * id Статусов для склада
+     *
+     * @return Collection
+     */
+    public static function getIdsStatuesForStock()
+    {
+       return OrderStatus::where('status', 'like', '%' . StockUser::STATUS_PREFIX . '%' )->pluck('id');
     }
 }
