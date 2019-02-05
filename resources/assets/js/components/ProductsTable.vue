@@ -103,7 +103,7 @@
                     }
                 }
 
-                return summ;
+                return summ - this.initial_price_delivery;
             },
 
             courier_payments() {

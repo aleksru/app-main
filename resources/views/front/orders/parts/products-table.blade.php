@@ -1,6 +1,6 @@
 <products-table :initial_data="{{ json_encode($order->realizations, true) }}"
                 :initial_order="{{ json_encode($order->id, true) }}"
-                :initial_price_delivery="{{ json_encode($order->deliveryType->price ?? 0, true) }}"
+                :initial_price_delivery="{{ $order->deliveryType->price ?? 0 }}"
                 inline-template>
 <div>
     <div class="box box-default">
