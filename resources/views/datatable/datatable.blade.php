@@ -12,7 +12,7 @@
         <tfoot>
         <tr>
             @foreach ($columns as $name => $column)
-                <th class=""></th>
+                <th rowspan="1" colspan="1"></th>
             @endforeach
         </tr>
         </tfoot>
@@ -69,7 +69,7 @@
                         ]
                     }
                 ]
-            });
+            }).search( '' ).columns().search( '' ).draw();
 
             /**
              * Дебаунс на поиск

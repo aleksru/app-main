@@ -43,7 +43,7 @@
                     'status_text' => [
                         'name' => 'Статус',
                         'width' => '2%',
-                        'searchable' => false,
+                        'searchable' => true,
                     ],
                     'store_text' => [
                         'name' => 'Магазин',
@@ -76,7 +76,7 @@
                     'courier' => [
                         'name' => 'Курьер',
                         'width' => '3%',
-                        'searchable' => false,
+                        'searchable' => true,
                         'orderable' => 'false'
 
                     ],
@@ -95,7 +95,8 @@
                     'created_at' => [
                         'name' => 'Дата создания',
                         'width' => '5%',
-                        'orderable' => 'false'
+                        'orderable' => 'false',
+                        'searchable' => true,
                     ],
                     'actions' => [
                         'name' => 'Действия',
@@ -117,16 +118,93 @@
         toast.error('{{ session()->get('error') }}')
     @endif
 
+    /**
+     *обновление таблицы
+     */
     $(function () {
         setInterval( function () {
             $('#orders-table').DataTable().ajax.reload(null, false);
         }, 5000 );
     });
 
+    /**
+     * Переход на редактирование заказа по клику по строке
+     */
     $('#orders-table').on( 'draw.dt', function () {
         $('.row-link').click(function(){
             window.open($(this).find('a').first().attr('href'), '_blank');
         });
     } );
+
+    /**
+     * Стиль футер под хедер
+     */
+    $(function(){
+        $('tfoot').css('display', 'table-header-group');
+
+    });
+
+    /**
+     * Индивидуальный поиск поле инпут
+     * @type Object
+     */
+    let individualSearchingColumnsInput = {
+        phone: {type: 'text'},
+        additional_phones: {type: 'text'},
+        name_customer: {type: 'text'},
+        created_at: {type: 'date'},
+        id: {type: 'text'},
+    };
+
+    /**
+     * Индивидуальный поиск поле селект
+     * @type Object
+     */
+    let individualSearchingColumnsSelect = {
+        store_text: {
+            data: {!! json_encode(App\Store::select('id', 'name')->get()->toArray()) !!}
+        },
+        status_text: {
+            data: {!! json_encode(App\Models\OrderStatus::select('id', 'status as name')->get()->toArray()) !!}
+        },
+        courier: {
+            data: {!! json_encode(App\Models\Courier::select('id', 'name')->get()->toArray()) !!}
+        }
+    };
+
+    /**
+     * Добавляем поля для поиска, вешаем события
+     */
+    $('#orders-table').on( 'init.dt', function () {
+        let tableOrders = $('#orders-table').DataTable();
+        let columns = tableOrders.settings().init().columns;
+
+        tableOrders.columns().every(function(){
+            let column = this;
+            let columnName = columns[this.index()].name;
+
+            if(columnName in individualSearchingColumnsInput) {
+                let input = $('<input type="' + individualSearchingColumnsInput[columnName]['type'] + '" value="" placeholder="Search...">').appendTo( $(column.footer()).empty() );
+                input.off().on('keyup cut paste change', _.debounce(() =>  column.search(input.val()).draw(), tableOrders.settings()[0].searchDelay));
+            }
+
+            if(columnName in individualSearchingColumnsSelect) {
+                let select = $('<select><option value=""></option></select>').appendTo( $(column.footer()).empty() );
+
+                for(let key in individualSearchingColumnsSelect[columnName]['data']) {
+                    select.append( '<option value="' + individualSearchingColumnsSelect[columnName]['data'][key]['id'] + '">'
+                        + individualSearchingColumnsSelect[columnName]['data'][key]['name']  + '</option>' );
+                }
+                select.on('change', function(){
+                    column.search($(this).val()).draw(), tableOrders.settings()[0].searchDelay;
+                });
+            }
+        });
+
+        $('tfoot').find('select').css('width', '80%').css('min-height', '32px');
+        $('tfoot').find('input').css('width', '100%').css('padding', '3px').css('box-sizing', 'border-box');
+    } );
+
 </script>
 @endpush
+
