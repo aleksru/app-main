@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\ClientCall;
+use App\Models\OrderStatus;
 use App\Product;
 use App\Repositories\ClientRepository;
 use App\Store;
@@ -60,6 +61,7 @@ class ApiMangoController extends Controller
                         'phone' => $data['from']['number'],
                         'comment' =>'Входящий Звонок',
                         'store_id' => $store->id ?? null,
+                        'status_id' => OrderStatus::getIdStatusNew() ?? null
                         //'products' => Product::EMPTY_PRODUCTS
                     ]);
                 }

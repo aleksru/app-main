@@ -10,6 +10,12 @@ class OrderStatus extends Model
     protected $guarded = ['id'];
 
     /**
+     * Префикс статуса нового заказа
+     * @var string
+     */
+    const STATUS_NEW_PREFIX = 'новый';
+
+    /**
      * Цвет по умолчанию
      *
      * @param $color
@@ -32,5 +38,21 @@ class OrderStatus extends Model
     public static function getIdsStatuesForStock()
     {
        return OrderStatus::where('status', 'like', '%' . StockUser::STATUS_PREFIX . '%' )->pluck('id');
+    }
+
+    /**
+     * Получение ид статуса нового заказа
+     *
+     * @return string|null
+     */
+    public static function getIdStatusNew()
+    {
+       $status = OrderStatus::where('status', 'like', '%' . self::STATUS_NEW_PREFIX . '%' )->first();
+
+       if(!$status) {
+           return null;
+       }
+
+       return $status->id;
     }
 }

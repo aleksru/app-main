@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Http\Requests\ClientRequest;
 use App\Models\ClientPhone;
+use App\Models\OrderStatus;
 use App\Order;
 use App\Product;
 use App\Repositories\ClientRepository;
@@ -159,6 +160,7 @@ class ClientController extends Controller
             'client_id' => $client->id,
             'store_text' => '',
             'comment' =>'-',
+            'status_id' => OrderStatus::getIdStatusNew() ?? null
         ]);
 
         return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно создан!']);
