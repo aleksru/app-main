@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Models\OrderStatus;
 use App\Product;
 use App\Repositories\ClientRepository;
 use App\Store;
@@ -35,6 +36,7 @@ class ApiOrdersController extends Controller
         $client->save();
 
         $data['client_id'] = $client->id;
+        $data['status_id'] = OrderStatus::getIdStatusNew();
 
         $store = Store::where('phone', $data['store_id'])->first();
         $data['store_id'] = $store ? $store->id : null;
