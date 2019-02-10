@@ -58,7 +58,7 @@ class OrdersDatatable
                 ->leftJoin('order_statuses as o_status', 'status_id', '=', 'o_status.id'))
 
             ->filterColumn('phone', function ($query, $keyword) {
-                if (preg_match('/[0-9]{4}/', $keyword)){
+                if (preg_match('/[0-9]{4,}/', $keyword)){
                     return $query->whereRaw('c.phone like ?', "%{$keyword}%");
                 }
             })
@@ -88,15 +88,15 @@ class OrdersDatatable
                 }
             })
             ->filterColumn('additional_phones', function ($query, $keyword) {
-                if (preg_match('/[0-9]{4}/', $keyword)) {
+                if (preg_match('/[0-9]{4,}/', $keyword)) {
                     $clientPhones = ClientPhone::where('phone', 'LIKE', "%{$keyword}%")->pluck('client_id');
 
                     return $query->whereIn('orders.client_id', $clientPhones);
                 }
             })
             ->filterColumn('name_customer', function ($query, $keyword) {
-                if (preg_match('/[A-Za-z]{3}/', $keyword)) {
-                    return $query->whereRaw('LOWER(c.name) like ?', "{$keyword}%");
+                if (preg_match('/[A-Za-zА-Яа-я]{3,}/', $keyword)) {
+                    return $query->whereRaw('LOWER(c.name) like ?', "%{$keyword}%");
                 }
             })
             ->editColumn('additional_phones', function (Order $order) {
