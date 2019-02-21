@@ -4,9 +4,11 @@ namespace App\Models\Traits;
 
 
 use App\Enums\UserGroupsEnums;
+use App\Models\Logist;
 use App\Models\Operator;
 use App\Models\StockUser;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 trait UserDynamicType
 {
@@ -18,12 +20,13 @@ trait UserDynamicType
     private $accountRelations = [
         UserGroupsEnums::OPERATOR => Operator::class,
         UserGroupsEnums::STOCK => StockUser::class,
+        UserGroupsEnums::LOGIST => Logist::class
     ];
 
     /**
      * Получение профиля пользователя в зависимости от его группы
      *
-     * @return null|Builder
+     * @return null|Relation
      */
     public function account()
     {

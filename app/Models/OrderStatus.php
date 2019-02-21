@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderStatus extends Model
@@ -35,7 +35,7 @@ class OrderStatus extends Model
      *
      * @return Collection
      */
-    public static function getIdsStatuesForStock()
+    public static function getIdsStatusesForStock():Collection
     {
        return OrderStatus::where('status', 'like', '%' . StockUser::STATUS_PREFIX . '%' )->pluck('id');
     }
@@ -54,5 +54,15 @@ class OrderStatus extends Model
        }
 
        return $status->id;
+    }
+
+    /**
+     * id Статусов для логистика
+     *
+     * @return Collection
+     */
+    public static function getIdsStatusesForLogistic():Collection
+    {
+        return OrderStatus::where('status', 'like', '%' . Logist::STATUS_PREFIX . '%' )->pluck('id');
     }
 }

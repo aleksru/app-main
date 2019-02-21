@@ -6,4 +6,5 @@ class UserGroupsEnums
 {
     const OPERATOR = 'operator';
     const STOCK    = 'stock';
+    const LOGIST   = 'logistics';
 }

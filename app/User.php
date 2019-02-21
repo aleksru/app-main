@@ -67,7 +67,27 @@ class User extends Authenticatable
      */
     public function isOperator()
     {
-        return $this->group ? $this->group->name === UserGroupsEnums::OPERATOR : false;
+        return $this->getUserGroupName() === UserGroupsEnums::OPERATOR;
+    }
+
+    /**
+     * Проверка на группу логистов
+     *
+     * @return bool
+     */
+    public function isLogist()
+    {
+        return $this->getUserGroupName() === UserGroupsEnums::LOGIST ;
+    }
+
+    /**
+     * Проверка на группу склада
+     *
+     * @return bool
+     */
+    public function isStock()
+    {
+        return $this->getUserGroupName() === UserGroupsEnums::STOCK ;
     }
 
     /**

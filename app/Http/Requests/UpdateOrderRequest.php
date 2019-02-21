@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Order;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateOrderRequest extends FormRequest
 {
@@ -24,6 +25,12 @@ class UpdateOrderRequest extends FormRequest
      */
     public function rules()
     {
+        if(Auth::user()->isLogist()) {
+            return [
+                'courier_id' => 'integer|nullable'
+            ];
+        }
+
         return [
             'user_id' => 'integer',
             'status_id' => 'integer|nullable',

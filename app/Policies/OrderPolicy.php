@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\RoleOrderEnums;
 use App\Enums\UserGroupsEnums;
 use App\User;
 use App\Order;
@@ -12,13 +13,28 @@ class OrderPolicy
     use HandlesAuthorization;
 
     /**
+     * @var RoleOrderEnums
+     */
+    protected $roleOrderEnums;
+
+    /**
+     * OrderPolicy constructor.
+     * @param RoleOrderEnums $roleOrderEnums
+     */
+    public function __construct (RoleOrderEnums $roleOrderEnums)
+    {
+        $this->roleOrderEnums = $roleOrderEnums;
+    }
+
+    /**
      * @param User $user
      * @return mixed
      */
     public function view(User $user)
     {
-        return $user->roles->pluck('name')->contains('read_orders') || $user->roles->pluck('name')->contains('change_orders')
-                    || $user->getUserGroupName() === UserGroupsEnums::OPERATOR;
+        return $user->roles->pluck('name')->contains($this->roleOrderEnums::READ_ORDER)
+            || $user->roles->pluck('name')->contains($this->roleOrderEnums::CHANGE_ORDER)
+            || $user->isOperator();
     }
 
     /**
@@ -27,8 +43,9 @@ class OrderPolicy
      */
     public function show(User $user)
     {
-        return $user->roles->pluck('name')->contains('read_orders') || $user->roles->pluck('name')->contains('change_orders')
-            || $user->getUserGroupName() === UserGroupsEnums::OPERATOR || $user->getUserGroupName() === UserGroupsEnums::STOCK;
+        return $user->roles->pluck('name')->contains($this->roleOrderEnums::READ_ORDER)
+            || $user->roles->pluck('name')->contains($this->roleOrderEnums::CHANGE_ORDER)
+            || $user->isOperator() || $user->isStock() || $user->isLogist();
     }
 
     /**
@@ -39,7 +56,8 @@ class OrderPolicy
      */
     public function create(User $user)
     {
-        return $user->roles->pluck('name')->contains('change_orders') || $user->getUserGroupName() === UserGroupsEnums::OPERATOR;
+        return $user->roles->pluck('name')->contains($this->roleOrderEnums::CHANGE_ORDER)
+            || $user->isOperator();
     }
 
     /**
@@ -50,7 +68,8 @@ class OrderPolicy
      */
     public function store(User $user)
     {
-        return $user->roles->pluck('name')->contains('change_orders') || $user->getUserGroupName() === UserGroupsEnums::OPERATOR;
+        return $user->roles->pluck('name')->contains($this->roleOrderEnums::CHANGE_ORDER)
+            || $user->isOperator();
     }
 
     /**
@@ -62,7 +81,18 @@ class OrderPolicy
      */
     public function update(User $user)
     {
-        return $user->roles->pluck('name')->contains('change_orders') || $user->getUserGroupName() === UserGroupsEnums::OPERATOR;
+        return $user->roles->pluck('name')->contains($this->roleOrderEnums::CHANGE_ORDER)
+            || $user->isOperator()
+            || $user->isLogist();
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function commentLogist(User $user)
+    {
+        return $user->isLogist();
     }
 
     /**

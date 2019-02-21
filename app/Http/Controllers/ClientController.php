@@ -84,7 +84,7 @@ class ClientController extends Controller
      */
     public function update(ClientRequest $clientRequest, Client $client)
     {
-        $this->authorize('update', Order::class);
+        $this->authorize('update', Client::class);
         $client->update($clientRequest->validated());
 
         $mainPhone = false;
@@ -144,7 +144,7 @@ class ClientController extends Controller
      */
     public function createOrderClient(Request $request, ClientRepository $clientRepository)
     {
-        $this->authorize('update', Order::class);
+        $this->authorize('create', Order::class);
 
         if (! $request->get('phone')){
             return redirect()->back()->with(['error' => 'Не заполнено поле!']);
