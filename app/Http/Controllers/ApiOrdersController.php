@@ -17,17 +17,16 @@ class ApiOrdersController extends Controller
      * Создание заказа
      *
      * @param ApiSetOrderRequest $req
-     * @param ClientRepository $clientRepository
      * @return string
      */
-    public function api(ApiSetOrderRequest $req, ClientRepository $clientRepository)
+    public function api(ApiSetOrderRequest $req)
     {
         $data = $req->validated();
         $data['products_text'] = json_decode($req->products, true);
         $data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
 
         //ищем клиента, если не находим создаем
-        $client = $clientRepository->getClientByPhone($data['phone']);
+        $client = Client::getClientByPhone($data['phone']);
         if(!$client) {
             $client = Client::create(['phone' => $data['phone']]);
         }

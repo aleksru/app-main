@@ -142,7 +142,7 @@ class ClientController extends Controller
      * @param ClientRepository $clientRepository
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function createOrderClient(Request $request, ClientRepository $clientRepository)
+    public function createOrderClient(Request $request)
     {
         $this->authorize('create', Order::class);
 
@@ -150,7 +150,7 @@ class ClientController extends Controller
             return redirect()->back()->with(['error' => 'Не заполнено поле!']);
         }
 
-        $client = $clientRepository->getClientByPhone($request->get('phone'));
+        $client = Client::getClientByPhone($request->get('phone'));
 
         if (! $client) {
             $client = Client::create(['phone' => $request->get('phone')]);

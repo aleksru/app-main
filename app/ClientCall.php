@@ -56,4 +56,36 @@ class ClientCall extends Model
 
         return 'Не определен';
     }
+
+    /**
+     * Получение последнего звонка для номера
+     *
+     * @param $number
+     * @return Model|null
+     */
+    public static function getLastCallForNumber($number)
+    {
+        return ClientCall::where('from_number', $number)->orderBy('created_at', 'desc')->first();
+    }
+
+    /**
+     * Получение имени клиента
+     *
+     * @return string|null
+     */
+    public function getClientNameAttribute()
+    {
+        return $this->client ? $this->client->name : null;
+    }
+
+    /**
+     * Получение названия магазина
+     *
+     * @return string|null
+     */
+    public function getStoreNameAttribute()
+    {
+        return $this->store ? $this->store->name : null;
+    }
+
 }

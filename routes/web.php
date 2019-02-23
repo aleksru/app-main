@@ -70,6 +70,10 @@ Route::group(['middleware' =>'auth'], function() {
     //Логистика
     Route::resource('logistics', 'LogisticController')->only('index');
     Route::get('logistics-table', 'LogisticController@datatable')->name('logistics.datatable');
+
+    //звонки
+    Route::resource('calls', 'ClientCallController')->only('index');
+    Route::get('calls-table', 'ClientCallController@datatable')->name('calls.datatable');
 });
 
 //Админка
