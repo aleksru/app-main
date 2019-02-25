@@ -5,6 +5,10 @@
         <li><a href="{{ route('product.index') }}"><i class="fa fa-upload"></i> <span>Загрузка прайса</span></a></li>
     @endcan
 
+    @can('view', App\ClientCall::class)
+        <li><a href="{{ route('calls.index') }}"><i class="fa fa-volume-control-phone"></i> <span>Пропущенные звонки</span></a></li>
+    @endcan
+
     @can('index', App\Product::class)
         <li><a href="{{ route('price-lists.index') }}"><i class="fa fa-credit-card"></i> <span>Прайс-листы</span></a></li>
     @endcan

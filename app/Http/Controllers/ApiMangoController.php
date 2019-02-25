@@ -99,6 +99,26 @@ class ApiMangoController extends Controller
      */
     public function summary(Request $request)
     {
+//        $data = array (
+//            'entry_id' => 'NTg2NjkwNDM5NQ==',
+//            'call_direction' => 1,
+//            'from' =>
+//                array (
+//                    'number' => '79175872565',
+//                ),
+//            'to' =>
+//                array (
+//                    'extension' => '106',
+//                    'number' => 'sip:user6@vpbx400137851.mangosip.ru',
+//                ),
+//            'line_number' => '74959266384',
+//            'create_time' => 1551075342,
+//            'forward_time' => 1551075342,
+//            'talk_time' => 0,
+//            'end_time' => 1551075443,
+//            'entry_result' => 0,
+//            'disconnect_reason' => 1110,
+//        );
         $data = json_decode($request->json, true);
 
         //входящий звонок

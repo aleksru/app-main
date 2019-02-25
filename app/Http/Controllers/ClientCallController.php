@@ -14,6 +14,8 @@ class ClientCallController extends Controller
      */
     public function index()
     {
+        $this->authorize('view', ClientCall::class);
+
         return view('front.calls.index');
     }
 
@@ -24,12 +26,15 @@ class ClientCallController extends Controller
     {
         $missedCalls = ClientCall::query()
             ->where('status_call', '=', MangoCallEnums::CALL_RESULT_MISSED)
+            ->where('type', ClientCall::incomingCall)
             ->where('created_at', '>=', Carbon::today())
             ->distinct()
             ->get();
 
         $missedCalls = $missedCalls->reject(function($value, $key) {
-            return ! ClientCall::where('from_number', $value->from_number)->where('created_at', '>', $value->created_at)->get()->isEmpty();
+            return ClientCall::where('from_number', $value->from_number)
+                            ->where('created_at', '>', $value->created_at)
+                            ->count() > 0;
         });
 
         $missedCalls = $missedCalls->each(function($value, $key) {
@@ -37,6 +42,14 @@ class ClientCallController extends Controller
             $value->append('storeName');
         });
 
-        return datatables()->of($missedCalls)->make(true);
+        return datatables()->of($missedCalls)
+                ->editColumn('clientName', function(ClientCall $clientCall){
+                    return view('datatable.customer', [
+                        'route' => route('clients.show', $clientCall->client_id),
+                        'name_customer' => $clientCall->clientName ?? 'Не указано'
+                    ]);
+                })
+                ->rawColumns(['clientName'])
+                ->make(true);
     }
 }

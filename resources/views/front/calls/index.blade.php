@@ -35,19 +35,19 @@
                 ],
                 'clientName' => [
                     'name' => 'Клиент',
-                    'width' => '1%',
+                    'width' => '5%',
                 ],
                 'from_number' => [
                     'name' => 'Телефон',
-                    'width' => '2%',
+                    'width' => '10%',
                 ],
                 'storeName' => [
                     'name' => 'Магазин',
-                    'width' => '2%',
+                    'width' => '10%',
                 ],
                 'created_at' => [
                     'name' => 'Время',
-                    'width' => '2%',
+                    'width' => '10%',
                 ],
 
             ],
@@ -61,10 +61,10 @@
     /**
      *обновление таблицы
      */
-//    $(function () {
-//        setInterval( function () {
-//            $('#calls-table').DataTable().ajax.reload(null, false);
-//        }, 3000 );
-//    });
+    $(function () {
+        setInterval( function () {
+            $('#calls-table').DataTable().ajax.reload(null, false);
+        }, 3000 );
+    });
 </script>
 @endpush

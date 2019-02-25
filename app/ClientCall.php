@@ -65,7 +65,10 @@ class ClientCall extends Model
      */
     public static function getLastCallForNumber($number)
     {
-        return ClientCall::where('from_number', $number)->orderBy('created_at', 'desc')->first();
+        return ClientCall::where('from_number', $number)
+                            ->where('type', self::incomingCall)
+                            ->orderBy('created_at', 'desc')
+                            ->first();
     }
 
     /**
