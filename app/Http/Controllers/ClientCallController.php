@@ -2,84 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
-use Illuminate\Http\Request;
+
+use App\ClientCall;
+use App\Enums\MangoCallEnums;
+use Carbon\Carbon;
 
 class ClientCallController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        //
+        $this->authorize('view', ClientCall::class);
+
+        return view('front.calls.index');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return string
      */
-    public function create()
+    public function datatable()
     {
-        //
-    }
+        $missedCalls = ClientCall::query()
+            ->where('status_call', '=', MangoCallEnums::CALL_RESULT_MISSED)
+            ->where('type', ClientCall::incomingCall)
+            ->where('created_at', '>=', Carbon::today())
+            ->distinct()
+            ->get();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $missedCalls = $missedCalls->reject(function($value, $key) {
+            return ClientCall::where('from_number', $value->from_number)
+                            ->where('created_at', '>', $value->created_at)
+                            ->count() > 0;
+        });
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($client)
-    {
-        return 1;
-    }
+        $missedCalls = $missedCalls->each(function($value, $key) {
+            $value->append('clientName');
+            $value->append('storeName');
+        });
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return datatables()->of($missedCalls)
+                ->editColumn('clientName', function(ClientCall $clientCall){
+                    return view('datatable.customer', [
+                        'route' => route('clients.show', $clientCall->client_id),
+                        'name_customer' => $clientCall->clientName ?? 'Не указано'
+                    ]);
+                })
+                ->rawColumns(['clientName'])
+                ->make(true);
     }
 }

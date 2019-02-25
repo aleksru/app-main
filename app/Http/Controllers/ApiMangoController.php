@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\ClientCall;
+use App\Enums\MangoCallEnums;
 use App\Models\OrderStatus;
 use App\Product;
 use App\Repositories\ClientRepository;
@@ -18,10 +19,9 @@ class ApiMangoController extends Controller
      * Фикс звонков
      *
      * @param Request $request
-     * @param ClientRepository $clientRepository
      * @return array
      */
-    public function index(Request $request, ClientRepository $clientRepository)
+    public function index(Request $request)
     {
         $data = json_decode($request->json, true);
 
@@ -49,7 +49,7 @@ class ApiMangoController extends Controller
             //проверка на входящий звонок
             if ($data['location'] === 'ivr') {
                 //ищем клиента по номеру телефона
-                $client = $clientRepository->getClientByPhone($data['from']['number']);
+                $client = Client::getClientByPhone($data['from']['number']);
                 //ищем магазин
                 $store = Store::where('phone', $data['to']['number'])->first();
                 //если новый клиент - создаем заявку
@@ -68,17 +68,21 @@ class ApiMangoController extends Controller
                 //фиксируем звонок
                 $client->calls()->create([
                     'type' => ClientCall::incomingCall,
-                    'store_id' => $store->id ?? NULL
+                    'store_id' => $store->id ?? NULL,
+                    'from_number' => $data['from']['number']
                 ]);
             }
 
             //проверка на исходящий вызов
             if ($data['location'] ==='abonent' && array_key_exists('extension', $data['from'])){
                 //ищем клиента по номеру телефона
-                $client = $clientRepository->getClientByPhone($data['to']['number']);
+                $client = Client::getClientByPhone($data['to']['number']);
                 if ($client) {
                     //фиксируем звонок
-                    $client->calls()->create(['type' => ClientCall::outgoingCall]);
+                    $client->calls()->create([
+                        'type' => ClientCall::outgoingCall,
+                        'from_number' => $data['from']['number'] ?? null
+                    ]);
                 }
 
             }
@@ -86,5 +90,47 @@ class ApiMangoController extends Controller
         }
 
         return ['status' => 200];
+    }
+
+    /**
+     * События по завершеню вызова
+     *
+     * @param Request $request
+     */
+    public function summary(Request $request)
+    {
+//        $data = array (
+//            'entry_id' => 'NTg2NjkwNDM5NQ==',
+//            'call_direction' => 1,
+//            'from' =>
+//                array (
+//                    'number' => '79175872565',
+//                ),
+//            'to' =>
+//                array (
+//                    'extension' => '106',
+//                    'number' => 'sip:user6@vpbx400137851.mangosip.ru',
+//                ),
+//            'line_number' => '74959266384',
+//            'create_time' => 1551075342,
+//            'forward_time' => 1551075342,
+//            'talk_time' => 0,
+//            'end_time' => 1551075443,
+//            'entry_result' => 0,
+//            'disconnect_reason' => 1110,
+//        );
+        $data = json_decode($request->json, true);
+
+        //входящий звонок
+        if($data['call_direction'] === MangoCallEnums::CALL_DIRECTION_INCOMING) {
+
+            //пропущенный
+            if($data['entry_result'] === MangoCallEnums::CALL_RESULT_MISSED) {
+                if ($lastCall = ClientCall::getLastCallForNumber($data['from']['number'])){
+                    $lastCall->status_call = MangoCallEnums::CALL_RESULT_MISSED;
+                    $lastCall->save();
+                }
+            }
+        }
     }
 }

@@ -94,4 +94,22 @@ class Client extends Model
 
         return $phones;
     }
+
+    /**
+     * Получение клиента по номеру телефона
+     *
+     * @param string $phone
+     * @return Model|null
+     */
+    public static function getClientByPhone(string $phone)
+    {
+        $client = Client::getOnPhone($phone)->first();
+
+        if(!$client) {
+            $client = ClientPhone::findByPhone($phone)->first();
+            $client ? $client = $client->client : null;
+        }
+
+        return $client;
+    }
 }
