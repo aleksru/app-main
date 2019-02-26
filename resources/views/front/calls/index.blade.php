@@ -45,7 +45,7 @@
                     'name' => 'Магазин',
                     'width' => '10%',
                 ],
-                'created_at' => [
+                'updated_at' => [
                     'name' => 'Время',
                     'width' => '10%',
                 ],
