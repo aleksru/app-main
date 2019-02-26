@@ -81,7 +81,7 @@ class ApiMangoController extends Controller
                     //фиксируем звонок
                     $client->calls()->create([
                         'type' => ClientCall::outgoingCall,
-                        'from_number' => $data['from']['number'] ?? null
+                        'from_number' => $data['to']['number'] ?? null
                     ]);
                 }
 
