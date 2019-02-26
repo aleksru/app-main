@@ -44,6 +44,10 @@
                         @foreach($client->calls as $call)
                             <li class="list-group-item">
                                 <strong>Тип:</strong> {{ $call->typeCall }}
+                                <strong>Телефон:</strong> {{ $call->from_number ?? '-' }}
+                                @if($call->status_call === '0')
+                                    <strong><span class="badge bg-red">Пропущенный</span></strong>
+                                @endif
                                 <strong>Источник:</strong> {{ $call->store->name ?? 'Не определено' }}
                                 <strong>Дата:</strong> {{ $call->created_at }}
                                 <strong>Комментарий:</strong> {{ $call->description ?? '' }}
