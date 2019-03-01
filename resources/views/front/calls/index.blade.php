@@ -28,12 +28,7 @@
             'id' => 'calls-table',
             'route' => route('calls.datatable'),
             'columns' => [
-                'id' => [
-                    'name' => 'ID',
-                    'width' => '1%',
-                    'searchable' => true,
-                ],
-                'clientName' => [
+                'client_id' => [
                     'name' => 'Клиент',
                     'width' => '5%',
                 ],
@@ -41,11 +36,12 @@
                     'name' => 'Телефон',
                     'width' => '10%',
                 ],
-                'storeName' => [
+                'store_id' => [
                     'name' => 'Магазин',
                     'width' => '10%',
+                    'searchable' => true,
                 ],
-                'updated_at' => [
+                'fnm_max' => [
                     'name' => 'Время',
                     'width' => '10%',
                 ],
@@ -66,5 +62,59 @@
             $('#calls-table').DataTable().ajax.reload(null, false);
         }, 3000 );
     });
+
+    /**
+     * Стиль футер под хедер
+     */
+    $(function(){
+        $('tfoot').css('display', 'table-header-group');
+
+    });
+
+    /**
+     * Столбцы поиска
+     */
+    let individualSearchingColumnsInput = {
+        fnm_max: {type: 'date'},
+    };
+
+    let individualSearchingColumnsSelect = {
+        store_id: {
+            data: {!! json_encode(App\Store::select('id', 'name')->get()->toArray()) !!}
+        },
+    };
+
+    /**
+     * Добавляем поля для поиска, вешаем события
+     */
+    $('#calls-table').on( 'init.dt', function () {
+        let tableOrders = $('#calls-table').DataTable();
+        let columns = tableOrders.settings().init().columns;
+
+        tableOrders.columns().every(function(){
+            let column = this;
+            let columnName = columns[this.index()].name;
+
+            if(columnName in individualSearchingColumnsInput) {
+                let input = $('<input type="' + individualSearchingColumnsInput[columnName]['type'] + '" value="" placeholder="Search...">').appendTo( $(column.footer()).empty() );
+                input.off().on('keyup cut paste change', _.debounce(() =>  column.search(input.val()).draw(), tableOrders.settings()[0].searchDelay));
+            }
+
+            if(columnName in individualSearchingColumnsSelect) {
+                let select = $('<select><option value=""></option></select>').appendTo( $(column.footer()).empty() );
+
+                for(let key in individualSearchingColumnsSelect[columnName]['data']) {
+                    select.append( '<option value="' + individualSearchingColumnsSelect[columnName]['data'][key]['id'] + '">'
+                        + individualSearchingColumnsSelect[columnName]['data'][key]['name']  + '</option>' );
+                }
+                select.on('change', function(){
+                    column.search($(this).val()).draw(), tableOrders.settings()[0].searchDelay;
+                });
+            }
+        });
+
+        $('tfoot').find('select').css('width', '80%').css('min-height', '32px');
+        $('tfoot').find('input').css('width', '100%').css('padding', '3px').css('box-sizing', 'border-box');
+    } );
 </script>
 @endpush
