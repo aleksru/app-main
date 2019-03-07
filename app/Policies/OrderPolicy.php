@@ -83,7 +83,8 @@ class OrderPolicy
     {
         return $user->roles->pluck('name')->contains($this->roleOrderEnums::CHANGE_ORDER)
             || $user->isOperator()
-            || $user->isLogist();
+            || $user->isLogist()
+            || $user->isStock();
     }
 
     /**

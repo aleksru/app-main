@@ -1,13 +1,103 @@
+<template>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Товары</h3>
+
+            <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 1000px;">
+
+                <div class="input-group-btn">
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary pull-right" @click.prevent="submit()">
+                            <i class="fa fa-save"></i> Сохранить
+                        </button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Кол-во</th>
+                    <th>Модель</th>
+                    <th>IMEI</th>
+                    <th>Цена</th>
+                    <th>Закупка</th>
+                    <th>Поставщик</th>
+                    <th>Зп Курьера</th>
+                    <th>Прибыль</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(product, index) in products">
+                    <td style="width: 2%">{{ index + 1  }}</td>
+                    <td style="width: 5%">
+                        <!--//quantity-->
+                        <input type="number" min="1" style="width: 100%" v-model="products[index].quantity">
+                    </td>
+                    <!--//Model-->
+                    <td style="width: 15%"> {{  products[index].product.product_name }} </td>
+                    <td style="width: 10%">
+                        <!--//imei-->
+                        <input type="text" class="form-control" v-model="products[index].imei">
+                    </td>
+                    <td style="width: 10%">
+                        <!--price-->
+                        <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].price">
+                    </td>
+                    <td style="width: 10%">
+                        <!--price_opt-->
+                        <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].price_opt">
+                    </td>
+                    <td style="width: 10%">
+                        <v-select label="name"
+                                  :options="suppliers"
+                                  v-model="products[index].supplier">
+                        </v-select>
+                    </td>
+                    <td style="width: 10%">
+                        <!--courier_payment-->
+                        <input type="number" class="form-control" min="1" style="width: 100%" v-model="products[index].courier_payment">
+                    </td>
+                    <td style="width: 5%">
+                        {{  delta(index) }}
+                    </td>
+                    <td style="width: 5%">
+                        <i class="btn btn-danger fa fa-trash" @click.prevent="deleteProduct(index)"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                    <td></td>
+                    <td>Итого</td>
+                    <td>{{ summ_price_products }}</td>
+                    <td>{{ summ_opt }}</td>
+                    <td>  </td>
+                    <td> {{ courier_payments }} </td>
+                    <td> {{ profit }} </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
 
 <script>
-
-    let emptyProduct = {id: null, product: {}, supplier_in_order: {},  courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: null, quantity: 1};
-
-    export default {
+ export default {
         props: {
             initial_data: Array,
             initial_order: '',
             initial_price_delivery: 0,
+            suppliers: Array,
         },
         data() {
             return {
@@ -45,52 +135,14 @@
             deleteProduct(index) {
                 this.products.splice(index, 1);
             },
-
-            addProduct(prod = _.cloneDeep(emptyProduct)) {
-                if (this.selectedProduct) {
-                    prod.product.product_name = this.selectedProduct.product_name;
-                    prod.product.id = this.selectedProduct.id;
-                    prod.product_id = this.selectedProduct.id;
-
-                    this.products.push(prod);
-                    this.selectedProduct = null;
-                    this.showCreateProduct = false;
-                }
-            },
-
-            async onSearchProduct(search, loading){
-                if(search.length > 2) {
-                    let response = await axios.post('/product-search', {query: search});
-                    this.productSearch =  response.data.products;
-
-                    if (this.productSearch.length === 0) {
-                        this.showCreateProduct = true;
-                    }
-                }
-            },
-
-            async createProduct(){
-                if (this.newProductName) {
-                    let response = await axios.post('/product-create', {product: this.newProductName});
-                    let prod = _.cloneDeep(emptyProduct);
-
-                    prod.product.product_name = response.data.product.product_name;
-                    prod.product.product_id = response.data.product.id;
-                    prod.product_id = response.data.product.id;
-
-                    this.products.push(prod);
-                    this.showCreateProduct = false;
-                    this.newProductName = null;
-
-                    toast.success(response.data.message);
-
-                }
-            },
-
         },
 
         mounted() {
             this.products = this.initial_data;
+
+            VueBus.$on('addProduct', (prod) => {
+                this.products.push(prod);
+            });
         },
 
         computed: {

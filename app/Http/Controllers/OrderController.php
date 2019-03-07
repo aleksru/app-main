@@ -77,11 +77,7 @@ class OrderController extends Controller
     {
         $this->authorize('update', Order::class);
         $data = $request->validated();
-
-        $data['flag_denial_acc'] = isset($data['flag_denial_acc']) ? $data['flag_denial_acc'] : null;
         isset($data['communication_time']) ? $data['communication_time'] = Carbon::now()->addMinutes((integer)($data['communication_time'] * 60)) : null;
-
-
         $order->update($data);
 
         if($order->status && stripos($order->status->status, 'отказ') === false || !$order->status) {
@@ -168,5 +164,15 @@ class OrderController extends Controller
     public function datatable(OrdersDatatable $ordersDatatable)
     {
        return $ordersDatatable->datatable();
+    }
+
+    /**
+     * @param Request $request
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getOrderWithRealizations(Request $request, Order $order)
+    {
+        return response()->json($order->load('realizations.product', 'deliveryType', 'realizations.supplier'));
     }
 }

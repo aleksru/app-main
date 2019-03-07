@@ -17,7 +17,7 @@ class StockController extends Controller
     {
         $this->authorize('view', StockUser::class);
 
-        return view('front.orders.orders', ['routeDatatable' => route('stock.datatable')]);
+        return view('front.stock.orders', ['routeDatatable' => route('stock.datatable')]);
     }
 
     /**
