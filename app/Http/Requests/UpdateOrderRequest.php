@@ -27,7 +27,14 @@ class UpdateOrderRequest extends FormRequest
     {
         if(Auth::user()->isLogist()) {
             return [
-                'courier_id' => 'integer|nullable'
+                'courier_id' => 'integer|nullable',
+                'status_id' => 'integer|nullable',
+            ];
+        }
+
+        if(Auth::user()->isStock()) {
+            return [
+                'status_id' => 'integer|nullable',
             ];
         }
 
@@ -43,7 +50,7 @@ class UpdateOrderRequest extends FormRequest
             'date_delivery' => 'date|nullable',
             'metro_id' => 'integer|nullable',
             'store_text' => 'string|nullable',
-            'flag_denial_acc' => 'string|nullable',
+            'flag_denial_acc' => 'integer|nullable',
             'communication_time' => 'numeric|nullable',
             'denial_reason_id' => 'nullable|integer',
             'delivery_type_id' => 'nullable|integer',

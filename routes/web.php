@@ -31,13 +31,15 @@ Route::group(['middleware' =>'auth'], function() {
     Route::get('price-lists-datatable', 'PriceListController@datatable')->name('price-lists.datatable');
     Route::get('price-lists-datatable/{price_list}', 'PriceListController@showDatatable')->name('price-lists.show.datatable');
 
-
     //заказы
     Route::resource('orders', 'OrderController');
     Route::get('orders-table', 'OrderController@datatable')->name('orders.datatable');
     Route::post('product-orders/{order}', 'OrderController@updateProductsOrder')->name('update.product-orders');
     Route::post('orders/{order}/set-status', 'OrderController@updateStatus')->name('orders.set-status');
     Route::post('orders/{order}/comment-logist', 'OrderController@commentLogist')->name('orders.comment-logist');
+
+    //заказ с загрузкой реализаций
+    Route::post('realizations/{order}', 'OrderController@getOrderWithRealizations')->name('order.realizations');
 
 
     //Route::get('/home', 'HomeController@index')->name('home');

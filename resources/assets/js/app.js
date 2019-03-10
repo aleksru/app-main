@@ -8,11 +8,19 @@ window.$ = window.jQuery = require('jquery');
 
 window.Vue = require('vue');
 
+//шина событий
+window.VueBus = new Vue();
+
 require('./bootstrap');
 window.toast = require('./notifications');
 
 //подключаем селекты чистый и обертку
 import vSelect from 'vue-select';
+
+import vmodal from 'vue-js-modal';
+
+Vue.use(vmodal);
+
 Vue.component('v-select', vSelect)
 
 Vue.component('vue-select', require('./components/VueSelect.vue'));
@@ -28,6 +36,10 @@ Vue.component('example-component', require('./components/ExampleComponent.vue'))
 Vue.component('PeriodsForm', require('./components/Admin/Form/PeriodsForm.vue'));
 
 Vue.component('ProductsTable', require('./components/ProductsTable.vue'));
+
+Vue.component('SearchProduct', require('./components/SearchProduct.vue'));
+
+Vue.component('GetOrder', require('./components/GetOrder.vue'));
 
 const app = new Vue({
     el: '#app'

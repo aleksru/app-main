@@ -143,13 +143,17 @@ class OrdersDatatable
                 return $order->store->name ?? $order->store_text;
 
             })
+            ->editColumn('button', function (Order $order) {
+                return view('front.stock.parts.modal_button', ['orderId' => $order->id]);
+
+            })
             ->setRowClass(function (Order $order) {
                 $class = 'row-link';
                 $class = $class . ($order->status ? ' label-' . $order->status->color : ' label-success');
 
                 return $class;
             })
-            ->rawColumns(['actions', 'status_text', 'products', 'name_customer', 'id'])
+            ->rawColumns(['actions', 'status_text', 'products', 'name_customer', 'id', 'button'])
             ->make(true);
     }
 
