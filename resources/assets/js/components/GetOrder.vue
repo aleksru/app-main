@@ -6,12 +6,11 @@
            :reset="true"
            :resizable="true"
            height="auto">
-        <span>Fast update products</span>
         <products-table v-if="order"
-            :initial_data="order.realizations"
-            :initial_order="order.id"
-            :initial_price_delivery="order.delivery_type ? order.delivery_type.price : 0"
-            :suppliers="suppliers_r">
+                        :initial_data="order.realizations"
+                        :initial_order="order.id"
+                        :initial_price_delivery="order.delivery_type ? parseInt(order.delivery_type.price) : 0"
+                        :suppliers="suppliers_r">
         </products-table>
         <button type="button" class="btn btn-block btn-warning btn-sm" @click="hideModal()">Close</button>
     </modal>

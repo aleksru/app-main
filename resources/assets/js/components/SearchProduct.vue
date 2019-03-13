@@ -41,7 +41,6 @@
     export default {
         data() {
             return {
-                products: Array,
                 productSearch: [],
                 selectedProduct: null,
                 showCreateProduct: false,
@@ -58,37 +57,41 @@
                     this.selectedProduct = null;
                     this.showCreateProduct = false;
 
-                    VueBus.$emit('addProduct', prod);
+                    this.$emit('addproduct', prod);
                 }
             },
 
-            async onSearchProduct(search, loading){
+            onSearchProduct: _.debounce(async function(search) {
                 if(search.length > 2) {
-                    let response = await axios.post('/product-search', {query: search});
+                    let response = await axios.post('/product-search', {query: search}).catch(function(e){
+                        toast.error('Ошибка сервера! Пожалуйста, свяжитесь с администратором.');
+                        throw Error(e);
+                    });
                     this.productSearch =  response.data.products;
-
                     if (this.productSearch.length === 0) {
                         this.showCreateProduct = true;
                     }
                 }
-            },
+            }, 250),
 
             async createProduct(){
                 if (this.newProductName) {
-                    let response = await axios.post('/product-create', {product: this.newProductName});
+                    let response = await axios.post('/product-create', {product: this.newProductName}).catch(function(e){
+                        toast.error('Ошибка сервера! Пожалуйста, свяжитесь с администратором.');
+                        throw Error(e);
+                    });;
                     let prod = _.cloneDeep(emptyProduct);
 
                     prod.product.product_name = response.data.product.product_name;
                     prod.product.product_id = response.data.product.id;
                     prod.product_id = response.data.product.id;
 
-                    VueBus.$emit('addProduct', prod);
+                    this.$emit('addproduct', prod);
 
                     this.showCreateProduct = false;
                     this.newProductName = null;
 
                     toast.success(response.data.message);
-
                 }
             },
 

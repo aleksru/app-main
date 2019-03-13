@@ -38,11 +38,11 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <search-product></search-product>
             <products-table :initial_data="{{ json_encode($order->realizations, true) }}"
                             :initial_order="{{ json_encode($order->id, true) }}"
                             :initial_price_delivery="{{ $order->deliveryType->price ?? 0 }}"
-                            :suppliers="{{  json_encode(\App\Models\Supplier::select('id', 'name')->get()) }}">
+                            :suppliers="{{  json_encode(\App\Models\Supplier::select('id', 'name')->get()) }}"
+                            :show_search="true">
             </products-table>
         </div>
     </div>
