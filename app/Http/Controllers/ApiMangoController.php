@@ -126,7 +126,7 @@ class ApiMangoController extends Controller
 
             //пропущенный
             if($data['entry_result'] === MangoCallEnums::CALL_RESULT_MISSED) {
-                if ($lastCall = ClientCall::getLastCallForNumber($data['from']['number'])){
+                if (isset($data['from']) && $lastCall = ClientCall::getLastCallForNumber($data['from']['number'])){
                     $lastCall->status_call = MangoCallEnums::CALL_RESULT_MISSED;
                     $lastCall->save();
                 }
