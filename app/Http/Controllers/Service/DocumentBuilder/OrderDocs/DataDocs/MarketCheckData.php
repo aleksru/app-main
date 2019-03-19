@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs;
+namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs\DataDocs;
 
 
-use App\Http\Controllers\Service\DocumentBuilder\DataInterface;
+use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\DataDocs\DataInterface;
 use App\Order;
 
 class MarketCheckData implements DataInterface
@@ -108,4 +108,11 @@ class MarketCheckData implements DataInterface
         return 'Счет №'.$this->order->id.' от '.date("d.m.Y").'.xlsx';
     }
 
+    /**
+     * @return string
+     */
+    public function getTemplate():string
+    {
+        return storage_path('app' . DIRECTORY_SEPARATOR . 'exel_templates' . DIRECTORY_SEPARATOR . 'market_check.xlsx') ;
+    }
 }

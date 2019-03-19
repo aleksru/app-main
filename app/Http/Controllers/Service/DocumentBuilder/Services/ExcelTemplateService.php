@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Service\DocumentBuilder;
+namespace App\Http\Controllers\Service\DocumentBuilder\Services;
 
-class ExcelTemplateService {
+use App\Http\Controllers\Service\DocumentBuilder\Services\ExcelServiceInterface;
+
+class ExcelTemplateService implements ExcelServiceInterface {
 
     const TAG_MARKER = '%';
     const PATTERN = '/' . self::TAG_MARKER . '([^' . self::TAG_MARKER . ']+)' . self::TAG_MARKER . '/';

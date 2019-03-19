@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs;
+namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs\DataDocs;
 
-use App\Http\Controllers\Service\DocumentBuilder\DataInterface;
+use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\DataDocs\DataInterface;
 use App\Order;
 use Illuminate\Database\Eloquent\Collection;
 

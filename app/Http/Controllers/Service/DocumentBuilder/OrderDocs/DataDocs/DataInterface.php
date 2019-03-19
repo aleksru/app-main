@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Service\DocumentBuilder;
+namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs\DataDocs;
 
 
 interface DataInterface
@@ -18,8 +18,7 @@ interface DataInterface
     public function getData();
 
     /**
-     * Получение имени файла
      * @return string
      */
-    public function getFileName();
+    public function getTemplate():string;
 }

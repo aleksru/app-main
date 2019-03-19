@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs;
+namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs\DataDocs;
 
 
-use App\Http\Controllers\Service\DocumentBuilder\DataInterface;
+use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\DataDocs\DataInterface;
 use App\Models\Courier;
+use Carbon\Carbon;
 
-class RouteMap implements DataInterface
+class RouteMapData implements DataInterface
 {
 
     /**
@@ -46,10 +47,11 @@ class RouteMap implements DataInterface
     private $toDate = null;
 
     /**
-     * RouteMap constructor.
+     * RouteMapData constructor.
      * @param Courier $courier
+     * @param string|null $date
      */
-    public function __construct (Courier $courier, string $date = null)
+    public function __construct(Courier $courier, string $date=null)
     {
         $this->courier = $courier;
         $this->toDate = $date;
@@ -106,8 +108,16 @@ class RouteMap implements DataInterface
      * Имя файла
      * @return string
      */
-    public function getFileName()
+    public function getFileName():string
     {
         return 'Маршрутный лист '.$this->courier->name.' от '.date("d.m.Y").'.xlsx';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate():string
+    {
+        return storage_path('app' . DIRECTORY_SEPARATOR . 'exel_templates' . DIRECTORY_SEPARATOR . 'route_map.xlsx') ;
     }
 }
