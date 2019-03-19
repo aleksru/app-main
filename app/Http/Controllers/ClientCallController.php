@@ -42,7 +42,7 @@ class ClientCallController extends Controller
 
         $successCallsQuery = ClientCall::query()
             ->selectRaw('from_number as fns, created_at as fnsca')
-            ->whereNull('status_call')
+            ->where('status_call', MangoCallEnums::CALL_RESULT_SUCCESS)
             ->whereDate('created_at', $toDate);
 
 
@@ -51,7 +51,8 @@ class ClientCallController extends Controller
             ->leftJoinSub($successCallsQuery, 'success', function($join) {
                 $join->on('client_calls.from_number', '=', 'success.fns');
             })
-            ->where('status_call', '0')
+            ->where('client_calls.status_call', MangoCallEnums::CALL_RESULT_MISSED)
+            ->where('client_calls.type', ClientCall::incomingCall)
             ->whereDate('created_at', $toDate)
             ->groupBy('client_calls.from_number', 'client_calls.client_id', 'client_calls.store_id')
             ->havingRaw('fnm_max > IFNULL(max_ca_suc, 0)');

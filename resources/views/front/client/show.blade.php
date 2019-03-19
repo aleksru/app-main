@@ -48,7 +48,7 @@
                                 @if($call->status_call === '0')
                                     <strong><span class="badge bg-red">Пропущенный</span></strong>
                                 @endif
-                                <strong>Источник:</strong> {{ $call->store->name ?? 'Не определено' }}
+                                <strong>Источник:</strong> {{ $call->store->name ?? $call->operator->name ?? 'Не определено' }}
                                 <strong>Дата:</strong> {{ $call->created_at }}
                                 <strong>Комментарий:</strong> {{ $call->description ?? '' }}
                             </li>
