@@ -21,6 +21,8 @@ import vmodal from 'vue-js-modal';
 
 Vue.use(vmodal);
 
+import Chart from 'chart.js';
+
 Vue.component('v-select', vSelect)
 
 Vue.component('vue-select', require('./components/VueSelect.vue'));

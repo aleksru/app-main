@@ -76,6 +76,9 @@ Route::group(['middleware' =>'auth'], function() {
     //звонки
     Route::resource('calls', 'ClientCallController')->only('index');
     Route::get('calls-table', 'ClientCallController@datatable')->name('calls.datatable');
+
+    //statistics
+    Route::get('statistics', 'Statistics\StatisticController@index')->name('statistic.index');
 });
 
 //Админка
