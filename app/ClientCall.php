@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Operator;
 use Illuminate\Database\Eloquent\Model;
 
 class ClientCall extends Model
@@ -22,6 +23,22 @@ class ClientCall extends Model
      */
     const outgoingCall = 'OUTGOING';
 
+
+    /**
+     * Получает записывает хэш
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($clientCall) {
+            $clientCall->hash = self::makeHash([
+                $clientCall->from_number,
+                $clientCall->call_create_time,
+            ]);
+        });
+    }
+
     /**
      * Получение клиента
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -29,6 +46,16 @@ class ClientCall extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    /**
+     * Оператор
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function operator()
+    {
+        return $this->belongsTo(Operator::class);
     }
 
     /**
@@ -91,4 +118,36 @@ class ClientCall extends Model
         return $this->store ? $this->store->name : null;
     }
 
+    /**
+     * Получение хеш для столбца hash
+     *
+     * @param array $params
+     * @return md5|string
+     */
+    public static function makeHash(array $params)
+    {
+        return md5(implode('', $params));
+    }
+
+    /**
+     * Получение звонка по хеш
+     *
+     * @param string $hash
+     * @return ClientCall|null
+     */
+    public static function getCallByHash(string $hash)
+    {
+        return ClientCall::where('hash', $hash)->first();
+    }
+
+
+    /**
+     * @param $value
+     */
+    public function setOperatorTextAttribute($value)
+    {
+        $resExp = explode(':', $value);
+
+        $this->attributes['operator_text'] =  count($resExp) > 1 ? $resExp[1] : $value;
+    }
 }

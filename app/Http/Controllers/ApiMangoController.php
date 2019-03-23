@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\ClientCall;
 use App\Enums\MangoCallEnums;
+use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Product;
 use App\Repositories\ClientRepository;
@@ -23,7 +24,7 @@ class ApiMangoController extends Controller
      */
     public function index(Request $request)
     {
-        $data = json_decode($request->json, true);
+        $data = $this->prepareData($request->json);
 
 //отладочные данные
         //входищий
@@ -62,30 +63,35 @@ class ApiMangoController extends Controller
                         'comment' =>'Входящий Звонок',
                         'store_id' => $store->id ?? null,
                         'status_id' => OrderStatus::getIdStatusNew() ?? null
-                        //'products' => Product::EMPTY_PRODUCTS
                     ]);
                 }
                 //фиксируем звонок
                 $client->calls()->create([
                     'type' => ClientCall::incomingCall,
                     'store_id' => $store->id ?? NULL,
-                    'from_number' => $data['from']['number']
+                    'from_number' => $data['from']['number'],
+                    'call_create_time' => $data['timestamp']
                 ]);
             }
 
+            /**
+             * отключено
+             * фиксация перенесена в события завершения
+             * тестирование
+             */
             //проверка на исходящий вызов
-            if ($data['location'] ==='abonent' && array_key_exists('extension', $data['from'])){
-                //ищем клиента по номеру телефона
-                $client = Client::getClientByPhone($data['to']['number']);
-                if ($client) {
-                    //фиксируем звонок
-                    $client->calls()->create([
-                        'type' => ClientCall::outgoingCall,
-                        'from_number' => $data['to']['number'] ?? null
-                    ]);
-                }
-
-            }
+//            if ($data['location'] ==='abonent' && array_key_exists('extension', $data['from'])){
+//                //ищем клиента по номеру телефона
+//                $client = Client::getClientByPhone($data['to']['number']);
+//                if ($client) {
+//                    //фиксируем звонок
+//                    $client->calls()->create([
+//                        'type' => ClientCall::outgoingCall,
+//                        'from_number' => $data['to']['number'] ?? null
+//                    ]);
+//                }
+//
+//            }
 
         }
 
@@ -104,33 +110,87 @@ class ApiMangoController extends Controller
 //            'call_direction' => 1,
 //            'from' =>
 //                array (
-//                    'number' => '79175872565',
+//                    'number' => '79250991030',
+//                    //'number' => 'sip:user6@vpbx400137851.mangosip.ru',
 //                ),
 //            'to' =>
 //                array (
 //                    'extension' => '106',
+//                    //'number' => '79250991030',
 //                    'number' => 'sip:user6@vpbx400137851.mangosip.ru',
 //                ),
 //            'line_number' => '74959266384',
-//            'create_time' => 1551075342,
-//            'forward_time' => 1551075342,
+//            'create_time' => 1551073978,
+//            'forward_time' => 1551095342,
 //            'talk_time' => 0,
-//            'end_time' => 1551075443,
+//            'end_time' => 1551085543,
 //            'entry_result' => 0,
 //            'disconnect_reason' => 1110,
 //        );
-        $data = json_decode($request->json, true);
+        $data = $this->prepareData($request->json);
 
         //входящий звонок
         if($data['call_direction'] === MangoCallEnums::CALL_DIRECTION_INCOMING) {
 
             //пропущенный
             if($data['entry_result'] === MangoCallEnums::CALL_RESULT_MISSED) {
-                if (isset($data['from']) && $lastCall = ClientCall::getLastCallForNumber($data['from']['number'])){
-                    $lastCall->status_call = MangoCallEnums::CALL_RESULT_MISSED;
+                if (isset($data['from']) &&
+                            $lastCall = ClientCall::getCallByHash(ClientCall::makeHash([$data['from']['number'], $data['create_time']]))){
+                    $lastCall->status_call = $data['entry_result'];
+                    $lastCall->call_end_time = $data['end_time'] ?? null;
                     $lastCall->save();
                 }
             }
+
+            //успешный
+            if($data['entry_result'] === MangoCallEnums::CALL_RESULT_SUCCESS) {
+                if (isset($data['from']) &&
+                                $clientCall = ClientCall::getCallByHash(ClientCall::makeHash([$data['from']['number'], $data['create_time']]))){
+                    $getOperator = $data['to']['number'] ? Operator::getOperatorBySipLogin(explode(':', $data['to']['number'])[1]) : null;
+                    $clientCall->call_end_time = $data['end_time'];
+                    $clientCall->operator_text = $data['to']['number'] ?? null;
+                    $clientCall->operator_id = $getOperator ? $getOperator->id : null;
+                    $clientCall->status_call = $data['entry_result'];
+                    $clientCall->save();
+                }
+            }
         }
+
+        //исходящий
+        if($data['call_direction'] === MangoCallEnums::CALL_DIRECTION_OUTCOMING) {
+            if ($operator = Operator::getOperatorBySipLogin(explode(':', $data['from']['number'])[1])) {
+                //фиксируем звонок
+                $client = Client::getClientByPhone($data['to']['number']);
+
+                $operator->calls()->create([
+                    'type' => ClientCall::outgoingCall,
+                    'from_number' => $data['to']['number'] ?? null,
+                    'call_create_time' => $data['create_time'],
+                    'call_end_time' => $data['end_time'],
+                    'operator_text' => $data['from']['number'] ?? null,
+                    'client_id' => $client->id ?? null,
+                    'status_call' => $data['entry_result']
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    private function prepareData($data):array
+    {
+        $data = json_decode($data, true);
+
+        if(isset($data['create_time'])){
+            $data['create_time'] = substr($data['create_time'], 0, -1);
+        }
+
+        if(isset($data['timestamp'])){
+            $data['timestamp'] = substr($data['timestamp'], 0, -1);
+        }
+
+        return $data;
     }
 }
