@@ -47,6 +47,11 @@
                         'width' => '10%',
                         'searchable' => true,
                     ],
+                    'is_online' => [
+                        'name' => 'Active',
+                        'width' => '10%',
+                        'searchable' => true,
+                    ],
                     'actions' => [
                         'name' => 'Действия',
                         'width' => '5%',

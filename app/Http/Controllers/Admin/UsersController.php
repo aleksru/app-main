@@ -114,6 +114,11 @@ class UsersController extends Controller
     public function datatable()
     {
         return datatables() ->of(User::query())
+            ->editColumn('is_online', function (User $user) {
+                return view('admin.users.parts.activity', [
+                    'activity' => $user->isOnline()
+                ]);
+            })
             ->editColumn('actions', function (User $user) {
                 return view('datatable.actions', [
                         'edit' => [
@@ -126,7 +131,7 @@ class UsersController extends Controller
                         ]
                 ]);
             })
-            ->rawColumns(['actions'])
+            ->rawColumns(['actions', 'is_online'])
             ->make(true);
     }
 }

@@ -5,6 +5,7 @@ namespace App;
 use App\Enums\UserGroupsEnums;
 use App\Models\Traits\UserDynamicType;
 use App\Models\UserGroup;
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -38,6 +39,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'is_admin' => 'boolean',
+        'last_activity' => 'datetime'
     ];
 
     /**
@@ -98,5 +100,15 @@ class User extends Authenticatable
     public function getUserGroupName()
     {
         return $this->group ? $this->group->name : null;
+    }
+
+    /**
+     * Онлайн пользователь
+     *
+     * @return bool
+     */
+    public function isOnline()
+    {
+        return $this->last_activity > Carbon::now();
     }
 }
