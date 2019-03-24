@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Requests\CommentLogistRequst;
+use App\Models\OtherStatus;
 use App\Models\Realization;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,9 +63,16 @@ class OrderController extends Controller
         $this->authorize('show', $order, Order::class);
         $operator = $order->operator ? $order->operator : (Auth()->user()->isOperator() ? Auth()->user()->account : null);
 
+        $subStatuses = OtherStatus::typeSubStatuses()->get();
+        $stockStatuses = OtherStatus::typeStockStatuses()->get();
+        $logisticStatuses = OtherStatus::typeLogisticStatuses()->get();
+
         return view('front.orders.form', [
             'order' => $order->load('client', 'realizations.product:id,product_name', 'realizations.supplier'),
-            'operator' => $operator
+            'operator' => $operator,
+            'subStatuses' => $subStatuses,
+            'stockStatuses' => $stockStatuses,
+            'logisticStatuses' => $logisticStatuses
         ]);
     }
 

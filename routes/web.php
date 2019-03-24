@@ -97,6 +97,7 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Статусы заказов
     Route::resource('order-statuses', 'OrderStatusesController')->except('show');
     Route::get('order-statuses-table', 'OrderStatusesController@datatable')->name('order-statuses.datatable');
+    Route::resource('other-statuses', 'OtherStatusController')->except('show', 'edit', 'update');
 
     //Поставщики
     Route::resource('suppliers', 'SupplierController')->except('show');

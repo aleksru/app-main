@@ -56,6 +56,40 @@
                 @endif
 
                 <div class="col-sm-4">
+                    <label for="name" class="control-label">Подстатус</label>
+                    <select class="form-control" name="substatus_id">
+                        <option value="" @if(empty($order->subStatus->id)) selected @endif>Не выбран</option>
+                        @foreach($subStatuses as $subStatus)
+                            <option value="{{ $subStatus->id }}"
+                                    @if(($order->subStatus->id ?? null) === $subStatus->id) selected @endif>{{ $subStatus->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Статус склад</label>
+                    <select class="form-control" name="stock_status_id">
+                        <option value="" @if(empty($order->stockStatus->id)) selected @endif>Не выбран</option>
+                        @foreach($stockStatuses as $stockStatus)
+                            <option value="{{ $stockStatus->id }}"
+                                @if(($order->stockStatus->id ?? null) === $stockStatus->id) selected @endif>{{ $stockStatus->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="name" class="control-label">Статус логистика</label>
+                    <select class="form-control" name="logistic_status_id">
+                        <option value="" @if(empty($order->logisticStatus->id)) selected @endif>Не выбран</option>
+                        @foreach($logisticStatuses as $logisticStatus)
+                            <option value="{{ $logisticStatus->id }}"
+                                @if(($order->logisticStatus->id ?? null) === $logisticStatus->id) selected @endif>{{ $logisticStatus->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-sm-4">
                     <label for="name" class="control-label">Тип доставки</label>
                     <select class="js-example-delivery-type-single form-control" name="delivery_type_id">
                         <option value="{{ $order->deliveryType->id ?? null }}" selected>{{ $order->deliveryType->type ?? 'Не выбран' }}</option>
