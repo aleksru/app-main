@@ -9,6 +9,7 @@ use App\Models\DenialReason;
 use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Models\Metro;
+use App\Models\OtherStatus;
 use App\Models\Realization;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +20,8 @@ class Order extends Model
     protected $fillable = ['user_id', 'client_id','store_text','comment','status_id', 'courier_id',
                             'delivery_period_id','operator_id','date_delivery','products_text', 'metro_id', 'address',
                             'store_id', 'flag_denial_acc', 'order_id', 'communication_time', 'denial_reason_id', 'delivery_type_id', 'flag_send_sms',
-                            'address_city', 'address_street', 'address_home', 'address_apartment', 'address_other', 'comment_logist'
+                            'address_city', 'address_street', 'address_home', 'address_apartment', 'address_other', 'comment_logist', 'substatus_id',
+                            'stock_status_id', 'logistic_status_id'
     ];
     
     protected $casts = [
@@ -211,6 +213,36 @@ class Order extends Model
         }
 
         return $address;
+    }
+
+    /**
+     * Подстатус заказа
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function subStatus()
+    {
+        return $this->belongsTo(OtherStatus::class, 'substatus_id');
+    }
+
+    /**
+     * Статус склада
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function stockStatus()
+    {
+        return $this->belongsTo(OtherStatus::class);
+    }
+
+    /**
+     * Статус логистика
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function logisticStatus()
+    {
+        return $this->belongsTo(OtherStatus::class);
     }
 
 }
