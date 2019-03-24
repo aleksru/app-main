@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\ProductType;
 use App\Models\Realization;
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Model;
@@ -54,6 +55,25 @@ class Product extends Model
     public function scopeByActicle($query, $article)
     {
         return $query->where('article', $article);
+    }
+
+    /**
+     * Строковый тип
+     *
+     * @return string
+     */
+    public function getTextType()
+    {
+        switch ($this->type){
+            case ProductType::TYPE_PRODUCT:
+                return 'Товар';
+            case ProductType::TYPE_ACCESSORY:
+                return 'Аксессуар';
+            case ProductType::TYPE_SERVICE:
+                return 'Услуга';
+            default:
+                return '';
+        }
     }
 
 }
