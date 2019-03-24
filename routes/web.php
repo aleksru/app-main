@@ -127,4 +127,9 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Логисты
     Route::resource('logists', 'LogistController')->except('show');
     Route::get('logists-table', 'LogistController@datatable')->name('logists.datatable');
+
+    //Товары
+    Route::get('products', 'ProductController@index')->name('products.index');
+    Route::get('products-table', 'ProductController@datatable')->name('products.datatable');
+    Route::post('products-toggle/{product}', 'ProductController@toggleSetType')->name('products.toggle.set-type');
 });

@@ -45,6 +45,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="{{ route('admin.stores.index') }}"><i class="fa fa-shopping-basket" aria-hidden="true"></i> <span>Магазины</span> </a></li>
+                        <li><a href="{{ route('admin.products.index') }}"><i class="fa fa-archive" aria-hidden="true"></i> <span>Товары</span> </a></li>
                         <li><a href="{{ route('admin.delivery-periods.index') }}"><i class="fa fa-truck" aria-hidden="true"></i> <span>Время доставки</span> </a></li>
                         <li class="treeview">
                             <a href="#"><i class="fa fa-book"></i> <span>Статусы заказа</span>
