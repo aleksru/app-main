@@ -49,6 +49,7 @@ class OrdersDatatable
                 'client',
                 'client.additionalPhones',
                 'courier',
+                'operator',
                 'realizations:order_id,product_id')
                 ->selectRaw('orders.*')
                 ->selectRaw('c.phone as phone')
@@ -75,6 +76,11 @@ class OrdersDatatable
             ->filterColumn('courier', function ($query, $keyword) {
                 if (preg_match('/[0-9]/', $keyword)){
                     return $query->whereRaw('orders.courier_id = ' . $keyword);
+                }
+            })
+            ->filterColumn('operator', function ($query, $keyword) {
+                if (preg_match('/[0-9]/', $keyword)){
+                    return $query->whereRaw('orders.operator_id = ' . $keyword);
                 }
             })
             ->filterColumn('id', function ($query, $keyword) {
@@ -104,6 +110,9 @@ class OrdersDatatable
             })
             ->editColumn('courier', function (Order $order) {
                 return $order->courier->name ?? '';
+            })
+            ->editColumn('operator', function (Order $order) {
+                return $order->operator->name ?? '';
             })
             ->editColumn('id', function (Order $order) {
                 return '<a href="'.route('orders.edit', $order->id).'" target="_blank"><h4>'.$order->id.'</h4></a>';

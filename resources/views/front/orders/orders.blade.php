@@ -73,6 +73,13 @@
                         'width' => '3%',
                         'searchable' => false,
                     ],
+                    'operator' => [
+                        'name' => 'Оператор',
+                        'width' => '3%',
+                        'searchable' => true,
+                        'orderable' => 'false'
+
+                    ],
                     'courier' => [
                         'name' => 'Курьер',
                         'width' => '3%',
@@ -169,6 +176,9 @@
         },
         courier: {
             data: {!! json_encode(App\Models\Courier::select('id', 'name')->get()->toArray()) !!}
+        },
+        operator: {
+            data: {!! json_encode(App\Models\Operator::select('id', 'name')->get()->toArray()) !!}
         }
     };
 
