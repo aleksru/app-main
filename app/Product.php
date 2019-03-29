@@ -46,6 +46,16 @@ class Product extends Model
     }
 
     /**
+     * Товар в заказах
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'realizations');
+    }
+
+    /**
      * Поиск по артикулу
      *
      * @param $query

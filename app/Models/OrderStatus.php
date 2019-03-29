@@ -16,6 +16,20 @@ class OrderStatus extends Model
     const STATUS_NEW_PREFIX = 'новый';
 
     /**
+     * Префикс статуса подтвержден
+     * @var string
+     */
+    const STATUS_CONFIRM_PREFIX = 'подтвержден';
+
+    const STATUS_CALLBACK_PREFIX = 'перезвон';
+
+    const STATUS_MISSED_PREFIX = 'недозвон';
+
+    const STATUS_DENIAL_PREFIX = 'отказ';
+
+    const STATUS_SPAM_PREFIX = 'спам';
+
+    /**
      * Цвет по умолчанию
      *
      * @param $color
@@ -57,6 +71,22 @@ class OrderStatus extends Model
     }
 
     /**
+     *  Получение ид статуса подтвержден
+     *
+     * @return int|null
+     */
+    public static function getIdStatusConfirm()
+    {
+        $status = OrderStatus::where('status', 'like', '%' . self::STATUS_CONFIRM_PREFIX . '%' )->first();
+
+        if(!$status) {
+            return null;
+        }
+
+        return $status->id;
+    }
+
+    /**
      * id Статусов для логистика
      *
      * @return Collection
@@ -64,5 +94,22 @@ class OrderStatus extends Model
     public static function getIdsStatusesForLogistic():Collection
     {
         return OrderStatus::where('status', 'like', '%' . Logist::STATUS_PREFIX . '%' )->pluck('id');
+    }
+
+    /**
+     * Ид для типа
+     *
+     * @param string $type
+     * @return int|null
+     */
+    public static function getIdStatusForType(string $type)
+    {
+        $status = OrderStatus::where('status', 'like', '%' . $type . '%' )->first();
+
+        if(!$status) {
+            return null;
+        }
+
+        return $status->id;
     }
 }

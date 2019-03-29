@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs;
 
-
-use App\Http\Controllers\Service\DocumentBuilder\DataInterface;
 use App\Order;
 
-class MarketCheckData implements DataInterface
+class MarketCheckData extends BaseReport
 {
 
     /**
      * Основной массив данных
      * @var array
      */
-    private $data = [
+    protected $data = [
         'id' => '',
         'date' => '',
         'client_name' => '',
@@ -91,21 +89,20 @@ class MarketCheckData implements DataInterface
     }
 
     /**
-     * Получение данных
-     * @return array
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
      * Имя файла
      * @return string
      */
-    public function getFileName()
+    public function getFileName() : string
     {
         return 'Счет №'.$this->order->id.' от '.date("d.m.Y").'.xlsx';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplatePath() : string
+    {
+        return  storage_path('app' . DIRECTORY_SEPARATOR . 'exel_templates' . DIRECTORY_SEPARATOR . 'market_check.xlsx');
     }
 
 }
