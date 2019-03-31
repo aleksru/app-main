@@ -18,6 +18,16 @@ class Store extends Model
     }
 
     /**
+     * Заказы магазина
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
      * Оставляем только цифры в номере телефона
      *
      * @param $value

@@ -21,5 +21,10 @@ interface DataInterface
      * Получение имени файла
      * @return string
      */
-    public function getFileName();
+    public function getFileName() : string;
+
+    /**
+     * @return mixed
+     */
+    public function getTemplatePath() : string;
 }

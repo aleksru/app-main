@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\ClientCall;
+use App\Order;
 use Illuminate\Database\Eloquent\Model;
 
 class Operator extends Model
@@ -28,5 +29,15 @@ class Operator extends Model
     public function calls()
     {
         return $this->hasMany(ClientCall::class);
+    }
+
+    /**
+     * Заказы
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs;
 
-
-use App\Http\Controllers\Service\DocumentBuilder\DataInterface;
 use App\Models\Courier;
 
-class RouteMap implements DataInterface
+class RouteMap extends BaseReport
 {
 
     /**
      * Основной массив данных
      * @var array
      */
-    private $data = [
+    protected $data = [
         'courier_name' => '',
         'day' => '',
         'month' => '',
@@ -94,20 +92,20 @@ class RouteMap implements DataInterface
     }
 
     /**
-     * Получение данных
-     * @return array
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
      * Имя файла
      * @return string
      */
-    public function getFileName()
+    public function getFileName() : string
     {
         return 'Маршрутный лист '.$this->courier->name.' от '.date("d.m.Y").'.xlsx';
     }
+
+    /**
+     * @return string
+     */
+    public function getTemplatePath() : string
+    {
+        return  storage_path('app' . DIRECTORY_SEPARATOR . 'exel_templates' . DIRECTORY_SEPARATOR . 'route_map.xlsx');
+    }
+
 }

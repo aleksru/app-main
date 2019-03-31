@@ -104,6 +104,16 @@ class Order extends Model
     }
 
     /**
+     * Товары
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'realizations');
+    }
+
+    /**
      * Магазин заказа
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
