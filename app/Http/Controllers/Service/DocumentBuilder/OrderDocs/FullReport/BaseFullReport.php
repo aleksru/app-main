@@ -90,7 +90,7 @@ abstract class BaseFullReport
             });
         });
 
-        $data['avg_check'] = $cntOrderRealiz > 0 ? round($summary / $cntOrderRealiz, 1) : 0;
+        $data['avg_check'] = $collection->count() > 0 ? round($summary / $collection->count(), 1) : 0;
         $data['main_check'] = round($summary);
         $data['main_product_sum'] = $summaryMainProduct;
         $data['main_other_sum'] = $summaryOther;
