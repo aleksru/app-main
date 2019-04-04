@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StockUser extends Model
 {
-    const STATUS_PREFIX = 'склад';
+    const STATUS_PREFIX = 'подтвержден';
 
     protected $guarded = ['id'];
 
