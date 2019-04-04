@@ -18,6 +18,22 @@
         <li><a href="{{ route('docs.index') }}"><i class="fa fa-print" aria-hidden="true"></i> <span>Принт-форм</span> </a></li>
     @endcan
 
+    @can('view', App\Order::class)
+        <li class="treeview">
+            <a href="#"><i class="fa fa-book"></i> <span>Отчеты</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="{{ route('reports.operators') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Операторы</span> </a></li>
+                <li><a href="{{ route('reports.days') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>По дням</span> </a></li>
+                <li><a href="{{ route('reports.products') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Товары</span> </a></li>
+                <li><a href="{{ route('reports.resources') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Источники</span> </a></li>
+            </ul>
+        </li>
+    @endcan
+
     @can('view', App\Models\StockUser::class)
         <li><a href="{{ route('stock.index') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Склад</span></a></li>
     @endcan

@@ -21,6 +21,8 @@
 
 @push('scripts')
     <script type="text/javascript">
+        let exchangeData = {};
+
         $(function () {
             /**
              * Базовые настройки таблицы.
@@ -37,6 +39,9 @@
                 ajax: {
                     url: '{{ $route }}',
                     type: 'get',
+                    "data": function ( d ) {
+                        return  $.extend(d, exchangeData);
+                    }
                 },
                 columns: [
                     @foreach ($columns as $name => $column)

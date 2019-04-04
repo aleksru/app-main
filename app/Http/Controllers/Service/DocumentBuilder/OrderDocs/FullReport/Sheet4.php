@@ -34,7 +34,7 @@ class Sheet4 extends BaseFullReport
         $products = Product::has('realizations')->with(['orders' => function($query){
             $query->whereDate('orders.created_at', '>=', $this->dateStart->toDateString())
                     ->whereDate('orders.created_at', '<=', $this->dateEnd->toDateString());
-        }, 'realizations'])->get();
+        }, 'realizations', 'orders.realizations', 'orders.realizations.product:id,type'])->get();
 
         $productsCount = Order::has('realizations')
                                 ->whereDate('orders.created_at', '>=', $this->dateStart->toDateString())
@@ -49,11 +49,16 @@ class Sheet4 extends BaseFullReport
             $this->data['[products.missed_calls]'][] = $this->calcStatuses($value->orders, OrderStatus::STATUS_MISSED_PREFIX);
             $this->data['[products.denials]'][] = $this->calcStatuses($value->orders, OrderStatus::STATUS_DENIAL_PREFIX);
             $this->data['[products.spam]'][] = $this->calcStatuses($value->orders, OrderStatus::STATUS_SPAM_PREFIX);
-            $this->data['[products.price]'][] = round($value->realizations->map(function($item){
-                return $item->price;
+
+            $this->data['[products.price]'][] = round($value->orders->map(function ($order) use ($value){
+                return $order->realizations->reject(function($item) use ($value){
+                    return $value->id !== $item->product_id;
+                })->avg('price');
             })->avg(), 1);
-            $this->data['[products.sum]'][] = round($value->realizations->map(function($item){
-                return $item->price  * $item->quantity;
+            $this->data['[products.sum]'][] = round($value->orders->map(function ($order) use ($value){
+                return $order->realizations->map(function($item) use ($value){
+                    return $value->id === $item->product_id ? $item->price * $item->quantity  : 0;
+                })->sum();
             })->sum(), 1);
             $this->data['[products.approved_main]'][] = $productsCount > 0 ? round($value->orders->count() * 100 / $productsCount, 1) . '%' : 0;
         });

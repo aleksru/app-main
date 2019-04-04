@@ -58,6 +58,16 @@ Route::group(['middleware' =>'auth'], function() {
         Route::post('report', 'DocumentController@reportDayOrders')->name('report');
         Route::get('print-form/', 'DocumentController@index')->name('index');
         Route::post('print-form/', 'DocumentController@form')->name('form');
+        Route::post('full-report', 'DocumentController@reportFull')->name('report-full');
+    });
+
+    //Отчеты
+    Route::group( ['prefix' => 'reports', 'as' => 'reports.'], function (){
+        Route::get('operators', 'ReportController@operators')->name('operators');
+        Route::get('days', 'ReportController@days')->name('days');
+        Route::get('products', 'ReportController@products')->name('products');
+        Route::get('resources', 'ReportController@resources')->name('resources');
+        Route::get('reports-table', 'ReportController@operatorsDatatable')->name('datatable');
     });
 
     //логи
