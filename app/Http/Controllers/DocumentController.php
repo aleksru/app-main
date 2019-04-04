@@ -70,18 +70,34 @@ class DocumentController extends Controller
     }
 
     /**
-     * Отчет по заказам
+     * Полный отчет
+     *
+     * @param Request $request
+     */
+    public function reportFull(Request $request)
+    {
+        $dateStart = Carbon::parse($request->get('dateFrom'));
+        $dateEnd = Carbon::parse($request->get('dateTo') ?? $request->get('dateFrom'));
+
+        $this->builder->download(new FullReport($dateStart, $dateEnd));
+    }
+
+    /**
+     * По дням
      *
      * @param Request $request
      * @param OrderRepository $orderRepository
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function reportDayOrders(Request $request)
+    public function reportDayOrders(Request $request, OrderRepository $orderRepository)
     {
-        $dateStart = Carbon::parse($request->get('date'));
-        $dateEnd = Carbon::parse($request->get('date_end') ?? $request->get('date_end'));
+        $orders = $orderRepository->getOrdersToDateWithRelations($request->get('date'), $request->get('date_end'));
 
-        $this->builder->download(new FullReport($dateStart, $dateEnd));
+        if($orders->isEmpty()) {
+            return redirect()->back()->with(['error' => 'Отсутствуют заказы за выбранный период!']);
+        }
+
+        $this->builder->download(new Report($orders), 'day_report');
     }
 
     /**

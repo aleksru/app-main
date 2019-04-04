@@ -6,14 +6,14 @@ use App\Http\Controllers\Service\DocumentBuilder\DataInterface;
 use App\Order;
 use Illuminate\Database\Eloquent\Collection;
 
-class Report implements DataInterface
+class Report extends BaseReport
 {
 
     /**
      * Основной массив данных
      * @var array
      */
-    private $data = [
+    protected $data = [
         'day' => '',
         'month' => '',
         'year' => '',
@@ -129,20 +129,19 @@ class Report implements DataInterface
     }
 
     /**
-     * Получение данных
-     * @return array
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
      * Имя файла
      * @return string
      */
-    public function getFileName()
+    public function getFileName() : string
     {
         return 'Отчет от '.(date("d.m.Y")).'.xlsx';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplatePath() : string
+    {
+        return  storage_path('app' . DIRECTORY_SEPARATOR . 'exel_templates' . DIRECTORY_SEPARATOR . 'every_day_report.xlsx');
     }
 }
