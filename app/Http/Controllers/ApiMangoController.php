@@ -158,20 +158,19 @@ class ApiMangoController extends Controller
 
         //исходящий
         if($data['call_direction'] === MangoCallEnums::CALL_DIRECTION_OUTCOMING) {
-            if ($operator = Operator::getOperatorBySipLogin(explode(':', $data['from']['number'])[1])) {
-                //фиксируем звонок
-                $client = Client::getClientByPhone($data['to']['number']);
+            $operator = Operator::getOperatorBySipLogin(explode(':', $data['from']['number'])[1]);
+            $client = Client::getClientByPhone($data['to']['number']);
 
-                $operator->calls()->create([
-                    'type' => ClientCall::outgoingCall,
-                    'from_number' => $data['to']['number'] ?? null,
-                    'call_create_time' => $data['create_time'],
-                    'call_end_time' => $data['end_time'],
-                    'operator_text' => $data['from']['number'] ?? null,
-                    'client_id' => $client->id ?? null,
-                    'status_call' => $data['entry_result']
-                ]);
-            }
+            ClientCall::create([
+                'type' => ClientCall::outgoingCall,
+                'from_number' => $data['to']['number'] ?? null,
+                'call_create_time' => $data['create_time'],
+                'call_end_time' => $data['end_time'],
+                'operator_text' => $data['from']['number'] ?? null,
+                'client_id' => $client->id ?? null,
+                'status_call' => $data['entry_result'],
+                'operator_id' => $operator->id ?? null,
+            ]);
         }
     }
 
