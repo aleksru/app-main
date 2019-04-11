@@ -139,19 +139,53 @@ class ApiMangoController extends Controller
                     $lastCall->status_call = $data['entry_result'];
                     $lastCall->call_end_time = $data['end_time'] ?? null;
                     $lastCall->save();
+                }else {
+                    Log::error(['пропущенный', $data]);
+                    $client = Client::getClientByPhone($data['from']['number']);
+                    if(!$client){
+                        $client = Client::create(['phone' => $data['from']['number']]);
+                    }
+                    $store = Store::where('phone', $data['line_number'])->first();
+                    ClientCall::create([
+                        'type' => ClientCall::incomingCall,
+                        'from_number' => $data['from']['number'] ?? null,
+                        'call_create_time' => $data['create_time'],
+                        'call_end_time' => $data['end_time'],
+                        'client_id' => $client->id ?? null,
+                        'status_call' => $data['entry_result'],
+                        'store_id' => $store->id ?? null
+                    ]);
                 }
             }
 
             //успешный
             if($data['entry_result'] === MangoCallEnums::CALL_RESULT_SUCCESS) {
+                $getOperator = $data['to']['number'] ? Operator::getOperatorBySipLogin(explode(':', $data['to']['number'])[1]) : null;
                 if (isset($data['from']) &&
                                 $clientCall = ClientCall::getCallByHash(ClientCall::makeHash([$data['from']['number'], $data['create_time']]))){
-                    $getOperator = $data['to']['number'] ? Operator::getOperatorBySipLogin(explode(':', $data['to']['number'])[1]) : null;
                     $clientCall->call_end_time = $data['end_time'];
                     $clientCall->operator_text = $data['to']['number'] ?? null;
                     $clientCall->operator_id = $getOperator ? $getOperator->id : null;
                     $clientCall->status_call = $data['entry_result'];
                     $clientCall->save();
+                }else{
+                    Log::error(['успешный', $data]);
+                    $client = Client::getClientByPhone($data['from']['number']);
+                    if(!$client){
+                        $client = Client::create(['phone' => $data['from']['number']]);
+                    }
+                    $store = Store::where('phone', $data['line_number'])->first();
+                    ClientCall::create([
+                        'type' => ClientCall::incomingCall,
+                        'from_number' => $data['from']['number'] ?? null,
+                        'call_create_time' => $data['create_time'],
+                        'call_end_time' => $data['end_time'],
+                        'client_id' => $client->id ?? null,
+                        'status_call' => $data['entry_result'],
+                        'store_id' => $store->id ?? null,
+                        'operator_id' => $getOperator ? $getOperator->id : null,
+                        'operator_text' => $data['to']['number'] ?? null,
+                    ]);
                 }
             }
         }

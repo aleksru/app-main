@@ -10,7 +10,7 @@ class PriceType extends Model
     
     static public function getPriceTypesName():array
     {
-        return config('app.price_types');
+        return self::pluck('name')->toArray();
     }
     
     public function products()

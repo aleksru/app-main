@@ -23,7 +23,7 @@ return [
     |
     */
 
-    'price_types' => [ 'moscow', 'regions', 'apple'],
+    'price_types' => [ 'moscow', 'regions', 'apple', 'NN'],
     
     /*
     |--------------------------------------------------------------------------
