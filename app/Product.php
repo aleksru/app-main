@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $guarded = ['id'];
+
+    protected $hidden = ['pivot'];
     
     const PRICE_LIST_ARTICUL = 'Артикул';
     const PRICE_LIST_PRODUCT = 'Товар';

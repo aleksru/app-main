@@ -26,3 +26,9 @@ Route::post('set-order', 'ApiOrdersController@api')->middleware('api.key');
 Route::post('events/call', 'ApiMangoController@index');
 
 Route::post('events/summary', 'ApiMangoController@summary');
+
+Route::group(['middleware' =>'api.v2', 'prefix' => 'v2', 'as' => 'apiV2.', 'namespace' => 'Api'], function (){
+    Route::get('products', 'ProductController@products')->name('products.get');
+    Route::get('price-list/version', 'PriceListController@version')->name('price-list.version');
+    Route::post('order', 'OrderController@create')->name('order.create');
+});
