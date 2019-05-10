@@ -39,7 +39,17 @@
     @endcan
 
     @can('view', App\Models\Logist::class)
-        <li><a href="{{ route('logistics.index') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Логистика</span></a></li>
+        <li class="treeview">
+            <a href="#"><i class="fa fa-book"></i> <span>Логистика</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="{{ route('logistics.index') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Заказы</span></a></li>
+                <li><a href="{{ route('logistics.simple.orders') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Таблица заказов</span></a></li>
+            </ul>
+        </li>
     @endcan
 
     @if (Auth::user()->is_admin)

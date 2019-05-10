@@ -144,4 +144,12 @@ class Report extends BaseReport
     {
         return  storage_path('app' . DIRECTORY_SEPARATOR . 'exel_templates' . DIRECTORY_SEPARATOR . 'every_day_report.xlsx');
     }
+
+    /**
+     * @return array
+     */
+    public function getResultsData() : array
+    {
+        return $this->data;
+    }
 }
