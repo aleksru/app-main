@@ -42,7 +42,7 @@ class ApiProductController extends Controller
     {
         $getPrice = PriceType::where('name', $req->get('pricelist'))->first();
 
-        return [ $getPrice->name => $getPrice->version ];
+        return $getPrice ? [ $getPrice->name => $getPrice->version ] : abort(404);
     }
     
 }
