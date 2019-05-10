@@ -80,8 +80,12 @@ Route::group(['middleware' =>'auth'], function() {
     Route::get('stock-table', 'StockController@datatable')->name('stock.datatable');
 
     //Логистика
-    Route::resource('logistics', 'LogisticController')->only('index');
-    Route::get('logistics-table', 'LogisticController@datatable')->name('logistics.datatable');
+    Route::group(['prefix' => 'logistics', 'as' => 'logistics.'], function(){
+        Route::resource('/', 'LogisticController')->only('index');
+        Route::get('logistics-table', 'LogisticController@datatable')->name('datatable');
+        Route::get('simple-orders', 'LogisticController@simpleOrders')->name('simple.orders');
+        Route::get('simple-orders-datatable', 'LogisticController@simpleOrdersDatatable')->name('simple.orders.datatable');
+    });
 
     //звонки
     Route::resource('calls', 'ClientCallController')->only('index');
