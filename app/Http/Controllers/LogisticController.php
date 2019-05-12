@@ -65,7 +65,7 @@ class LogisticController extends Controller
             'metro',
             'deliveryPeriod',
             'operator',
-            'realizations:order_id,product_id')->where('created_at', '>=',Carbon::today()->toDateString())->whereIn('status_id', $statusIds)->get();
+            'realizations')->where('created_at', '>=',Carbon::today()->toDateString())->whereIn('status_id', $statusIds)->get();
 
         $data = (new Report($orders))->prepareData()->getResultsData();
 
