@@ -51,7 +51,7 @@ class UpdatePriceListCommand extends Command
 //        foreach (PriceType::getPriceTypesName() as $priceType){
 //           PriceType::firstOrCreate(['name' => $priceType]);
 //        }
-        
+        Log::error("Обновление цен. Начало");
         $files = File::where('status', 0)->get();
         if ( !$files->isEmpty() ) {
             foreach ($files as $file) {
@@ -71,8 +71,10 @@ class UpdatePriceListCommand extends Command
 
                 //обнуляем счетчик
                 $counter = 0;
-                
-                foreach (ExelService::excelToArray(storage_path('app/'.$file->path)) as $productPriceList) {
+
+                $arrPriceList = ExelService::excelToArray(storage_path('app/'.$file->path));
+
+                foreach ($this->genExelContent($arrPriceList) as $productPriceList) {
                     if (!isset($productPriceList[Product::PRICE_LIST_ARTICUL])|| 
                         !isset($productPriceList[Product::PRICE_LIST_PRODUCT])|| 
                         !isset($productPriceList[Product::PRICE_LIST_PRICE])){
@@ -101,5 +103,16 @@ class UpdatePriceListCommand extends Command
         }
 
         Log::error("Обновление цен завершено.");
+    }
+
+    /**
+     * @param array $lists
+     * @return \Generator
+     */
+    private function genExelContent(array $lists)
+    {
+        foreach ($lists as $list) {
+            yield $list;
+        }
     }
 }
