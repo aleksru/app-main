@@ -9,6 +9,7 @@ use App\Models\Logist;
 use App\Models\OrderStatus;
 use App\Order;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class LogisticController extends Controller
@@ -72,6 +73,39 @@ class LogisticController extends Controller
         return datatables()->of($data['product'])
             ->editColumn('product.real_denied', '')
             ->editColumn('product.comment_logist', '')
+            ->setRowClass(function ($el) {
+                if($productId = $el['product.product_id'] ?? false) {
+                    $order = Order::find($el['product.order']);
+                    $realiz = $order->realizations()->where('product_id', $productId)->first();
+
+                    return $realiz && $realiz->is_copy_logist ? 'alert-success' : 'alert-danger';
+                }
+
+                return 'alert-danger';
+            })
+            ->setRowAttr([
+                'data-orderid' => function($el) {
+                    return $el['product.order'];
+                },
+                'data-productid' => function($el) {
+                    return $el['product.product_id'] ?? '';
+                }
+            ])
             ->make(true);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logistCopyToggle(Request $request)
+    {
+        $order = Order::findOrFail($request->get('order_id'));
+        $productId = $request->get('product_id');
+        $realiz = $order->realizations()->where('product_id', $productId)->firstOrFail();
+        $realiz->is_copy_logist = true;
+        $realiz->save();
+
+        return response()->json(['message' => 'Скопировано']);
     }
 }

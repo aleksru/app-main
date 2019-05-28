@@ -85,6 +85,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('logistics-table', 'LogisticController@datatable')->name('datatable');
         Route::get('simple-orders', 'LogisticController@simpleOrders')->name('simple.orders');
         Route::get('simple-orders-datatable', 'LogisticController@simpleOrdersDatatable')->name('simple.orders.datatable');
+        Route::post('logist-copy-toggle/', 'LogisticController@logistCopyToggle')->name('copy.toggle');
     });
 
     //звонки

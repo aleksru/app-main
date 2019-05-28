@@ -159,7 +159,6 @@
             $('#orders-table tr').dblclick(function(e){
                 let range = document.createRange();
                 let sel = window.getSelection();
-
                 range.selectNode(this);
                 sel.removeAllRanges();
                 sel.addRange(range);
@@ -167,8 +166,25 @@
                 //пытаемся скопировать текст в буфер обмена
                 try {
                     document.execCommand('copy');
-                    toast.success('', {title: 'Скопировано'});
+
+                    if(this.dataset.productid == '') {
+                        throw 'product_is_null';
+                    }
+                    axios.post("{!! route('logistics.copy.toggle') !!}", {
+                        order_id: this.dataset.orderid,
+                        product_id: this.dataset.productid
+                    }).then((res) => {
+                        this.classList.remove('alert-danger');
+                        this.classList.add('alert-success');
+                        toast.success('', {title: res.data.message});
+                    });
+
                 } catch(err) {
+                    let mess = 'Произошла ошибка!';
+                    if(err === 'product_is_null') {
+                        mess += ' Отсутстуют товары';
+                    }
+                    toast.error(mess);
                     console.log('Error copy to buffer');
                 }
                 sel.removeAllRanges();

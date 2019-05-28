@@ -18,6 +18,10 @@ class Realization extends Model
     ];
     protected $dates = ['deleted_at'];
 
+    protected $casts = [
+        'is_copy_logist' => 'boolean',
+    ];
+
     /**
      * Продукт
      *
