@@ -147,4 +147,8 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     Route::get('products', 'ProductController@index')->name('products.index');
     Route::get('products-table', 'ProductController@datatable')->name('products.datatable');
     Route::post('products-toggle/{product}', 'ProductController@toggleSetType')->name('products.toggle.set-type');
+
+    //Юр лицо
+    Route::get('corporate-info', 'CorporateInfoController@index')->name('corporate-info.index');
+    Route::post('corporate-info', 'CorporateInfoController@store')->name('corporate-info.store');
 });
