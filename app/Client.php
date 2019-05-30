@@ -46,7 +46,25 @@ class Client extends Model
      */
     public function setPhoneAttribute($value)
     {
-        $this->attributes['phone'] = preg_replace('/[^0-9]/', '', $value);
+        $value = preg_replace('/[^0-9]/', '', $value);
+        if(strlen($value) === 10){
+            $value = '7' . $value;
+        }
+        $this->attributes['phone'] = substr_replace($value, '7', 0, 1);
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public static function preparePhone($value)
+    {
+        $value = preg_replace('/[^0-9]/', '', $value);
+        if(strlen($value) === 10){
+            $value = '7' . $value;
+        }
+
+        return substr_replace($value, '7', 0, 1);
     }
 
     /**
