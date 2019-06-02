@@ -11,6 +11,7 @@ class CorporateInfoEnums
     const KPP = ['name' => 'КПП', 'key' => 'corporate.kpp'];
     const OGRN = ['name' => 'ОГРН', 'key' => 'corporate.ogrn'];
     const ADDRESS = ['name' => 'Адрес организации', 'key' => 'corporate.address'];
+    const DIRECTOR = ['name' => 'Генеральный директор', 'key' => 'corporate.gendir'];
 
     /**
      * @return array
