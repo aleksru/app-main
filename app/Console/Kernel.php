@@ -29,6 +29,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('update-price-lists')->everyTenMinutes();
         $schedule->command('logs:prepare')->everyFiveMinutes();
+        $schedule->command('avito:mail-parse')->everyTenMinutes();
     }
 
     /**
