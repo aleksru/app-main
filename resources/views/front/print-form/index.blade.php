@@ -102,6 +102,14 @@
                         </tr>
                         <tr>
                             <td></td>
+                            <td>Расписка</td>
+                            <td> <a href="{{ route('docs.obligation', ['courier' => $courier->id, 'date' => $toDate]) }}">
+                                    <i class="fa fa-print btn btn-info" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
                             <td><strong>Счета</strong></td>
                             <td>
                             </td>

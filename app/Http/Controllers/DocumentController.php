@@ -9,6 +9,7 @@ use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\MarketCheckData;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\RouteMap;
+use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Warranty;
 use App\Models\Courier;
 use App\Order;
 use App\Repositories\OrderRepository;
@@ -111,5 +112,21 @@ class DocumentController extends Controller
         }
 
         $this->builder->download(new MarketCheckData($order));
+    }
+
+    /**
+     * @param Courier $courier
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function warranty(Courier $courier, Request $request)
+    {
+        if ($courier->orders()->deliveryToday($request->get('date'))->count() === 0 ) {
+            return redirect()->back()->with(['error' => 'На курьера не назначено заказов!']);
+        }
+
+        $routeMap = new RouteMap($courier, $request->get('date'));
+
+        $this->builder->download(new Warranty($courier, $routeMap));
     }
 }

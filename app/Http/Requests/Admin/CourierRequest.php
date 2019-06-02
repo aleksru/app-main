@@ -25,7 +25,12 @@ class CourierRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'string|nullable'
+            'description' => 'string|nullable',
+            'passport_number' => 'string|nullable',
+            'passport_date' => 'date|nullable',
+            'birth_day' => 'date|nullable',
+            'passport_issued_by' => 'string|nullable',
+            'passport_address' => 'string|nullable',
         ];
     }
 }

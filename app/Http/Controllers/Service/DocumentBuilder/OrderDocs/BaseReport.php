@@ -33,4 +33,12 @@ abstract class BaseReport implements DataInterface
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getArrayData() : array
+    {
+        return $this->data;
+    }
+
 }

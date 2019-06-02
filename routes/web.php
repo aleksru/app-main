@@ -59,6 +59,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('print-form/', 'DocumentController@index')->name('index');
         Route::post('print-form/', 'DocumentController@form')->name('form');
         Route::post('full-report', 'DocumentController@reportFull')->name('report-full');
+        Route::get('courier-obligation/{courier}', 'DocumentController@warranty')->name('obligation');
     });
 
     //Отчеты

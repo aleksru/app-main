@@ -48,6 +48,46 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="birth_day" class="col-sm-2 control-label">Дата рождения</label>
+
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" name="birth_day"  value="{{ old('birth_day', $courier->birth_day->toDateString() ?? '') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="passport_number" class="col-sm-2 control-label">Номер паспорта</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="passport_number"  value="{{ old('passport_number', $courier->passport_number ?? '') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="passport_date" class="col-sm-2 control-label">Дата выдачи паспорта</label>
+
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" name="passport_date"  value="{{ old('passport_date', $courier->passport_date->toDateString() ?? '') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="passport_issued_by" class="col-sm-2 control-label">Кем выдан</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="passport_issued_by"  value="{{ old('passport_issued_by', $courier->passport_issued_by ?? '') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="passport_address" class="col-sm-2 control-label">Адрес проживания</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="passport_address"  value="{{ old('passport_address', $courier->passport_address ?? '') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="email" class="col-sm-2 control-label">Описание</label>
 
                     <div class="col-sm-10">
