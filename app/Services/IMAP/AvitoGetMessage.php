@@ -15,7 +15,7 @@ class AvitoGetMessage
     public static function getPost() : array
     {
         $urlHost = env('AVITO_ORDERS_POST_HOST');
-        $host = "{" . $urlHost . "}INBOX";
+        $host = "{" . $urlHost . ":993/ssl/novalidate-cert}INBOX";
         $email = env('AVITO_ORDERS_POST');
         $pass = env('AVITO_ORDERS_POST_PASS');
 
@@ -25,6 +25,8 @@ class AvitoGetMessage
             $connect = imap_open($host, $email, $pass);
         }catch (\Exception $e) {
             Log::error('Сбой подключения к ' . $urlHost . '. e-mail: ' . $email);
+            Log::error($e);
+            Log::error(imap_last_error());
             return $res;
         }
 
