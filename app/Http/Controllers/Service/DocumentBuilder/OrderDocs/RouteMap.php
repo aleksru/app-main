@@ -87,6 +87,7 @@ class RouteMap extends BaseReport
             }
 
         }
+        $this->setCorpInfo();
 
         return $this;
     }

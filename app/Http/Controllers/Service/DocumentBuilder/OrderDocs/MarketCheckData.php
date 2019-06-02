@@ -84,6 +84,7 @@ class MarketCheckData extends BaseReport
 
             array_push($this->data['product'], $this->products);
         }
+        $this->setCorpInfo();
 
         return $this;
     }
