@@ -28,7 +28,8 @@ class ParseMailAvito
     {
         $messages = $this->getMessages();
         foreach ($messages as $message) {
-            if(preg_match('/^Вам пришло новое сообщение/', trim($message['subject']))){
+            if(preg_match('/^Вам пришло новое сообщение/', trim($message['subject'])) ||
+                preg_match('/^Вам пришли новые сообщения/', trim($message['subject'])) ){
                 $this->getParser()->setString($message['body']);
                 $numbs = $this->getParser()->parsePhoneNumber();
                 if(!empty($numbs)){
