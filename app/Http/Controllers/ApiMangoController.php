@@ -140,7 +140,7 @@ class ApiMangoController extends Controller
                     $lastCall->call_end_time = $data['end_time'] ?? null;
                     $lastCall->save();
                 }else {
-                    Log::error(['пропущенный', $data]);
+                    //Log::error(['пропущенный', $data]);
                     $client = Client::getClientByPhone($data['from']['number']);
                     if(!$client){
                         $client = Client::create(['phone' => $data['from']['number']]);
@@ -169,7 +169,7 @@ class ApiMangoController extends Controller
                     $clientCall->status_call = $data['entry_result'];
                     $clientCall->save();
                 }else{
-                    Log::error(['успешный', $data]);
+                    //Log::error(['успешный', $data]);
                     $client = Client::getClientByPhone($data['from']['number']);
                     if(!$client){
                         $client = Client::create(['phone' => $data['from']['number']]);

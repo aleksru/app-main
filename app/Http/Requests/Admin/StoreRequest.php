@@ -28,6 +28,8 @@ class StoreRequest extends FormRequest
             'phone' => 'required|string',
             'address' => 'string|nullable',
             'description' => 'string|nullable',
+            'price_type_id' => 'integer|nullable',
+            'url' => 'url|nullable',
         ];
     }
 }

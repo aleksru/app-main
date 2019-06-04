@@ -152,4 +152,9 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Юр лицо
     Route::get('corporate-info', 'CorporateInfoController@index')->name('corporate-info.index');
     Route::post('corporate-info', 'CorporateInfoController@store')->name('corporate-info.store');
+
+    //Магазины апи
+    Route::group( ['prefix' => 'remote-store', 'as' => 'remote-store.', 'namespace' => 'Stores'], function (){
+        Route::get('update-prices/{store}', 'RemoteStoresController@runUpdatePrices')->name('update-prices');
+    });
 });

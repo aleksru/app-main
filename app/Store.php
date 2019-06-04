@@ -36,4 +36,37 @@ class Store extends Model
     {
         $this->attributes['phone'] = preg_replace('/[^0-9]/', '', $value);
     }
+
+    /**
+     * Прайс магазина
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function priceType()
+    {
+        return $this->belongsTo(PriceType::class);
+    }
+
+    /**
+     * @param string $number
+     * @return mixed
+     */
+    public static function getStoreByPhoneNumber(string $number)
+    {
+        return Store::where('phone', self::preparePhone($number))->first();
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public static function preparePhone($value)
+    {
+        $value = preg_replace('/[^0-9]/', '', $value);
+        if(strlen($value) === 10){
+            $value = '7' . $value;
+        }
+
+        return substr_replace($value, '7', 0, 1);
+    }
 }
