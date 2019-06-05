@@ -9,15 +9,18 @@
         <script>
             $(function () {
                 $('#btn_updated_prices').click(async function () {
-                    await axios.get(this.dataset.route).then(function(response) {
+                    this.disabled = true;
+                    await axios.get(this.dataset.route).then((response) => {
                         if(response.data.success){
                             toast.success(response.data.success);
                         }
                         if(response.data.error){
                             toast.error(response.data.error);
                         }
-                    }).catch(function (err) {
+                        this.disabled = false;
+                    }).catch((err) => {
                         toast.error('Произошла ошибка выполнения');
+                        this.disabled = false;
                         console.log(err);
                     });
                 });
