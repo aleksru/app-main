@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin\Stores;
 use App\Http\Controllers\Controller;
 use App\Services\RemoteStores\RemoteStoreUpdatePrices;
 use App\Store;
+use Illuminate\Support\Facades\Log;
 
 class RemoteStoresController extends Controller
 {
@@ -22,6 +23,7 @@ class RemoteStoresController extends Controller
         try{
             $res = (new RemoteStoreUpdatePrices($store))->process();
         }catch (\Exception $e) {
+            Log::error($e);
             return response()->json(['error' => 'Произошла ошибка выполнения.']);
         }
 
