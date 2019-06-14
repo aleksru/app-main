@@ -121,6 +121,7 @@ class Client extends Model
      */
     public static function getClientByPhone(string $phone)
     {
+        $phone = self::preparePhone($phone);
         $client = Client::getOnPhone($phone)->first();
 
         if(!$client) {

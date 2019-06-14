@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
 
-class DeliveryPeriod extends Model
+class OtherDelivery extends Model
 {
+    protected $guarded = ['id'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */

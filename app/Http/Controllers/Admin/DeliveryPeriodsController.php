@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DeliveryPeriod;
+use App\Models\OtherDelivery;
 use Illuminate\Http\Request;
 
 
@@ -15,7 +16,10 @@ class DeliveryPeriodsController extends Controller
      */
     public function index()
     {
-        return view('admin.periods.form', ['periods' => DeliveryPeriod::select('id', 'period')->get()]);
+        return view('admin.periods.form', [
+            'periods' => DeliveryPeriod::select('id', 'period')->get(),
+            'otherPeriods' => OtherDelivery::all(),
+        ]);
     }
 
     /**
@@ -48,4 +52,30 @@ class DeliveryPeriodsController extends Controller
 
         return response()->json(['message' => 'Период удален']);
     }
+
+    /**
+     * @param OtherDelivery $otherDelivery
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function otherDeliveryDestroy(OtherDelivery $otherDelivery)
+    {
+        $otherDelivery->delete();
+
+        return response()->json(['message' => 'Доп тип удален']);
+    }
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function otherDeliveryStore(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        OtherDelivery::create($validatedData);
+
+        return redirect()->back()->with(['success' => 'Успешно добавлено!']);
+    }
+
 }

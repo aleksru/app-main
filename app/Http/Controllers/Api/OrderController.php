@@ -22,7 +22,7 @@ class OrderController extends Controller
     {
         $data = $createOrderRequest->validated();
         $data['products_text'] = json_decode($createOrderRequest->products, true);
-        $data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
+        //$data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
         $customer = Client::getClientByPhone($data['phone']);
         $store = Store::where('phone', $data['store_phone'])->first();
 
@@ -38,22 +38,24 @@ class OrderController extends Controller
             'client_id'     => $customer->id,
             'store_text'    => $data['store_text'],
             'store_id'      => $store->id ?? null,
-            'comment'       => $data['comment'],
-            'products_text' => $data['products_text'],
+            'comment'       => $data['comment'] ?? '',
+            'products_text' => $data['products_text'] ?? [],
         ]);
 
         if ($order->products_text) {
             foreach ($order->products_text as $product) {
-                $productModel = Product::byActicle($product['articul'])->first();
-                if (!$productModel) {
-                    continue;
-                }
+                if(isset($product['articul'])){
+                    $productModel = Product::byActicle($product['articul'])->first();
+                    if (!$productModel) {
+                        continue;
+                    }
 
-                $order->realizations()->create([
-                    'quantity'   => (int)$product['quantity'],
-                    'price'      => (float)$product['price'],
-                    'product_id' => $productModel->id,
-                ]);
+                    $order->realizations()->create([
+                        'quantity'   => (int)$product['quantity'],
+                        'price'      => (float)$product['price'],
+                        'product_id' => $productModel->id,
+                    ]);
+                }
             }
         }
 

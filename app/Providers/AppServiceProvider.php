@@ -3,12 +3,14 @@
 namespace App\Providers;
 
 use App\Client;
+use App\Http\Composers\DeliveryWidget;
 use App\Models\ClientPhone;
 use App\Models\Realization;
 use App\Observers\LogObserver;
 use App\Order;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
        Realization::observe(LogObserver::class);
        Client::observe(LogObserver::class);
        ClientPhone::observe(LogObserver::class);
+       View::composer('front.widgets.delivery_periods_widget', DeliveryWidget::class);
     }
 
     /**

@@ -13,7 +13,7 @@
     </section>
 @endsection
 @section('content')
-    <div class="col-md-8">
+    <div class="col-md-12">
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -23,6 +23,9 @@
                 </ul>
             </div>
         @endif
+        <div class="alert">
+            @include('front.widgets.delivery_periods_widget')
+        </div>
     </div>
 
     <div class="row">

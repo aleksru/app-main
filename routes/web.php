@@ -87,6 +87,9 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('simple-orders', 'LogisticController@simpleOrders')->name('simple.orders');
         Route::get('simple-orders-datatable', 'LogisticController@simpleOrdersDatatable')->name('simple.orders.datatable');
         Route::post('logist-copy-toggle/', 'LogisticController@logistCopyToggle')->name('copy.toggle');
+        Route::get('deliveries', 'LogisticController@deliveries')->name('deliveries');
+        Route::post('delivery-toggle', 'LogisticController@deliveryToggle')->name('delivery.toggle');
+        Route::get('delivery-widget', 'LogisticController@deliveriesForWidget')->name('deliveries.widget');
     });
 
     //звонки
@@ -109,6 +112,8 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
 
     //Периоды доставки
     Route::resource('delivery-periods', 'DeliveryPeriodsController')->only('index', 'store', 'destroy');
+    Route::delete('otherDelivery/{other_delivery}', 'DeliveryPeriodsController@otherDeliveryDestroy')->name('other-delivery.destroy');
+    Route::post('otherDelivery', 'DeliveryPeriodsController@otherDeliveryStore')->name('other-delivery.create');
 
     //Статусы заказов
     Route::resource('order-statuses', 'OrderStatusesController')->except('show');

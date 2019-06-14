@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
+use App\Models\FailDeliveryDate;
 use App\Models\Logist;
 use App\Models\OrderStatus;
 use App\Order;
+use App\Repositories\DeliveryPeriodsRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -53,7 +55,7 @@ class LogisticController extends Controller
      */
     public function simpleOrdersDatatable()
     {
-        $statusIds = Cache::remember('logistics.status.ids', Carbon::now()->addHours(4), function (){
+        $statusIds = Cache::remember('logistics.status.ids', Carbon::now()->addHours(4), function () {
             return OrderStatus::getIdsStatusesForLogistic();
         });
 
@@ -66,7 +68,7 @@ class LogisticController extends Controller
             'metro',
             'deliveryPeriod',
             'operator',
-            'realizations')->where('created_at', '>=',Carbon::today()->toDateString())->whereIn('status_id', $statusIds)->get();
+            'realizations')->where('created_at', '>=', Carbon::today()->toDateString())->whereIn('status_id', $statusIds)->get();
 
         $data = (new Report($orders))->prepareData()->getResultsData();
 
@@ -74,7 +76,7 @@ class LogisticController extends Controller
             ->editColumn('product.real_denied', '')
             ->editColumn('product.comment_logist', '')
             ->setRowClass(function ($el) {
-                if($productId = $el['product.product_id'] ?? false) {
+                if ($productId = $el['product.product_id'] ?? false) {
                     $order = Order::find($el['product.order']);
                     $realiz = $order->realizations()->where('product_id', $productId)->first();
 
@@ -84,10 +86,10 @@ class LogisticController extends Controller
                 return 'alert-danger';
             })
             ->setRowAttr([
-                'data-orderid' => function($el) {
+                'data-orderid' => function ($el) {
                     return $el['product.order'];
                 },
-                'data-productid' => function($el) {
+                'data-productid' => function ($el) {
                     return $el['product.product_id'] ?? '';
                 }
             ])
@@ -107,5 +109,59 @@ class LogisticController extends Controller
         $realiz->save();
 
         return response()->json(['message' => 'Скопировано']);
+    }
+
+    /**
+     * @param Request $request
+     * @param DeliveryPeriodsRepository $deliveryPeriodsRepository
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function deliveries(Request $request, DeliveryPeriodsRepository $deliveryPeriodsRepository)
+    {
+        $selectedDate = Carbon::parse($request->get('date')) ?? Carbon::today();
+        $periods = $deliveryPeriodsRepository->getDeliveryPeriods($selectedDate);
+
+        return view('front.logistic.delivery_intervals',
+                    compact('periods','selectedDate'));
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deliveriesForWidget()
+    {
+        $view = view('front.widgets.delivery_periods_widget')->render();
+
+        return response()->json(['html' => $view]);
+    }
+
+    /**
+     * @param Request $request
+     * @param DeliveryPeriodsRepository $deliveryPeriodsRepository
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deliveryToggle(Request $request, DeliveryPeriodsRepository $deliveryPeriodsRepository)
+    {
+        $model = $request->get('model');
+        $id = $request->get('id');
+        $date = $request->get('date');
+        if(!$model || !$id || !$date){
+            return response()->json(['message' => 'Произошла ошибка!']);
+        }
+        $model = app($model);
+        $model = $model::find($id);
+
+        if($failDeliveryModel = $model->failDeliveryDate()->whereDate('date', '=', Carbon::parse($date))->first()){
+            $failDeliveryModel->stop = !$failDeliveryModel->stop;
+            $failDeliveryModel->save();
+        }else{
+            $model->failDeliveryDate()->save(FailDeliveryDate::create(['date' => $date]));
+        }
+        $periods = $deliveryPeriodsRepository->getDeliveryPeriods(Carbon::parse($date));
+
+        $html = view('front.logistic.parts.delivery_list',
+                        ['periods' => $periods, 'date' => Carbon::parse($date)])->render();
+
+        return response()->json(['message' => 'Успешно обновлено!', 'html' => $html]);
     }
 }
