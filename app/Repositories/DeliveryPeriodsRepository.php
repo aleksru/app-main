@@ -21,10 +21,12 @@ class DeliveryPeriodsRepository
         $periods = DeliveryPeriod::with(['failDeliveryDate' => function($query) use ($selectedDate){
             $query->filterFailsByDate($selectedDate);
         }])->get();
-        $otherPeriods = OtherDelivery::with(['failDeliveryDate' => function($query) use ($selectedDate){
+        OtherDelivery::with(['failDeliveryDate' => function($query) use ($selectedDate){
             $query->filterFailsByDate($selectedDate);
-        }])->get();
+        }])->get()->each(function ($item) use (&$periods){
+            $periods->push($item);
+        });
 
-        return $periods = $periods->merge($otherPeriods);
+        return $periods;
     }
 }
