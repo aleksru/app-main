@@ -19,6 +19,12 @@ class DeliveryWidget
             $deliveryPeriodsRepository = app(DeliveryPeriodsRepository::class);
             return $deliveryPeriodsRepository->getDeliveryPeriods(Carbon::today());
         });
-        $view->with(['periods' => $periods]);
+
+        $periodsTomorrow = Cache::remember('delivery_periods_next_day', Carbon::now()->addMinutes(2), function (){
+            $deliveryPeriodsRepository = app(DeliveryPeriodsRepository::class);
+            return $deliveryPeriodsRepository->getDeliveryPeriods(Carbon::tomorrow());
+        });
+
+        $view->with(['periods' => $periods, 'periodsTomorrow' => $periodsTomorrow]);
     }
 }
