@@ -93,7 +93,7 @@ class OrderController extends Controller
             $order->save();
         }
 
-        return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно обновлен!']);
+        return response()->json(['success' => 'Форма заказа успешно обновлена!']);
     }
 
     /**
@@ -148,10 +148,7 @@ class OrderController extends Controller
 
         Realization::destroy($arrDiff);
 
-        return response()->json([
-            'message' => 'Товары успешно обновлены!',
-            'products' => $order->realizations()->with('product:id,product_name', 'supplier')->get()
-        ]);
+        return response()->json(['success' => 'Товары успешно обновлены!', 'products' => $order->realizations()->with('product:id,product_name', 'supplier')->get()]);
     }
 
     /**
@@ -166,7 +163,7 @@ class OrderController extends Controller
         $this->authorize('commentLogist', Order::class);
         $order->update($commentLogistRequst->validated());
 
-        return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно обновлен!']);
+        return response()->json(['success' => 'Комментарий логиста успешно обновлен!']);
     }
 
     /**

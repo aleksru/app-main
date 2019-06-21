@@ -10,7 +10,7 @@
 
                     <div class="input-group-btn">
                         <div class="col-sm-12">
-                            <button class="btn btn-primary pull-right" @click.prevent="submit()">
+                            <button class="btn btn-primary pull-right" @click.prevent="localSubmit()">
                                 <i class="fa fa-save"></i> Сохранить
                             </button>
                         </div>
@@ -115,18 +115,30 @@
             }
         },
         methods: {
+            localSubmit(){
+                this.submit().then((res) => {
+                    toast.success(res.success);
+                }).catch((err) => {
+                    toast.error('Ошибка при обновлении товаров!');
+                    console.log(err);
+                });
+            },
+
             submit(){
                 for(let i = 0; i < this.products.length; i++){
                     this.products[i].supplier_id = this.products[i].supplier ? this.products[i].supplier.id : null;
                 }
 
-                axios.post('/product-orders/' + this.initial_order, {'products': this.products}).then(response => {
+                let res = axios.post('/product-orders/' + this.initial_order, {'products': this.products}).then(response => {
                     this.products = response.data.products;
-                    toast.success(response.data.message);
-
-                }).catch(function() {
-                    toast.error('Ошибка сервера! Пожалуйста, свяжитесь с администратором.');
+                    return response.data;
                 });
+
+                return res;
+//                .catch(function(err) {
+//                    toast.error('Ошибка сервера! Пожалуйста, свяжитесь с администратором.');
+//                    throw new Error(err);
+//                });
             },
 
             delta(index) {

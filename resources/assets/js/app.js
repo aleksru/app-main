@@ -31,7 +31,7 @@ Vue.component('vue-select', require('./components/VueSelect.vue'));
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+//Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 Vue.component('PeriodsForm', require('./components/Admin/Form/PeriodsForm.vue'));
 
@@ -40,6 +40,8 @@ Vue.component('ProductsTable', require('./components/ProductsTable.vue'));
 Vue.component('SearchProduct', require('./components/SearchProduct.vue'));
 
 Vue.component('GetOrder', require('./components/GetOrder.vue'));
+
+Vue.component('OrderForm', require('./components/OrderForm.vue'));
 
 const app = new Vue({
     el: '#app'

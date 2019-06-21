@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ClientRequest extends FormRequest
 {
@@ -32,9 +34,36 @@ class ClientRequest extends FormRequest
         ];
     }
 
+    /**
+     *
+     */
     protected function prepareForValidation()
     {
         if ($this->has('phone'))
             $this->merge(['phone' => preg_replace('/[^0-9]/', '', $this->phone)]);
+    }
+
+    /**
+     * @param Validator $validator
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        if($this->ajax()){
+            throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 422));
+        }
+
+        parent::failedValidation($validator);
+    }
+
+    /**
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'phone.required'   => 'Номер телефона клиента обязателен для заполнения',
+            'phone.unique'     => 'Номер телефона уже существует',
+            'name.required'    => 'Имя клиента обязателено для заполнения',
+        ];
     }
 }

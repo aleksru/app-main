@@ -68,12 +68,12 @@
             </div>
         @endif
 
-        <div class="col-sm-12">
-            <button form="user-form" type="submit" class="btn btn-primary pull-right">
-                <i class="fa fa-save"></i> Сохранить
-            </button>
+        {{--<div class="col-sm-12">--}}
+            {{--<button form="user-form" type="submit" class="btn btn-primary pull-right">--}}
+                {{--<i class="fa fa-save"></i> Сохранить--}}
+            {{--</button>--}}
 
-        </div>
+        {{--</div>--}}
     </form>
     </div>
 </div>

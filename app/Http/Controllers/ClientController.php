@@ -121,7 +121,7 @@ class ClientController extends Controller
             }
         }
 
-        return redirect()->back()->with(['success' => 'Успешно обновлен!']);
+        return response()->json(['success' => 'Клиент успешно обновлен!']);
     }
 
     /**
