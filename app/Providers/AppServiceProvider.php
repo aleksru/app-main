@@ -7,6 +7,7 @@ use App\Http\Composers\DeliveryWidget;
 use App\Models\ClientPhone;
 use App\Models\Realization;
 use App\Observers\LogObserver;
+use App\Observers\OrderObserver;
 use App\Order;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
@@ -23,12 +24,8 @@ class AppServiceProvider extends ServiceProvider
     {
        Schema::defaultStringLength(191);
        require_once(app_path() . '/Helpers/helpers.php');
-
-       Order::observe(LogObserver::class);
-       Realization::observe(LogObserver::class);
-       Client::observe(LogObserver::class);
-       ClientPhone::observe(LogObserver::class);
-       View::composer('front.widgets.delivery_periods_widget', DeliveryWidget::class);
+       $this->registerObservers();
+       $this->registerViewComposers();
     }
 
     /**
@@ -39,5 +36,25 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    /**
+     * Register observers
+     */
+    private function registerObservers()
+    {
+        Order::observe(LogObserver::class);
+        Order::observe(OrderObserver::class);
+        Realization::observe(LogObserver::class);
+        Client::observe(LogObserver::class);
+        ClientPhone::observe(LogObserver::class);
+    }
+
+    /**
+     * Register view composers
+     */
+    private function registerViewComposers()
+    {
+        View::composer('front.widgets.delivery_periods_widget', DeliveryWidget::class);
     }
 }

@@ -25,7 +25,8 @@ class Order extends Model
     ];
     
     protected $casts = [
-      'products_text' => 'array',
+        'products_text' => 'array',
+        'flag_send_sms' => 'boolean'
     ];
 
     protected $dates = [
@@ -253,6 +254,14 @@ class Order extends Model
     public function logisticStatus()
     {
         return $this->belongsTo(OtherStatus::class);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFullSumAttribute()
+    {
+        return $this->realizations->sum('price');
     }
 
 }
