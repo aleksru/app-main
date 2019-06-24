@@ -35,6 +35,11 @@
             'id' => 'orders-table',
             'route' => $routeDatatable ?? route('orders.datatable'),
             'columns' => [
+                'product.nodata' => [
+                    'name' => '',
+                    'width' => '1%',
+                    'searchable' => false,
+                ],
                 'product.date' => [
                     'name' => 'Дата',
                     'width' => '1%',

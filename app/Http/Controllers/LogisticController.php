@@ -73,8 +73,21 @@ class LogisticController extends Controller
         $data = (new Report($orders))->prepareData()->getResultsData();
 
         return datatables()->of($data['product'])
+            ->editColumn('product.nodata', '-')
             ->editColumn('product.real_denied', '')
             ->editColumn('product.comment_logist', '')
+            ->editColumn('product.price_opt', function ($value){
+                return (int)$value['product.price_opt'];
+            })
+            ->editColumn('product.price', function ($value){
+                return (int)$value['product.price'];
+            })
+            ->editColumn('product.courier_payment', function ($value){
+                return (int)$value['product.courier_payment'];
+            })
+            ->editColumn('product.profit', function ($value){
+                return (int)$value['product.profit'];
+            })
             ->setRowClass(function ($el) {
                 if ($productId = $el['product.product_id'] ?? false) {
                     $order = Order::find($el['product.order']);
