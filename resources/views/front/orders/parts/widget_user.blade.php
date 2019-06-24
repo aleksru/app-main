@@ -81,10 +81,10 @@
 @push('scripts')
     <script>
         $(function(){
-            $('.mask-phone').mask('+0 (000) 000-0000',{
+            $('.mask-phone').mask('00000000000',{
                 onComplete: function(val, e, field){
-                    if(val.indexOf('+') >= 0) {
-                        val.charAt(val.indexOf('+') + 1) !== 7 ? field.val( val.replace(val.charAt(val.indexOf('+') + 1), 7) )  : '';
+                    if(val.charAt(0) != 7){
+                        field.val('7' + val.substr(1));
                     }
                 },
             });
