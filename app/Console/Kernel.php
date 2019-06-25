@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\PrepareLogsCommand;
+use App\Console\Commands\UpdateMetroStations;
 use App\Console\Commands\UpdatePriceListCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -16,7 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         PrepareLogsCommand::class,
-        UpdatePriceListCommand::class
+        UpdatePriceListCommand::class,
+        UpdateMetroStations::class
     ];
 
     /**
@@ -28,8 +30,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('update-price-lists')->everyTenMinutes();
-        $schedule->command('logs:prepare')->everyFiveMinutes();
+        $schedule->command('logs:prepare')->everyThirtyMinutes();
         $schedule->command('avito:mail-parse')->everyTenMinutes();
+        $schedule->command('metro:update-stations')->monthlyOn(26, '02:00');
     }
 
     /**

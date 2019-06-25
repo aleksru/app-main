@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolesSeeder::class);
         $this->call(BaseOrderStatusesSeeder::class);
-        $this->call(MetrosSeeder::class);
+        //$this->call(MetrosSeeder::class);
         $this->call(UserGroupsSeeder::class);
     }
 }
