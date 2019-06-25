@@ -59,18 +59,23 @@ class LogisticController extends Controller
             return OrderStatus::getIdsStatusesForLogistic();
         });
 
-        $orders = Order::with(
-            'status',
-            'store',
-            'client',
-            'client.additionalPhones',
-            'courier',
-            'metro',
-            'deliveryPeriod',
-            'operator',
-            'realizations')->where('created_at', '>=', Carbon::today()->toDateString())->whereIn('status_id', $statusIds)->get();
+        $data = Cache::remember('logistics_simple_orders_table', Carbon::now()->addSeconds(5), function () use ($statusIds){
+            $orders = Order::with(
+                'status',
+                'store',
+                'client',
+                'client.additionalPhones',
+                'courier',
+                'metro',
+                'deliveryPeriod',
+                'operator',
+                'realizations')->where('created_at', '>=', Carbon::yesterday()->toDateString())
+                ->whereIn('status_id', $statusIds)
+                ->get();
 
-        $data = (new Report($orders))->prepareData()->getResultsData();
+            return (new Report($orders))->prepareData()->getResultsData();
+        });
+
 
         return datatables()->of($data['product'])
             ->editColumn('product.nodata', '-')

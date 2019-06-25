@@ -148,7 +148,10 @@ class OrderController extends Controller
 
         Realization::destroy($arrDiff);
 
-        return response()->json(['message' => 'Товары успешно обновлены!', 'products' => $order->realizations()->with('product:id,product_name', 'supplier')->get()]);
+        return response()->json([
+            'message' => 'Товары успешно обновлены!',
+            'products' => $order->realizations()->with('product:id,product_name', 'supplier')->get()
+        ]);
     }
 
     /**

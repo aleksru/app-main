@@ -17,7 +17,7 @@ class ActivityUsers
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check()) {
+        if (Auth::check() && !Auth::user()->isOnline()) {
             $user = Auth::user();
             $expiresAt = Carbon::now()->addMinutes(5);
             $user->last_activity = $expiresAt;
