@@ -36,6 +36,8 @@
                 stateSave: true,
                 searchDelay: 500,
                 order: [[0, 'desc']],
+                scrollX: true,
+                scrollCollapse: true,
                 ajax: {
                     url: '{{ $route }}',
                     type: 'get',
@@ -180,6 +182,14 @@
 //                    $('#idTable').DataTable().ajax.reload(null, false);
 //                }, 5000 );
 //            });
+
+            //Добавляем скролл по событию инициализации
+            $('#{{ $id }}').on( 'init.dt', function () {
+                $('.dataTables_scrollBody').doubleScroll({
+                    resetOnWindowResize: true
+                });
+            } );
+
         })  
     </script>
 @endpush

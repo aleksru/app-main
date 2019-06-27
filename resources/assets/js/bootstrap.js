@@ -21,6 +21,7 @@ try {
     require('jquery-slimscroll');
     require('select2');
     require('jquery-mask-plugin');
+    require('@activix/double-scroll');
 
 } catch (e) {}
 

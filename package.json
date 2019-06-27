@@ -20,6 +20,7 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "@activix/double-scroll": "^1.0.2",
         "admin-lte": "^2.4.8",
         "awesome-bootstrap-checkbox": "^1.0.1",
         "datatables.net": "^1.10.19",
