@@ -125,31 +125,30 @@
         toast.error('{{ session()->get('error') }}')
     @endif
 
-    /**
-     *обновление таблицы
-     */
-    $(function () {
-        setInterval( function () {
-            $('#orders-table').DataTable().ajax.reload(null, false);
-        }, 5000 );
+    //инициализация таблицы
+    $('#orders-table').on( 'init.dt', function () {
+        rewriteSearchColumns();
     });
-
-//    /**
-//     * Переход на редактирование заказа по клику по строке
-//     */
-//    $('#orders-table').on( 'draw.dt', function () {
+    //событие перерисовки таблицы
+    $('#orders-table').on( 'draw.dt', function () {
+        //Переход на редактирование заказа по клику по строке
 //        $('.row-link').click(function(){
 //            window.open($(this).find('a').first().attr('href'), '_blank');
 //        });
-//    } );
+    } );
+
+    //обновление таблицы
+    setInterval( function () {
+        $('#orders-table').DataTable().ajax.reload(null, false);
+    }, 5000 );
 
     /**
      * Стиль футер под хедер
      */
-    $(function(){
-        $('tfoot').css('display', 'table-header-group');
-
-    });
+    //    $(function(){
+    //        $('tfoot').css('display', 'table-header-group');
+    //
+    //    });
 
     /**
      * Индивидуальный поиск поле инпут
@@ -176,40 +175,51 @@
         },
         courier: {
             data: {!! json_encode(App\Models\Courier::select('id', 'name')->get()->toArray()) !!}
+        },
+        operator: {
+            data: {!! json_encode(App\Models\Operator::select('id', 'name')->get()->toArray()) !!}
         }
     };
 
     /**
      * Добавляем поля для поиска, вешаем события
      */
-    $('#orders-table').on( 'init.dt', function () {
+    function rewriteSearchColumns() {
         let tableOrders = $('#orders-table').DataTable();
         let columns = tableOrders.settings().init().columns;
+        /*При отключении скролла */
+//        $('#orders-table thead tr').clone(true).appendTo( '#orders-table thead' );
+//        $('#orders-table thead tr:eq(1) th').each( function (i)
 
-        tableOrders.columns().every(function(){
-            let column = this;
-            let columnName = columns[this.index()].name;
-
+        $('.dataTables_scrollHead thead tr').clone(true).appendTo( '.dataTables_scrollHead thead' );
+        $('.dataTables_scrollHead thead tr:eq(1) th').each( function (i) {
+            this.className = this.className.replace(/sorting.*/, 'sorting_disabled');
+            let columnName = columns[i].name;
+            $(this).html('');
             if(columnName in individualSearchingColumnsInput) {
-                let input = $('<input type="' + individualSearchingColumnsInput[columnName]['type'] + '" value="" placeholder="Search...">').appendTo( $(column.footer()).empty() );
-                input.off().on('keyup cut paste change', _.debounce(() =>  column.search(input.val()).draw(), tableOrders.settings()[0].searchDelay));
+                let input = $('<input type="' + individualSearchingColumnsInput[columnName]['type'] + '" value="" placeholder="Search...">');
+                $(this).html(input);
+                input.off().on('keyup cut paste change', _.debounce((e) => {
+                    tableOrders.columns(i).search(input.val()).draw(), tableOrders.settings()[0].searchDelay
+                }));
             }
 
             if(columnName in individualSearchingColumnsSelect) {
-                let select = $('<select><option value=""></option></select>').appendTo( $(column.footer()).empty() );
-
+                let select = $('<select><option value=""></option></select>');
+                $(this).html(select);
                 for(let key in individualSearchingColumnsSelect[columnName]['data']) {
                     select.append( '<option value="' + individualSearchingColumnsSelect[columnName]['data'][key]['id'] + '">'
                         + individualSearchingColumnsSelect[columnName]['data'][key]['name']  + '</option>' );
                 }
                 select.on('change', function(){
-                    column.search($(this).val()).draw(), tableOrders.settings()[0].searchDelay;
+                    tableOrders.columns(i).search($(this).val()).draw(), tableOrders.settings()[0].searchDelay;
                 });
             }
-        });
+        } );
 
-        $('tfoot').find('select').css('width', '80%').css('min-height', '32px');
-        $('tfoot').find('input').css('width', '100%').css('padding', '3px').css('box-sizing', 'border-box');
-    } );
+        $('thead').find('select').css('width', '80%').css('min-height', '32px');
+        $('thead').find('input').css('width', '100%').css('padding', '3px').css('box-sizing', 'border-box');
+    }
+
 </script>
 @endpush
