@@ -5,9 +5,12 @@ namespace App;
 use App\Models\ClientPhone;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Client extends Model
 {
+    use Notifiable;
+
     protected $guarded = ['id'];
 
     /**
