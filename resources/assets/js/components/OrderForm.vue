@@ -25,14 +25,14 @@
 
                 //обновление товаров
                 await this.$refs.ProductsTable.submit().then((res) => {
-                    this.addBlockInfo(this.getInfoSuccessItem(res.success));
+                    this.addBlockInfo(this.getInfoItemFromResponse(res));
                     this.setProgressBar();
                 });
 
                 //обновление клиента
                 await this.sendForm(formClient.action,
                                 new FormData(document.getElementById("user-form"))).then((res) => {
-                    this.addBlockInfo(this.getInfoSuccessItem(res.success));
+                    this.addBlockInfo(this.getInfoItemFromResponse(res));
                     this.setProgressBar();
                 });
 
@@ -40,7 +40,7 @@
                 if(this.is_update_comment_logist){
                     await this.sendForm(formCommentLogist.action,
                                 new FormData(document.getElementById("logist-comment-form"))).then((res) => {
-                        this.addBlockInfo(this.getInfoSuccessItem(res.success));
+                        this.addBlockInfo(this.getInfoItemFromResponse(res));
                         this.setProgressBar();
                     });
                 }
@@ -48,7 +48,7 @@
                 //обновление заказа
                 await this.sendForm(formMainOrder.action,
                                 new FormData(document.getElementById("order-form"))).then((res) => {
-                    this.addBlockInfo(this.getInfoSuccessItem(res.success));
+                    this.addBlockInfo(this.getInfoItemFromResponse(res));
                     this.setProgressBar();
                 });
             },
@@ -59,10 +59,18 @@
                 return res.data;
             },
 
+            getInfoItemFromResponse(res){
+                if(res.warning){
+                    return this.getInfoWarningItem(res.warning);
+                }
+
+                return this.getInfoSuccessItem(res.success);
+            },
+
             getInfoSuccessItem(text){
                 let div = document.createElement('div');
                 div.className = "alert alert-success";
-                div.innerHTML = `<i class="fa fa-check" aria-hidden="true"></i>${text}`;
+                div.innerHTML = `<i class="fa fa-check" aria-hidden="true"></i> ${text}`;
 
                 return div;
             },
@@ -70,7 +78,15 @@
             getInfoErrorItem(text){
                 let div = document.createElement('div');
                 div.className = "alert alert-danger";
-                div.innerHTML = `<i class="fa fa-times-circle" aria-hidden="true"></i>${text}`;
+                div.innerHTML = `<i class="fa fa-times-circle" aria-hidden="true"></i> ${text}`;
+
+                return div;
+            },
+
+            getInfoWarningItem(text){
+                let div = document.createElement('div');
+                div.className = "alert alert-warning";
+                div.innerHTML = `<i class="fa fa-info" aria-hidden="true"></i> ${text}`;
 
                 return div;
             },

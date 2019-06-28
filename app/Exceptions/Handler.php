@@ -49,7 +49,9 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof AuthorizationException || $exception instanceof HttpException && $exception->getStatusCode() === 403) {
-
+            if($request->ajax()){
+                return response()->json(['warning' => 'Не достаточно прав на выполнение действия!']);
+            }
             return redirect()->back()->with(['error' => 'Не достаточно прав на выполнение действия!']);
         }
 
