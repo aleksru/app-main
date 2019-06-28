@@ -5,6 +5,8 @@ namespace App\Http\Requests;
 use App\Order;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateOrderRequest extends FormRequest
 {
@@ -93,5 +95,17 @@ class UpdateOrderRequest extends FormRequest
             'address_other' => 'string|nullable',
             'substatus_id' => 'integer|nullable',
         ];
+    }
+
+    /**
+     * @param Validator $validator
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        if($this->ajax()){
+            throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 422));
+        }
+
+        parent::failedValidation($validator);
     }
 }

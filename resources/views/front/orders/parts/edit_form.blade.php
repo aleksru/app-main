@@ -204,9 +204,9 @@
                             <option value="1"  @if($order->flag_send_sms) selected @endif>Отправлено</option>
                         </select>
                     </div>
-                    <button form="order-form" type="submit" class="btn btn-primary pull-right ">
-                        <i class="fa fa-save"></i> Сохранить
-                    </button>
+                    {{--<button form="order-form" type="submit" class="btn btn-primary pull-right ">--}}
+                        {{--<i class="fa fa-save"></i> Сохранить--}}
+                    {{--</button>--}}
                 </div>
 
                 <input type="hidden" class="form-control"  value="{{ Auth::user()->id }}" name="user_id">

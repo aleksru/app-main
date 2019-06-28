@@ -12,13 +12,13 @@
                 </div>
             </div>
 
-            @can('commentLogist', App\Order::class)
-                <div class="col-sm-12">
-                    <button form="logist-comment-form" type="submit" class="btn btn-primary pull-right">
-                        <i class="fa fa-save"></i> Сохранить
-                    </button>
-                </div>
-            @endcan
+            {{--@can('commentLogist', App\Order::class)--}}
+                {{--<div class="col-sm-12">--}}
+                    {{--<button form="logist-comment-form" type="submit" class="btn btn-primary pull-right">--}}
+                        {{--<i class="fa fa-save"></i> Сохранить--}}
+                    {{--</button>--}}
+                {{--</div>--}}
+            {{--@endcan--}}
         </form>
     </div>
 </div>
