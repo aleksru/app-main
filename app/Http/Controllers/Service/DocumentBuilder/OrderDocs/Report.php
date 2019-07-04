@@ -47,6 +47,7 @@ class Report extends BaseReport
         'product.profit' => '0',
         'product.courier_name' => '0',
         'product.supplier' => '0',
+        'product.is_copy_logist' => 0,
         'product.test' => '',
 
     ];
@@ -102,7 +103,7 @@ class Report extends BaseReport
                 $this->product['product.courier_payment'] = '';
                 $this->product['product.profit'] = '';
                 $this->product['product.supplier'] = '';
-
+                $this->product['product.is_copy_logist'] =  false;
                 array_push($this->data['product'], $this->product);
 
                 ++$numb;
@@ -120,7 +121,8 @@ class Report extends BaseReport
                 $this->product['product.courier_payment'] = $product->courier_payment ?  $product->courier_payment + ($order->deliveryType->price ?? 0) : $order->deliveryType->price ?? 0;
                 $this->product['product.profit'] = (int)$product->price - (int)$product->price_opt - (int)$product->courier_payment;
                 $this->product['product.supplier'] = $product->supplier ? $product->supplier->name : '';
-                $this->product['product.product_id'] = $product->product->id ?? '';;
+                $this->product['product.product_id'] = $product->product->id ?? '';
+                $this->product['product.is_copy_logist'] =  $product->is_copy_logist;
                 ++$numb;
                 array_push($this->data['product'], $this->product);
             }

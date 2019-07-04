@@ -59,8 +59,8 @@ class LogisticController extends Controller
             return OrderStatus::getIdsStatusesForLogistic();
         });
 
-        $data = Cache::remember('logistics_simple_orders_table_' . $request->get('length'),
-                                    Carbon::now()->addSeconds(5), function () use ($statusIds){
+       return Cache::remember('logistics_simple_orders_table_' . $request->get('length'),
+                                    Carbon::now()->addSeconds(10), function () use ($statusIds){
             $orders = Order::with(
                 'status',
                 'store',
@@ -70,49 +70,45 @@ class LogisticController extends Controller
                 'metro',
                 'deliveryPeriod',
                 'operator',
-                'realizations')->where('created_at', '>=', Carbon::yesterday()->toDateString())
-                ->whereIn('status_id', $statusIds)
-                ->get();
+                'realizations')
+                    ->where('created_at', '>=', Carbon::now()->subDays(4)->toDateString())
+                    ->whereIn('status_id', $statusIds)
+                    ->get()
+                    ->sortBy(function ($product, $key) {
+                        return $product->realizations->min('is_copy_logist');
+                    });
 
-            return (new Report($orders))->prepareData()->getResultsData();
+                $data = (new Report($orders))->prepareData()->getResultsData();
+
+                return datatables()->of($data['product'])
+                    ->editColumn('product.nodata', '-')
+                    ->editColumn('product.real_denied', '')
+                    ->editColumn('product.comment_logist', '')
+                    ->editColumn('product.price_opt', function ($value){
+                        return (int)$value['product.price_opt'];
+                    })
+                    ->editColumn('product.price', function ($value){
+                        return (int)$value['product.price'];
+                    })
+                    ->editColumn('product.courier_payment', function ($value){
+                        return (int)$value['product.courier_payment'];
+                    })
+                    ->editColumn('product.profit', function ($value){
+                        return (int)$value['product.profit'];
+                    })
+                    ->setRowClass(function ($el){
+                        return $el['product.is_copy_logist'] ? 'alert-success' : 'alert-danger';
+                    })
+                    ->setRowAttr([
+                        'data-orderid' => function ($el) {
+                            return $el['product.order'];
+                        },
+                        'data-productid' => function ($el) {
+                            return $el['product.product_id'] ?? '';
+                        }
+                    ])
+                    ->toJson();
         });
-
-
-        return datatables()->of($data['product'])
-            ->editColumn('product.nodata', '-')
-            ->editColumn('product.real_denied', '')
-            ->editColumn('product.comment_logist', '')
-            ->editColumn('product.price_opt', function ($value){
-                return (int)$value['product.price_opt'];
-            })
-            ->editColumn('product.price', function ($value){
-                return (int)$value['product.price'];
-            })
-            ->editColumn('product.courier_payment', function ($value){
-                return (int)$value['product.courier_payment'];
-            })
-            ->editColumn('product.profit', function ($value){
-                return (int)$value['product.profit'];
-            })
-            ->setRowClass(function ($el) {
-                if ($productId = $el['product.product_id'] ?? false) {
-                    $order = Order::find($el['product.order']);
-                    $realiz = $order->realizations()->where('product_id', $productId)->first();
-
-                    return $realiz && $realiz->is_copy_logist ? 'alert-success' : 'alert-danger';
-                }
-
-                return 'alert-danger';
-            })
-            ->setRowAttr([
-                'data-orderid' => function ($el) {
-                    return $el['product.order'];
-                },
-                'data-productid' => function ($el) {
-                    return $el['product.product_id'] ?? '';
-                }
-            ])
-            ->make(true);
     }
 
     /**

@@ -158,7 +158,7 @@
     $(function () {
         setInterval( function () {
             $('#orders-table').DataTable().ajax.reload(null, false);
-        }, 5000 );
+        }, 10000 );
 
         $('#orders-table').on( 'draw.dt', function () {
             $('#orders-table tr').dblclick(function(e){

@@ -171,7 +171,12 @@ class OrderController extends Controller
      */
     public function datatable(OrdersDatatable $ordersDatatable)
     {
-       return $ordersDatatable->datatable();
+        $ordersDatatable->setQuery(
+            $ordersDatatable->getOrderQuery()
+                            ->orderBy('updated_at', 'DESC')
+                            ->orderBy('id', 'DESC'));
+
+        return $ordersDatatable->datatable();
     }
 
     /**
