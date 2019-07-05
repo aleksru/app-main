@@ -58,9 +58,10 @@ class LogisticController extends Controller
         $statusIds = Cache::remember('logistics.status.ids', Carbon::now()->addHours(4), function () {
             return OrderStatus::getIdsStatusesForLogistic();
         });
+        $cacheKey =  $request->get('length') . "_" .$request->get('start');
 
-       return Cache::remember('logistics_simple_orders_table_' . $request->get('length'),
-                                    Carbon::now()->addSeconds(7), function () use ($statusIds){
+       return Cache::remember('logistics_simple_orders_table_' . $cacheKey,
+                                    Carbon::now()->addSeconds(5), function () use ($statusIds){
             $orders = Order::with(
                 'status',
                 'store',
@@ -72,7 +73,7 @@ class LogisticController extends Controller
                 'deliveryType',
                 'operator',
                 'realizations.product')
-                    ->where('created_at', '>=', Carbon::now()->subDays(4)->toDateString())
+                    ->where('updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
                     ->whereIn('status_id', $statusIds)
                     ->get()
                     ->sortBy(function ($product, $key) {
