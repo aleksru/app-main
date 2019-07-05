@@ -69,6 +69,7 @@ class LogisticController extends Controller
                 'courier',
                 'metro',
                 'deliveryPeriod',
+                'deliveryType',
                 'operator',
                 'realizations.product')
                     ->where('created_at', '>=', Carbon::now()->subDays(4)->toDateString())
