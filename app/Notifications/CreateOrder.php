@@ -10,8 +10,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Log;
 
-class CreateOrder extends Notification
+class CreateOrder extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -96,5 +97,6 @@ class CreateOrder extends Notification
                     ->commandId($notifiable->id . rand(1, 9999999));
 
         (new MangoService())->sendSms($mangoSms);
+        Log::error('Смс отправлено ' . $notifiable->phone);
     }
 }
