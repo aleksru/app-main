@@ -70,7 +70,7 @@ class LogisticController extends Controller
                 'metro',
                 'deliveryPeriod',
                 'operator',
-                'realizations')
+                'realizations.product')
                     ->where('created_at', '>=', Carbon::now()->subDays(4)->toDateString())
                     ->whereIn('status_id', $statusIds)
                     ->get()
