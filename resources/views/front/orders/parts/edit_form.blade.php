@@ -269,7 +269,7 @@
             });
         });
 
-        let stores = {!!   json_encode(\App\Store::select('id', 'name as text')->get()->toArray()) !!}
+        let stores = {!!   json_encode(\App\Store::active()->select('id', 'name as text')->get()->toArray()) !!}
         $(function() {
             $('.js-example-stores-single').select2({
                 data: stores,

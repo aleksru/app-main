@@ -85,8 +85,27 @@ class StoreController extends Controller
                     ]
                 ]);
             })
-            ->rawColumns(['actions'])
+            ->editColumn('is_hidden', function (Store $store) {
+                return view('datatable.toggle', [
+                    'route' => route('admin.stores.toggle.hidden', $store->id),
+                    'id' => $store->id,
+                    'check' => $store->is_hidden
+                ]);
+            })
+            ->rawColumns(['actions', 'is_hidden'])
             ->make(true);
+    }
+
+    /**
+     * @param Store $store
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function toggleHidden(Store $store)
+    {
+        $store->is_hidden = ! $store->is_hidden;
+        $store->save();
+
+        return response()->json(['message' => 'Успешно обновлен!']);
     }
 
 }

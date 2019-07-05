@@ -109,6 +109,7 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Магазины
     Route::resource('stores', 'StoreController')->except('show');
     Route::get('stores-table', 'StoreController@datatable')->name('stores.datatable');
+    Route::post('stores-hidden-toggle/{store}', 'StoreController@toggleHidden')->name('stores.toggle.hidden');
 
     //Периоды доставки
     Route::resource('delivery-periods', 'DeliveryPeriodsController')->only('index', 'store', 'destroy');

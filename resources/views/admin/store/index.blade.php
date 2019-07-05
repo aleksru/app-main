@@ -52,6 +52,11 @@
                         'width' => '10%',
                         'searchable' => true,
                     ],
+                    'is_hidden' => [
+                        'name' => 'Скрыть\показать',
+                        'width' => '10%',
+                        'searchable' => false,
+                    ],
                     'actions' => [
                         'name' => 'Действия',
                         'width' => '5%',

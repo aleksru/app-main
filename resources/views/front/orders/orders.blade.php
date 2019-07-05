@@ -174,7 +174,7 @@
      */
     let individualSearchingColumnsSelect = {
         store_text: {
-            data: {!! json_encode(App\Store::select('id', 'name')->get()->toArray()) !!}
+            data: {!! json_encode(App\Store::active()->select('id', 'name')->get()->toArray()) !!}
         },
         status_text: {
             data: {!! json_encode(App\Models\OrderStatus::select('id', 'status as name')->get()->toArray()) !!}

@@ -2,11 +2,16 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Store extends Model
 {
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'is_hidden' => 'bool'
+    ];
 
     /**
      * Возвращает звонки в магазин
@@ -68,5 +73,14 @@ class Store extends Model
         }
 
         return substr_replace($value, '7', 0, 1);
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive(Builder $query)
+    {
+        return $query->where('is_hidden', 0);
     }
 }
