@@ -61,15 +61,24 @@ class OrderController extends Controller
     public function edit(Order $order)
     {
         $this->authorize('show', $order, Order::class);
-        $operator = $order->operator ? $order->operator : (Auth()->user()->isOperator() ? Auth()->user()->account : null);
+        $authUser = Auth()->user();
 
+        if ( ! $order->operator && $authUser->isOperator() ){
+            $order->operator()->associate($authUser->account);
+            $order->save();
+        }
+
+        if ($authUser->isOperator() && $authUser->account->id !==  $order->operator->id){
+            $message = 'Заказ обрабатывает оператор ' . ($order->operator->name ?? '');
+            session()->flash('warning', $message);
+        }
         $subStatuses = OtherStatus::typeSubStatuses()->get();
         $stockStatuses = OtherStatus::typeStockStatuses()->get();
         $logisticStatuses = OtherStatus::typeLogisticStatuses()->get();
 
         return view('front.orders.form', [
             'order' => $order->load('client', 'realizations.product:id,product_name', 'realizations.supplier'),
-            'operator' => $operator,
+            'operator' => $order->operator,
             'subStatuses' => $subStatuses,
             'stockStatuses' => $stockStatuses,
             'logisticStatuses' => $logisticStatuses

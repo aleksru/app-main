@@ -222,7 +222,10 @@
         @endif
         @if (session()->has('error'))
             toast.error('{{ session()->get('error') }}')
-                @endif
+        @endif
+        @if (session()->has('warning'))
+            toast.warning('{{ session()->get('warning') }}')
+        @endif
 
         let statuses = {!!   json_encode(\App\Models\OrderStatus::select('id', 'status as text', 'color')->get()->toArray()) !!}
             $(function() {
