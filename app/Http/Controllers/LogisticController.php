@@ -8,6 +8,7 @@ use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
 use App\Models\FailDeliveryDate;
 use App\Models\Logist;
 use App\Models\OrderStatus;
+use App\Models\Realization;
 use App\Order;
 use App\Repositories\DeliveryPeriodsRepository;
 use Carbon\Carbon;
@@ -62,7 +63,7 @@ class LogisticController extends Controller
 
        return Cache::remember('logistics_simple_orders_table_' . $cacheKey,
                                     Carbon::now()->addSeconds(5), function () use ($statusIds){
-            $orders = Order::with(
+         $orders = Order::with(
                 'status',
                 'store',
                 'client',
@@ -75,12 +76,16 @@ class LogisticController extends Controller
                 'realizations.product')
                     ->where('updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
                     ->whereIn('status_id', $statusIds)
-                    ->get()
-                    ->sortBy(function ($product, $key) {
-                        return $product->realizations->min('is_copy_logist');
-                    });
+                    ->get();
 
                 $data = (new Report($orders))->prepareData()->getResultsData();
+
+                usort($data['product'], function ($a, $b){
+                    if ((int)$a['product.is_copy_logist'] == (int)$b['product.is_copy_logist']) {
+                        return 0;
+                    }
+                    return ((int)$a['product.is_copy_logist'] <=> (int)$b['product.is_copy_logist']);
+                });
 
                 return datatables()->of($data['product'])
                     ->editColumn('product.nodata', '-')
@@ -102,11 +107,8 @@ class LogisticController extends Controller
                         return $el['product.is_copy_logist'] ? 'alert-success' : 'alert-danger';
                     })
                     ->setRowAttr([
-                        'data-orderid' => function ($el) {
-                            return $el['product.order'];
-                        },
-                        'data-productid' => function ($el) {
-                            return $el['product.product_id'] ?? '';
+                        'data-realizationid' => function ($el) {
+                            return $el['product.realization_id'];
                         }
                     ])
                     ->toJson();
@@ -119,13 +121,15 @@ class LogisticController extends Controller
      */
     public function logistCopyToggle(Request $request)
     {
-        $order = Order::findOrFail($request->get('order_id'));
-        $productId = $request->get('product_id');
-        $realiz = $order->realizations()->where('product_id', $productId)->firstOrFail();
+        $realiz = Realization::findOrFail($request->get('realization_id'));
+
+        if($realiz->is_copy_logist){
+            return response()->json(['type' => 'error', 'message' => 'Уже скопировано']);
+        }
         $realiz->is_copy_logist = true;
         $realiz->save();
 
-        return response()->json(['message' => 'Скопировано']);
+        return response()->json(['type' => 'success', 'message' => 'Скопировано']);
     }
 
     /**

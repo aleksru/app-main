@@ -34,6 +34,7 @@
         @include('datatable.datatable',[
             'id' => 'orders-table',
             'route' => $routeDatatable ?? route('orders.datatable'),
+            'ordering' => false,
             'columns' => [
                 'product.nodata' => [
                     'name' => '',
@@ -159,7 +160,6 @@
         setInterval( function () {
             $('#orders-table').DataTable().ajax.reload(null, false);
         }, 5000 );
-
         $('#orders-table').on( 'draw.dt', function () {
             $('#orders-table tr').dblclick(function(e){
                 let range = document.createRange();
@@ -176,12 +176,11 @@
                         throw 'product_is_null';
                     }
                     axios.post("{!! route('logistics.copy.toggle') !!}", {
-                        order_id: this.dataset.orderid,
-                        product_id: this.dataset.productid
+                        realization_id: this.dataset.realizationid,
                     }).then((res) => {
                         this.classList.remove('alert-danger');
                         this.classList.add('alert-success');
-                        toast.success('', {title: res.data.message});
+                        toast[res.data.type]('', {title: res.data.message});
                     });
 
                 } catch(err) {

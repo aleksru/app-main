@@ -48,6 +48,7 @@ class Report extends BaseReport
         'product.courier_name' => '0',
         'product.supplier' => '0',
         'product.is_copy_logist' => 0,
+        'product.realization_id' => 0,
         'product.test' => '',
 
     ];
@@ -104,6 +105,7 @@ class Report extends BaseReport
                 $this->product['product.profit'] = '';
                 $this->product['product.supplier'] = '';
                 $this->product['product.is_copy_logist'] =  false;
+                $this->product['product.realization_id'] = 0;
                 array_push($this->data['product'], $this->product);
 
                 ++$numb;
@@ -111,7 +113,6 @@ class Report extends BaseReport
             }
 
             foreach ($order->realizations as $product) {
-
                 $this->product['product.index'] = $numb;
                 $this->product['product.name'] = $product->product->product_name ?? '';
                 $this->product['product.imei'] = $product->imei ?? '';
@@ -123,6 +124,7 @@ class Report extends BaseReport
                 $this->product['product.supplier'] = $product->supplier ? $product->supplier->name : '';
                 $this->product['product.product_id'] = $product->product->id ?? '';
                 $this->product['product.is_copy_logist'] =  $product->is_copy_logist;
+                $this->product['product.realization_id'] = $product->id;
                 ++$numb;
                 array_push($this->data['product'], $this->product);
             }

@@ -26,11 +26,16 @@
         $(function () {
             /**
              * Базовые настройки таблицы.
-             */ 
+             */
+
+            $.fn.dataTable.ext.errMode = 'none';
             const table = $('#{{ $id }}').DataTable({
                 language: {
                     url: '/js/ru.json',
                 },
+                @if(isset($ordering) && !$ordering)
+                    ordering: false,
+                @endif
                 processing: false,
                 serverSide: true,
                 stateSave: true,
