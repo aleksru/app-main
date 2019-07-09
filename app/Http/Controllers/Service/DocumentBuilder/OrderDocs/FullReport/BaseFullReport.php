@@ -52,7 +52,7 @@ abstract class BaseFullReport
         });
 
         $cnt = $values->reject(function ($item) use ($typeStatus) {
-            return $item->status_id !== $typeStatus;
+            return $item->status_id != $typeStatus;
         })->count();
 
         if($cnt === 0) {
