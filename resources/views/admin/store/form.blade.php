@@ -102,6 +102,7 @@
                 </div>
             </form>
             @include('admin.remote-stores.parts.button_update_price', ['store' => $store ?? null])
+            @include('admin.remote-stores.parts.btn_check_state', ['store' => $store ?? null])
 
         </div>
         <div class="box-footer">

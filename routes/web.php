@@ -162,5 +162,6 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Магазины апи
     Route::group( ['prefix' => 'remote-store', 'as' => 'remote-store.', 'namespace' => 'Stores'], function (){
         Route::get('update-prices/{store}', 'RemoteStoresController@runUpdatePrices')->name('update-prices');
+        Route::get('get-state_store/{store}', 'RemoteStoresController@getStateStore')->name('state');
     });
 });
