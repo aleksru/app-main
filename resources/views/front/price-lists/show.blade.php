@@ -43,6 +43,11 @@
                     'width' => '5%',
                     'searchable' => false,
                 ],
+                'price_special' => [
+                    'name' => 'Цена по акции',
+                    'width' => '5%',
+                    'searchable' => false,
+                ],
                 'updated_at' => [
                     'name' => 'Обновлен',
                     'width' => '5%',

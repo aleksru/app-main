@@ -54,6 +54,6 @@ class ApiOrdersController extends Controller
             }
         }
         
-        return json_encode('ok');
+        return response()->json(['order' => $order->id], 200);
     }
 }
