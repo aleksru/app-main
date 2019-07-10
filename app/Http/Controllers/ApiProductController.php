@@ -9,7 +9,7 @@ use App\PriceType;
 class ApiProductController extends Controller
 {
     /**
-     * @return json|pattern Product::take($count)->skip($skip)->get();
+     * @return json;
      */
     public function api(Request $req)
     {
@@ -21,21 +21,13 @@ class ApiProductController extends Controller
         if ($req->get('page') && $req->get('page') > 0) {
             $skip  = $count * $req->get('page');
         }
-        $result = collect([]);
-        PriceType::where('name', $req->get('pricelist'))->first()
+        $result = PriceType::where('name', $req->get('pricelist'))->first()
                                                         ->products()
                                                         ->take($count)
                                                         ->skip($skip)
-                                                        ->select('article','product_name','price')
-                                                        ->get()
-                                                        ->each(function ($item, $key) use (&$result){
-                                                            $result->prepend([
-                                                                'article' => $item->article,
-                                                                'product_name' => $item->product_name,
-                                                                'price' => $item->price
-                                                            ]);
-                                                        });
-        return $result;
+                                                        ->select('article','product_name','price', 'price_special')
+                                                        ->get();
+        return response()->json($result);
     }
 
     public function priceVersion(Request $req)

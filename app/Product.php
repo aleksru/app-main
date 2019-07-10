@@ -16,6 +16,7 @@ class Product extends Model
     const PRICE_LIST_ARTICUL = 'Артикул';
     const PRICE_LIST_PRODUCT = 'Товар';
     const PRICE_LIST_PRICE = 'Цена';
+    const PRICE_LIST_PRICE_SPECIAL = 'Акция';
 
     /**
      * Префикс товаров созданных вручную

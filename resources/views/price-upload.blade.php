@@ -44,6 +44,9 @@
                                     {{\App\Product::PRICE_LIST_PRODUCT}},
                                     {{\App\Product::PRICE_LIST_PRICE}}
                   </li>
+                  <li>Необязательные столбцы для заполнения:
+                      {{\App\Product::PRICE_LIST_PRICE_SPECIAL}}
+                  </li>
               </ul>
             </div>
             <div class="card">

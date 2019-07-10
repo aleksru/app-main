@@ -28,8 +28,9 @@ class ProductController extends Controller
         }
 
         $result = $priceList->products()
-                            ->take($count)->skip($skip)
-                            ->select('article', 'product_name', 'price')
+                            ->take($count)
+                            ->skip($skip)
+                            ->select('article', 'product_name', 'price', 'price_special')
                             ->get();
 
         return response()->json($result);
