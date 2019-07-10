@@ -56,10 +56,14 @@ class LogisticController extends Controller
      */
     public function simpleOrdersDatatable(Request $request)
     {
+        $columns = $request->get('columns');
         $statusIds = Cache::remember('logistics.status.ids', Carbon::now()->addHours(4), function () {
             return OrderStatus::getIdsStatusesForLogistic();
         });
         $cacheKey =  $request->get('length') . "_" .$request->get('start');
+        if($columns[4]['search']['value']) {
+            $cacheKey = $cacheKey . '_search_' . $columns[4]['search']['value'];
+        }
 
        return Cache::remember('logistics_simple_orders_table_' . $cacheKey,
                                     Carbon::now()->addSeconds(5), function () use ($statusIds){

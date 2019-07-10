@@ -44,17 +44,17 @@
                 'product.date' => [
                     'name' => 'Дата',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.operator' => [
                     'name' => 'Оператор',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.store' => [
                     'name' => 'Источник',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.order' => [
                     'name' => 'Номер заказа',
@@ -64,87 +64,87 @@
                 'product.real_denied' => [
                     'name' => 'Реал.прич. отказа',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.type' => [
                     'name' => 'Коммент КЦ',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.comment_logist' => [
                     'name' => 'Коммент ЛОГ',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.status' => [
                     'name' => 'Статус',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.client_name' => [
                     'name' => 'ФИО клиента',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.delivery_time' => [
                     'name' => 'Время доставки',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.address' => [
                     'name' => 'Адрес',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.client_phone' => [
                     'name' => 'Телефон',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.name' => [
                     'name' => 'Модель',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product.imei' => [
                     'name' => 'IMEI',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                'product.quantity' => [
                     'name' => 'Кол-во',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                'product.price_opt' => [
                     'name' => 'Закупка',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                'product.price' => [
                     'name' => 'Продажа',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                'product.courier_payment' => [
                     'name' => 'ЗП курьера',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                'product.profit' => [
                     'name' => 'Прибыль',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                'product.courier_name' => [
                     'name' => 'Курьер',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                'product.supplier' => [
                     'name' => 'Поставщик',
                     'width' => '1%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
             ],
         ])
@@ -157,9 +157,9 @@
      *обновление таблицы
      */
     $(function () {
-        setInterval( function () {
-            $('#orders-table').DataTable().ajax.reload(null, false);
-        }, 5000 );
+//        setInterval( function () {
+//            $('#orders-table').DataTable().ajax.reload(null, false);
+//        }, 5000 );
         $('#orders-table').on( 'draw.dt', function () {
             $('#orders-table tr').dblclick(function(e){
                 let range = document.createRange();
