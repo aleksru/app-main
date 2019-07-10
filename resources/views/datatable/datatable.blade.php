@@ -36,6 +36,7 @@
                 @if(isset($ordering) && !$ordering)
                     ordering: false,
                 @endif
+                pageLength: {{ $pageLength ?? 50}} ,
                 processing: false,
                 serverSide: true,
                 stateSave: true,

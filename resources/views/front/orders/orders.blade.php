@@ -37,6 +37,7 @@
             @include('datatable.datatable',[
                 'id' => 'orders-table',
                 'route' => $routeDatatable ?? route('orders.datatable'),
+                'pageLength' => 100,
                 'columns' => [
                     'id' => [
                         'name' => 'ID',
