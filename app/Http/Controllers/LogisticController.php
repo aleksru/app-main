@@ -81,9 +81,10 @@ class LogisticController extends Controller
                 $data = (new Report($orders))->prepareData()->getResultsData();
 
                 usort($data['product'], function ($a, $b){
-                    if ((int)$a['product.is_copy_logist'] == (int)$b['product.is_copy_logist']) {
-                        return 0;
+                    if ( ! $a['product.is_copy_logist'] && ! $b['product.is_copy_logist'] ) {
+                        return $a['product.order'] <=> $b['product.order'];
                     }
+
                     return ((int)$a['product.is_copy_logist'] <=> (int)$b['product.is_copy_logist']);
                 });
 
