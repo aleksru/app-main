@@ -6,6 +6,7 @@ use App\Order;
 use App\Services\Mango\Commands\SendSms;
 use App\Services\Mango\MangoChannel;
 use App\Services\Mango\MangoService;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,6 +35,9 @@ class CreateOrder extends Notification implements ShouldQueue
     public function __construct(Order $order)
     {
         $this->order = $order;
+        if($this->order->fullSum == 0){
+            $this->delay(Carbon::now()->addMinutes(5));
+        }
     }
 
     /**
@@ -84,6 +88,10 @@ class CreateOrder extends Notification implements ShouldQueue
         if(!$notifiable->phone){
             throw new \Exception('Error send sms. Notifialble not found phone number');
         }
+        if($this->order->fullSum == 0){
+            Log::error('Error sending sms. Number ' . $notifiable->phone . ' order:' . $this->order->id . ' products not found');
+            return false;
+        }
         $text = "Уважаемый клиент! Ваш заказ №{$this->order->id} принят на доставку. Общая сумма {$this->order->fullSum}р. Спасибо за заказ!";
         $store = $this->order->store;
         if($store){
@@ -97,6 +105,6 @@ class CreateOrder extends Notification implements ShouldQueue
                     ->commandId($notifiable->id . rand(1, 9999999));
 
         (new MangoService())->sendSms($mangoSms);
-        Log::error('Смс отправлено ' . $notifiable->phone . $text);
+        Log::error('Смс отправлено ' . $notifiable->phone . ' ' .$text);
     }
 }
