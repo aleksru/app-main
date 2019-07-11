@@ -95,6 +95,11 @@ Route::group(['middleware' =>'auth'], function() {
     //звонки
     Route::resource('calls', 'ClientCallController')->only('index');
     Route::get('calls-table', 'ClientCallController@datatable')->name('calls.datatable');
+
+    //магазины
+    Route::group(['prefix' => 'stores', 'as' => 'stores.'], function(){
+        Route::get('get-state-widget', 'StoresController@getStateWidget')->name('state.widget');
+    });
 });
 
 //Админка

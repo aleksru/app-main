@@ -32,4 +32,5 @@ Route::group(['middleware' =>'api.v2', 'prefix' => 'v2', 'as' => 'apiV2.', 'name
     Route::get('price-list/version', 'PriceListController@version')->name('price-list.version');
     Route::post('order', 'OrderController@create')->name('order.create');
     Route::get('store/price-list', 'StoreController@getPriceList')->name('store.pricelist');
+    Route::post('store/set-online', 'StoreController@onlineStore')->name('store.set_online');
 });

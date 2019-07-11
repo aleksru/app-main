@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +11,8 @@ class Store extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'is_hidden' => 'bool'
+        'is_hidden' => 'bool',
+        'active_at' => 'datetime'
     ];
 
     /**
@@ -62,6 +64,17 @@ class Store extends Model
     }
 
     /**
+     * @param string $url
+     * @return mixed
+     */
+    public static function getStoreByUrl(string $url)
+    {
+        $url = str_replace(['https:', 'http:', '/', '\/'], '', $url);
+
+        return Store::where('name', 'LIKE', "%{$url}%")->first();
+    }
+
+    /**
      * @param $value
      * @return mixed
      */
@@ -82,5 +95,13 @@ class Store extends Model
     public function scopeActive(Builder $query)
     {
         return $query->where('is_hidden', 0);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnline() : bool
+    {
+        return $this->active_at > Carbon::now()->subMinutes(60);
     }
 }

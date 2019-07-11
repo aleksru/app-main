@@ -25,9 +25,12 @@
               <li>Товары: Количество-Артикул-Название-ЦенаЗаШт</li>
           </ul>
         </div>
+
         <div class="alert">
             @include('front.widgets.delivery_periods_widget')
+            @include('front.widgets.state_stores_widget')
         </div>
+
         <div class="box-header">
             <a href="{{route('orders.create')}}" target="_blank"><button class="btn btn-sm btn-primary pull-right">
                     <i class="fa fa-plus"></i> Новый заказ

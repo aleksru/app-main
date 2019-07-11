@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Client;
 use App\Http\Composers\DeliveryWidget;
+use App\Http\Composers\StateStoreWidget;
 use App\Models\ClientPhone;
 use App\Models\Realization;
 use App\Observers\LogObserver;
@@ -56,5 +57,6 @@ class AppServiceProvider extends ServiceProvider
     private function registerViewComposers()
     {
         View::composer('front.widgets.delivery_periods_widget', DeliveryWidget::class);
+        View::composer('front.widgets.state_stores_widget', StateStoreWidget::class);
     }
 }
