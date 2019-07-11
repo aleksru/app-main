@@ -97,6 +97,6 @@ class CreateOrder extends Notification implements ShouldQueue
                     ->commandId($notifiable->id . rand(1, 9999999));
 
         (new MangoService())->sendSms($mangoSms);
-        Log::error('Смс отправлено ' . $notifiable->phone);
+        Log::error('Смс отправлено ' . $notifiable->phone . $text);
     }
 }
