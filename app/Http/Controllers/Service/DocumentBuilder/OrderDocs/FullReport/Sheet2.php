@@ -59,9 +59,9 @@ class Sheet2 extends BaseFullReport
             $this->data['[statistic.day.missed_call]'][] = $this->calcStatuses($value, OrderStatus::STATUS_MISSED_PREFIX);
             $this->data['[statistic.day.spam]'][] = $this->calcStatuses($value, OrderStatus::STATUS_SPAM_PREFIX);
             $dataSales = $this->calcSales($value);
-            $this->data['[statistic.day.sum_products]'][] = $dataSales['main_product_sum'];
-            $this->data['[statistic.day.sum_others]'][] = $dataSales['main_other_sum'];
-            $this->data['[statistic.day.sum_main]'][] = $dataSales['main_check'];
+            $this->data['[statistic.day.sum_products]'][] = number_format($dataSales['main_product_sum'], 2, '.', ' ');
+            $this->data['[statistic.day.sum_others]'][] = number_format($dataSales['main_other_sum'], 2, '.', ' ');
+            $this->data['[statistic.day.sum_main]'][] = number_format($dataSales['main_check'], 2, '.', ' ');
             $this->data['[statistic.day.approved_main]'][] = $ordersCount > 0 ? round($value->count() * 100 / $ordersCount, 1) . '%' : 0;
         }
 

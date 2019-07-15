@@ -52,10 +52,10 @@ class Sheet5 extends BaseFullReport
             $this->data['[resources.denials]'][] = $this->calcStatuses($store->orders, OrderStatus::STATUS_DENIAL_PREFIX);
             $this->data['[resources.spam]'][] = $this->calcStatuses($store->orders, OrderStatus::STATUS_SPAM_PREFIX);
             $sales = $this->calcSales($store->orders);
-            $this->data['[resources.avg_check]'][] = $sales['avg_check'];
-            $this->data['[resources.product_sum]'][] = $sales['main_product_sum'];
-            $this->data['[resources.other_sum]'][] = $sales['main_other_sum'];
-            $this->data['[resources.main_sum]'][] = $sales['main_check'];
+            $this->data['[resources.avg_check]'][] = number_format($sales['avg_check'], 2, '.', ' ');
+            $this->data['[resources.product_sum]'][] = number_format($sales['main_product_sum'], 2, '.', ' ');
+            $this->data['[resources.other_sum]'][] = number_format($sales['main_other_sum'], 2, '.', ' ');
+            $this->data['[resources.main_sum]'][] = number_format($sales['main_check'], 2, '.', ' ');
             $this->data['[resources.approved_main]'][] = $ordersCount > 0 ? round($store->orders->count() * 100 / $ordersCount, 1) . '%' : 0;
         });
 

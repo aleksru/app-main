@@ -63,10 +63,10 @@ class Sheet1 extends BaseFullReport
                 return ($item->call_end_time - $item->call_create_time * 10) / 60;
             })->avg(), 1);
             $dataSales = $this->calcSales($value->orders);
-            $this->data['[operators.avg_check]'][] = $dataSales['avg_check'];
-            $this->data['[operators.main_check]'][] = $dataSales['main_check'];
-            $this->data['[operators.main_product_sum]'][] = $dataSales['main_product_sum'];
-            $this->data['[operators.main_other_sum]'][] = $dataSales['main_other_sum'];
+            $this->data['[operators.avg_check]'][] = number_format($dataSales['avg_check'], 2, '.', ' ');
+            $this->data['[operators.main_check]'][] = number_format($dataSales['main_check'], 2, '.', ' ');
+            $this->data['[operators.main_product_sum]'][] = number_format($dataSales['main_product_sum'], 2, '.', ' ');
+            $this->data['[operators.main_other_sum]'][] = number_format($dataSales['main_other_sum'], 2, '.', ' ');
         });
 
         return $this->data;
