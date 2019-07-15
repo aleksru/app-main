@@ -7,6 +7,7 @@ use App\ClientCall;
 use App\Enums\MangoCallEnums;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClientCallController extends Controller
 {
@@ -36,36 +37,43 @@ class ClientCallController extends Controller
             }
         }
 
-        if(isset($searchParams['fnm_max'])) {
-            $toDate = Carbon::parse($searchParams['fnm_max']);
+        if(isset($searchParams['fca'])) {
+            $toDate = Carbon::parse($searchParams['fca']);
         }
 
         $successCallsQuery = ClientCall::query()
-            ->selectRaw('from_number as fns, created_at as fnsca')
+            ->selectRaw('from_number as s_from_number, max(created_at) as sca')
             ->where('status_call', MangoCallEnums::CALL_RESULT_SUCCESS)
-            ->whereDate('created_at', $toDate);
-
-
-        $missedCallsQuery = ClientCall::query()->with('client:id,name', 'store:id,name')
-            ->selectRaw('from_number, MAX(created_at) as fnm_max, MAX(success.fnsca) as max_ca_suc, client_id, store_id')
-            ->leftJoinSub($successCallsQuery, 'success', function($join) {
-                $join->on('client_calls.from_number', '=', 'success.fns');
-            })
-            ->where('client_calls.status_call', MangoCallEnums::CALL_RESULT_MISSED)
-            ->where('client_calls.type', ClientCall::incomingCall)
             ->whereDate('created_at', $toDate)
-            ->groupBy('client_calls.from_number', 'client_calls.client_id', 'client_calls.store_id')
-            ->havingRaw('fnm_max > IFNULL(max_ca_suc, 0)');
+            ->groupBy('from_number');
 
-        return datatables()->of($missedCallsQuery)
-                ->editColumn('client_id', function(ClientCall $clientCall){
+        $sql = DB::query()
+            ->selectRaw('failed.from_number, failed.client_id, stores.`name` as store_name, clients.`name` as client_name, failed.fca')
+            ->fromSub(function ($query) use ($toDate){
+                $query->from('client_calls')
+                    ->selectRaw('from_number, max(client_id) as client_id, max(store_id) as store_id, max(created_at) as fca')
+                    ->where('status_call', MangoCallEnums::CALL_RESULT_MISSED)
+                    ->where('type', ClientCall::incomingCall)
+                    ->whereDate('created_at', $toDate)
+                    ->groupBy('from_number');
+            }, 'failed')
+            ->leftJoinSub($successCallsQuery, 'success', function($join) {
+                $join->on('failed.from_number', '=', 'success.s_from_number');
+            })
+            ->leftJoin('clients', 'failed.client_id', '=', 'clients.id')
+            ->leftJoin('stores', 'failed.store_id', '=', 'stores.id')
+            ->whereRaw('failed.fca > IFNULL(success.sca, 0)');
+
+
+        return datatables()->of($sql)
+                ->editColumn('client_id', function($clientCall){
                     return view('datatable.customer', [
                         'route' => route('clients.show', $clientCall->client_id),
-                        'name_customer' => $clientCall->clientName ?? 'Не указано'
+                        'name_customer' => $clientCall->client_name ?? 'Не указано'
                     ]);
                 })
-                ->editColumn('store_id', function(ClientCall $clientCall){
-                    return $clientCall->store ? $clientCall->store->name : '';
+                ->editColumn('store_id', function($clientCall){
+                    return $clientCall->store_name ?? 'Не найден';
                 })
                 ->filterColumn('store_id', function ($query, $keyword) {
                     if (preg_match('/[0-9]/', $keyword)){

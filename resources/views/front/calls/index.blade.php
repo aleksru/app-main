@@ -41,7 +41,7 @@
                     'width' => '10%',
                     'searchable' => true,
                 ],
-                'fnm_max' => [
+                'fca' => [
                     'name' => 'Время',
                     'width' => '10%',
                 ],
@@ -75,7 +75,7 @@
      * Столбцы поиска
      */
     let individualSearchingColumnsInput = {
-        fnm_max: {type: 'date'},
+        fca: {type: 'date'},
     };
 
     let individualSearchingColumnsSelect = {
