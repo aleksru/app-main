@@ -60,7 +60,7 @@
     $(function () {
         setInterval( function () {
             $('#calls-table').DataTable().ajax.reload(null, false);
-        }, 7000 );
+        }, 5000 );
     });
 
     /**
