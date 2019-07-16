@@ -74,6 +74,24 @@
             exchangeData.dateTo = inputDateTo.val();
             table.draw();
         });
+
+        $('#{{$tableName}}').on( 'draw.dt', function () {
+            table.columns('.sum').every(function () {
+                let sum = this.data().reduce(function (a, b) {
+                    if(typeof a === "string"){
+                       a =  a.replace(/\s+/g, '');
+                    }
+                    if(typeof b === "string"){
+                        b =  b.replace(/\s+/g, '');
+                    }
+
+                    let x = parseInt(a) || 0;
+                    let y = parseInt(b) || 0;
+                    return x + y;
+                }, 0);
+                $(this.footer()).html(sum.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
+            });
+        } );
     });
 </script>
 @endpush

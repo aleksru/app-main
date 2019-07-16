@@ -57,6 +57,9 @@
                         data: '{{ $name }}', 
                         name: '{{ $name }}', 
                         width: '{{ $column['width'] ?? '' }}',
+                        @if(isset($column['className']))
+                            className: '{{$column['className']}}'
+                        @endif
                     },
                     @endforeach
                 ],
