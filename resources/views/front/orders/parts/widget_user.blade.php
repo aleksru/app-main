@@ -13,7 +13,7 @@
             <label for="name" class="col-sm-2 control-label">Имя</label>
 
             <div class="col-sm-10">
-                <input type="text" class="form-control"  value="{{ $client->name ?? '' }}" name="name">
+                <input type="text" class="form-control"  value="{{ $client->name ?? 'Не указано' }}" name="name">
             </div>
         </div>
         <div class="form-group">
