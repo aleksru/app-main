@@ -21,7 +21,12 @@
         </div>
     @endif
     <div class="box-header">
-
+        <div class="col-md-2">
+            <button id="btn_activate_call_center" type="button" class="btn btn-block btn-default" disabled>Коллцентр</button>
+        </div>
+        <div class="col-md-2">
+            <button id="btn_activated_complaint" type="button" class="btn btn-block btn-default">Рекламации</button>
+        </div>
     </div>
     <div class="col-md-12">
         @include('datatable.datatable',[
@@ -53,11 +58,10 @@
 
 @push('scripts')
 <script>
-
-    /**
-     *обновление таблицы
-     */
     $(function () {
+        /**
+         *обновление таблицы
+         */
         setInterval( function () {
             $('#calls-table').DataTable().ajax.reload(null, false);
         }, 5000 );
@@ -111,6 +115,21 @@
                     column.search($(this).val()).draw(), tableOrders.settings()[0].searchDelay;
                 });
             }
+        });
+
+
+        $('#btn_activate_call_center').click(function () {
+            $('#btn_activated_complaint').attr("disabled", false);
+            this.disabled = ! this.disabled;
+            exchangeData.isComplaint = false;
+            tableOrders.draw();
+        });
+
+        $('#btn_activated_complaint').click(function () {
+            $('#btn_activate_call_center').attr("disabled", false);
+            this.disabled = ! this.disabled;
+            exchangeData.isComplaint = true;
+            tableOrders.draw();
         });
 
         $('tfoot').find('select').css('width', '80%').css('min-height', '32px');

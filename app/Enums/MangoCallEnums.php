@@ -28,4 +28,7 @@ class MangoCallEnums
 
     //звонок пропущен, разговор не состоялся
     const CALL_RESULT_MISSED   = 0;
+
+    //Группа дозвона рекламаций
+    const CALL_GROUP_COMPLAINT = 666;
 }

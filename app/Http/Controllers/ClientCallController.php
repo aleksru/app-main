@@ -30,6 +30,7 @@ class ClientCallController extends Controller
         $requestParams = $request->get('columns');
         $searchParams = [];
         $toDate = Carbon::today();
+        $isComplaint = $request->get('isComplaint') == 'true' ? true : false;
 
         foreach($requestParams as $requestParam) {
             if ($requestParam['search']['value']) {
@@ -49,11 +50,12 @@ class ClientCallController extends Controller
 
         $sql = DB::query()
             ->selectRaw('failed.from_number, failed.client_id, stores.`name` as store_name, clients.`name` as client_name, failed.fca')
-            ->fromSub(function ($query) use ($toDate){
+            ->fromSub(function ($query) use ($toDate, $isComplaint){
                 $query->from('client_calls')
                     ->selectRaw('from_number, max(client_id) as client_id, max(store_id) as store_id, max(created_at) as fca')
                     ->where('status_call', MangoCallEnums::CALL_RESULT_MISSED)
                     ->where('type', ClientCall::incomingCall)
+                    ->whereRaw('IFNULL(extension, 0) ' . ($isComplaint ? '= ' : '!= ') .  MangoCallEnums::CALL_GROUP_COMPLAINT)
                     ->whereDate('created_at', $toDate)
                     ->groupBy('from_number');
             }, 'failed')
