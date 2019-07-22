@@ -138,6 +138,7 @@ class ApiMangoController extends Controller
                             $lastCall = ClientCall::getCallByHash(ClientCall::makeHash([$data['from']['number'], $data['create_time']]))){
                     $lastCall->status_call = $data['entry_result'];
                     $lastCall->call_end_time = $data['end_time'] ?? null;
+                    $lastCall->extension = $data['extension'] ?? null;
                     $lastCall->save();
                 }else {
                     //Log::error(['пропущенный', $data]);
@@ -153,7 +154,8 @@ class ApiMangoController extends Controller
                         'call_end_time' => $data['end_time'],
                         'client_id' => $client->id ?? null,
                         'status_call' => $data['entry_result'],
-                        'store_id' => $store->id ?? null
+                        'store_id' => $store->id ?? null,
+                        'extension' => $data['extension'] ?? null
                     ]);
                 }
             }
@@ -167,6 +169,7 @@ class ApiMangoController extends Controller
                     $clientCall->operator_text = $data['to']['number'] ?? null;
                     $clientCall->operator_id = $getOperator ? $getOperator->id : null;
                     $clientCall->status_call = $data['entry_result'];
+                    $clientCall->extension = $data['extension'] ?? null;
                     $clientCall->save();
                 }else{
                     //Log::error(['успешный', $data]);
@@ -185,6 +188,7 @@ class ApiMangoController extends Controller
                         'store_id' => $store->id ?? null,
                         'operator_id' => $getOperator ? $getOperator->id : null,
                         'operator_text' => $data['to']['number'] ?? null,
+                        'extension' => $data['extension'] ?? null,
                     ]);
                 }
             }
