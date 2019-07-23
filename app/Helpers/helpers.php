@@ -9,12 +9,11 @@ if (! function_exists('get_class_colors')) {
     function get_class_colors()
     {
         return [
-            'default',
-            'primary',
-            'success',
-            'info',
-            'danger',
-            'warning',
+            'light-blue',
+            'green',
+            'aqua',
+            'red',
+            'yellow',
             'gray',
             'navy',
             'teal',
