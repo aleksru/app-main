@@ -158,7 +158,7 @@ class OrdersDatatable
             })
             ->setRowClass(function (Order $order) {
                 $class = 'row-link';
-                $class = $class . ($order->status ? ' label-' . $order->status->color : ' label-success');
+                $class = $class . ($order->status ? ' bg-' . $order->status->color : ' bg-success');
 
                 return $class;
             })

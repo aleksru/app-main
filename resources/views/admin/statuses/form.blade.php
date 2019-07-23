@@ -61,11 +61,11 @@
                     <div class="col-sm-10">
                         <select class="form-control" name="color">
                             <option value="{{ old('color', $status->color ?? '') }}"
-                                    class="btn btn-{{ old('color', $status->color ?? '') }}"
+                                    class="bg-{{ old('color', $status->color ?? '') }}"
                                     selected>{{ old('color', $status->color ?? '') }}
                             </option>
                             @foreach(get_class_colors() as $color)
-                                <option value="{{ $color }}" class="btn btn-{{$color}}">{{$color}}</option>
+                                <option value="{{ $color }}" class="bg-{{$color}}">{{$color}}</option>
                             @endforeach
                         </select>
                     </div>

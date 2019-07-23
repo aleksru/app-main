@@ -43,7 +43,7 @@ class ClientCallController extends Controller
         }
 
         $successCallsQuery = ClientCall::query()
-            ->selectRaw('from_number as s_from_number, max(created_at) as sca')
+            ->selectRaw('from_number as s_from_number, max(call_end_time) as sca')
             ->where('status_call', MangoCallEnums::CALL_RESULT_SUCCESS)
             ->whereDate('created_at', $toDate)
             ->groupBy('from_number');
@@ -52,7 +52,7 @@ class ClientCallController extends Controller
             ->selectRaw('failed.from_number, failed.client_id, stores.`name` as store_name, clients.`name` as client_name, failed.fca')
             ->fromSub(function ($query) use ($toDate, $isComplaint){
                 $query->from('client_calls')
-                    ->selectRaw('from_number, max(client_id) as client_id, max(store_id) as store_id, max(created_at) as fca')
+                    ->selectRaw('from_number, max(client_id) as client_id, max(store_id) as store_id, max(call_end_time) as fca')
                     ->where('status_call', MangoCallEnums::CALL_RESULT_MISSED)
                     ->where('type', ClientCall::incomingCall)
                     ->whereRaw('IFNULL(extension, 0) ' . ($isComplaint ? '= ' : '!= ') .  MangoCallEnums::CALL_GROUP_COMPLAINT)
@@ -76,6 +76,9 @@ class ClientCallController extends Controller
                 })
                 ->editColumn('store_id', function($clientCall){
                     return $clientCall->store_name ?? 'Не найден';
+                })
+                ->editColumn('fca', function($clientCall){
+                    return Carbon::createFromTimestamp($clientCall->fca)->format('d.m.Y H:i:s');
                 })
                 ->filterColumn('store_id', function ($query, $keyword) {
                     if (preg_match('/[0-9]/', $keyword)){

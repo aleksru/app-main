@@ -23,22 +23,6 @@ class ClientCall extends Model
      */
     const outgoingCall = 'OUTGOING';
 
-
-    /**
-     * Получает записывает хэш
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($clientCall) {
-            $clientCall->hash = self::makeHash([
-                $clientCall->from_number,
-                $clientCall->call_create_time,
-            ]);
-        });
-    }
-
     /**
      * Получение клиента
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

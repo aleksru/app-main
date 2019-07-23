@@ -44,13 +44,13 @@ class Client extends Model
     /**
      * Оставляем только цифры в номере телефона
      *
-     * @param  string  $value
+     * @param  string $value
      * @return void
      */
     public function setPhoneAttribute($value)
     {
         $value = preg_replace('/[^0-9]/', '', $value);
-        if(strlen($value) === 10){
+        if (strlen($value) === 10) {
             $value = '7' . $value;
         }
         $this->attributes['phone'] = substr_replace($value, '7', 0, 1);
@@ -63,7 +63,7 @@ class Client extends Model
     public static function preparePhone($value)
     {
         $value = preg_replace('/[^0-9]/', '', $value);
-        if(strlen($value) === 10){
+        if (strlen($value) === 10) {
             $value = '7' . $value;
         }
 
@@ -109,8 +109,8 @@ class Client extends Model
     {
         $phones = '';
 
-        $this->additionalPhones->each(function ($item, $key) use (&$phones){
-            $phones = $phones.' '.$item->phone;
+        $this->additionalPhones->each(function ($item, $key) use (&$phones) {
+            $phones = $phones . ' ' . $item->phone;
         });
 
         return $phones;
@@ -127,11 +127,20 @@ class Client extends Model
         $phone = self::preparePhone($phone);
         $client = Client::getOnPhone($phone)->first();
 
-        if(!$client) {
+        if (!$client) {
             $client = ClientPhone::findByPhone($phone)->first();
             $client ? $client = $client->client : null;
         }
 
         return $client;
+    }
+
+    /**
+     * @param int $statusId
+     * @return int
+     */
+    public function getOrdersCountForStatus(int $statusId) : int
+    {
+        return $this->orders()->where('status_id', $statusId)->count();
     }
 }

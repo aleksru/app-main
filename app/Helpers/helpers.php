@@ -14,7 +14,13 @@ if (! function_exists('get_class_colors')) {
             'success',
             'info',
             'danger',
-            'warning'
+            'warning',
+            'gray',
+            'navy',
+            'teal',
+            'purple',
+            'orange',
+            'maroon'
         ];
     }
 }
