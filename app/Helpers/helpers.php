@@ -19,7 +19,10 @@ if (! function_exists('get_class_colors')) {
             'teal',
             'purple',
             'orange',
-            'maroon'
+            'maroon',
+            'green-active',
+            'orange-active',
+            'yellow-active'
         ];
     }
 }
