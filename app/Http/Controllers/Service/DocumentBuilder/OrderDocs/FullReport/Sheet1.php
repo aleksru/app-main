@@ -57,10 +57,10 @@ class Sheet1 extends BaseFullReport
             $this->data['[operators.garbage]'][] = $this->calcStatuses($value->orders, OrderStatus::STATUS_SPAM_PREFIX);
             $this->data['[operators.count_calls]'][] = $value->calls->count();
             $this->data['[operators.count_time_calls]'][] = $value->calls->map(function($item) {
-                return round(($item->call_end_time - $item->call_create_time), 1);
+                return round(($item->call_end_time - $item->call_create_time) / 60, 1);
             })->sum();
             $this->data['[operators.count_avg_calls]'][] = round($value->calls->map(function($item) {
-                return ($item->call_end_time - $item->call_create_time);
+                return ($item->call_end_time - $item->call_create_time) / 60;
             })->avg(), 1);
             $dataSales = $this->calcSales($value->orders);
             $this->data['[operators.avg_check]'][] = number_format($dataSales['avg_check'], 2, '.', ' ');
