@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport;
 
 use App\Models\Operator;
 use App\Models\OrderStatus;
+use App\Repositories\CallsRepository;
 
 class Sheet1 extends BaseFullReport
 {
@@ -27,7 +28,8 @@ class Sheet1 extends BaseFullReport
         '[operators.main_other_sum]' => [],
         '[operators.count_calls]' => [],
         '[operators.count_time_calls]' => [],
-        '[operators.count_avg_calls]' => []
+        '[operators.count_avg_calls]' => [],
+        '[operators.avg_call_back]' => [],
     ];
 
     /**
@@ -46,8 +48,11 @@ class Sheet1 extends BaseFullReport
                     ->whereDate('created_at', '<=', $this->dateEnd->toDateString());
             }
         ])->get();
-
-        $operators->each(function($value){
+        $callBacks = app(CallsRepository::class)->getMissedCallBacksInTime($this->dateStart, $this->dateEnd);
+        $operators->each(function(Operator $value) use ($callBacks) {
+            $avgCallBacksSec = $callBacks->reject(function ($item, $key) use($value) {
+                return $item->operator_id_outgoing != $value->id;
+            })->avg('sub');
             $this->data['[operators.name]'][]= $value->name;
             $this->data['[operators.count_lid]'][]= $value->orders->count();
             $this->data['[operators.confirmation_1]'][] = $this->calcStatuses($value->orders, OrderStatus::STATUS_CONFIRM_PREFIX);
@@ -67,6 +72,7 @@ class Sheet1 extends BaseFullReport
             $this->data['[operators.main_check]'][] = number_format($dataSales['main_check'], 2, '.', ' ');
             $this->data['[operators.main_product_sum]'][] = number_format($dataSales['main_product_sum'], 2, '.', ' ');
             $this->data['[operators.main_other_sum]'][] = number_format($dataSales['main_other_sum'], 2, '.', ' ');
+            $this->data['[operators.avg_call_back]'][] = round($avgCallBacksSec / 60, 2);
         });
 
         return $this->data;

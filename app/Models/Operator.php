@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\ClientCall;
 use App\Order;
+use App\Repositories\CallsRepository;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Operator extends Model
@@ -39,5 +41,15 @@ class Operator extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function getCallBacksForDate(Carbon $dateFrom, ?Carbon $dateTo = null)
+    {
+        $calls = app(CallsRepository::class)->getMissedCallBacksInTime($dateFrom, $dateTo);
+        $calls = $calls->reject(function ($value, $key) {
+            return $value->operator_id_outgoing != $this->id;
+        });
+
+        return $calls;
     }
 }

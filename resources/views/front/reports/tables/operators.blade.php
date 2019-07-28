@@ -21,6 +21,11 @@
              'width' => '5%',
              'className' => 'sum'
          ],
+        '[operators.avg_call_back]' => [
+             'name' => 'Ср вр перезвона(min)',
+             'width' => '5%',
+             //'className' => 'sum'
+         ],
         '[operators.missedcall]' => [
              'name' => 'Недозвоны',
              'width' => '5%',
