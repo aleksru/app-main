@@ -10,6 +10,7 @@ use App\Store;
 use Illuminate\Http\Request;
 use App\Http\Requests\ApiSetOrderRequest;
 use App\Order;
+use Illuminate\Support\Facades\Log;
 
 class ApiOrdersController extends Controller
 {
@@ -22,6 +23,7 @@ class ApiOrdersController extends Controller
     public function api(ApiSetOrderRequest $req)
     {
         $data = $req->validated();
+        Log::error($data);
         $data['products_text'] = json_decode($req->products, true);
         $data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
 
