@@ -10,6 +10,7 @@ use App\Models\OrderStatus;
 use App\Order;
 use App\Product;
 use App\Store;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -21,6 +22,7 @@ class OrderController extends Controller
     public function create(CreateOrderRequest $createOrderRequest)
     {
         $data = $createOrderRequest->validated();
+        Log::error($data);
         $data['products_text'] = json_decode($createOrderRequest->products, true);
         //$data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
         $customer = Client::getClientByPhone($data['phone']);
