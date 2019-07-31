@@ -166,7 +166,6 @@
      */
     let individualSearchingColumnsInput = {
         phone: {type: 'text'},
-        additional_phones: {type: 'text'},
         name_customer: {type: 'text'},
         created_at: {type: 'date'},
         id: {type: 'text'},

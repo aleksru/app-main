@@ -50,17 +50,21 @@ class OrdersDatatable
                 'client.additionalPhones',
                 'courier',
                 'operator',
+                'products',
                 'realizations:order_id,product_id')
                 ->selectRaw('orders.*')
                 ->selectRaw('c.phone as phone')
                 ->selectRaw('c.name as name_customer')
                 ->selectRaw('o_status.status as status_text')
                 ->join('clients as c', 'client_id', '=', 'c.id')
-                ->leftJoin('order_statuses as o_status', 'status_id', '=', 'o_status.id'))
+                ->leftJoin('order_statuses as o_status', 'status_id', '=', 'o_status.id')
+                ->leftJoin('client_phones as additional_phones', 'orders.client_id', '=', 'additional_phones.client_id')
+        )
 
             ->filterColumn('phone', function ($query, $keyword) {
                 if (preg_match('/[0-9]{4,}/', $keyword)){
-                    return $query->whereRaw('c.phone like ?', "%{$keyword}%");
+                    return $query->whereRaw('c.phone like ?', "%{$keyword}%")
+                                ->OrWhereRaw('additional_phones.phone like ?', "%{$keyword}%");
                 }
             })
             ->filterColumn('store_text', function ($query, $keyword) {
@@ -93,13 +97,6 @@ class OrdersDatatable
                     return $query->whereDate('orders.created_at', $keyword);
                 }
             })
-            ->filterColumn('additional_phones', function ($query, $keyword) {
-                if (preg_match('/[0-9]{4,}/', $keyword)) {
-                    $clientPhones = ClientPhone::where('phone', 'LIKE', "%{$keyword}%")->pluck('client_id');
-
-                    return $query->whereIn('orders.client_id', $clientPhones);
-                }
-            })
             ->filterColumn('name_customer', function ($query, $keyword) {
                 if (preg_match('/[A-Za-zА-Яа-я]{3,}/', $keyword)) {
                     return $query->whereRaw('LOWER(c.name) like ?', "%{$keyword}%");
@@ -128,9 +125,7 @@ class OrdersDatatable
                 ]);
             })
             ->editColumn('products', function (Order $order) {
-                if(!$order->realizations->isEmpty()){
-                    $products = Product::find($order->realizations->pluck('product_id'))->pluck('product_name')->toArray();
-                }
+                $products = $order->products->pluck('product_name')->toArray();
                 return !empty($products) ? implode(', ', $products) :
                     view('datatable.products', [
                         'products' => $order->products_text ?? [],
