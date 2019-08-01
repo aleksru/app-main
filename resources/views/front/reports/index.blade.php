@@ -43,7 +43,8 @@
                         <div class="col-md-2">
                             <label></label>
                             <button type="submit" class="btn btn-primary form-control" id="btn-result">
-                                Вывести
+                                <p>Вывести</p>
+                                <img src="/images/preloader3.gif" style="display: none">
                             </button>
                         </div>
                         <div class="col-md-2">
@@ -72,8 +73,19 @@
             e.preventDefault();
             exchangeData.dateFrom = inputDateFrom.val();
             exchangeData.dateTo = inputDateTo.val();
+            togglePreloader();
             table.draw();
         });
+
+        function togglePreloader() {
+            $('#btn-result p').toggle();
+            $('#btn-result img').toggle();
+            $('#btn-result').prop('disabled', ! $('#btn-result').prop('disabled'));
+        }
+
+        $('#{{$tableName}}').on( 'xhr.dt', function () {
+            togglePreloader();
+        } );
 
         $('#{{$tableName}}').on( 'draw.dt', function () {
             table.columns('.sum').every(function () {
@@ -91,7 +103,9 @@
                 }, 0);
                 $(this.footer()).html(sum.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
             });
+
         } );
     });
+
 </script>
 @endpush
