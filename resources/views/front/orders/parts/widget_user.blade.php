@@ -62,8 +62,8 @@
                     <span>Заказы</span>
                     <span class="label label-success">{{ $client->orders()->count() ?? 0 }}</span>
                 </div>
-                <div class="col-sm-8" style="font-size: 10px;">
-                    @include('front.client.parts.client_orders_table', [ 'orders' => $client->orders->take(5) ])
+                <div class="col-sm-8" style="font-size: 10px;overflow: scroll; max-height: 250px">
+                    @include('front.client.parts.client_orders_table', [ 'orders' => $client->orders ])
                 </div>
             </div>
         @endif
