@@ -77,7 +77,12 @@ class OrderController extends Controller
         $logisticStatuses = OtherStatus::typeLogisticStatuses()->get();
 
         return view('front.orders.form', [
-            'order' => $order->load('client', 'realizations.product:id,product_name', 'realizations.supplier'),
+                'order' => $order->load(['client.orders' => function($query){
+                    $query->orderBy('id', 'DESC');
+                },
+                'realizations.product:id,product_name',
+                'realizations.supplier'
+            ]),
             'operator' => $order->operator,
             'subStatuses' => $subStatuses,
             'stockStatuses' => $stockStatuses,

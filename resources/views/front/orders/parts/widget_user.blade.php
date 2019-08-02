@@ -54,26 +54,19 @@
 
         @if (isset($client))
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">Звонки</label>
-
                 <div class="col-sm-2">
-                    <span class="pull-left badge bg-aqua">{{ $client->calls()->count() ?? 0 }}</span>
+                    <span>Звонки</span>
+                    <span class="label label-success">{{ $client->calls()->count() ?? 0 }}</span>
                 </div>
-
-                <label for="name" class="col-sm-2 control-label">Заказы</label>
-
                 <div class="col-sm-2">
-                    <span class="pull-left badge bg-green">{{ $client->orders()->count() ?? 0 }}</span>
+                    <span>Заказы</span>
+                    <span class="label label-success">{{ $client->orders()->count() ?? 0 }}</span>
+                </div>
+                <div class="col-sm-8" style="font-size: 10px;">
+                    @include('front.client.parts.client_orders_table', [ 'orders' => $client->orders->take(5) ])
                 </div>
             </div>
         @endif
-
-        {{--<div class="col-sm-12">--}}
-            {{--<button form="user-form" type="submit" class="btn btn-primary pull-right">--}}
-                {{--<i class="fa fa-save"></i> Сохранить--}}
-            {{--</button>--}}
-
-        {{--</div>--}}
     </form>
     </div>
 </div>

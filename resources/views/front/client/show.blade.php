@@ -28,14 +28,7 @@
                 </div>
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="timeline">
-                    <ul class="list-group">
-                        @foreach($client->orders as $order)
-                            <li class="list-group-item">
-                                <strong>ID:</strong><a href=" {{ route('orders.edit', $order->id) }}"> {{ $order->id }} </a>
-                                <strong>Дата:</strong> {{ $order->created_at }}
-                            </li>
-                        @endforeach
-                    </ul>
+                    @include('front.client.parts.client_orders_table', ['orders' => $client->orders])
                 </div>
                 <!-- /.tab-pane -->
 
