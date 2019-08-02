@@ -94,6 +94,7 @@
                         <li><a href="{{ route('admin.delivery-types.index') }}"><i class="fa fa-car" aria-hidden="true"></i> <span>Типы доставки</span> </a></li>
                         <li><a href="{{ route('admin.stock.index') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Склад</span> </a></li>
                         <li><a href="{{ route('admin.logists.index') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Логисты</span> </a></li>
+                        <li><a href="{{ route('admin.cities.index') }}"><i class="fa fa-map-o" aria-hidden="true"></i> <span>Города</span> </a></li>
                     </ul>
                 </li>
             </ul>
