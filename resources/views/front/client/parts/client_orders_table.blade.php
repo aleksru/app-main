@@ -8,13 +8,15 @@
                         <td>Статус</td>
                         <td>Создан</td>
                         <td>Обновлен</td>
+                        <td>Источник</td>
                     </tr>
                     @foreach($orders as $order)
                         <tr>
                             <td><a href=" {{ route('orders.edit', $order->id) }}" target="_blank"> {{ $order->id }}</a></td>
-                            <td>{{ $order->status ? $order->status->status : '' }}</td>
+                            <td>{{ $order->status->status ?? '' }}</td>
                             <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
                             <td>{{ $order->updated_at->format('d.m.Y H:i') }}</td>
+                            <td>{{ $order->store->name ?? '' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
