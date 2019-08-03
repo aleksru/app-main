@@ -52,16 +52,16 @@ class OrdersDatatable
                 'operator',
                 'products',
                 'realizations:order_id,product_id')
-                ->selectRaw('orders.*, c.phone as phone, c.name as name_customer, o_status.status as status_text')
+                ->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
                 ->join('clients as c', 'client_id', '=', 'c.id')
-                ->leftJoin('order_statuses as o_status', 'status_id', '=', 'o_status.id')
-                ->leftJoin('client_phones as additional_phones', 'orders.client_id', '=', 'additional_phones.client_id')
+
         )
 
             ->filterColumn('phone', function ($query, $keyword) {
                 if (preg_match('/[0-9]{4,}/', $keyword)){
+                    $this->orderQuery->leftJoin('client_phones', 'orders.client_id', '=', 'client_phones.client_id');
                     return $query->whereRaw('c.phone like ?', "%{$keyword}%")
-                                ->OrWhereRaw('additional_phones.phone like ?', "%{$keyword}%");
+                                ->OrWhereRaw('client_phones.phone like ?', "%{$keyword}%");
                 }
             })
             ->filterColumn('store_text', function ($query, $keyword) {
