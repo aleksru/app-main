@@ -52,12 +52,13 @@ class OrdersDatatable
                 'operator',
                 'products',
                 'realizations:order_id,product_id')
-                ->selectRaw('orders.*, c.phone as phone, GROUP_CONCAT(additional_phones.phone) as additional_phones, 
-                            c.name as name_customer, o_status.status as status_text')
+                ->selectRaw('orders.*')
+                ->selectRaw('c.phone as phone')
+                ->selectRaw('c.name as name_customer')
+                ->selectRaw('o_status.status as status_text')
                 ->join('clients as c', 'client_id', '=', 'c.id')
                 ->leftJoin('order_statuses as o_status', 'status_id', '=', 'o_status.id')
                 ->leftJoin('client_phones as additional_phones', 'orders.client_id', '=', 'additional_phones.client_id')
-                ->groupBy('orders.id')
         )
 
             ->filterColumn('phone', function ($query, $keyword) {
