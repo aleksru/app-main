@@ -56,7 +56,6 @@ class OrdersDatatable
                 ->join('clients as c', 'client_id', '=', 'c.id')
                 ->leftJoin('order_statuses as o_status', 'status_id', '=', 'o_status.id')
                 ->leftJoin('client_phones as additional_phones', 'orders.client_id', '=', 'additional_phones.client_id')
-                ->groupBy('orders.id')
         )
 
             ->filterColumn('phone', function ($query, $keyword) {
