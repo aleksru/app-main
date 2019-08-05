@@ -111,7 +111,7 @@ class Order extends Model
      */
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'realizations');
+        return $this->belongsToMany(Product::class, 'realizations')->wherePivot('deleted_at', null);
     }
 
     /**
