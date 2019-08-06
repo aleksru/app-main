@@ -31,7 +31,13 @@ class LogistController extends Controller
      */
     public function store(LogistRequest $logistRequest)
     {
-        return redirect()->route('admin.logists.edit', Logist::create($logistRequest->validated())->id)->with(['success' => 'Успешно создан!']);
+        $data = $logistRequest->validated();
+        $cities = isset($data['cities']) ? $data['cities'] : [];
+        unset($data['cities']);
+        $logist = Logist::create($data);
+        $logist->cities()->sync($cities);
+
+        return redirect()->route('admin.logists.edit', $logist->id)->with(['success' => 'Успешно создан!']);
     }
 
     /**
@@ -50,7 +56,11 @@ class LogistController extends Controller
      */
     public function update(LogistRequest $logistRequest, Logist $logist)
     {
-        $logist->update($logistRequest->validated());
+        $data = $logistRequest->validated();
+        $cities = isset($data['cities']) ? $data['cities'] : [];
+        unset($data['cities']);
+        $logist->update($data);
+        $logist->cities()->sync($cities);
 
         return redirect()->route('admin.logists.edit', $logist->id)->with(['success' => 'Успешно обновлен!']);
     }

@@ -169,4 +169,8 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
         Route::get('update-prices/{store}', 'RemoteStoresController@runUpdatePrices')->name('update-prices');
         Route::get('get-state_store/{store}', 'RemoteStoresController@getStateStore')->name('state');
     });
+
+    //Города
+    Route::resource('cities', 'CityController')->except('show');
+    Route::get('cities-table', 'CityController@datatable')->name('cities.datatable');
 });

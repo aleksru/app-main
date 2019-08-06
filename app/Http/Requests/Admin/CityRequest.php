@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
-
 use Illuminate\Foundation\Http\FormRequest;
 
-class LogistRequest extends FormRequest
+class CityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +23,9 @@ class LogistRequest extends FormRequest
      */
     public function rules()
     {
+        $name = $this->route('city') ? ",{$this->route('city')->id},id" : '';
         return [
-            'name' => 'string|required',
-            'cities' => ''
+            'name' => 'string|required|unique:cities,name' . $name,
         ];
     }
 }

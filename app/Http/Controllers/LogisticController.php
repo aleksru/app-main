@@ -13,6 +13,7 @@ use App\Order;
 use App\Repositories\DeliveryPeriodsRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class LogisticController extends Controller
@@ -60,14 +61,18 @@ class LogisticController extends Controller
         $statusIds = Cache::remember('logistics.status.ids', Carbon::now()->addHours(4), function () {
             return OrderStatus::getIdsStatusesForLogistic();
         });
-        $cacheKey =  $request->get('length') . "_" .$request->get('start');
+        $accessCitiesByLogistIds = (Auth::user()->isLogist() && Auth::user()->account) ?
+                                        Auth::user()->account->cities->pluck('id') : collect();
+        $cacheKey =  $request->get('length') . "_" .
+                        $request->get('start') . '_' .
+                            implode('_', $accessCitiesByLogistIds->toArray());
         if($columns[4]['search']['value']) {
             $cacheKey = $cacheKey . '_search_' . $columns[4]['search']['value'];
         }
 
        return Cache::remember('logistics_simple_orders_table_' . $cacheKey,
-                                    Carbon::now()->addSeconds(5), function () use ($statusIds){
-         $orders = Order::with(
+                                    Carbon::now()->addSeconds(5), function () use ($statusIds, $accessCitiesByLogistIds){
+            $orders = Order::with(
                 'status',
                 'store',
                 'client',
@@ -77,46 +82,49 @@ class LogisticController extends Controller
                 'deliveryPeriod',
                 'deliveryType',
                 'operator',
-                'realizations.product')
-                    ->where('updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
-                    ->whereIn('status_id', $statusIds)
-                    ->get();
+                'realizations.product'
+            )->where('updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
+            ->whereIn('status_id', $statusIds);
 
-                $data = (new Report($orders))->prepareData()->getResultsData();
+            if( ! $accessCitiesByLogistIds->isEmpty() ) {
+                $orders->whereIn('city_id', $accessCitiesByLogistIds);
+            }
 
-                usort($data['product'], function ($a, $b){
-                    if ( ! $a['product.is_copy_logist'] && ! $b['product.is_copy_logist'] ) {
-                        return $a['product.order'] <=> $b['product.order'];
+            $data = (new Report($orders->get()))->prepareData()->getResultsData();
+
+            usort($data['product'], function ($a, $b){
+                if ( ! $a['product.is_copy_logist'] && ! $b['product.is_copy_logist'] ) {
+                    return $a['product.order'] <=> $b['product.order'];
+                }
+
+                return ((int)$a['product.is_copy_logist'] <=> (int)$b['product.is_copy_logist']);
+            });
+
+            return datatables()->of($data['product'])
+                ->editColumn('product.nodata', '-')
+                ->editColumn('product.real_denied', '')
+                ->editColumn('product.comment_logist', '')
+                ->editColumn('product.price_opt', function ($value){
+                    return (int)$value['product.price_opt'];
+                })
+                ->editColumn('product.price', function ($value){
+                    return (int)$value['product.price'];
+                })
+                ->editColumn('product.courier_payment', function ($value){
+                    return (int)$value['product.courier_payment'];
+                })
+                ->editColumn('product.profit', function ($value){
+                    return (int)$value['product.profit'];
+                })
+                ->setRowClass(function ($el){
+                    return $el['product.is_copy_logist'] ? 'alert-success' : 'alert-danger';
+                })
+                ->setRowAttr([
+                    'data-realizationid' => function ($el) {
+                        return $el['product.realization_id'];
                     }
-
-                    return ((int)$a['product.is_copy_logist'] <=> (int)$b['product.is_copy_logist']);
-                });
-
-                return datatables()->of($data['product'])
-                    ->editColumn('product.nodata', '-')
-                    ->editColumn('product.real_denied', '')
-                    ->editColumn('product.comment_logist', '')
-                    ->editColumn('product.price_opt', function ($value){
-                        return (int)$value['product.price_opt'];
-                    })
-                    ->editColumn('product.price', function ($value){
-                        return (int)$value['product.price'];
-                    })
-                    ->editColumn('product.courier_payment', function ($value){
-                        return (int)$value['product.courier_payment'];
-                    })
-                    ->editColumn('product.profit', function ($value){
-                        return (int)$value['product.profit'];
-                    })
-                    ->setRowClass(function ($el){
-                        return $el['product.is_copy_logist'] ? 'alert-success' : 'alert-danger';
-                    })
-                    ->setRowAttr([
-                        'data-realizationid' => function ($el) {
-                            return $el['product.realization_id'];
-                        }
-                    ])
-                    ->toJson();
+                ])
+                ->toJson();
         });
     }
 

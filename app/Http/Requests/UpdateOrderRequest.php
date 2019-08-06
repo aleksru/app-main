@@ -27,21 +27,6 @@ class UpdateOrderRequest extends FormRequest
      */
     public function rules()
     {
-        if(Auth::user()->isLogist()) {
-            return [
-                'courier_id' => 'integer|nullable',
-                'status_id' => 'integer|nullable',
-                'logistic_status_id' => 'integer|nullable',
-            ];
-        }
-
-        if(Auth::user()->isStock()) {
-            return [
-                'status_id' => 'integer|nullable',
-                'stock_status_id' => 'integer|nullable',
-            ];
-        }
-
         if(Auth::user()->is_admin) {
             return [
                 'user_id' => 'integer',
@@ -67,6 +52,22 @@ class UpdateOrderRequest extends FormRequest
                 'address_other' => 'string|nullable',
                 'substatus_id' => 'integer|nullable',
                 'logistic_status_id' => 'integer|nullable',
+                'stock_status_id' => 'integer|nullable',
+                'city_id' => 'integer|nullable',
+            ];
+        }
+
+        if(Auth::user()->isLogist()) {
+            return [
+                'courier_id' => 'integer|nullable',
+                'status_id' => 'integer|nullable',
+                'logistic_status_id' => 'integer|nullable',
+            ];
+        }
+
+        if(Auth::user()->isStock()) {
+            return [
+                'status_id' => 'integer|nullable',
                 'stock_status_id' => 'integer|nullable',
             ];
         }
@@ -94,6 +95,7 @@ class UpdateOrderRequest extends FormRequest
             'address_apartment' => 'string|nullable',
             'address_other' => 'string|nullable',
             'substatus_id' => 'integer|nullable',
+            'city_id' => 'integer|nullable',
         ];
     }
 

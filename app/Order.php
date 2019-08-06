@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\City;
 use App\Models\Courier;
 use App\Models\DeliveryPeriod;
 use App\Models\DeliveryType;
@@ -21,7 +22,7 @@ class Order extends Model
                             'delivery_period_id','operator_id','date_delivery','products_text', 'metro_id', 'address',
                             'store_id', 'flag_denial_acc', 'order_id', 'communication_time', 'denial_reason_id', 'delivery_type_id', 'flag_send_sms',
                             'address_city', 'address_street', 'address_home', 'address_apartment', 'address_other', 'comment_logist', 'substatus_id',
-                            'stock_status_id', 'logistic_status_id'
+                            'stock_status_id', 'logistic_status_id', 'city_id'
     ];
     
     protected $casts = [
@@ -264,4 +265,11 @@ class Order extends Model
         return $this->realizations->sum('price');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }
