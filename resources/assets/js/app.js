@@ -13,7 +13,7 @@ window.VueBus = new Vue();
 
 require('./bootstrap');
 window.toast = require('./notifications');
-
+require('./modules/fake-link');
 //подключаем селекты чистый и обертку
 import vSelect from 'vue-select';
 

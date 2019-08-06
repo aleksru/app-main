@@ -100,6 +100,13 @@ Route::group(['middleware' =>'auth'], function() {
     Route::group(['prefix' => 'stores', 'as' => 'stores.'], function(){
         Route::get('get-state-widget', 'StoresController@getStateWidget')->name('state.widget');
     });
+
+    // Уведомления
+    Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function(){
+        Route::get('user/{user}/unread', 'UserController@unReadNotifications')->name('user');
+        Route::get('user/{user}/unread/count', 'UserController@getCountUnReadNotifications')->name('user.unread.count');
+        Route::post('set-read', 'NotificationController@setReadNotification')->name('set-read');
+    });
 });
 
 //Админка

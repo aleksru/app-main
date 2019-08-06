@@ -109,16 +109,8 @@
                 </div>
                 <div class="col-sm-5">
                     <label for="name" class="control-label">Перезвон</label>
-                    <select name="communication_time" class="form-control">
-                        @if($order->communication_time)
-                            <option disabled selected>{{  $order->communication_time }}</option>
-                        @endif
-                        <option value="">Нет</option>
-                        <option value="0.5">+ 30 мин</option>
-                        @for( $i = 1; $i <= 24; $i++)
-                            <option value="{{ $i }}">+ {{ $i }} ч.</option>
-                        @endfor
-                    </select>
+                    <input type='text' name="communication_time" class="form-control"
+                           value="{{ $order->communication_time ?  $order->communication_time->format('d.m.Y H:i:s') : '' }}"/>
                 </div>
             </div>
             <div class="row">
@@ -239,6 +231,13 @@
         @if (session()->has('warning'))
             toast.warning('{{ session()->get('warning') }}')
         @endif
+        $(function() {
+            $('input[name="communication_time"]').datepicker({
+                timepicker: true,
+                minDate: new Date(),
+                clearButton: true,
+            });
+        });
 
         let statuses = {!!   json_encode(\App\Models\OrderStatus::select('id', 'status as text', 'color')->get()->toArray()) !!}
             $(function() {
