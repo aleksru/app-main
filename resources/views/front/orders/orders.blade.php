@@ -74,7 +74,7 @@
                     'additional_phones' => [
                         'name' => 'Доп телефоны',
                         'width' => '3%',
-                        'searchable' => true,
+                        'searchable' => false,
                         'orderable' => 'false'
                     ],
                     'communication_time' => [
