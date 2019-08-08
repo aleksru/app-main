@@ -87,7 +87,7 @@ class Report extends BaseReport
             $this->product['product.store'] = $order->store ? $order->store->name : '';
             $this->product['product.client_name'] = $order->client ? $order->client->name ?? '' : '';
             $this->product['product.delivery_time'] =
-                ($order->date_delivery ?? '') . ' ' . ($order->deliveryPeriod ? $order->deliveryPeriod->period : '');
+                ($order->date_delivery ? $order->date_delivery->format('d.m.Y') : '') . ' ' . ($order->deliveryPeriod ? $order->deliveryPeriod->period : '');
             $this->product['product.address'] = ($order->metro ? 'м.'.$order->metro->name.',' : '' )
                                                     .' '. ($order->fullAddress ?? '');
             $this->product['product.client_phone'] = $order->client ? implode(', ',$order->client->allPhones->toArray()) : '';

@@ -132,7 +132,11 @@
 
                 <div class="col-sm-4">
                     <label for="name" class="control-label">Дата доставки</label>
-                    <input type="date" class="form-control"  value="{{  old('date_delivery', $order->date_delivery ?? null )  }}" name="date_delivery">
+                    <input type="date" class="form-control"
+                           value="{{  old('date_delivery',
+                           $order->date_delivery ? $order->date_delivery->toDateString() : null )  }}"
+                           name="date_delivery"
+                    >
                 </div>
 
                 <div class="col-sm-4">

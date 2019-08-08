@@ -272,4 +272,13 @@ class Order extends Model
     {
         return $this->belongsTo(City::class);
     }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getDateDeliveryAttribute($value)
+    {
+        return $value ? Carbon::parse($value) : $value;
+    }
 }
