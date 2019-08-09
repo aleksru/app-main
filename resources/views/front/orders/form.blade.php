@@ -50,7 +50,9 @@
                                 :initial_order="{{ json_encode($order->id, true) }}"
                                 :initial_price_delivery="{{ $order->deliveryType->price ?? 0 }}"
                                 :suppliers="{{  json_encode(\App\Models\Supplier::select('id', 'name')->get()) }}"
-                                :show_search="true">
+                                :show_search="true"
+                                :initial_product_types="{{  json_encode(array_values(\App\Enums\ProductType::getConstantsForDescription())) }}"
+                >
                 </products-table>
             </order-form>
         </div>

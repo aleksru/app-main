@@ -20,12 +20,20 @@
             <div class="row" v-show="showCreateProduct">
                 <label for="name" class="col-sm-2 control-label">Создать новый товар</label>
 
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" name="new_product" v-model="newProductName">
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="new_product" v-model="newProductName.product_name">
+                </div>
+                <div class="col-sm-2">
+                    <v-select label="desc"
+                              v-model="newProductName.type"
+                              :options="initial_product_types"
+                              index="name"
+                              :searchable="false">
+                    </v-select>
                 </div>
 
                 <div class="col-sm-2">
-                    <button class="btn btn-primary" @click.prevent="createProduct()">
+                    <button class="btn btn-primary" @click.prevent="createProduct()" :disabled="btnCreateProduct">
                         <i class="fa fa-shopping-bag"></i>Создать товар
                     </button>
                 </div>
@@ -37,8 +45,12 @@
 <script>
 
     let emptyProduct = {id: null, product: {}, supplier_in_order: {},  courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: null, quantity: 1};
+    let newProduct = {product_name: null, type: null};
 
     export default {
+        props: {
+            initial_product_types: Array
+        },
         data() {
             return {
                 productSearch: [],
@@ -75,26 +87,32 @@
             }, 250),
 
             async createProduct(){
-                if (this.newProductName) {
-                    let response = await axios.post('/product-create', {product: this.newProductName}).catch(function(e){
-                        toast.error('Ошибка сервера! Пожалуйста, свяжитесь с администратором.');
-                        throw Error(e);
-                    });;
-                    let prod = _.cloneDeep(emptyProduct);
+                let response = await axios.post('/product-create', this.newProductName).catch(function(e){
+                    toast.error('Ошибка сервера! Пожалуйста, свяжитесь с администратором.');
+                    throw Error(e);
+                });
+                let prod = _.cloneDeep(emptyProduct);
 
-                    prod.product.product_name = response.data.product.product_name;
-                    prod.product.product_id = response.data.product.id;
-                    prod.product_id = response.data.product.id;
+                prod.product.product_name = response.data.product.product_name;
+                prod.product.product_id = response.data.product.id;
+                prod.product_id = response.data.product.id;
 
-                    this.$emit('addproduct', prod);
+                this.$emit('addproduct', prod);
 
-                    this.showCreateProduct = false;
-                    this.newProductName = null;
+                this.showCreateProduct = false;
+                this.newProductName = {...newProduct};
 
-                    toast.success(response.data.message);
-                }
-            },
-
+                toast.success(response.data.message);
+            }
         },
+        created(){
+            this.newProductName = {...newProduct};
+        },
+
+        computed: {
+            btnCreateProduct(){
+                return ! (this.newProductName.product_name && this.newProductName.type !== null);
+            }
+        }
     }
 </script>

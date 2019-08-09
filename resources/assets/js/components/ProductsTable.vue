@@ -1,6 +1,9 @@
 <template>
     <div>
-        <search-product v-if="show_search" @addproduct="products.push($event)"></search-product>
+        <search-product v-if="show_search"
+                        @addproduct="products.push($event)"
+                        :initial_product_types="initial_product_types"
+        ></search-product>
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title">Товары</h3>
@@ -107,7 +110,8 @@
             show_search: {
                 type: Boolean,
                 default: false
-            }
+            },
+            initial_product_types: Array
         },
         data() {
             return {

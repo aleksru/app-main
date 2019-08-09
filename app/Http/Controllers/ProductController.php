@@ -57,7 +57,11 @@ class ProductController extends Controller
     {
         $article = Product::where('article', 'LIKE', '%'.Product::PREFIX_CUSTOM_PRODUCT.'%')->orderBy('id', 'desc')->first();
         $article = $article ? ((int)$article->article + 1).Product::PREFIX_CUSTOM_PRODUCT : '1000'.Product::PREFIX_CUSTOM_PRODUCT;
-        $product = Product::create(['product_name' => $request->get('product'), 'article' => $article]);
+        $product = Product::create([
+            'product_name' => $request->get('product_name'),
+            'article'      => $article,
+            'type'         => $request->get('type')
+        ]);
 
         return response()->json(['product' => $product, 'message' => 'Товар создан и добавлен в заказ!']);
     }
