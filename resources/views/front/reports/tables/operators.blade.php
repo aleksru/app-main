@@ -1,6 +1,7 @@
 @include('datatable.datatable',[
      'id' => $tableName,
      'route' => route('reports.datatable'),
+     'disableHeaderScroll' => true,
      'columns' => [
          '[operators.name]' => [
              'name' => 'Оператор',

@@ -193,15 +193,17 @@
 //            });
 
             //Добавляем скролл по событию инициализации
-            $('#{{ $id }}').on( 'init.dt', function () {
-                // Enable THEAD scroll bars
-                $('.dataTables_scrollHead').css('overflow', 'auto');
+            @if( ! isset($disableHeaderScroll) )
+                $('#{{ $id }}').on( 'init.dt', function () {
+                    // Enable THEAD scroll bars
+                    $('.dataTables_scrollHead').css('overflow', 'auto');
 
-                // Sync THEAD scrolling with TBODY
-                $('.dataTables_scrollHead').on('scroll', function () {
-                    $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                    // Sync THEAD scrolling with TBODY
+                    $('.dataTables_scrollHead').on('scroll', function () {
+                        $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                    });
                 });
-            });
+            @endif
         })  
     </script>
 @endpush

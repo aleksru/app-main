@@ -1,6 +1,7 @@
 @include('datatable.datatable',[
      'id' => $tableName,
      'route' => route('reports.datatable'),
+     'disableHeaderScroll' => true,
      'columns' => [
          '[statistic.day.date]' => [
              'name' => 'Дата',
