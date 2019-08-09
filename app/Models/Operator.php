@@ -5,6 +5,7 @@ namespace App\Models;
 use App\ClientCall;
 use App\Order;
 use App\Repositories\CallsRepository;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -51,5 +52,13 @@ class Operator extends Model
         });
 
         return $calls;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

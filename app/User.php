@@ -3,9 +3,11 @@
 namespace App;
 
 use App\Enums\UserGroupsEnums;
+use App\Models\Operator;
 use App\Models\Traits\UserDynamicType;
 use App\Models\UserGroup;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -110,5 +112,14 @@ class User extends Authenticatable
     public function isOnline()
     {
         return $this->last_activity > Carbon::now();
+    }
+
+    /**
+     * @param Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeOnline(Builder $query)
+    {
+        return $query->whereDate('last_activity', '>=', Carbon::now());
     }
 }

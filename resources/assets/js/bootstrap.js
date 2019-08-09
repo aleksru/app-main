@@ -22,7 +22,7 @@ try {
     require('select2');
     require('jquery-mask-plugin');
     require('@activix/double-scroll');
-
+    require('air-datepicker');
 } catch (e) {}
 
 

@@ -6,10 +6,12 @@ use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Requests\CommentLogistRequst;
 use App\Models\OtherStatus;
 use App\Models\Realization;
+use App\Notifications\ClientCallBack;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Order;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -99,7 +101,9 @@ class OrderController extends Controller
     {
         $this->authorize('update', Order::class);
         $data = $request->validated();
-        isset($data['communication_time']) ? $data['communication_time'] = Carbon::now()->addMinutes((integer)($data['communication_time'] * 60)) : null;
+        isset ($data['communication_time']) ?
+            $data['communication_time'] = Carbon::parse($data['communication_time']) : null;
+
         $order->update($data);
 
         if($order->status && stripos($order->status->status, 'отказ') === false || !$order->status) {
