@@ -17,11 +17,11 @@ try {
     });
     require('bootstrap-sass');
     require('datatables.net');
+    require('datatables.net-fixedcolumns-bs');
     require ('admin-lte');
     require('jquery-slimscroll');
     require('select2');
     require('jquery-mask-plugin');
-    require('@activix/double-scroll');
     require('air-datepicker');
 } catch (e) {}
 

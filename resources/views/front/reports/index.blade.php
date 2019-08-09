@@ -76,6 +76,11 @@
             togglePreloader();
             table.draw();
         });
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        new $.fn.dataTable.FixedColumns( table, {
+            leftColumns: 1,
+        } );
 
         function togglePreloader() {
             $('#btn-result p').toggle();
@@ -103,8 +108,12 @@
                 }, 0);
                 $(this.footer()).html(sum.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
             });
+        });
 
-        } );
+        $('#{{$tableName}}').on( 'init.dt column-sizing.dt', function () {
+            let top = $('.dataTables_scrollHead').height() - $('.dataTables_scrollHeadInner').height() - 6;
+            $('.DTFC_LeftBodyWrapper .DTFC_LeftBodyLiner').css('top', top);
+        });
     });
 
 </script>

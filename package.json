@@ -20,13 +20,13 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "@activix/double-scroll": "^1.0.2",
         "admin-lte": "^2.4.8",
         "air-datepicker": "^2.2.3",
         "awesome-bootstrap-checkbox": "^1.0.1",
         "datatables.net": "^1.10.19",
         "datatables.net-buttons": "^1.5.3",
         "datatables.net-dt": "^1.10.19",
+        "datatables.net-fixedcolumns-bs": "^3.2.6",
         "font-awesome": "^4.7.0",
         "izitoast": "^1.4.0",
         "jquery-mask-plugin": "^1.14.15",
