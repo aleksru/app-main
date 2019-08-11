@@ -14,17 +14,17 @@
             @endif
 
             <div class="row">
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                     <label for="name" class="control-label">№</label>
                     <input type="text" class="form-control"  value="{{ $order->id ?? '' }}" disabled>
                 </div>
 
-                <div class="col-sm-5">
+                <div class="col-sm-4">
                     <label for="name" class="control-label">Дата заказа</label>
                     <input type="text" class="form-control"  value="{{ $order->created_at ?? '' }}" disabled>
                 </div>
 
-                <div class="col-sm-5">
+                <div class="col-sm-4">
                     {{--<label for="name" class="control-label">Источник*</label>--}}
                     {{--<input type="text" class="form-control"  value="{{ old('store', $order->store ?? '' ) }}" name="store">--}}
                     <label for="name" class="control-label">Источник</label>

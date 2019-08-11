@@ -39,7 +39,7 @@
                 <input type="text" class="form-control mask-phone"  value="" name="additional_phones[new]" placeholder="Добавить новый номер">
             </div>
             @foreach($client->additionalPhones as $additionalPhone)
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     {{--<input type="text" class="form-control mask-phone"  value="{{ $additionalPhone->phone ?? '' }}" name="additional_phones[{{ $additionalPhone->id }}]">--}}
                     <div class="input-group @if($additionalPhone->main) has-success @endif">
                         <span class="input-group-addon">
