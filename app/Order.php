@@ -27,7 +27,9 @@ class Order extends Model
     
     protected $casts = [
         'products_text' => 'array',
-        'flag_send_sms' => 'boolean'
+        'flag_send_sms' => 'boolean',
+        'communication_time' => 'datetime:d.m H:i',
+        'created_at' => 'datetime:d.m.y H:i',
     ];
 
     protected $dates = [
