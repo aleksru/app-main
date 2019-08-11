@@ -34,7 +34,8 @@
                 setCountNotifications(countNotify.data.count);
                 if(countNotify.data.message !== null) {
                     toast.warning(countNotify.data.message, {
-                        title: 'Внимание!'
+                        title: 'Внимание!',
+                        timeout: 300 * 1000
                     });
                 }
             };
