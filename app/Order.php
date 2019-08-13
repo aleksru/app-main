@@ -12,12 +12,15 @@ use App\Models\OrderStatus;
 use App\Models\Metro;
 use App\Models\OtherStatus;
 use App\Models\Realization;
+use App\Models\Traits\HasSms;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
+    use HasSms;
+
     protected $fillable = ['user_id', 'client_id','store_text','comment','status_id', 'courier_id',
                             'delivery_period_id','operator_id','date_delivery','products_text', 'metro_id', 'address',
                             'store_id', 'flag_denial_acc', 'order_id', 'communication_time', 'denial_reason_id', 'delivery_type_id', 'flag_send_sms',

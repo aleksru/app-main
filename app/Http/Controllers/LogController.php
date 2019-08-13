@@ -34,7 +34,7 @@ class LogController extends Controller
             return $item->created_at;
         });
 
-        return view('front.logs.index', ['logs' => $fullLogsCollect]);
+        return view('front.logs.index', ['logs' => $fullLogsCollect, 'orderSms' => $order->sms]);
     }
 
 }

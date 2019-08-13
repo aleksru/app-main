@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\SendSmsClient;
 use App\Order;
 use App\Services\Mango\Commands\SendSms;
 use App\Services\Mango\MangoChannel;
@@ -12,6 +13,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class CreateOrder extends Notification implements ShouldQueue
 {
@@ -97,14 +99,15 @@ class CreateOrder extends Notification implements ShouldQueue
         if($store){
             $text .= " Ваш {$store->name}. {$store->phone}";
         }
+        $commandId = Str::uuid();
         $mangoSms = new SendSms();
         $mangoSms->phone($notifiable->phone)
                     ->smsRender($store->name ?? "")
                     ->text($text)
                     ->fromExtension('101')
-                    ->commandId($notifiable->id . rand(1, 9999999));
+                    ->commandId($commandId);
 
         (new MangoService())->sendSms($mangoSms);
-        Log::error('Смс отправлено ' . $notifiable->phone . ' ' .$text);
+        event(new SendSmsClient($mangoSms, $this->order));
     }
 }
