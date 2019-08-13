@@ -109,7 +109,7 @@
                 </div>
                 <div class="col-sm-5">
                     <label for="name" class="control-label">Перезвон</label>
-                    <input type='text' name="communication_time" class="form-control"
+                    <input type='text' name="communication_time" class="form-control" autocomplete="off"
                            value="{{ $order->communication_time ?  $order->communication_time->format('d.m.Y H:i:s') : '' }}"/>
                 </div>
             </div>
