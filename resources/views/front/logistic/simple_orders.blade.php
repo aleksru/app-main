@@ -157,21 +157,19 @@
      *обновление таблицы
      */
     $(function () {
-        setInterval( function () {
-            $('#orders-table').DataTable().ajax.reload(null, false);
-        }, 5000 );
+//        setInterval( function () {
+//            $('#orders-table').DataTable().ajax.reload(null, false);
+//        }, 5000 );
         $('#orders-table').on( 'draw.dt', function () {
             $('#orders-table tr').dblclick(function(e){
                 let range = document.createRange();
                 let sel = window.getSelection();
-                range.selectNode(this);
+                range.setStart(this.children[0], 0);
+                range.setEnd(this.children[this.children.length - 1], 0);
                 sel.removeAllRanges();
                 sel.addRange(range);
-                window.getSelection().addRange(range);
-                //пытаемся скопировать текст в буфер обмена
                 try {
                     document.execCommand('copy');
-
                     if(this.dataset.productid == '') {
                         throw 'product_is_null';
                     }
