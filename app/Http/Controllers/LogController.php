@@ -34,7 +34,11 @@ class LogController extends Controller
             return $item->created_at;
         });
 
-        return view('front.logs.index', ['logs' => $fullLogsCollect, 'orderSms' => $order->sms]);
+        $allSms = $order->sms->merge($order->client->sms)->sortByDesc(function($item, $key){
+            return $item->created_at;
+        });
+
+        return view('front.logs.index', ['logs' => $fullLogsCollect, 'orderSms' => $allSms]);
     }
 
 }

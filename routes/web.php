@@ -107,6 +107,11 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('user/{user}/unread/count', 'UserController@getCountUnReadNotifications')->name('user.unread.count');
         Route::post('set-read', 'NotificationController@setReadNotification')->name('set-read');
     });
+
+    //Sms
+    Route::group(['prefix' => 'sms', 'as' => 'sms.'], function(){
+        Route::post('client/{client}/send', 'SmsController@sendClient')->name('client.send');
+    });
 });
 
 //Админка

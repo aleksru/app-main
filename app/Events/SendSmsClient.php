@@ -27,14 +27,21 @@ class SendSmsClient
     public $model;
 
     /**
+     * @var int|null
+     */
+    public $resultCode;
+
+    /**
      * SendSmsClient constructor.
      * @param SendSms $sendSms
      * @param Model $model
+     * @param null $resultCode
      */
-    public function __construct(SendSms $sendSms, Model $model)
+    public function __construct(SendSms $sendSms, Model $model, int $resultCode = null)
     {
         $this->sendSms = $sendSms;
         $this->model = $model;
+        $this->resultCode = $resultCode;
     }
 
     /**

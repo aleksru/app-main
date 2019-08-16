@@ -27,11 +27,12 @@ class SaveSmsLog
     public function handle(SendSmsClient $event)
     {
         $event->model->sms()->create([
-            'text' => $event->sendSms->text,
-            'command_id' => $event->sendSms->command_id,
-            'sms_render' => $event->sendSms->sms_sender,
+            'text'           => $event->sendSms->text,
+            'command_id'     => $event->sendSms->command_id,
+            'sms_render'     => $event->sendSms->sms_sender,
             'from_extension' => $event->sendSms->from_extension,
-            'to_number' => $event->sendSms->to_number,
+            'to_number'      => $event->sendSms->to_number,
+            'result'         => $event->resultCode
         ]);
     }
 }

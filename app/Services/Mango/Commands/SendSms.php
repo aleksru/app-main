@@ -4,6 +4,8 @@
 namespace App\Services\Mango\Commands;
 
 
+use Illuminate\Support\Str;
+
 class SendSms
 {
     /**
@@ -30,6 +32,14 @@ class SendSms
      * @var string
      */
     public $sms_sender;
+
+    /**
+     * SendSms constructor.
+     */
+    public function __construct()
+    {
+        $this->command_id = Str::uuid();
+    }
 
     /**
      * @param $phone
