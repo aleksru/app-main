@@ -157,9 +157,9 @@
      *обновление таблицы
      */
     $(function () {
-//        setInterval( function () {
-//            $('#orders-table').DataTable().ajax.reload(null, false);
-//        }, 5000 );
+        setInterval( function () {
+            $('#orders-table').DataTable().ajax.reload(null, false);
+        }, 5000 );
         $('#orders-table').on( 'draw.dt', function () {
             $('#orders-table tr').dblclick(function(e){
                 let range = document.createRange();
