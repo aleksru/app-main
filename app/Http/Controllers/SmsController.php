@@ -21,7 +21,7 @@ class SmsController extends Controller
         $this->authorize('update', Client::class);
         $text = $request->get('text');
         if( ! $text ) {
-            return response()->json(['error' => 'Field text cannot be empty'], 400);
+            return response()->json(['error' => 'Поле текст не может быть пустым'], 422);
         }
         $mangoTemplateSms = app(MangoSendSms::class);
         $mangoTemplateSms->phone($client->phone)

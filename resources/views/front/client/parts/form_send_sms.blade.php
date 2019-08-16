@@ -30,7 +30,7 @@
                     let res = await axios.post($(this).attr("action"), formData);
                     toast.success(res.data.message);
                 }catch (err){
-                    toast.error('Что то пошло не так (((');
+                    toast.error(err.response.data.error);
                     console.log(err);
                 }
 
