@@ -6,6 +6,7 @@ use App\Enums\UserGroupsEnums;
 use App\Models\Operator;
 use App\Models\Traits\UserDynamicType;
 use App\Models\UserGroup;
+use App\Services\User\UserNotifications;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
@@ -121,5 +122,13 @@ class User extends Authenticatable
     public function scopeOnline(Builder $query)
     {
         return $query->whereDate('last_activity', '>=', Carbon::now());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAllUnreadNotifications()
+    {
+        return app(UserNotifications::class, ['user' => $this])->getUnreadNotifications();
     }
 }

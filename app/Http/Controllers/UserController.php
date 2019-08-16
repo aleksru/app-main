@@ -16,7 +16,7 @@ class UserController extends Controller
     public function unReadNotifications(User $user)
     {
         $content = view('layouts.adminlte.parts.chunks.notifications_list', [
-            'notifications' => $user->unreadNotifications
+            'notifications' => $user->getAllUnreadNotifications()
         ])->render();
 
         return response()->json(['content' => $content]);
@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function getCountUnReadNotifications(User $user, Request $request)
     {
-        $countNotifications = $user->unreadNotifications->count();
+        $countNotifications = $user->getAllUnreadNotifications()->count();
         $message = null;
         if($request->session()->pull('count_notifications') < $countNotifications){
             $message = 'У вас новые уведомления!';

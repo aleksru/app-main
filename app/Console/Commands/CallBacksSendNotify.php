@@ -2,14 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Operator;
+use App\Enums\UserGroupsEnums;
+use App\Models\UserGroup;
 use App\Notifications\ClientCallBack;
 use App\Order;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
 
 class CallBacksSendNotify extends Command
 {
@@ -52,10 +50,8 @@ class CallBacksSendNotify extends Command
             $user = $order->operator ? $order->operator->user : null;
             if ($user && $user->isOnline()) {
                 $user->notify(new ClientCallBack($order));
-            }else {
-                $userIds = DB::table('operators')->whereNotNull('user_id')->pluck('user_id');
-                $users = User::online()->whereIn('id', $userIds)->get();
-                Notification::send($users, new ClientCallBack($order));
+            } else if ($group = UserGroup::where(['name' => UserGroupsEnums::OPERATOR])->first()){
+                $group->notify(new ClientCallBack($order));
             }
         }
     }
