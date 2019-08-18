@@ -43,6 +43,8 @@ Vue.component('GetOrder', require('./components/GetOrder.vue'));
 
 Vue.component('OrderForm', require('./components/OrderForm.vue'));
 
+Vue.component('MassStatuses', require('./components/MassChangeStatuses.vue'));
+
 const app = new Vue({
     el: '#app'
 });

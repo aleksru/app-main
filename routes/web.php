@@ -112,6 +112,12 @@ Route::group(['middleware' =>'auth'], function() {
     Route::group(['prefix' => 'sms', 'as' => 'sms.'], function(){
         Route::post('client/{client}/send', 'SmsController@sendClient')->name('client.send');
     });
+
+    //Статусы
+    Route::group(['prefix' => 'statuses', 'as' => 'statuses.'], function(){
+        Route::get('orders', 'StatusController@index')->name('orders');
+        Route::post('orders', 'StatusController@massChange')->name('orders.change');
+    });
 });
 
 //Админка
