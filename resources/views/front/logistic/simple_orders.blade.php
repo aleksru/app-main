@@ -157,13 +157,10 @@
      *обновление таблицы
      */
     $(function () {
-//        setInterval( function () {
-//            $('#orders-table').DataTable().ajax.reload(null, false);
-//        }, 5000 );
+        setInterval( function () {
+            $('#orders-table').DataTable().ajax.reload(null, false);
+        }, 10000 );
         $('#orders-table').on( 'draw.dt', function () {
-            setTimeout( function () {
-                $('#orders-table').DataTable().ajax.reload(null, false);
-            }, 5000 );
             $('#orders-table tr').dblclick(function(e){
                 let range = document.createRange();
                 let sel = window.getSelection();
