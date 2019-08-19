@@ -139,6 +139,7 @@
     $('#orders-table').on( 'init.dt', function () {
         rewriteSearchColumns();
     });
+
     //событие перерисовки таблицы
     $('#orders-table').on( 'draw.dt', function () {
         //Переход на редактирование заказа по клику по строке
@@ -148,7 +149,7 @@
         setTimeout(function () {
             $('#orders-table').DataTable().ajax.reload(null, false);
         }, 5000);
-    } );
+    });
 
     //обновление таблицы
 //    setInterval( function () {

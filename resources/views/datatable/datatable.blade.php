@@ -49,6 +49,12 @@
                     type: 'get',
                     "data": function ( d ) {
                         return  $.extend(d, exchangeData);
+                    },
+                    error(err){
+                        console.log(err);
+                        setTimeout(function () {
+                            table.ajax.reload(null, false);
+                        }, 5000);
                     }
                 },
                 columns: [
