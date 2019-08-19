@@ -145,12 +145,15 @@
         $('.row-link').click(function(){
             window.open($(this).find('a').first().attr('href'), '_blank');
         });
+        setTimeout(function () {
+            $('#orders-table').DataTable().ajax.reload(null, false);
+        }, 5000);
     } );
 
     //обновление таблицы
-    setInterval( function () {
-        $('#orders-table').DataTable().ajax.reload(null, false);
-    }, 5000 );
+//    setInterval( function () {
+//        $('#orders-table').DataTable().ajax.reload(null, false);
+//    }, 5000 );
 
     /**
      * Стиль футер под хедер
