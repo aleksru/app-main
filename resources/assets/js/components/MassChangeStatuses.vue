@@ -1,8 +1,9 @@
 <template>
     <form class="form-horizontal">
         <div class="form-group">
-            <label for="name" class="col-sm-2 control-label">ID заказов</label>
-
+            <label for="name" class="col-sm-2 control-label">ID заказов.
+                <span>Кол-во: {{ prepareIds.length }}</span>
+            </label>
             <div class="col-sm-6">
                 <textarea rows="6" class="form-control" :value="ids" @change="onStatuses"></textarea>
             </div>
