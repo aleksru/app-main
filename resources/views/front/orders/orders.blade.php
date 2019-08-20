@@ -80,7 +80,7 @@
                     'communication_time' => [
                         'name' => 'Время перезвона',
                         'width' => '3%',
-                        'searchable' => false,
+                        'searchable' => true,
                         'orderable' => 'false'
                     ],
                     'operator' => [
@@ -138,6 +138,9 @@
     //инициализация таблицы
     $('#orders-table').on( 'init.dt', function () {
         rewriteSearchColumns();
+        setInterval(function () {
+            $('#orders-table').DataTable().ajax.reload(null, false);
+        }, 5000);
     });
 
     //событие перерисовки таблицы
@@ -146,9 +149,6 @@
         $('.row-link').click(function(){
             window.open($(this).find('a').first().attr('href'), '_blank');
         });
-        setTimeout(function () {
-            $('#orders-table').DataTable().ajax.reload(null, false);
-        }, 5000);
     });
 
     //обновление таблицы
@@ -173,6 +173,7 @@
         name_customer: {type: 'text'},
         created_at: {type: 'date'},
         id: {type: 'text'},
+        communication_time: {type: 'date'},
     };
 
     /**
