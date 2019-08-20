@@ -18,6 +18,7 @@ try {
     require('bootstrap-sass');
     require('datatables.net');
     require('datatables.net-fixedcolumns-bs');
+    require('jquery-datatables-checkboxes');
     require ('admin-lte');
     require('jquery-slimscroll');
     require('select2');

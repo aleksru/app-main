@@ -110,6 +110,8 @@ Route::group(['middleware' =>'auth'], function() {
 
     //Sms
     Route::group(['prefix' => 'sms', 'as' => 'sms.'], function(){
+        Route::get('distribution', 'SmsController@index')->name('distribution.index');
+        Route::post('distribution', 'SmsController@sendDistribution')->name('distribution.send');
         Route::post('client/{client}/send', 'SmsController@sendClient')->name('client.send');
     });
 

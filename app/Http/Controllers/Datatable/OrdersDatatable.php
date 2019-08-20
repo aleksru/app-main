@@ -108,6 +108,9 @@ class OrdersDatatable
             ->editColumn('operator', function (Order $order) {
                 return $order->operator->name ?? '';
             })
+            ->editColumn('client_id', function (Order $order) {
+                return $order->client->id;
+            })
             ->editColumn('id', function (Order $order) {
                 return '<a href="'.route('orders.edit', $order->id).'" target="_blank"><h4>'.$order->id.'</h4></a>';
             })

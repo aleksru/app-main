@@ -24,6 +24,7 @@
             </a>
             <ul class="treeview-menu">
                 <li><a href="{{ route('statuses.orders') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Смена статусов</span> </a></li>
+                <li><a href="{{ route('sms.distribution.index') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>СМС рассылка</span> </a></li>
             </ul>
         </li>
     @endcan
