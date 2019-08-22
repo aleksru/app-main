@@ -24,8 +24,6 @@ class NotificationController extends Controller
             return response()->json(['error' => 'Notification not found'], 400);
         }
         $notify->markAsRead();
-        $count = session('count_notifications');
-        session(['count_notifications' => ($count ? $count - 1 : 0)]);
 
         return response()->json(['message' => 'Уведомление прочитано'], 200);
     }

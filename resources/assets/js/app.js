@@ -45,6 +45,8 @@ Vue.component('OrderForm', require('./components/OrderForm.vue'));
 
 Vue.component('MassStatuses', require('./components/MassChangeStatuses.vue'));
 
+Vue.component('Notifications', require('./components/Front/Notifications.vue'));
+
 const app = new Vue({
     el: '#app'
 });

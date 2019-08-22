@@ -15,3 +15,5 @@ yarn-error.log
 /nbproject/private/
 /public/css/*.*
 /public/js/*.*
+laravel-echo-server.json
+laravel-echo-server.lock

@@ -12,5 +12,13 @@
 */
 
 Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+    return true;
+});
+
+Broadcast::channel('App.Models.UserGroup.{id}', function ($user, $id) {
+    return true;
+});
+
+Broadcast::channel('notifications.{user_id}', function ($user, $user_id) {
+    return true;
 });
