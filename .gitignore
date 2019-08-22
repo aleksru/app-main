@@ -13,3 +13,5 @@ yarn-error.log
 .env
 .phpunit.result.cache
 /nbproject/private/
+/public/css/*.*
+/public/js/*.*
