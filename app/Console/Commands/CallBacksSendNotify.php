@@ -6,6 +6,7 @@ use App\Enums\UserGroupsEnums;
 use App\Models\UserGroup;
 use App\Notifications\ClientCallBack;
 use App\Order;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -16,7 +17,7 @@ class CallBacksSendNotify extends Command
      *
      * @var string
      */
-    protected $signature = 'orders:call-backs';
+    protected $signature = 'orders:call-backs {--user_id=} {--order_id=}';
 
     /**
      * The console command description.
@@ -42,6 +43,13 @@ class CallBacksSendNotify extends Command
      */
     public function handle()
     {
+        if(($userId = $this->option('user_id')) && ($orderId = $this->option('order_id'))){
+            $order = Order::findOrFail($orderId);
+            if(! $order->communication_time){
+                throw new \Exception('Order not communication_time');
+            }
+            return User::findOrFail($userId)->notify(new ClientCallBack($order));
+        }
         $orders = Order::query()->whereBetween('communication_time', [
             Carbon::now(),
             Carbon::now()->addMinutes(5)

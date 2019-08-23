@@ -8,6 +8,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Log;
 
 class ClientCallBack extends Notification implements ShouldQueue
 {
@@ -48,10 +49,12 @@ class ClientCallBack extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
+        Log::error($this->order);
         return [
             'content' => (view('front.notifications.user.call_back', [
                 'orderId' => $this->order->id,
-                'communication_time' => $this->order->communication_time->format('d.m H:i')
+                'communication_time' => $this->order->communication_time ?
+                                            $this->order->communication_time->format('d.m H:i') : ''
             ])->render())
         ];
     }
