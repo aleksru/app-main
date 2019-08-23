@@ -49,7 +49,6 @@ class ClientCallBack extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        Log::error($this->order);
         return [
             'content' => (view('front.notifications.user.call_back', [
                 'orderId' => $this->order->id,
