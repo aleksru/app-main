@@ -33,6 +33,18 @@
             </div>
 
             <div class="form-group">
+                <div class="col-sm-10">
+                    <div class="pretty p-default p-curve p-thick" style="font-size: 150%">
+                        <input type="hidden" value="0" name="is_black_list" />
+                        <input class="form-control" type="checkbox" value="1" name="is_black_list" @if($client->is_black_list)checked @endif />
+                        <div class="state p-danger-o">
+                            <label>Чёрный список</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">Доп телефоны</label>
 
                 <div class="col-sm-4">

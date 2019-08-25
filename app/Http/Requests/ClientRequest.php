@@ -31,6 +31,7 @@ class ClientRequest extends FormRequest
             'name' => 'required|string',
             'phone' => 'required|string|unique:clients,phone'.$phone,
             'description' => 'string|nullable',
+            'is_black_list' => 'integer|nullable'
         ];
     }
 

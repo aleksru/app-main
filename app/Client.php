@@ -14,6 +14,10 @@ class Client extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'is_black_list' => 'boolean',
+    ];
+
     /**
      * Получаение звонков клиента
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
