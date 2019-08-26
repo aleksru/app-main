@@ -77,6 +77,12 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
+
+        'custom' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/custom-laravel.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

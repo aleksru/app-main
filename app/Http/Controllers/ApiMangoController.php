@@ -83,6 +83,11 @@ class ApiMangoController extends Controller
             }
         }
 
+        //оператор снимает трубку
+        if($data['seq'] === 2 && $data['call_state'] === 'Connected' && $data['location'] === 'abonent'){
+            Log::channel('custom')->error($data);
+        }
+
         return ['status' => 200];
     }
 
