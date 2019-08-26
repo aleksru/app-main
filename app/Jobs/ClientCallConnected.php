@@ -39,7 +39,7 @@ class ClientCallConnected implements ShouldQueue
         $operator = Operator::getOperatorBySipLogin($this->data['to']['number']);
         if($client && $user = $operator->user){
             $lastOrder = $client->orders()->max('id');
-            Log::channel('custom')->error([$user->id, $client->phone, $lastOrder]);
+            //Log::channel('custom')->error([$user->id, $client->phone, $lastOrder]);
             event(new OperatorCallConnected($user, $client, $lastOrder));
         }
     }

@@ -88,7 +88,7 @@ class ApiMangoController extends Controller
         if($data['seq'] === 2 && $data['call_state'] === 'Connected' && $data['location'] === 'abonent'){
             //входящий
             if(preg_match('/^(\d){1,12}$/', $data['from']['number'])){
-                Log::channel('custom')->error($data);
+                //Log::channel('custom')->error($data);
                 ClientCallConnected::dispatch($data);
             }
         }
