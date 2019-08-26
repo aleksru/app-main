@@ -86,8 +86,11 @@ class ApiMangoController extends Controller
 
         //оператор снимает трубку
         if($data['seq'] === 2 && $data['call_state'] === 'Connected' && $data['location'] === 'abonent'){
-            Log::channel('custom')->error($data);
-            ClientCallConnected::dispatch($data)->onQueue('calls');
+            //входящий
+            if(preg_match('/^(\d){1,12}$/', $data['from']['number'])){
+                Log::channel('custom')->error($data);
+                ClientCallConnected::dispatch($data)->onQueue('calls');
+            }
         }
 
         return ['status' => 200];

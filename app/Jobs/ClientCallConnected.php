@@ -34,14 +34,11 @@ class ClientCallConnected implements ShouldQueue
      */
     public function handle()
     {
-        if(preg_match('/^(\d){1,12}$/', $this->data['from']['number'])){
-            $client = Client::getClientByPhone($this->data['from']['number']);
-            $operator = Operator::getOperatorBySipLogin($this->data['to']['number']);
-            if($client && $user = $operator->user){
-                $lastOrder = $client->orders()->max('id');
-                Log::channel('custom')->error([$this->data['from']['number'], $this->data['to']['number'], $lastOrder->id, $user->id]);
-            }
+        $client = Client::getClientByPhone($this->data['from']['number']);
+        $operator = Operator::getOperatorBySipLogin($this->data['to']['number']);
+        if($client && $user = $operator->user){
+            $lastOrder = $client->orders()->max('id');
+            Log::channel('custom')->error([$this->data['from']['number'], $this->data['to']['number'], $lastOrder, $user->id]);
         }
-
     }
 }
