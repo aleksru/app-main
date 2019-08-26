@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Log;
 
 class ClientCallConnected implements ShouldQueue
 {
@@ -38,6 +39,7 @@ class ClientCallConnected implements ShouldQueue
         $operator = Operator::getOperatorBySipLogin($this->data['to']['number']);
         if($client && $user = $operator->user){
             $lastOrder = $client->orders()->max('id');
+            Log::channel('custom')->error([$user->id, $client->phone, $lastOrder]);
             event(new OperatorCallConnected($user, $client, $lastOrder));
         }
     }
