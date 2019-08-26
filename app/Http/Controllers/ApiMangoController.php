@@ -89,7 +89,7 @@ class ApiMangoController extends Controller
             //входящий
             if(preg_match('/^(\d){1,12}$/', $data['from']['number'])){
                 Log::channel('custom')->error($data);
-                ClientCallConnected::dispatch($data)->onQueue('calls');
+                ClientCallConnected::dispatch($data);
             }
         }
 
