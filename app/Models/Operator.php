@@ -21,6 +21,7 @@ class Operator extends Model
      */
     public static function getOperatorBySipLogin(string $login)
     {
+        $login = str_replace('sip:', '', $login);
         return Operator::where('sip_login', $login)->first();
     }
 
