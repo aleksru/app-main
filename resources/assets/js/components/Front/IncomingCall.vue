@@ -12,7 +12,7 @@
             </div>
             <div class="box-body">
                 <p>Клиент: {{client.name}}, {{client.phone}}, <span class="text-red">{{ blackList }}</span>.</p>
-                <p>Заказ: <a :href="'/orders/' + orderId + '/edit'" target="_blank">#{{orderId}}</a></p>
+                <p>Заказ: <a href="#" @click.prevent="onLinkOrder()">#{{orderId}}</a></p>
             </div>
             <!-- /.box-body -->
         </div>
@@ -49,6 +49,11 @@
                 this.$modal.hide('operator-call');
                 this.client = {};
                 this.orderId = null;
+            },
+
+            onLinkOrder(){
+                window.open(`/orders/${this.orderId}/edit`, '_blank');
+                this.hideModal();
             }
         },
 
