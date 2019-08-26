@@ -3,13 +3,13 @@
 namespace App\Jobs;
 
 use App\Client;
+use App\Events\OperatorCallConnected;
 use App\Models\Operator;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Log;
 
 class ClientCallConnected implements ShouldQueue
 {
@@ -36,10 +36,9 @@ class ClientCallConnected implements ShouldQueue
     {
         $client = Client::getClientByPhone($this->data['from']['number']);
         $operator = Operator::getOperatorBySipLogin($this->data['to']['number']);
-        Log::channel('custom')->error(['EVENT', $client->id ?? null, $operator->id ?? null]);
         if($client && $user = $operator->user){
             $lastOrder = $client->orders()->max('id');
-            Log::channel('custom')->error([$this->data['from']['number'], $this->data['to']['number'], $lastOrder, $user->id]);
+            event(new OperatorCallConnected($user, $client, $lastOrder));
         }
     }
 }

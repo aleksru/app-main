@@ -22,3 +22,7 @@ Broadcast::channel('App.Models.UserGroup.{id}', function ($user, $id) {
 Broadcast::channel('notifications.{user_id}', function ($user, $user_id) {
     return true;
 });
+
+Broadcast::channel('operator-incomming.{user_id}', function ($user, $user_id) {
+    return true;
+});

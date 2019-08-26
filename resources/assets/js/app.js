@@ -47,6 +47,8 @@ Vue.component('MassStatuses', require('./components/MassChangeStatuses.vue'));
 
 Vue.component('Notifications', require('./components/Front/Notifications.vue'));
 
+Vue.component('IncomingCall', require('./components/Front/IncomingCall.vue'));
+
 const app = new Vue({
     el: '#app'
 });

@@ -124,6 +124,10 @@
                 ],
             ])
         </div>
+
+        @if(\Illuminate\Support\Facades\Auth::user()->isOperator() || \Illuminate\Support\Facades\Auth::user()->is_admin)
+            <incoming-call :user='@json(Auth::user())'></incoming-call>
+        @endif
 @endsection
 
 @push('scripts')
