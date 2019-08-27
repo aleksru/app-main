@@ -36,7 +36,7 @@
         </div>
 
         <div class="col-sm-12 col-md-6">
-            @include('front.orders.parts.widget_user', ['client' => $order->client ?? null])
+            @include('front.orders.parts.widget_user', ['client' => $order->client ?? null, 'store' => $order->store])
             @include('front.orders.parts.comment_logist', ['order' => $order ?? ''])
         </div>
     </div>

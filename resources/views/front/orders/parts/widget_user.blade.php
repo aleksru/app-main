@@ -108,7 +108,8 @@
             @if(Auth::user()->isOperator() && Auth::user()->account)
                 <div class="col-sm-3">
                     <call-back :phones='@json($client->allPhones->toArray())'
-                               :operator='@json(Auth::user()->account)'>
+                               :operator='@json(Auth::user()->account)'
+                               :store='@json($store)'>
                     </call-back>
                 </div>
             @endif

@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class="btn-group">
             <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-phone" aria-hidden="true"></i>
@@ -29,7 +28,8 @@
     export default {
         props: {
             phones: Array,
-            operator: Object
+            operator: Object,
+            store: Object
         },
 
         data() {
@@ -47,10 +47,10 @@
                     this.listenChannelCallResult();
                 }).catch((err) => {
                     toast.hide(this.toastLoadingId);
+                    console.log(err);
                     if(err.response.data.message){
                         toast.error(err.response.data.message, {timeout: 10 * 1000});
                     }
-                    console.log(err);
                 })
             },
 
@@ -62,7 +62,8 @@
 
             async send(index){
                 let res = await axios.post(`/callback/${this.operator.id}`, {
-                    phone: this.phones[index]
+                    phone: this.phones[index],
+                    store_phone: this.store ? this.store.phone : null,
                 });
 
                 return res;
