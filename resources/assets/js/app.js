@@ -49,6 +49,8 @@ Vue.component('Notifications', require('./components/Front/Notifications.vue'));
 
 Vue.component('IncomingCall', require('./components/Front/IncomingCall.vue'));
 
+Vue.component('CallBack', require('./components/Front/CallBack.vue'));
+
 const app = new Vue({
     el: '#app'
 });

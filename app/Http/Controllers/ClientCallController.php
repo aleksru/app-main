@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 
+use App\Client;
 use App\ClientCall;
 use App\Enums\MangoCallEnums;
+use App\Events\ResultCallBack;
+use App\Models\Operator;
+use App\Services\Mango\Commands\Callback;
+use App\Services\Mango\MangoService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ClientCallController extends Controller
 {
@@ -19,6 +26,23 @@ class ClientCallController extends Controller
         $this->authorize('view', ClientCall::class);
 
         return view('front.calls.index');
+    }
+
+    public function callback(Operator $operator, Request $request)
+    {
+        if($operator->extension === null){
+            return response()->json(['message' => 'Не назначен внутренний номер в системе. Обратитесь к системному администратору'], 422);
+        }
+        $callback = new Callback();
+        $uuid = Str::uuid();
+        $callback->command_id($uuid)
+                ->extension($operator->extension)
+                ->to_number($request->get('phone'));
+        $mangoService = new MangoService();
+        $mangoService->callback($callback);
+        Log::channel('custom')->error(['ClientCallController', (array)$callback]);
+
+        return response()->json(['command_id' => $uuid]);
     }
 
     /**

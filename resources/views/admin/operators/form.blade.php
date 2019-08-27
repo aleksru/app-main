@@ -54,6 +54,14 @@
                         <input type="text" class="form-control" name="sip_login" placeholder="sip login" value="{{ old('sip_login', $operator->sip_login ?? '') }}">
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="email" class="col-sm-2 control-label">Внутренний номер</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="extension"  value="{{ old('extension', $operator->extension ?? '') }}">
+                    </div>
+                </div>
             </form>
         </div>
         <div class="box-footer">

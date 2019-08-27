@@ -4,6 +4,7 @@
 namespace App\Services\Mango;
 
 
+use App\Services\Mango\Commands\Callback;
 use App\Services\Mango\Commands\SendSms;
 
 class MangoService
@@ -19,5 +20,16 @@ class MangoService
         }
 
         return false;
+    }
+
+    /**
+     * CallBack client
+     *
+     * @param callable $callback
+     * @return array
+     */
+    public function callback(Callback $callback)
+    {
+        return (new MangoClient((array)$callback,'commands/callback'))->send();
     }
 }

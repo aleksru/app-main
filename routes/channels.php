@@ -26,3 +26,7 @@ Broadcast::channel('notifications.{user_id}', function ($user, $user_id) {
 Broadcast::channel('operator-incomming.{user_id}', function ($user, $user_id) {
     return true;
 });
+
+Broadcast::channel('operator-callback.{command_uuid}', function ($user, $command_uuid) {
+    return true;
+});

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\ClientCall;
 use App\Enums\MangoCallEnums;
+use App\Enums\MangoResultCodes;
+use App\Events\ResultCallBack;
 use App\Jobs\ClientCallConnected;
 use App\Jobs\SaveCall;
 use App\Models\Operator;
@@ -127,5 +129,12 @@ class ApiMangoController extends Controller
 //        );
         $data = json_decode($request->json, true);
         SaveCall::dispatch($data)->onQueue('calls');
+    }
+
+    public function resultCallback(Request $request)
+    {
+        $data = json_decode($request->json, true);
+        Log::channel('custom')->error(['ApiMangoController', $data]);
+        event(new ResultCallBack($data['command_id'], MangoResultCodes::getDescriptionCode($data['result'])));
     }
 }

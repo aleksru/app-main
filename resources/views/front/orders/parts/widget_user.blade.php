@@ -81,7 +81,7 @@
             @endif
         </form>
         <div class="form-group">
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#send-sms-form-modal">
                     <i class="fa fa-envelope" aria-hidden="true"></i> Отправить смс
                 </button>
@@ -105,6 +105,13 @@
                     <!-- /.modal-dialog -->
                 </div>
             </div>
+            @if(Auth::user()->isOperator() && Auth::user()->account)
+                <div class="col-sm-3">
+                    <call-back :phones='@json($client->allPhones->toArray())'
+                               :operator='@json(Auth::user()->account)'>
+                    </call-back>
+                </div>
+            @endif
         </div>
     </div>
 </div>

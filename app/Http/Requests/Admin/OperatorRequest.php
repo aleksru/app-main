@@ -28,6 +28,7 @@ class OperatorRequest extends FormRequest
         return [
             'name' => 'required|string',
             'sip_login' => 'string|nullable|unique:operators,sip_login'.$sipLogin,
+            'extension' => 'integer|nullable|unique:operators,extension'.$sipLogin,
         ];
     }
 }

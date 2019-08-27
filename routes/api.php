@@ -27,6 +27,10 @@ Route::post('events/call', 'ApiMangoController@index');
 
 Route::post('events/summary', 'ApiMangoController@summary');
 
+Route::group(['prefix' => 'result', 'as' => 'mango.result'], function (){
+    Route::post('callback', 'ApiMangoController@resultCallback')->name('callback');
+});
+
 Route::group(['middleware' =>'api.v2', 'prefix' => 'v2', 'as' => 'apiV2.', 'namespace' => 'Api'], function (){
     Route::get('products', 'ProductController@products')->name('products.get');
     Route::get('price-list/version', 'PriceListController@version')->name('price-list.version');
