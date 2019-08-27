@@ -43,7 +43,6 @@ class ResultCallBack implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        Log::channel('custom')->error(['ResultCallBack', $this->commandId, $this->result]);
         return new PrivateChannel('operator-callback.' . $this->commandId);
     }
 }

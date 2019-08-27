@@ -88,6 +88,9 @@ class SaveCall implements ShouldQueue
 
         //исходящий
         if($data['call_direction'] === MangoCallEnums::CALL_DIRECTION_OUTCOMING) {
+            if (! isset($data['from']['number'][1])){
+                return null;
+            }
             $operator = Operator::getOperatorBySipLogin(explode(':', $data['from']['number'])[1]);
             $client = Client::getClientByPhone($data['to']['number']);
 
