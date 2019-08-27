@@ -27,6 +27,11 @@ class Callback
     public $to_number;
 
     /**
+     * @var string
+     */
+    public $line_number;
+
+    /**
      * @param $command_id
      * @return $this
      */
@@ -70,5 +75,15 @@ class Callback
         return $this;
     }
 
+    /**
+     * @param $line_number
+     * @return $this
+     */
+    public function line_number($line_number)
+    {
+        $this->line_number = $line_number;
+
+        return $this;
+    }
 
 }
