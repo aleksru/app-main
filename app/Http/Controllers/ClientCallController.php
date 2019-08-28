@@ -41,7 +41,7 @@ class ClientCallController extends Controller
                 ->to_number($request->get('phone'));
         $mangoService = new MangoService();
         $mangoService->callback($callback);
-        Log::channel('custom')->error(['ClientCallController', (array)$callback]);
+        //Log::channel('custom')->error(['ClientCallController', (array)$callback]);
 
         return response()->json(['command_id' => $uuid]);
     }

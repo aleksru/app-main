@@ -24,7 +24,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
         
         // Horizon::night();
         Horizon::auth(function ($req){
-            Log::channel('custom')->error('Horizon::auth');
+            Log::channel('custom')->error($req->user());
             return true;
         });
     }
@@ -39,7 +39,6 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewHorizon', function ($user) {
-            Log::channel('custom')->error('HorizonServiceProvider');
             return true;
         });
     }

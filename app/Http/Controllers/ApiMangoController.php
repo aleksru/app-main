@@ -134,7 +134,7 @@ class ApiMangoController extends Controller
     public function resultCallback(Request $request)
     {
         $data = json_decode($request->json, true);
-        Log::channel('custom')->error(['ApiMangoController', $data]);
+        //Log::channel('custom')->error(['ApiMangoController', $data]);
         event(new ResultCallBack($data['command_id'], MangoResultCodes::getDescriptionCode($data['result'])));
     }
 }
