@@ -47,6 +47,11 @@
                         'width' => '10%',
                         'searchable' => true,
                     ],
+                    'extension' => [
+                        'name' => 'Внутренний номер',
+                        'width' => '10%',
+                        'searchable' => true,
+                    ],
                     'sip_login' => [
                         'name' => 'Sip Login',
                         'width' => '10%',
