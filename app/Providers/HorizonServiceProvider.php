@@ -24,8 +24,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
         
         // Horizon::night();
         Horizon::auth(function ($req){
-            if($req->user()){
-                Log::channel('custom')->error($req->user()->is_admin);
+            if($req->user() && $req->user()->is_admin){
                 return true;
             }
 
@@ -42,8 +41,12 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      */
     protected function gate()
     {
-        Gate::define('viewHorizon', function ($user) {
-            return true;
+        Gate::define('viewHorizon', function ($user = null) {
+            if($user && $user->is_admin){
+                return true;
+            }
+
+            return false;
         });
     }
 }
