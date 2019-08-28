@@ -24,8 +24,12 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
         
         // Horizon::night();
         Horizon::auth(function ($req){
-            Log::channel('custom')->error($req->user());
-            return true;
+            if($req->user()){
+                Log::channel('custom')->error($req->user()->is_admin);
+                return true;
+            }
+
+            return false;
         });
     }
 
