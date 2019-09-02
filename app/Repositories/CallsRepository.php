@@ -51,4 +51,58 @@ class CallsRepository
 
         return $result;
     }
+
+    /**
+     * @param Carbon $toDate
+     * @param bool $isComplaint
+     * @return Collection
+     */
+    public function getMissedCallsForDate(Carbon $toDate, bool $isComplaint = false) : Collection
+    {
+        $successCallsQuery = ClientCall::query()
+            ->selectRaw('from_number as s_from_number, max(call_end_time) as sca')
+            ->where('status_call', MangoCallEnums::CALL_RESULT_SUCCESS)
+            ->whereDate('created_at', $toDate)
+            ->groupBy('from_number');
+
+        $sql = DB::query()
+            ->selectRaw('failed.from_number, failed.client_id, stores.`name` as store_name, clients.`name` as client_name, failed.fca')
+            ->fromSub(function ($query) use ($toDate, $isComplaint){
+                $query->from('client_calls')
+                    ->selectRaw('from_number, max(client_id) as client_id, max(store_id) as store_id, max(call_end_time) as fca')
+                    ->where('status_call', MangoCallEnums::CALL_RESULT_MISSED)
+                    ->where('type', ClientCall::incomingCall)
+                    ->whereRaw('IFNULL(extension, 0) ' . ($isComplaint ? '= ' : '!= ') .  MangoCallEnums::CALL_GROUP_COMPLAINT)
+                    ->whereDate('created_at', $toDate)
+                    ->groupBy('from_number');
+            }, 'failed')
+            ->leftJoinSub($successCallsQuery, 'success', function($join) {
+                $join->on('failed.from_number', '=', 'success.s_from_number');
+            })
+            ->leftJoin('clients', 'failed.client_id', '=', 'clients.id')
+            ->leftJoin('stores', 'failed.store_id', '=', 'stores.id')
+            ->whereRaw('failed.fca > IFNULL(success.sca, 0)')
+            ->orderBy('fca', 'DESC')
+            ->get();
+
+        return $sql;
+    }
+
+    /**
+     * @param Carbon $carbon
+     * @param array $phones
+     * @return int
+     */
+    public function getUniquePhonesForDate(Carbon $carbon, array $phones = []) : int
+    {
+        $calls = DB::table('client_calls')
+            ->where('is_first', 1)
+            ->whereDate('created_at', '=' ,$carbon);
+        if( !empty($phones)){
+            $calls->whereIn('from_number', $phones);
+        }
+        $calls = $calls->count();
+
+        return $calls;
+    }
 }

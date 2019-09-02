@@ -96,6 +96,7 @@ Route::group(['middleware' =>'auth'], function() {
     Route::resource('calls', 'ClientCallController')->only('index');
     Route::get('calls-table', 'ClientCallController@datatable')->name('calls.datatable');
     Route::post('callback/{operator}', 'ClientCallController@callback')->name('callback');
+    Route::post('calls/get-calls-by-phone', 'ClientCallController@getCallsByPhone')->name('calls.by_phone');
 
     //магазины
     Route::group(['prefix' => 'stores', 'as' => 'stores.'], function(){
