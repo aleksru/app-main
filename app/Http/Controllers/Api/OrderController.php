@@ -42,6 +42,7 @@ class OrderController extends Controller
             'store_id'      => $store->id ?? null,
             'comment'       => $data['comment'] ?? '',
             'products_text' => $data['products_text'] ?? [],
+            'utm_source'    => $data['utm_source'] ?? null,
         ]);
 
         if ($order->products_text) {

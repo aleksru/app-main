@@ -35,6 +35,7 @@ class CreateOrderRequest extends FormRequest
             'store_phone'   => 'required|string',
             'comment'       => 'string|nullable',
             'products'      => 'string|nullable',
+            'utm_source'    => 'string|nullable',
         ];
     }
 
