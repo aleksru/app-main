@@ -96,7 +96,7 @@ class ApiMangoController extends Controller
         }
 
         //Disconnected abonent
-        if($data['call_state'] === 'Disconnected' && $data['location'] === 'abonent'){
+        if($data['call_state'] === 'Disconnected' && $data['location'] === 'abonent' && $data['seq'] >= 3){
             Log::channel('custom')->error($data);
         }
 
