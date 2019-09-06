@@ -23,6 +23,10 @@ class ClientCall extends Model
      */
     const outgoingCall = 'OUTGOING';
 
+    protected $casts = [
+        'is_first' => 'boolean',
+    ];
+
     /**
      * Получение клиента
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

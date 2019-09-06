@@ -12,6 +12,12 @@ window.Vue = require('vue');
 window.VueBus = new Vue();
 
 require('./bootstrap');
+
+/**
+ * Глобально подключаем аксиос
+ */
+Object.defineProperty(Vue.prototype, '$axios', { value: window.axios });
+
 window.toast = require('./notifications');
 require('./modules/fake-link');
 //подключаем селекты чистый и обертку
@@ -50,6 +56,8 @@ Vue.component('Notifications', require('./components/Front/Notifications.vue'));
 Vue.component('IncomingCall', require('./components/Front/IncomingCall.vue'));
 
 Vue.component('CallBack', require('./components/Front/CallBack.vue'));
+
+Vue.component('MissedCalls', require('./components/Front/MissedCalls.vue'));
 
 const app = new Vue({
     el: '#app'

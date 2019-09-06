@@ -46,9 +46,11 @@ class SaveCall implements ShouldQueue
 
             //пропущенный
             if($data['entry_result'] === MangoCallEnums::CALL_RESULT_MISSED) {
+                $isFirst = false;
                 $client = Client::getClientByPhone($data['from']['number']);
                 $store = Store::where('phone', $data['line_number'])->first();
                 if(!$client){
+                    $isFirst = true;
                     $client = Client::create(['phone' => $data['from']['number']]);
                 }
                 ClientCall::create([
@@ -59,7 +61,8 @@ class SaveCall implements ShouldQueue
                     'client_id' => $client->id ?? null,
                     'status_call' => $data['entry_result'],
                     'store_id' => $store->id ?? null,
-                    'extension' => $data['to']['extension'] ?? null
+                    'extension' => $data['to']['extension'] ?? null,
+                    'is_first' => $isFirst,
                 ]);
             }
 
