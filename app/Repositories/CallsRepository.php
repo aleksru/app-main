@@ -105,4 +105,13 @@ class CallsRepository
 
         return $calls;
     }
+
+    /**
+     * @param string $number
+     * @return int
+     */
+    public function getCountCallsFromNumber(string $number) : int
+    {
+        return DB::table('client_calls')->where('from_number', $number)->count();
+    }
 }

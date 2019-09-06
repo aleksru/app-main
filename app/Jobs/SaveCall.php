@@ -6,6 +6,7 @@ use App\Client;
 use App\ClientCall;
 use App\Enums\MangoCallEnums;
 use App\Models\Operator;
+use App\Repositories\CallsRepository;
 use App\Store;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -46,6 +47,7 @@ class SaveCall implements ShouldQueue
 
             //пропущенный
             if($data['entry_result'] === MangoCallEnums::CALL_RESULT_MISSED) {
+                $callRepository = new CallsRepository();
                 $isFirst = false;
                 $client = Client::getClientByPhone($data['from']['number']);
                 $store = Store::where('phone', $data['line_number'])->first();
@@ -53,6 +55,10 @@ class SaveCall implements ShouldQueue
                     $isFirst = true;
                     $client = Client::create(['phone' => $data['from']['number']]);
                 }
+                if($callRepository->getCountCallsFromNumber($data['from']['number']) <= 1){
+                    $isFirst = true;
+                }
+
                 ClientCall::create([
                     'type' => ClientCall::incomingCall,
                     'from_number' => $data['from']['number'] ?? null,
