@@ -55,7 +55,7 @@ class SaveCall implements ShouldQueue
                     $isFirst = true;
                     $client = Client::create(['phone' => $data['from']['number']]);
                 }
-                if($callRepository->getCountCallsFromNumber($data['from']['number']) <= 1){
+                if($callRepository->getCountCallsFromNumber($data['from']['number']) === 0){
                     $isFirst = true;
                 }
 
@@ -80,6 +80,9 @@ class SaveCall implements ShouldQueue
                 if(!$client){
                     $client = Client::create(['phone' => $data['from']['number']]);
                 }
+                if($callRepository->getCountCallsFromNumber($data['from']['number']) === 0){
+                    $isFirst = true;
+                }
                 ClientCall::create([
                     'type' => ClientCall::incomingCall,
                     'from_number' => $data['from']['number'] ?? null,
@@ -91,6 +94,7 @@ class SaveCall implements ShouldQueue
                     'operator_id' => $getOperator ? $getOperator->id : null,
                     'operator_text' => $data['to']['number'] ?? null,
                     'extension' => $data['to']['extension'] ?? null,
+                    'is_first' => $isFirst ?? null,
                 ]);
             }
         }
