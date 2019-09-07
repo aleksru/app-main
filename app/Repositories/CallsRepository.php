@@ -57,7 +57,7 @@ class CallsRepository
      * @param bool $isComplaint
      * @return Collection
      */
-    public function getIdsMissedCallsForDate(Carbon $toDate, bool $isComplaint = false) : Collection
+    public function getIdsMissedCallsForDate(Carbon $toDate) : Collection
     {
         //SELECT m_id from
         //    (select from_number, max(id) as m_id
@@ -76,11 +76,10 @@ class CallsRepository
 
         $sql = DB::query()
             ->selectRaw('m_id')
-            ->fromSub(function ($query) use ($toDate, $isComplaint){
+            ->fromSub(function ($query) use ($toDate){
                 $query->from('client_calls')
                     ->selectRaw('from_number, max(id) as m_id')
                     ->where('status_call', MangoCallEnums::CALL_RESULT_MISSED)
-                    ->whereRaw('IFNULL(extension, 0) ' . ($isComplaint ? '= ' : '!= ') .  MangoCallEnums::CALL_GROUP_COMPLAINT)
                     ->where('type', ClientCall::incomingCall)
                     ->whereDate('created_at', $toDate)
                     ->groupBy('from_number');

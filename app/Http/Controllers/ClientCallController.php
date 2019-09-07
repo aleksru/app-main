@@ -67,15 +67,16 @@ class ClientCallController extends Controller
      */
     public function datatable(Request $request, CallsRepository $callsRepository)
     {
-        $isComplaint = $request->get('isComplaint') == 'true' ? true : false;
         $toDate = Carbon::today();
         if($request->get('forDate')) {
             $toDate = Carbon::parse($request->get('forDate'));
         }
-        $callsIds = $callsRepository->getIdsMissedCallsForDate($toDate, $isComplaint);
+        $callsIds = $callsRepository->getIdsMissedCallsForDate($toDate);
         $calls = ClientCall::with('client', 'store')->whereIn('id', $callsIds)->orderBy('call_create_time', 'DESC')->get();
-        $uniquePhones = $callsRepository->getUniquePhonesForDate($toDate, $calls->pluck('from_number')->toArray());
+        if(!$calls->isEmpty()){
+            $uniquePhones = $callsRepository->getUniquePhonesForDate($toDate, $calls->pluck('from_number')->toArray());
+        }
 
-        return response()->json(['calls' => $calls, 'uniquePhones' => $uniquePhones]);
+        return response()->json(['calls' => $calls, 'uniquePhones' => $uniquePhones ?? 0]);
     }
 }

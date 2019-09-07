@@ -35,7 +35,48 @@
                         <th>Магазин</th>
                         <th>Время</th>
                     </tr>
-                    <tr v-for="(call, index) in missedCalls" :key="call.id">
+                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="(call.extension !== 666)" v-show="!isComplaint">
+                        <td>
+                            <a :href="'/clients/' + call.client_id" target="_blank">
+                                {{call.client.name}}
+                                <i class="fa fa-address-card-o" aria-hidden="true"></i>
+                            </a>
+
+                        </td>
+                        <td>
+                            <div class="margin">
+                                <div class="btn-group">
+                                    <input type="button"
+                                           class="btn btn-default btn-call-info"
+                                           data-toggle="dropdown"
+                                           aria-haspopup="true"
+                                           aria-expanded="false"
+                                           :value="call.from_number"
+                                           @click="processAllCallsPhone(call.from_number, call.id)"/>
+                                    <ul class="dropdown-menu">
+                                        <li role="presentation" v-for="(otherCall, name) in phoneOtherCalls[call.id]">
+                                            <a role="menuitem" tabindex="-1" href="#" onclick="return false">
+                                                <p :class="otherCall.type === 'INCOMING' ? 'text-red' : 'text-green'">
+                                                    {{formatDateTimeCall(otherCall.call_create_time)}}
+                                                    {{otherCall.store ? otherCall.store.name : ''}}
+                                                    {{otherCall.type === 'INCOMING' ? 'Входящий' : 'Исходящий'}}
+                                                </p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <call-back v-if="operator && call.store"
+                                           :phones="[call.from_number]"
+                                           :operator="operator"
+                                           :store="call.store"
+                                >
+                                </call-back>
+                            </div>
+                        </td>
+                        <td>{{call.store ? call.store.name : ''}}</td>
+                        <td>{{formatDateTimeCall(call.call_create_time)}}</td>
+                    </tr>
+                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="(call.extension === 666)" v-show="isComplaint">
                         <td>
                             <a :href="'/clients/' + call.client_id" target="_blank">
                                 {{call.client.name}}
@@ -106,7 +147,6 @@
             async getMissedCalls(){
                 let res = await this.$axios.get('calls-table', {
                     params: {
-                        isComplaint: this.isComplaint,
                         forDate: this.forDate,
                     }
                 });
@@ -133,7 +173,7 @@
 
             changeTypeCalls(){
                 this.isComplaint = ! this.isComplaint;
-                this.updateTable();
+                //this.updateTable();
             },
 
             updateTable(){
