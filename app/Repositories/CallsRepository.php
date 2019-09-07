@@ -96,14 +96,14 @@ class CallsRepository
     public function getUniquePhonesForDate(Carbon $carbon, array $phones = []) : int
     {
         $calls = DB::table('client_calls')
+            ->selectRaw('COUNT(DISTINCT from_number) as count')
             ->where('is_first', 1)
             ->whereDate('created_at', '=' ,$carbon);
         if( !empty($phones)){
             $calls->whereIn('from_number', $phones);
         }
-        $calls = $calls->count();
 
-        return $calls;
+        return $calls->first()->count;
     }
 
     /**
