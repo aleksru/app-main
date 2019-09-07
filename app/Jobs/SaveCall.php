@@ -44,10 +44,9 @@ class SaveCall implements ShouldQueue
 
         //входящий звонок
         if($data['call_direction'] === MangoCallEnums::CALL_DIRECTION_INCOMING) {
-
+            $callRepository = new CallsRepository();
             //пропущенный
             if($data['entry_result'] === MangoCallEnums::CALL_RESULT_MISSED) {
-                $callRepository = new CallsRepository();
                 $isFirst = false;
                 $client = Client::getClientByPhone($data['from']['number']);
                 $store = Store::where('phone', $data['line_number'])->first();
