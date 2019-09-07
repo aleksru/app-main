@@ -10,6 +10,7 @@ use App\Services\Mango\Commands\Callback;
 use App\Services\Mango\MangoService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ClientCallController extends Controller
@@ -20,8 +21,10 @@ class ClientCallController extends Controller
     public function index()
     {
         $this->authorize('view', ClientCall::class);
+        $user =  Auth::user();
+        $operator = ($user->isOperator() && $user->account) ? $user->account : null;
 
-        return view('front.calls.index');
+        return view('front.calls.index', compact('operator'));
     }
 
     public function callback(Operator $operator, Request $request)
@@ -69,7 +72,8 @@ class ClientCallController extends Controller
         if($request->get('forDate')) {
             $toDate = Carbon::parse($request->get('forDate'));
         }
-        $calls = $callsRepository->getMissedCallsForDate($toDate, $isComplaint);
+        $callsIds = $callsRepository->getIdsMissedCallsForDate($toDate, $isComplaint);
+        $calls = ClientCall::with('client', 'store')->whereIn('id', $callsIds)->get();
         $uniquePhones = $callsRepository->getUniquePhonesForDate($toDate, $calls->pluck('from_number')->toArray());
 
         return response()->json(['calls' => $calls, 'uniquePhones' => $uniquePhones]);

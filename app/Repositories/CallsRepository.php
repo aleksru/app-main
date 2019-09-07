@@ -57,33 +57,39 @@ class CallsRepository
      * @param bool $isComplaint
      * @return Collection
      */
-    public function getMissedCallsForDate(Carbon $toDate, bool $isComplaint = false) : Collection
+    public function getIdsMissedCallsForDate(Carbon $toDate, bool $isComplaint = false) : Collection
     {
-        $successCallsQuery = ClientCall::query()
-            ->selectRaw('from_number as s_from_number, max(call_end_time) as sca')
+        //SELECT m_id from
+        //    (select from_number, max(id) as m_id
+        //		from `client_calls` where `status_call` = 0 and `type` = 'INCOMING' and date(`created_at`) = '2019-07-25' group by `from_number`) as missed
+        //left join
+        //    (select from_number as from_number, max(id) as s_id from `client_calls` where `status_call` = 1 and date(`created_at`) = '2019-07-25' group by `from_number`) as success
+        //on `missed`.`from_number` = `success`.`from_number`
+        //
+        //WHERE m_id > IFNULL(s_id, 0)
+
+        $successCallsQuery = DB::table('client_calls')
+            ->selectRaw('from_number as from_number, max(id) as s_id')
             ->where('status_call', MangoCallEnums::CALL_RESULT_SUCCESS)
             ->whereDate('created_at', $toDate)
             ->groupBy('from_number');
 
         $sql = DB::query()
-            ->selectRaw('failed.from_number, failed.client_id, stores.`name` as store_name, clients.`name` as client_name, failed.fca')
+            ->selectRaw('m_id')
             ->fromSub(function ($query) use ($toDate, $isComplaint){
                 $query->from('client_calls')
-                    ->selectRaw('from_number, max(client_id) as client_id, max(store_id) as store_id, max(call_end_time) as fca')
+                    ->selectRaw('from_number, max(id) as m_id')
                     ->where('status_call', MangoCallEnums::CALL_RESULT_MISSED)
-                    ->where('type', ClientCall::incomingCall)
                     ->whereRaw('IFNULL(extension, 0) ' . ($isComplaint ? '= ' : '!= ') .  MangoCallEnums::CALL_GROUP_COMPLAINT)
+                    ->where('type', ClientCall::incomingCall)
                     ->whereDate('created_at', $toDate)
                     ->groupBy('from_number');
-            }, 'failed')
+            }, 'missed')
             ->leftJoinSub($successCallsQuery, 'success', function($join) {
-                $join->on('failed.from_number', '=', 'success.s_from_number');
+                $join->on('missed.from_number', '=', 'success.from_number');
             })
-            ->leftJoin('clients', 'failed.client_id', '=', 'clients.id')
-            ->leftJoin('stores', 'failed.store_id', '=', 'stores.id')
-            ->whereRaw('failed.fca > IFNULL(success.sca, 0)')
-            ->orderBy('fca', 'DESC')
-            ->get();
+            ->whereRaw('m_id > IFNULL(s_id, 0)')
+            ->pluck('m_id');
 
         return $sql;
     }
@@ -95,15 +101,26 @@ class CallsRepository
      */
     public function getUniquePhonesForDate(Carbon $carbon, array $phones = []) : int
     {
-        $calls = DB::table('client_calls')
-            ->selectRaw('COUNT(DISTINCT from_number) as count')
-            ->where('is_first', 1)
-            ->whereDate('created_at', '=' ,$carbon);
+        //  select count(*) as cnt from `client_calls`
+        //	WHERE id IN(
+        //        select max(id) as max_id from `client_calls` where date(`created_at`) = '2019-09-01' and `from_number` in ('79168599960', '79608676770', '79773639683', '79865653256') GROUP BY from_number
+        //	)
+        //	AND is_first = 1
+
+        $subQuery =  DB::table('client_calls')
+            ->selectRaw('max(id) as max_id')
+            ->whereDate('created_at', '=' ,$carbon)
+            ->groupBy('from_number');
+
+        $calls = DB::table('client_calls');
         if( !empty($phones)){
-            $calls->whereIn('from_number', $phones);
+            $subQuery->whereIn('from_number', $phones);
+            $calls ->whereIn('id', $subQuery);
         }
 
-        return $calls->first()->count;
+        $calls = $calls->where('is_first', 1)->count();
+
+        return $calls;
     }
 
     /**

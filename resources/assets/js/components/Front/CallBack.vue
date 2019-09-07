@@ -1,17 +1,15 @@
 <template>
-    <div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-phone" aria-hidden="true"></i>
-            </button>
-            <ul class="dropdown-menu">
-                <li v-for="(phone, index) in phones" role="presentation" @click.prevent="process(index)">
-                    <a role="menuitem" tabindex="-1" href="#">
-                        <i class="fa fa-phone" aria-hidden="true"></i>{{phone}}
-                    </a>
-                </li>
-            </ul>
-        </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-phone" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu">
+            <li v-for="(phone, index) in phones" role="presentation" @click.prevent="process(index)">
+                <a role="menuitem" tabindex="-1" href="#">
+                    <i class="fa fa-phone" aria-hidden="true"></i>{{phone}}
+                </a>
+            </li>
+        </ul>
     </div>
 </template>
 

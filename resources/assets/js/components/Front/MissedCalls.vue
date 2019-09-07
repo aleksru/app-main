@@ -35,34 +35,46 @@
                         <th>Магазин</th>
                         <th>Время</th>
                     </tr>
-                    <tr v-for="(call, index) in missedCalls" :key="call.fca">
+                    <tr v-for="(call, index) in missedCalls" :key="call.id">
                         <td>
-                            <a :href="'/clients/' + call.client_id" target="_blank">{{call.client_name}}</a>
+                            <a :href="'/clients/' + call.client_id" target="_blank">
+                                {{call.client.name}}
+                                <i class="fa fa-address-card-o" aria-hidden="true"></i>
+                            </a>
+
                         </td>
                         <td>
-                            <div class="btn-group">
-                                <input type="button"
-                                       class="btn btn-default btn-call-info"
-                                       data-toggle="dropdown"
-                                       aria-haspopup="true"
-                                       aria-expanded="false"
-                                       :value="call.from_number"
-                                       @click="processAllCallsPhone(call.from_number, call.fca)"/>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation" v-for="(otherCall, name) in phoneOtherCalls[call.fca]">
-                                        <a role="menuitem" tabindex="-1" href="#" onclick="return false">
-                                            <p :class="otherCall.type === 'INCOMING' ? 'text-red' : 'text-green'">
-                                                {{formatDateTimeCall(otherCall.call_create_time)}}
-                                                {{otherCall.store ? otherCall.store.name : ''}}
-                                                {{otherCall.type === 'INCOMING' ? 'Входящий' : 'Исходящий'}}
-                                            </p>
-                                        </a>
-                                    </li>
-                                </ul>
+                            <div class="margin">
+                                <div class="btn-group">
+                                    <input type="button"
+                                           class="btn btn-default btn-call-info"
+                                           data-toggle="dropdown"
+                                           aria-haspopup="true"
+                                           aria-expanded="false"
+                                           :value="call.from_number"
+                                           @click="processAllCallsPhone(call.from_number, call.id)"/>
+                                    <ul class="dropdown-menu">
+                                        <li role="presentation" v-for="(otherCall, name) in phoneOtherCalls[call.id]">
+                                            <a role="menuitem" tabindex="-1" href="#" onclick="return false">
+                                                <p :class="otherCall.type === 'INCOMING' ? 'text-red' : 'text-green'">
+                                                    {{formatDateTimeCall(otherCall.call_create_time)}}
+                                                    {{otherCall.store ? otherCall.store.name : ''}}
+                                                    {{otherCall.type === 'INCOMING' ? 'Входящий' : 'Исходящий'}}
+                                                </p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <call-back v-if="operator && call.store"
+                                           :phones="[call.from_number]"
+                                           :operator="operator"
+                                           :store="call.store"
+                                >
+                                </call-back>
                             </div>
                         </td>
-                        <td>{{call.store_name}}</td>
-                        <td>{{formatDateTimeCall(call.fca)}}</td>
+                        <td>{{call.store ? call.store.name : ''}}</td>
+                        <td>{{formatDateTimeCall(call.call_create_time)}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -76,6 +88,10 @@
 
 <script>
     export default {
+        props: {
+            operator: [Object, null],
+        },
+
         data() {
             return {
                 missedCalls: [],
