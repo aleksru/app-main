@@ -35,7 +35,7 @@
                         <th>Магазин</th>
                         <th>Время</th>
                     </tr>
-                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="(call.extension !== 666)" v-show="!isComplaint">
+                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="(parseInt(call.extension) !== 666)" v-show="!isComplaint">
                         <td>
                             <a :href="'/clients/' + call.client_id" target="_blank">
                                 {{call.client.name}}
@@ -76,7 +76,7 @@
                         <td>{{call.store ? call.store.name : ''}}</td>
                         <td>{{formatDateTimeCall(call.call_create_time)}}</td>
                     </tr>
-                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="(call.extension === 666)" v-show="isComplaint">
+                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="(parseInt(call.extension) === 666)" v-show="isComplaint">
                         <td>
                             <a :href="'/clients/' + call.client_id" target="_blank">
                                 {{call.client.name}}
