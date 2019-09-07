@@ -73,7 +73,7 @@ class ClientCallController extends Controller
             $toDate = Carbon::parse($request->get('forDate'));
         }
         $callsIds = $callsRepository->getIdsMissedCallsForDate($toDate, $isComplaint);
-        $calls = ClientCall::with('client', 'store')->whereIn('id', $callsIds)->get();
+        $calls = ClientCall::with('client', 'store')->whereIn('id', $callsIds)->orderBy('call_create_time', 'DESC')->get();
         $uniquePhones = $callsRepository->getUniquePhonesForDate($toDate, $calls->pluck('from_number')->toArray());
 
         return response()->json(['calls' => $calls, 'uniquePhones' => $uniquePhones]);
