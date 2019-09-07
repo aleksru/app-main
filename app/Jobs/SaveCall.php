@@ -93,7 +93,7 @@ class SaveCall implements ShouldQueue
                     'operator_id' => $getOperator ? $getOperator->id : null,
                     'operator_text' => $data['to']['number'] ?? null,
                     'extension' => $data['to']['extension'] ?? null,
-                    'is_first' => $isFirst ?? null,
+                    'is_first' => $isFirst ?? false,
                 ]);
             }
         }
