@@ -122,6 +122,12 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('orders', 'StatusController@index')->name('orders');
         Route::post('orders', 'StatusController@massChange')->name('orders.change');
     });
+
+    //Marketing
+    Route::group(['prefix' => 'marketing', 'as' => 'marketing.'], function(){
+        Route::get('utm_tags', 'MarketingController@utmTags')->name('utm');
+        Route::get('utm-tags-table', 'MarketingController@datatable')->name('utm.datatable');
+    });
 });
 
 //Админка

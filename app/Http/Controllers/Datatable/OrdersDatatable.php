@@ -99,6 +99,9 @@ class OrdersDatatable
                     return $query->whereRaw('LOWER(c.name) like ?', "%{$keyword}%");
                 }
             })
+            ->filterColumn('utm_source', function ($query, $keyword) {
+                return $query->where('utm_source', $keyword);
+            })
             ->editColumn('additional_phones', function (Order $order) {
                 return $order->client->allAdditionalPhones;
             })
