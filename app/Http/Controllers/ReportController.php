@@ -8,8 +8,10 @@ use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet1;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet2;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet4;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet5;
+use App\Models\OrderStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -47,6 +49,28 @@ class ReportController extends Controller
     {
         return view('front.reports.index', ['table' => view('front.reports.tables.resources', ['tableName' => 'reportResources']),
             'tableName' => 'reportResources']);
+    }
+
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function utmReport(Request $request)
+    {
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo') ? $request->get('dateTo') : $dateFrom;
+        $orders = [];
+        $statuses = OrderStatus::all();
+        DB::table('orders')->selectRaw('utm_source, status_id, count(*) as cnt')
+                    ->whereNotNull('utm_source')
+                    ->whereBetween('created_at', [$dateFrom, $dateTo])
+                    ->groupBy('utm_source', 'status_id')
+                    ->get()
+                    ->each(function ($item) use (&$orders){
+                        $orders[$item->utm_source][$item->status_id] = $item->cnt;
+                    });
+
+        return view('front.reports.utm', compact('orders', 'statuses'));
     }
 
     /**

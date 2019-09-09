@@ -69,6 +69,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('products', 'ReportController@products')->name('products');
         Route::get('resources', 'ReportController@resources')->name('resources');
         Route::get('reports-table', 'ReportController@operatorsDatatable')->name('datatable');
+        Route::get('utm', 'ReportController@utmReport')->name('utmReport');
     });
 
     //логи
