@@ -57,6 +57,11 @@
                         'width' => '10%',
                         'searchable' => false,
                     ],
+                    'is_disable_api_price' => [
+                        'name' => 'API цены',
+                        'width' => '10%',
+                        'searchable' => false,
+                    ],
                     'actions' => [
                         'name' => 'Действия',
                         'width' => '5%',

@@ -92,6 +92,9 @@ class StoreController extends Controller
                     'check' => $store->is_hidden
                 ]);
             })
+            ->editColumn('is_disable_api_price', function (Store $store) {
+                return $store->is_disable_api_price ? 'НЕТ' : 'ДА';
+            })
             ->rawColumns(['actions', 'is_hidden'])
             ->make(true);
     }
