@@ -55,7 +55,7 @@ class OrderController extends Controller
 
                     $order->realizations()->create([
                         'quantity'   => (int)$product['quantity'],
-                        'price'      => (float)$product['price'],
+                        'price'      => ($store && ! $store->is_disable_api_price) ? (float)$product['price'] : 0,
                         'product_id' => $productModel->id,
                     ]);
                 }

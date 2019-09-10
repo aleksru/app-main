@@ -100,6 +100,19 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="price_type_id" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-6">
+                        <div class="pretty p-default p-curve p-thick">
+                            <input type="hidden" value="0" name="is_disable_api_price" />
+                            <input class="form-control" type="checkbox" value="1" name="is_disable_api_price" @if($store->is_disable_api_price)checked @endif />
+                            <div class="state p-danger-o">
+                                <label>Не проставлять цены из API</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
             @include('admin.remote-stores.parts.button_update_price', ['store' => $store ?? null])
             @include('admin.remote-stores.parts.btn_check_state', ['store' => $store ?? null])

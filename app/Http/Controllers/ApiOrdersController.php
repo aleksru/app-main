@@ -51,8 +51,8 @@ class ApiOrdersController extends Controller
                 if (!$productModel) {
                     continue;
                 }
-
-                $order->realizations()->create(['quantity' => (int)$product['quantity'], 'price' => (float)$product['price'], 'product_id' => $productModel->id]);
+                $price = ($store && ! $store->is_disable_api_price) ? (float)$product['price'] : 0;
+                $order->realizations()->create(['quantity' => (int)$product['quantity'], 'price' => $price, 'product_id' => $productModel->id]);
             }
         }
         
