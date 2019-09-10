@@ -168,6 +168,7 @@
                 range.setEnd(this.children[this.children.length - 1], 0);
                 sel.removeAllRanges();
                 sel.addRange(range);
+
                 try {
                     document.execCommand('copy');
                     if(this.dataset.productid == '') {
@@ -175,6 +176,7 @@
                     }
                     axios.post("{!! route('logistics.copy.toggle') !!}", {
                         realization_id: this.dataset.realizationid,
+                        row: this.innerHTML,
                     }).then((res) => {
                         this.classList.remove('alert-danger');
                         this.classList.add('alert-success');

@@ -11,6 +11,7 @@ use App\Models\OrderStatus;
 use App\Models\Realization;
 use App\Order;
 use App\Repositories\DeliveryPeriodsRepository;
+use App\Services\Google\Sheets\GoogleSheets;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -141,6 +142,12 @@ class LogisticController extends Controller
         }
         $realiz->is_copy_logist = true;
         $realiz->save();
+
+        if(file_exists(storage_path('app/google/key_table.json'))){
+            $rowGet = str_replace('<td>', '', $request->get('row'));
+            $row = explode('</td>', $rowGet);
+            (new GoogleSheets())->writeRow($row);
+        }
 
         return response()->json(['type' => 'success', 'message' => 'Скопировано']);
     }
