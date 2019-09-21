@@ -106,7 +106,9 @@
                     <div class="col-sm-6">
                         <div class="pretty p-default p-curve p-thick">
                             <input type="hidden" value="0" name="is_disable_api_price" />
-                            <input class="form-control" type="checkbox" value="1" name="is_disable_api_price" @if($store->is_disable_api_price)checked @endif />
+                            <input class="form-control" type="checkbox" value="1" name="is_disable_api_price"
+                                   @if(isset($store) && $store->is_disable_api_price)checked @endif
+                            />
                             <div class="state p-danger-o">
                                 <label>Не проставлять цены из API</label>
                             </div>
