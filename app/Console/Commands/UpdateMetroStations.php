@@ -3,8 +3,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\City;
 use App\Services\Metro\UpdateStations;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateMetroStations extends Command
 {
@@ -13,7 +15,7 @@ class UpdateMetroStations extends Command
      *
      * @var string
      */
-    protected $signature = 'metro:update-stations';
+    protected $signature = 'metro:update-stations {--city=}';
 
     /**
      * The console command description.
@@ -23,9 +25,7 @@ class UpdateMetroStations extends Command
     protected $description = 'update metro stations';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
+     * UpdateMetroStations constructor.
      */
     public function __construct()
     {
@@ -33,12 +33,25 @@ class UpdateMetroStations extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @throws \Exception
      */
     public function handle()
     {
-        (new UpdateStations())->update();
+        if($optionCity = $this->option('city')) {
+            $city = City::where('name', 'like', $optionCity)->first();
+            if(!$city){
+                throw new \Exception("City not found in database!");
+            }
+            (new UpdateStations($city))->update();
+        }else{
+            foreach (config('metro.aliases') as $alias => $key){
+                $city = City::where('name', 'like', $alias)->first();
+                if($city){
+                    (new UpdateStations($city))->update();
+                }else{
+                    Log::error('Ошибка обновления станций метро!!! Не найден город ' . $alias);
+                }
+            }
+        }
     }
 }

@@ -142,27 +142,27 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-3">
-                    <label for="metro" class="control-label">Метро</label>
-                    <select class="js-example-metros-single form-control" name="metro_id">
-                        <option value="{{ $order->metro->id ?? null }}" selected>{{ $order->metro->name ?? 'Не выбрана' }}</option>
-                        <option value="{{ null }}">  </option>
-                    </select>
-                </div>
+                {{--<div class="col-sm-3">--}}
+                    {{--<label for="metro" class="control-label">Метро</label>--}}
+                    {{--<select class="js-example-metros-single form-control" name="metro_id">--}}
+                        {{--<option value="{{ $order->metro->id ?? null }}" selected>{{ $order->metro->name ?? 'Не выбрана' }}</option>--}}
+                        {{--<option value="{{ null }}">  </option>--}}
+                    {{--</select>--}}
+                {{--</div>--}}
 
                 <div class="col-sm-3">
                     <label for="address" class="control-label">Город</label>
                     <input type="text" class="form-control"  value="{{ old('address_city', $order->address_city ?? '')  }}" name="address_city">
                 </div>
 
-                <div class="col-sm-3">
-                    <label for="city_id" class="control-label">Город доставки</label>
+                {{--<div class="col-sm-3">--}}
+                    {{--<label for="city_id" class="control-label">Город доставки</label>--}}
 
-                    <select class="js-example-city-single form-control" name="city_id">
-                        <option value="{{ $order->city->id ?? null }}" selected>{{ $order->city->name ?? 'Не указан' }}</option>
-                        <option value="{{ null }}">  </option>
-                    </select>
-                </div>
+                    <select-input :value-city="{{json_encode($order->city->id ?? null)}}"
+                                  :value-metro="{{json_encode($order->metro->id ?? null)}}"
+                                  :options="{{json_encode(\App\Models\City::select("id", "name")->get(), true)}}">
+                    </select-input>
+                {{--</div>--}}
 
                 <div class="col-sm-3">
                     <label for="address" class="control-label">Улица</label>

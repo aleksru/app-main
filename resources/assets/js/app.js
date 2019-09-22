@@ -59,6 +59,8 @@ Vue.component('CallBack', require('./components/Front/CallBack.vue'));
 
 Vue.component('MissedCalls', require('./components/Front/MissedCalls.vue'));
 
+Vue.component('SelectInput', require('./components/Front/SelectCityMetro.vue'));
+
 const app = new Vue({
     el: '#app'
 });

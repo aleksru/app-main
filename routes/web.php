@@ -129,6 +129,11 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('utm_tags', 'MarketingController@utmTags')->name('utm');
         Route::get('utm-tags-table', 'MarketingController@datatable')->name('utm.datatable');
     });
+
+    //Metro
+    Route::group(['prefix' => 'metro', 'as' => 'metro.'], function(){
+        Route::get('city/{city}', 'MetroController@getMetrosByCity')->name('city');
+    });
 });
 
 //Админка
