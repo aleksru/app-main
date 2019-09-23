@@ -144,7 +144,7 @@ return [
             'supervisor-1' => [
                 'connection' => 'redis',
                 'queue' => ['default', 'calls', 'sms'],
-                'balance' => 'simple',
+                'balance' => 'auto',
                 'processes' => 10,
                 'tries' => 3,
             ],
