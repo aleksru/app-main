@@ -15,7 +15,7 @@ class MangoService
      */
     public function sendSms(SendSms $sendSms)
     {
-        if(config('mango.enable_send_sms')){
+        if(config('mango.enable_send_sms') && env('APP_ENV') !== 'local'){
             return (new MangoClient((array)$sendSms,'commands/sms'))->send();
         }
 
