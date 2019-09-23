@@ -108,6 +108,7 @@ class CreateOrder extends Notification implements ShouldQueue
                     ->commandId($commandId);
 
         $res = (new MangoService())->sendSms($mangoSms);
-        event(new SendSmsClient($mangoSms, $this->order, (int)$res['result'] ?? null));
+        $result = array_key_exists('result', $res) ? $res['result'] : null;
+        event(new SendSmsClient($mangoSms, $this->order,  $result));
     }
 }
