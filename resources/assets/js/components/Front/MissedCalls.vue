@@ -17,7 +17,7 @@
                 </button>
             </div>
             <div class="col-md-2">
-                <input type='date' class='form-control' v-model="forDate" @input="updateTable()"/>
+                <input type='date' v-model="forDate" @input="updateTable()"/>
             </div>
 
             <div class="col-md-2">
