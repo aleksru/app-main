@@ -267,7 +267,9 @@ class Order extends Model
      */
     public function getFullSumAttribute()
     {
-        return $this->realizations->sum('price');
+        return $this->realizations->reduce(function ($prev, $val){
+            return $prev + ($val->quantity * $val->price);
+        }, 0);
     }
 
     /**
