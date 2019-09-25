@@ -2,9 +2,12 @@
 
 namespace App\Observers;
 
+use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
+use App\Jobs\SendLogistGoogleTable;
 use App\Models\OrderStatus;
 use App\Notifications\CreateOrder;
 use App\Order;
+use App\Services\Google\Sheets\Data\OrderLogistData;
 
 class OrderObserver
 {
@@ -32,12 +35,15 @@ class OrderObserver
 
     public function updating(Order $order)
     {
-        if($order->getAttributeValue('status_id') != $order->getOriginal('status_id') &&
-               ! $order->flag_send_sms) {
+        if($order->getAttributeValue('status_id') != $order->getOriginal('status_id')) {
             $statusConfirm = OrderStatus::getIdStatusConfirm();
             if($statusConfirm && $order->status_id == $statusConfirm){
-                $order->client->notify(new CreateOrder($order));
-                $order->flag_send_sms = true;
+                if(!$order->flag_send_sms){
+                    $order->client->notify(new CreateOrder($order));
+                    $order->flag_send_sms = true;
+                }
+                $logistOrderData = app(OrderLogistData::class, ['order' => $order]);
+                dispatch(new SendLogistGoogleTable($logistOrderData));
             }
         }
     }
