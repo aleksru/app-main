@@ -14,6 +14,6 @@ class MetroController extends Controller
      */
     public function getMetrosByCity(City $city)
     {
-        return response()->json(['metros' => $city->metros]);
+        return response()->json(['metros' => $city->metros()->orderBy('name')->get()]);
     }
 }
