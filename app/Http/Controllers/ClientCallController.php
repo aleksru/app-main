@@ -74,7 +74,7 @@ class ClientCallController extends Controller
         $callsIds = $callsRepository->getIdsMissedCallsForDate($toDate);
         $calls = ClientCall::with('client', 'store')->whereIn('id', $callsIds)->orderBy('call_create_time', 'DESC')->get();
         if(!$calls->isEmpty()){
-            $uniquePhones = $callsRepository->getUniquePhonesForDate($toDate, $calls->pluck('from_number')->toArray());
+            $uniquePhones = $calls->sum('is_first');
         }
 
         return response()->json(['calls' => $calls, 'uniquePhones' => $uniquePhones ?? 0]);
