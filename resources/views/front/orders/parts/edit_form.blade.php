@@ -142,27 +142,16 @@
             </div>
 
             <div class="row">
-                {{--<div class="col-sm-3">--}}
-                    {{--<label for="metro" class="control-label">Метро</label>--}}
-                    {{--<select class="js-example-metros-single form-control" name="metro_id">--}}
-                        {{--<option value="{{ $order->metro->id ?? null }}" selected>{{ $order->metro->name ?? 'Не выбрана' }}</option>--}}
-                        {{--<option value="{{ null }}">  </option>--}}
-                    {{--</select>--}}
-                {{--</div>--}}
 
                 <div class="col-sm-3">
                     <label for="address" class="control-label">Город</label>
                     <input type="text" class="form-control"  value="{{ old('address_city', $order->address_city ?? '')  }}" name="address_city">
                 </div>
 
-                {{--<div class="col-sm-3">--}}
-                    {{--<label for="city_id" class="control-label">Город доставки</label>--}}
-
-                    <select-input :value-city="{{json_encode($order->city->id ?? null)}}"
-                                  :value-metro="{{json_encode($order->metro->id ?? null)}}"
-                                  :options="{{json_encode(\App\Models\City::select("id", "name")->get(), true)}}">
-                    </select-input>
-                {{--</div>--}}
+                <select-input :value-city="{{json_encode($order->city->id ?? null)}}"
+                              :value-metro="{{json_encode($order->metro->id ?? null)}}"
+                              :options="{{json_encode(\App\Models\City::select("id", "name")->get(), true)}}">
+                </select-input>
 
                 <div class="col-sm-3">
                     <label for="address" class="control-label">Улица</label>
@@ -275,15 +264,6 @@
             });
         });
 
-        let metros = {!!   json_encode(\App\Models\Metro::select('id', 'name as text')->get()->toArray()) !!}
-        $(function() {
-            $('.js-example-metros-single').select2({
-                data: metros,
-                allowClear: true,
-                placeholder: "Выберите станцию метро...",
-            });
-        });
-
         let stores = {!!   json_encode(\App\Store::active()->select('id', 'name as text')->get()->toArray()) !!}
         $(function() {
             $('.js-example-stores-single').select2({
@@ -308,15 +288,6 @@
                 data: deliveryType,
                 allowClear: true,
                 placeholder: "Тип доставки",
-            });
-        });
-
-        let cities = {!!   json_encode(\App\Models\City::select('id', 'name as text')->get()->toArray()) !!}
-        $(function() {
-            $('.js-example-city-single').select2({
-                data: cities,
-                allowClear: true,
-                placeholder: "Город доставки",
             });
         });
     </script>
