@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 @foreach ($columns as $name => $column)
-                    <th class="th-{{ $name }}">{{ $column['name'] }}</th>
+                    <th class="th-{{ $name }}" title="{{$column['title'] ?? ''}}">{{ $column['name'] }}</th>
                 @endforeach
             </tr>
         </thead>
