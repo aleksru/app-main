@@ -59,16 +59,20 @@ class ReportController extends Controller
     {
         $dateFrom = $request->get('dateFrom');
         $dateTo = $request->get('dateTo') ? $request->get('dateTo') : $dateFrom;
+        $storesIds = $request->get('store_ids');
         $orders = [];
         $statuses = OrderStatus::all();
-        DB::table('orders')->selectRaw('utm_source, status_id, count(*) as cnt')
+        $res = DB::table('orders')->selectRaw('utm_source, status_id, count(*) as cnt')
                     ->whereNotNull('utm_source')
                     ->whereBetween('created_at', [$dateFrom, $dateTo])
-                    ->groupBy('utm_source', 'status_id')
-                    ->get()
-                    ->each(function ($item) use (&$orders){
-                        $orders[$item->utm_source][$item->status_id] = $item->cnt;
-                    });
+                    ->groupBy('utm_source', 'status_id');
+        if($storesIds){
+            $res->whereIn('store_id', $storesIds);
+        }
+        $res->get()
+            ->each(function ($item) use (&$orders){
+                $orders[$item->utm_source][$item->status_id] = $item->cnt;
+            });
 
         return view('front.reports.utm', compact('orders', 'statuses'));
     }

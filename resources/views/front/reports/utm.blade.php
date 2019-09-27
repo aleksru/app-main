@@ -20,13 +20,13 @@
             </ul>
         </div>
     @endif
-    <div class="box-header">
-
-    </div>
     <div class="col-md-12">
         <div class="box box-default">
+            <div class="box-header">
+
+            </div>
             <div class="box-header with-border">
-                <h3 class="box-title">Выберите даты</h3>
+
             </div>
             <div class="box-body">
                 <form id="report" method="get" action="{{ route('reports.utmReport') }}">
@@ -38,6 +38,12 @@
                         <div class="col-md-2">
                             <label>Дата окончания</label>
                             <input type="date" name="dateTo" class="form-control" id="dateTo">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="name" class="control-label">Источники</label>
+                            <select class="js-example-stores-multiple form-control" name="store_ids[]" multiple="multiple">
+                                <option value="{{ null }}"></option>
+                            </select>
                         </div>
                         <div class="col-md-2">
                             <label></label>
@@ -79,3 +85,17 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    let stores = {!!   json_encode(\App\Store::active()->select('id', 'name as text')->get()->toArray()) !!}
+    $(function() {
+        $('.js-example-stores-multiple').select2({
+            data: stores,
+            allowClear: true,
+            placeholder: "Выберите магазин...",
+        });
+    });
+</script>
+
+@endpush
