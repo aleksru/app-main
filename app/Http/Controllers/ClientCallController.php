@@ -72,7 +72,10 @@ class ClientCallController extends Controller
             $toDate = Carbon::parse($request->get('forDate'));
         }
         $callsIds = $callsRepository->getIdsMissedCallsForDate($toDate);
-        $calls = ClientCall::with('client', 'store')->whereIn('id', $callsIds)->orderBy('call_create_time', 'DESC')->get();
+        $calls = ClientCall::with('client', 'store')
+                            ->whereIn('id', $callsIds)
+                            ->orderBy('call_create_time', 'DESC')
+                            ->get();
         if(!$calls->isEmpty()){
             $uniquePhones = $calls->sum('is_first');
         }

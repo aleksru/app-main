@@ -68,20 +68,24 @@ class CallsRepository
         //
         //WHERE m_id > IFNULL(s_id, 0)
 
+        $fromDate = clone $toDate;
+        $fromDate = $fromDate->subHours(3);
+        $toDate = $toDate->addDay();
+
         $successCallsQuery = DB::table('client_calls')
             ->selectRaw('from_number as from_number, max(id) as s_id')
             ->where('status_call', MangoCallEnums::CALL_RESULT_SUCCESS)
-            ->whereDate('created_at', $toDate)
+            ->whereBetween('created_at', [$fromDate, $toDate])
             ->groupBy('from_number');
 
         $sql = DB::query()
             ->selectRaw('m_id')
-            ->fromSub(function ($query) use ($toDate){
+            ->fromSub(function ($query) use ($fromDate, $toDate){
                 $query->from('client_calls')
                     ->selectRaw('from_number, max(id) as m_id')
                     ->where('status_call', MangoCallEnums::CALL_RESULT_MISSED)
                     ->where('type', ClientCall::incomingCall)
-                    ->whereDate('created_at', $toDate)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
                     ->groupBy('from_number');
             }, 'missed')
             ->leftJoinSub($successCallsQuery, 'success', function($join) {
