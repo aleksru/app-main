@@ -115,6 +115,12 @@
                         'orderable' => 'false',
                         'searchable' => true,
                     ],
+                    'city' => [
+                        'name' => 'Город',
+                        'width' => '2%',
+                        'orderable' => 'false',
+                        'searchable' => true,
+                    ],
                     'actions' => [
                         'name' => 'Действия',
                         'width' => '2%',
@@ -196,6 +202,9 @@
         },
         operator: {
             data: {!! json_encode(App\Models\Operator::select('id', 'name')->get()->toArray()) !!}
+        },
+        city: {
+            data: {!! json_encode(App\Models\City::select('id', 'name')->get()->toArray()) !!}
         }
     };
 

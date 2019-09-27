@@ -51,7 +51,8 @@ class OrdersDatatable
                 'courier',
                 'operator',
                 'products',
-                'realizations:order_id,product_id')
+                'realizations:order_id,product_id',
+                'city')
                 ->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
                 ->join('clients as c', 'client_id', '=', 'c.id')
 
@@ -101,6 +102,11 @@ class OrdersDatatable
             })
             ->filterColumn('utm_source', function ($query, $keyword) {
                 return $query->where('utm_source', $keyword);
+            })
+            ->filterColumn('city', function ($query, $keyword) {
+                if (preg_match('/[0-9]/', $keyword)){
+                    return $query->whereRaw('orders.city_id = ' . $keyword);
+                }
             })
             ->editColumn('additional_phones', function (Order $order) {
                 return $order->client->allAdditionalPhones;
@@ -152,7 +158,9 @@ class OrdersDatatable
             })
             ->editColumn('button', function (Order $order) {
                 return view('front.stock.parts.modal_button', ['orderId' => $order->id]);
-
+            })
+            ->editColumn('city', function (Order $order) {
+                return $order->city ? $order->city->name : '';
             })
             ->setRowClass(function (Order $order) {
                 $class = 'row-link';
