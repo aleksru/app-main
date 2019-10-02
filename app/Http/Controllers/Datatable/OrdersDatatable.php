@@ -91,8 +91,14 @@ class OrdersDatatable
                 }
             })
             ->filterColumn('created_at', function ($query, $keyword) {
-                if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $keyword)){
-                    return $query->whereDate('orders.created_at', $keyword);
+                if (preg_match('/\d{4}.\d{2}.\d{2}/', $keyword)){
+                    $dates = explode(',', $keyword);
+                    if(count($dates) === 1){
+                        return $query->whereDate('orders.created_at', $dates[0]);
+                    }
+                    if(count($dates) === 2){
+                        return $query->whereBetween('orders.created_at', [$dates[0], $dates[1]]);
+                    }
                 }
             })
             ->filterColumn('name_customer', function ($query, $keyword) {

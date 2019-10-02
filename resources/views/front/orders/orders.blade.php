@@ -151,6 +151,19 @@
         setInterval(function () {
             $('#orders-table').DataTable().ajax.reload(null, false);
         }, 5000);
+
+        let tableOrders = $('#orders-table').DataTable();
+        const indCreAt = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'created_at');
+
+        $(".datepicker-here").datepicker({
+            range: true,
+            clearButton: true,
+            dateFormat: 'yyyy.mm.dd',
+            onSelect(formattedDate, date, inst){
+                tableOrders.columns(indCreAt).search(formattedDate).draw(), tableOrders.settings()[0].searchDelay
+            },
+        });
+
     });
 
     //событие перерисовки таблицы
@@ -161,18 +174,6 @@
         });
     });
 
-    //обновление таблицы
-//    setInterval( function () {
-//        $('#orders-table').DataTable().ajax.reload(null, false);
-//    }, 5000 );
-
-    /**
-     * Стиль футер под хедер
-     */
-//    $(function(){
-//        $('tfoot').css('display', 'table-header-group');
-//
-//    });
 
     /**
      * Индивидуальный поиск поле инпут
@@ -181,7 +182,7 @@
     let individualSearchingColumnsInput = {
         phone: {type: 'text'},
         name_customer: {type: 'text'},
-        created_at: {type: 'date'},
+        created_at: {type: 'text', className: "datepicker-here" },
         id: {type: 'text'},
         communication_time: {type: 'date'},
     };
@@ -221,10 +222,12 @@
         $('.dataTables_scrollHead thead tr').clone(true).appendTo( '.dataTables_scrollHead thead' );
         $('.dataTables_scrollHead thead tr:eq(1) th').each( function (i) {
             this.className = this.className.replace(/sorting.*/, 'sorting_disabled');
+
             let columnName = columns[i].name;
             $(this).html('');
             if(columnName in individualSearchingColumnsInput) {
-                let input = $('<input type="' + individualSearchingColumnsInput[columnName]['type'] + '" value="" placeholder="Search...">');
+                let input = $('<input type="' + individualSearchingColumnsInput[columnName]['type'] + '" value="" placeholder="Search..."' +
+                                ` class="${individualSearchingColumnsInput[columnName]['className']}">`);
                 $(this).html(input);
                 input.off().on('keyup cut paste change', _.debounce((e) => {
                     tableOrders.columns(i).search(input.val()).draw(), tableOrders.settings()[0].searchDelay
