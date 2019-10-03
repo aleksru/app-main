@@ -70,6 +70,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('resources', 'ReportController@resources')->name('resources');
         Route::get('reports-table', 'ReportController@operatorsDatatable')->name('datatable');
         Route::get('utm', 'ReportController@utmReport')->name('utmReport');
+        Route::get('utm-statuses', 'ReportController@utmStatus')->name('utm_status');
     });
 
     //логи

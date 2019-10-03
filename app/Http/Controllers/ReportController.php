@@ -9,6 +9,7 @@ use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet2;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet4;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet5;
 use App\Models\OrderStatus;
+use App\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -115,5 +116,29 @@ class ReportController extends Controller
         }
 
         return datatables()->collection(collect($result))->toJson();
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function utmStatus(Request $request)
+    {
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo') ? $request->get('dateTo') : $dateFrom;
+        $storesIds = $request->get('store_ids');
+        $statuses = OrderStatus::all();
+        $orders = Order::with('status')
+            ->selectRaw('status_id, utm_source, COUNT(*) as cnt')
+            ->whereNotNull('utm_source')
+            ->whereNotNull('status_id')
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->groupBy('status_id', 'utm_source');
+        if($storesIds){
+            $orders->whereIn('store_id', $storesIds);
+        }
+        $orders = $orders->get()->groupBy('utm_source');
+
+        return view('front.reports.utm_status', compact('orders', 'statuses'));
     }
 }

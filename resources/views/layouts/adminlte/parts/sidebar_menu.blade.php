@@ -41,7 +41,17 @@
                 <li><a href="{{ route('reports.days') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>По дням</span> </a></li>
                 <li><a href="{{ route('reports.products') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Товары</span> </a></li>
                 <li><a href="{{ route('reports.resources') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Источники</span> </a></li>
-                <li><a href="{{ route('reports.utmReport') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>UTM</span> </a></li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-book"></i> <span>Маркетинг</span>
+                        <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{ route('reports.utmReport') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>UTM</span> </a></li>
+                        <li><a href="{{ route('reports.utm_status') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>UTM статусы заказа</span> </a></li>
+                    </ul>
+                </li>
             </ul>
         </li>
     @endcan
