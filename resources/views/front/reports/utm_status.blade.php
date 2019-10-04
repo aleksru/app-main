@@ -75,7 +75,7 @@
                                     @for($k=0; $k < $statuses->count(); $k++)
                                         <td class="bg-{{$statuses[$k]->color}}">
                                             {{ $order->first(function ($value, $key) use(&$statuses, &$k) {
-                                                return $value->status_id === $statuses[$k]->id ;
+                                                return $value->status_id == $statuses[$k]->id ;
                                             })->cnt ?? 0}}
                                         </td>
                                     @endfor
