@@ -29,6 +29,8 @@ class OrderStatus extends Model
 
     const STATUS_SPAM_PREFIX = 'спам';
 
+    const STATUS_PAYMENT_PREFIX = 'выкуп';
+
     /**
      * Цвет по умолчанию
      *
@@ -111,5 +113,16 @@ class OrderStatus extends Model
         }
 
         return $status->id;
+    }
+
+    public static function getStatusForType(string $type)
+    {
+        $status = OrderStatus::where('status', 'like', '%' . $type . '%' )->first();
+
+        if(!$status) {
+            return null;
+        }
+
+        return $status;
     }
 }

@@ -100,6 +100,23 @@ abstract class BaseFullReport
     }
 
     /**
+     * @param Collection $orders
+     * @param OrderStatus $orderStatus
+     * @return int
+     */
+    protected function avgCheckByStatus(Collection $orders, OrderStatus $orderStatus)
+    {
+        $avgSum = 0;
+        $orders->each(function ($val) use (&$avgSum, $orderStatus){
+            if($val->status_id == $orderStatus->id){
+                $avgSum += $val->getFullSumByStatus($orderStatus);
+            }
+        });
+
+        return $avgSum;
+    }
+
+    /**
      * @return array
      */
     abstract public function prepareDataSheet() : array;

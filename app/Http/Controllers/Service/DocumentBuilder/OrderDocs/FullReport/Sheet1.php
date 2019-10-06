@@ -30,6 +30,9 @@ class Sheet1 extends BaseFullReport
         '[operators.count_time_calls]' => [],
         '[operators.count_avg_calls]' => [],
         '[operators.avg_call_back]' => [],
+        '[operators.payment_check]' => [],
+        '[operators.payment_avg_check]' => [],
+
     ];
 
     /**
@@ -60,6 +63,7 @@ class Sheet1 extends BaseFullReport
             $this->data['[operators.missedcall]'][] = $this->calcStatuses($value->orders, OrderStatus::STATUS_MISSED_PREFIX);
             $this->data['[operators.denial]'][] = $this->calcStatuses($value->orders, OrderStatus::STATUS_DENIAL_PREFIX);
             $this->data['[operators.garbage]'][] = $this->calcStatuses($value->orders, OrderStatus::STATUS_SPAM_PREFIX);
+            $this->data['[operators.payment_check]'][] = $this->calcStatuses($value->orders, OrderStatus::STATUS_PAYMENT_PREFIX);
             $this->data['[operators.count_calls]'][] = $value->calls->count();
             $this->data['[operators.count_time_calls]'][] = $value->calls->map(function($item) {
                 return round(($item->call_end_time - $item->call_create_time) / 60, 1);
@@ -73,6 +77,9 @@ class Sheet1 extends BaseFullReport
             $this->data['[operators.main_product_sum]'][] = number_format($dataSales['main_product_sum'], 2, '.', ' ');
             $this->data['[operators.main_other_sum]'][] = number_format($dataSales['main_other_sum'], 2, '.', ' ');
             $this->data['[operators.avg_call_back]'][] = round($avgCallBacksSec / 60, 2);
+
+            $statusPayment = OrderStatus::getStatusForType(OrderStatus::STATUS_PAYMENT_PREFIX);
+            $this->data['[operators.payment_avg_check]'][] = $statusPayment ? $this->avgCheckByStatus($value->orders, $statusPayment) : 0;
         });
 
         return $this->data;

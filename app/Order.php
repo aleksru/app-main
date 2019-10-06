@@ -288,4 +288,18 @@ class Order extends Model
     {
         return $value ? Carbon::parse($value) : $value;
     }
+
+    /**
+     * @param OrderStatus $orderStatus
+     * @return int
+     */
+    public function getFullSumByStatus(OrderStatus $orderStatus)
+    {
+        if($this->status_id != $orderStatus->id){
+            return 0;
+        }
+        return $this->realizations->reduce(function ($prev, $val){
+            return $prev + ($val->quantity * $val->price);
+        }, 0);
+    }
 }
