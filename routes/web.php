@@ -37,6 +37,8 @@ Route::group(['middleware' =>'auth'], function() {
     Route::post('product-orders/{order}', 'OrderController@updateProductsOrder')->name('update.product-orders');
     Route::post('orders/{order}/set-status', 'OrderController@updateStatus')->name('orders.set-status');
     Route::post('orders/{order}/comment-logist', 'OrderController@commentLogist')->name('orders.comment-logist');
+    Route::get('orders/{order}/unload/{user}', 'OrderController@unLoad')->name('order.unload');
+    Route::get('orders/{order}/onload/{user}', 'OrderController@onLoad')->name('order.onload');
 
     //заказ с загрузкой реализаций
     Route::post('realizations/{order}', 'OrderController@getOrderWithRealizations')->name('order.realizations');

@@ -302,4 +302,12 @@ class Order extends Model
             return $prev + ($val->quantity * $val->price);
         }, 0);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function views()
+    {
+        return $this->belongsToMany(User::class, 'orders_views');
+    }
 }

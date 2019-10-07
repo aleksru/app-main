@@ -7,11 +7,13 @@ use App\Http\Requests\CommentLogistRequst;
 use App\Models\OtherStatus;
 use App\Models\Realization;
 use App\Notifications\ClientCallBack;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -205,5 +207,25 @@ class OrderController extends Controller
     public function getOrderWithRealizations(Request $request, Order $order)
     {
         return response()->json($order->load('realizations.product', 'deliveryType', 'realizations.supplier'));
+    }
+
+    /**
+     * @param Request $request
+     * @param Order $order
+     * @param User $user
+     */
+    public function unLoad(Request $request, Order $order, User $user) : void
+    {
+        $order->views()->detach($user);
+    }
+
+    /**
+     * @param Request $request
+     * @param Order $order
+     * @param User $user
+     */
+    public function onLoad(Request $request, Order $order, User $user) : void
+    {
+        $order->views()->syncWithoutDetaching($user);
     }
 }

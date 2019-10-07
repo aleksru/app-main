@@ -88,3 +88,15 @@
 
 @endsection
 
+@if(\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->isOperator())
+    @push('scripts')
+        <script>
+            window.addEventListener('beforeunload', async function () {
+                axios.get("{{route('order.unload', [$order->id, \Illuminate\Support\Facades\Auth::user()->id])}}");
+            });
+            window.addEventListener('load', async function () {
+                axios.get("{{route('order.onload', [$order->id, \Illuminate\Support\Facades\Auth::user()->id])}}");
+            });
+        </script>
+    @endpush
+@endif
