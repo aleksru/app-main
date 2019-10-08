@@ -19,9 +19,13 @@ class ActivityUsers
     {
         if (Auth::check() && !Auth::user()->isOnline()) {
             $user = Auth::user();
-            $expiresAt = Carbon::now()->addMinutes(5);
-            $user->last_activity = $expiresAt;
+            $user->last_activity = Carbon::now()->addMinutes(5);
             $user->save();
+
+            if($contTime = $user->getUnClosedTime()){
+                $contTime->logout = Carbon::now()->addMinutes(5);
+                $contTime->save();
+            }
         }
 
         return $next($request);

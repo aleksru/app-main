@@ -131,4 +131,23 @@ class User extends Authenticatable
     {
         return app(UserNotifications::class, ['user' => $this])->getUnreadNotifications();
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function controlTimes()
+    {
+        return $this->hasMany(UserTime::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function getUnClosedTime()
+    {
+        return $this->controlTimes()
+                    ->orderBy('logon', 'desc')
+                    ->first();
+    }
+
 }
