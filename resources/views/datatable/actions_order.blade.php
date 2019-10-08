@@ -2,7 +2,7 @@
 <a href="{{ route('orders.edit', $order->id) }}" target="_blank">
     <i class="fa fa fa-sign-in btn btn-xs btn-success"></i>
 </a>
-@if($order->views()->count() > 0)
+@if($order->views->count() > 0)
     <i class="fa fa-eye" aria-hidden="true"></i>
 @endif
 

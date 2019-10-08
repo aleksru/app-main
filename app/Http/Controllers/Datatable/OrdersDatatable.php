@@ -52,7 +52,8 @@ class OrdersDatatable
                 'operator',
                 'products',
                 'realizations:order_id,product_id',
-                'city')
+                'city',
+                'views')
                 ->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
                 ->join('clients as c', 'client_id', '=', 'c.id')
 
