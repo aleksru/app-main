@@ -150,4 +150,12 @@ class User extends Authenticatable
                     ->first();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function viewOrders()
+    {
+        return $this->belongsToMany(Order::class, 'orders_views');
+    }
+
 }

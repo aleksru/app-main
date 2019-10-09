@@ -29,5 +29,6 @@ class Login
     public function handle(LoginEvent $event)
     {
         $this->timeControl->logon($event->user);
+        $event->user->viewOrders()->detach();
     }
 }
