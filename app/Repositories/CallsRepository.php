@@ -75,7 +75,7 @@ class CallsRepository
         $successCallsQuery = DB::table('client_calls')
             ->selectRaw('from_number as from_number, max(id) as s_id')
             ->where('status_call', MangoCallEnums::CALL_RESULT_SUCCESS)
-            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->whereDate('created_at', '>=',$fromDate)
             ->groupBy('from_number');
 
         $sql = DB::query()
