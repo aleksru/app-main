@@ -2,6 +2,8 @@
 
 namespace App\Observers;
 
+use App\Events\CreatedOrderEvent;
+use App\Events\UpdatedOrderEvent;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
 use App\Jobs\SendLogistGoogleTable;
 use App\Models\OrderStatus;
@@ -19,7 +21,7 @@ class OrderObserver
      */
     public function created(Order $order)
     {
-        //
+        event(new CreatedOrderEvent($order->load('status', 'client', 'operator', 'store')));
     }
 
     /**
@@ -30,7 +32,7 @@ class OrderObserver
      */
     public function updated(Order $order)
     {
-        //
+
     }
 
     public function updating(Order $order)
@@ -45,6 +47,10 @@ class OrderObserver
                 $logistOrderData = app(OrderLogistData::class, ['order' => $order]);
                 dispatch(new SendLogistGoogleTable($logistOrderData));
             }
+        }
+
+        if(!$order->getOriginal('operator_id') && $order->getAttributeValue('operator_id')) {
+            event(new UpdatedOrderEvent($order->load('status', 'client', 'operator', 'store')));
         }
     }
 

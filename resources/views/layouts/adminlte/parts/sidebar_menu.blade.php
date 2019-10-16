@@ -31,6 +31,20 @@
 
     @can('view', App\Order::class)
         <li class="treeview">
+            <a href="#"><i class="fa fa-tty" aria-hidden="true"></i><span>Звонки</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="{{ route('ringing.queue') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Очередь</span> </a></li>
+                {{--<li><a href="{{ route('sms.distribution.index') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>СМС рассылка</span> </a></li>--}}
+            </ul>
+        </li>
+    @endcan
+
+    @can('view', App\Order::class)
+        <li class="treeview">
             <a href="#"><i class="fa fa-book"></i> <span>Отчеты</span>
                 <span class="pull-right-container">
                     <i class="fa fa-angle-left pull-right"></i>

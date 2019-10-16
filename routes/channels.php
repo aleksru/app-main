@@ -30,3 +30,7 @@ Broadcast::channel('operator-incomming.{user_id}', function ($user, $user_id) {
 Broadcast::channel('operator-callback.{command_uuid}', function ($user, $command_uuid) {
     return true;
 });
+
+Broadcast::channel('order', function () {
+    return true;
+});

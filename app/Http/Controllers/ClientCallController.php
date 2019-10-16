@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\ClientCall;
 use App\Models\Operator;
 use App\Repositories\CallsRepository;
+use App\Repositories\OrderRepository;
 use App\Services\Mango\Commands\Callback;
 use App\Services\Mango\MangoService;
 use Carbon\Carbon;
@@ -81,5 +82,19 @@ class ClientCallController extends Controller
         }
 
         return response()->json(['calls' => $calls, 'uniquePhones' => $uniquePhones ?? 0]);
+    }
+
+    public function callQueue(Request $request, OrderRepository $orderRepository)
+    {
+        $freeOperatorOrders = $orderRepository->getFreeOperatorOrders(Carbon::today());
+        $ordersCallBacks = $orderRepository->getCallBacksOrders();
+        $ordersMissedRecall = $orderRepository->getOrdersForRecall();
+        $freeOperatorOrders = $freeOperatorOrders->merge($ordersCallBacks)->merge($ordersMissedRecall);
+
+        if($request->ajax()){
+            return response()->json(['orders' => $freeOperatorOrders]);
+        }
+
+        return view('front.calls.calls_queue', ['data' => $freeOperatorOrders]);
     }
 }

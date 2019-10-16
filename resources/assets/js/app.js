@@ -61,6 +61,8 @@ Vue.component('MissedCalls', require('./components/Front/MissedCalls.vue'));
 
 Vue.component('SelectInput', require('./components/Front/SelectCityMetro.vue'));
 
+Vue.component('CallsQueue', require('./components/Front/CallsQueue.vue'));
+
 const app = new Vue({
     el: '#app'
 });
