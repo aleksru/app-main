@@ -58,7 +58,7 @@ class OrderRepository
     {
         return self::getOrderQueryByRelations()->whereBetween('communication_time', [
             Carbon::now(),
-            Carbon::now()->addMinutes(10)
+            Carbon::now()->addMinutes(50)
         ])->orderBy('communication_time')->get();
     }
 
