@@ -24,7 +24,7 @@
                         <td>{{order.operator ? order.operator.name : '-'}}</td>
                         <td>{{order.client ? order.client.name : 'No name'}} / {{order.client ? order.client.phone : ''}}</td>
                         <td>
-                            <span :class="'label label-' + (order.status ? order.status.color : '')">
+                            <span :class="'label bg-' + (order.status ? order.status.color : '')">
                                 {{order.status ? order.status.status : 'No status'}}
                             </span>
                             {{order.communication_time ? (' / Перезвон: ' + order.communication_time) : ''}}</td>
