@@ -22,7 +22,7 @@ class OrderController extends Controller
     public function create(CreateOrderRequest $createOrderRequest)
     {
         $data = $createOrderRequest->validated();
-        //Log::error($data);
+        Log::channel('api')->error($data);
         $data['products_text'] = json_decode($createOrderRequest->products, true);
         //$data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
         $customer = Client::getClientByPhone($data['phone']);

@@ -83,6 +83,13 @@ return [
             'path' => storage_path('logs/custom-laravel.log'),
             'level' => 'debug',
         ],
+
+        'api' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/api.log'),
+            'days' => 2,
+            'permission' => 0777,
+        ],
     ],
 
 ];
