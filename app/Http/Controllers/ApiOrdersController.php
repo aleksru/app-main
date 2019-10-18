@@ -46,6 +46,10 @@ class ApiOrdersController extends Controller
 
         if ($order->products_text){
             foreach ($order->products_text as $product) {
+                if(!isset($product['articul']) && !is_string($product['articul'])){
+                    continue;
+                }
+
                 $productModel = Product::byActicle($product['articul'])->first();
 
                 if (!$productModel) {
