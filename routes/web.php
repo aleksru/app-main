@@ -78,6 +78,7 @@ Route::group(['middleware' =>'auth'], function() {
     //логи
     Route::group( ['prefix' => 'logs', 'as' => 'logs.'], function (){
         Route::get('order/{order}', 'LogController@order')->name('order');
+        Route::get('version', 'Admin\LogController@version')->name('version');
     });
 
     //Склад

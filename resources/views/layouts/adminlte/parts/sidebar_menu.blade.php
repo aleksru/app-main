@@ -101,7 +101,7 @@
             </ul>
         </li>
     @endcan
-
+    <li><a href="{{ route('logs.version') }}"><i class="fa fa-cogs" aria-hidden="true"></i> <span>О системе</span></a></li>
     @if (Auth::user()->is_admin)
         <li class="treeview">
             <a href="#"><i class="fa fa-link"></i> <span>Админка</span>

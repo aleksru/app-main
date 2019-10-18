@@ -17,4 +17,15 @@ class LogController extends Controller
 
         return view('admin.log.index', ['filePath' => $filePath]);
     }
+
+    public function version()
+    {
+        $filePath = file_exists(storage_path('version.log'));
+
+        if ($filePath) {
+            $filePath = storage_path('version.log');
+        }
+
+        return view('front.logs.version', ['filePath' => $filePath]);
+    }
 }
