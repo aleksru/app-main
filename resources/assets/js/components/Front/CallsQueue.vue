@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="box-header with-border">
+            <small class="label pull-right bg-red" style="font-size: 150%;">{{countOrders}}</small>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -8,7 +9,7 @@
                 <tbody>
                     <tr>
                         <th>ID</th>
-                        <th>Оператор</th>
+                        <th>Просмотры</th>
                         <th>Клиент</th>
                         <th>Статус</th>
                         <th>Магазин</th>
@@ -21,14 +22,19 @@
                                     <i class="fa fa-address-card-o" aria-hidden="true"></i>
                             </a>
                         </td>
-                        <td>{{order.operator ? order.operator.name : '-'}}</td>
+                        <td>{{order.views.reduce((prev, val) => {return prev + val.name + ',' }, '')}}</td>
                         <td>{{order.client ? order.client.name : 'No name'}} / {{order.client ? order.client.phone : ''}}</td>
                         <td>
                             <span :class="'label bg-' + (order.status ? order.status.color : '')">
                                 {{order.status ? order.status.status : 'No status'}}
                             </span>
                             {{order.communication_time ? (' / Перезвон: ' + order.communication_time) : ''}}</td>
-                        <td>{{order.store ? order.store.name : 'No store'}}</td>
+                        <td>
+                            <a v-if="order.store" :href="order.store.url ?  order.store.url : order.store.name" target="_blank">
+                                {{order.store.name}}
+                            </a>
+                            <span v-else>No store</span>
+                        </td>
                         <td>{{order.created_at}}</td>
                     </tr>
                 </tbody>
@@ -93,5 +99,10 @@
                     this.deleteOrder(e.order.id);
             });
         },
+        computed: {
+            countOrders(){
+                return this.orders.length;
+            }
+        }
     }
 </script>
