@@ -32,7 +32,8 @@ class SaveSmsLog
             'sms_render'     => $event->sendSms->sms_sender,
             'from_extension' => $event->sendSms->from_extension,
             'to_number'      => $event->sendSms->to_number,
-            'result'         => $event->resultCode
+            'result'         => $event->resultCode,
+            'action'         => $event->action
         ]);
     }
 }

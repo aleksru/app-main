@@ -6,10 +6,14 @@ use App\Events\CreatedOrderEvent;
 use App\Events\UpdatedOrderEvent;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
 use App\Jobs\SendLogistGoogleTable;
+use App\Jobs\SmsAction;
 use App\Models\OrderStatus;
 use App\Notifications\CreateOrder;
 use App\Order;
+use App\Services\Actions\SmsActionNoReach;
 use App\Services\Google\Sheets\Data\OrderLogistData;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class OrderObserver
 {
@@ -38,8 +42,19 @@ class OrderObserver
     public function updating(Order $order)
     {
         if($order->getAttributeValue('status_id') != $order->getOriginal('status_id')) {
-            $statusConfirm = OrderStatus::getIdStatusConfirm();
-            if($statusConfirm && $order->status_id == $statusConfirm){
+            $statusConfirm = Cache::remember('ID_ORDER_STATUS_CONFIRM', Carbon::now()->addHours(4), function (){
+                return OrderStatus::getIdStatusConfirm();
+            });
+
+            $statusNoReach = Cache::remember('ID_ORDER_STATUS_MISSED_CALL', Carbon::now()->addHours(4), function (){
+                return OrderStatus::getIdStatusForType(OrderStatus::STATUS_MISSED_PREFIX);
+            });
+
+            if($order->status_id == $statusNoReach){
+                dispatch(new SmsAction($order->client, new SmsActionNoReach($order->client, $order)));
+            }
+
+            if($order->status_id == $statusConfirm){
                 if(!$order->flag_send_sms){
                     $order->client->notify(new CreateOrder($order));
                     $order->flag_send_sms = true;

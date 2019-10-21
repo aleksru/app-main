@@ -19,7 +19,7 @@ class MangoService
             return (new MangoClient((array)$sendSms,'commands/sms'))->send();
         }
 
-        return false;
+        return [];
     }
 
     /**
