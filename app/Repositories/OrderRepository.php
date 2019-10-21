@@ -46,9 +46,9 @@ class OrderRepository
         });
         if($statusNew){
             return self::getOrderQueryByRelations()->where('status_id', $statusNew)
-                        ->whereDate('created_at', $date)
-                        ->whereNull('operator_id')
-                        ->orderBy('created_at', 'desc')
+                        ->whereDate('orders.created_at', $date)
+                        ->doesntHave('views')
+                        ->orderBy('orders.created_at', 'desc')
                         ->get();
         }
 
@@ -65,19 +65,21 @@ class OrderRepository
         });
 
         if($orderStatusCallBack) {
-                return self::getOrderQueryByRelations()->whereBetween('communication_time', [
-                    Carbon::now()->subMinutes(10),
-                    Carbon::now()->addMinutes(50)
-                ])->orderBy('communication_time')->get();
+            return self::getOrderQueryByRelations()->whereBetween('communication_time', [
+                Carbon::now()->subMinutes(10),
+                Carbon::now()->addMinutes(50)
+            ])->orderBy('communication_time')->get();
         }
 
         return Order::whereNull('id')->get();
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param Carbon|null $date
+     * @param bool $forRecall
+     * @return Collection
      */
-    public function getOrdersForRecall() : Collection
+    public function getOrdersForRecall(Carbon $date = null, $forRecall = true) : Collection
     {
 //        select orders.id, COUNT(client_calls.id) as cnt from `orders`
 //        JOIN client_calls ON orders.client_id = client_calls.client_id AND orders.created_at >= client_calls.created_at
@@ -85,6 +87,8 @@ class OrderRepository
 //        GROUP BY orders.id
 //        HAVING cnt <= 3
         $ids = [];
+        $date ? null : $date = Carbon::today();
+        $type = $forRecall ? '<=' : '>=';
 
         $orderStatusMissed = Cache::remember('ID_ORDER_STATUS_MISSED_CALL', Carbon::now()->addHours(4), function (){
             return OrderStatus::getIdStatusForType(OrderStatus::STATUS_MISSED_PREFIX);
@@ -98,9 +102,9 @@ class OrderRepository
                         ->on('orders.created_at', '>=', 'client_calls.created_at');
                 })->where('orders.status_id', $orderStatusMissed)
                 ->where('client_calls.type', ClientCall::outgoingCall)
-                ->whereDate('orders.created_at', '>=', Carbon::today()->subDays(2))
+                ->whereDate('orders.created_at', '>=', $date->subDays(2))
                 ->groupBy('orders.id')
-                ->having('cnt', '<=', 3)
+                ->having('cnt', $type, 5)
                 ->pluck('orders.id');
         }
 

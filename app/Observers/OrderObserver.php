@@ -49,9 +49,9 @@ class OrderObserver
             }
         }
 
-        if(!$order->getOriginal('operator_id') && $order->getAttributeValue('operator_id')) {
-            event(new UpdatedOrderEvent($order->load('status', 'client', 'operator', 'store')));
-        }
+//        if(!$order->getOriginal('operator_id') && $order->getAttributeValue('operator_id')) {
+//            event(new UpdatedOrderEvent($order->load('status', 'client', 'operator', 'store')));
+//        }
     }
 
     /**

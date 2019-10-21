@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UpdatedOrderEvent;
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Requests\CommentLogistRequst;
+use App\Models\OrderStatus;
 use App\Models\OtherStatus;
 use App\Models\Realization;
 use App\Notifications\ClientCallBack;
@@ -13,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -227,5 +230,11 @@ class OrderController extends Controller
     public function onLoad(Request $request, Order $order, User $user) : void
     {
         $order->views()->syncWithoutDetaching($user);
+        $statusIdNew = Cache::remember('ID_ORDER_STATUS_NEW', Carbon::now()->addHours(4), function (){
+            return OrderStatus::getIdStatusNew();
+        });
+        if($statusIdNew == $order->status_id) {
+            event(new UpdatedOrderEvent($order->load('status', 'client', 'operator', 'store')));
+        }
     }
 }

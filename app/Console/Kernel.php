@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\CallBacksSendNotify;
+use App\Console\Commands\CloseOrders;
 use App\Console\Commands\PrepareLogsCommand;
 use App\Console\Commands\UpdateMetroStations;
 use App\Console\Commands\UpdatePriceListCommand;
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
         UpdatePriceListCommand::class,
         UpdateMetroStations::class,
         CallBacksSendNotify::class,
+        CloseOrders::class,
     ];
 
     /**
@@ -36,6 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('avito:mail-parse')->everyTenMinutes();
         $schedule->command('metro:update-stations')->monthlyOn(26, '02:00');
         $schedule->command('orders:call-backs')->everyFiveMinutes();
+        $schedule->command('orders::close')->everyTenMinutes();
     }
 
     /**
