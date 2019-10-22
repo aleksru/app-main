@@ -38,9 +38,12 @@ class OperatorController extends Controller
      * @param Operator $operator
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Operator $operator)
+    public function edit(Operator $operator, Request $request)
     {
-        return view('admin.operators.form', ['operator' => $operator]);
+        $isActiveJobTimeNav = (bool)$request->get('page');
+        $jobTime = $operator->user ? $operator->user->controlTimes()->orderBy('logon', 'desc')->paginate(15) : null;
+
+        return view('admin.operators.form', compact('operator', 'jobTime', 'isActiveJobTimeNav'));
     }
 
     /**

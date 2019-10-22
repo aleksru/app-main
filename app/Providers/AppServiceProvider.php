@@ -10,6 +10,7 @@ use App\Models\Realization;
 use App\Observers\LogObserver;
 use App\Observers\OrderObserver;
 use App\Order;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
        require_once(app_path() . '/Helpers/helpers.php');
        $this->registerObservers();
        $this->registerViewComposers();
+        Paginator::defaultView('vendor.pagination.default');
     }
 
     /**
