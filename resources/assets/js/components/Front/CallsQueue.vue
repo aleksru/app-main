@@ -13,6 +13,7 @@
                         <th>Клиент</th>
                         <th>Статус</th>
                         <th>Магазин</th>
+                        <th>Последнее обновление</th>
                         <th>Создан</th>
                     </tr>
                     <tr v-for="(order, index) in orders" :key="order.id">
@@ -35,6 +36,7 @@
                             </a>
                             <span v-else>No store</span>
                         </td>
+                        <td>{{order.updated_at}}</td>
                         <td>{{order.created_at}}</td>
                     </tr>
                 </tbody>
