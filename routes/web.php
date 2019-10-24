@@ -73,6 +73,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('reports-table', 'ReportController@operatorsDatatable')->name('datatable');
         Route::get('utm', 'ReportController@utmReport')->name('utmReport');
         Route::get('utm-statuses', 'ReportController@utmStatus')->name('utm_status');
+        Route::get('operator-created', 'ReportController@operatorCreatedOrders')->name('operators.created');
     });
 
     //логи

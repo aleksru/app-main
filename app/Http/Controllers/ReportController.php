@@ -8,6 +8,7 @@ use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet1;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet2;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet4;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet5;
+use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Order;
 use Carbon\Carbon;
@@ -140,5 +141,51 @@ class ReportController extends Controller
         $orders = $orders->get()->groupBy('utm_source');
 
         return view('front.reports.utm_status', compact('orders', 'statuses'));
+    }
+
+    /**
+     * Созданные оператором заказы
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function operatorCreatedOrders(Request $request)
+    {
+        $dateFrom = Carbon::parse($request->get('dateFrom'));
+        $dateTo = $request->get('dateTo') ? Carbon::parse($request->get('dateTo')) : null;
+        if(!$dateTo){
+            $dateTo =  clone $dateFrom;
+            $dateTo->addDay();
+        }
+        $statuses = OrderStatus::all();
+        $data = Operator::query()
+                    ->has('user')
+                    ->with(['user.createdOrders' => function($query) use ($dateFrom, $dateTo){
+                        $query->whereBetween('created_at', [$dateFrom, $dateTo]);
+                     },
+                    'user.createdOrders.realizations',
+                    'user.createdOrders.status',
+                    ])->get();
+
+        $data = $data->reject(function ($item){
+            return $item->user->createdOrders->isEmpty();
+        });
+        $results = [];
+        $data->each(function ($item) use (&$results){
+            $results[$item->id] = [
+                'count'    => $item->user->createdOrders->count(),
+                'operator' => $item->name,
+                'sum'      => $item->user->createdOrders->reduce(function ($prev, $val){
+                    return $prev + $val->fullSum;
+                }, 0),
+                'statuses' => $item->user->createdOrders->map(function ($val){
+                    return $val->status;
+                })->filter()->groupBy('id')->map(function ($val){
+                    return $val->count();
+                }),
+            ];
+        });
+
+        return view('front.reports.operators_created', compact('statuses', 'results'));
     }
 }
