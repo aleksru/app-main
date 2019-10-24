@@ -158,4 +158,12 @@ class User extends Authenticatable
         return $this->belongsToMany(Order::class, 'orders_views');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function createdOrders()
+    {
+        return $this->hasMany(Order::class, 'creator_user_id', 'id');
+    }
+
 }

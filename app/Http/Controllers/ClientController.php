@@ -10,6 +10,7 @@ use App\Order;
 use App\Product;
 use App\Repositories\ClientRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -161,7 +162,8 @@ class ClientController extends Controller
             'client_id' => $client->id,
             'store_text' => '',
             'comment' =>'-',
-            'status_id' => OrderStatus::getIdStatusNew() ?? null
+            'status_id' => null,
+            'creator_user_id' => Auth::user()->id ?? null,
         ]);
 
         return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно создан!']);

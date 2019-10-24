@@ -75,7 +75,7 @@ class OrderController extends Controller
             $order->save();
         }
 
-        if ($authUser->isOperator() && $authUser->account->id !==  $order->operator->id){
+        if ($authUser->isOperator() && $authUser->account && $authUser->account->id !==  $order->operator->id){
             $message = 'Заказ обрабатывает оператор ' . ($order->operator->name ?? '');
             session()->flash('warning', $message);
         }
