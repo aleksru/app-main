@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('avito:mail-parse')->everyTenMinutes();
         $schedule->command('metro:update-stations')->monthlyOn(26, '02:00');
         $schedule->command('orders:call-backs')->everyFiveMinutes();
-        $schedule->command('orders::close')->everyTenMinutes();
+        $schedule->command('orders:close')->everyTenMinutes();
     }
 
     /**
