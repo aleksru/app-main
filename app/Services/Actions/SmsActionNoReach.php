@@ -38,7 +38,7 @@ class SmsActionNoReach implements ActionInterface
 
     public function isCheckAction() : bool
     {
-        return config('sms.actions.SmsActionNoReach');
+        return config('sms.actions.sms_action_no_reach');
     }
 
     public function isCheckParams() : bool
@@ -54,7 +54,7 @@ class SmsActionNoReach implements ActionInterface
     {
         $store = $this->order->store;
         if(!$store){
-            throw new \Exception('SmsActionNoReach store not found in order: ' . $this->order->id . 'SMS not send!');
+            throw new \Exception('SmsActionNoReach store not found in order: ' . $this->order->id . ' SMS not send!');
         }
 
         $url = $store->url ?? 'https://' . $store->name;

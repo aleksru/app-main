@@ -1,6 +1,6 @@
 <?php
 return [
     'actions' => [
-        'SmsActionNoReach' => true
+        'sms_action_no_reach' => true
     ],
 ];

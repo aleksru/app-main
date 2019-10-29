@@ -16,9 +16,8 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['middleware' =>'auth'], function() {
-    Route::get('/', function () {
-        return view('welcome');
-    })->name('main.index');
+
+    Route::get('/', 'HomeController@index')->name('main.index');
 
     //загрузка прайса
     Route::get('product', 'ProductController@index')->name('product.index');
@@ -43,11 +42,7 @@ Route::group(['middleware' =>'auth'], function() {
     //заказ с загрузкой реализаций
     Route::post('realizations/{order}', 'OrderController@getOrderWithRealizations')->name('order.realizations');
 
-
-    //Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('404', function(){
-        return 404;
-    })->name('error');
+    Route::get('404', 'HomeController@error404')->name('error');
 
     //клиенты
     Route::resource('clients', 'ClientController');
