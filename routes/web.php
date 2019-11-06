@@ -123,6 +123,7 @@ Route::group(['middleware' =>'auth'], function() {
     Route::group(['prefix' => 'statuses', 'as' => 'statuses.'], function(){
         Route::get('orders', 'StatusController@index')->name('orders');
         Route::post('orders', 'StatusController@massChange')->name('orders.change');
+        Route::get('substatuses/{order_status}', 'StatusController@subStatuses')->name('substatuses');
     });
 
     //Marketing

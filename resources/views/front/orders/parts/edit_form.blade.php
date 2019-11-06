@@ -36,35 +36,7 @@
             </div>
 
             <div class="row">
-
-                <div class="col-sm-4">
-                    <label for="name" class="control-label">Статус</label>
-                    <select class="js-example-basic-single form-control" name="status_id">
-                        <option value="{{ $order->status->id ?? null }}" selected>{{ $order->status->status ?? 'Не выбран' }}</option>
-                        <option value="{{ null }}">  </option>
-                    </select>
-                </div>
-
-                @if($order->status && stripos($order->status->status, 'отказ') !== false)
-                    <div class="col-sm-4">
-                        <label for="name" class="control-label">Причина отказа</label>
-                        <select class="js-example-reasons-single form-control" name="denial_reason_id">
-                            <option value="{{ $order->denialReason->id ?? null }}" selected>{{ $order->denialReason->reason ?? 'Не выбран' }}</option>
-                            <option value="{{ null }}">  </option>
-                        </select>
-                    </div>
-                @endif
-
-                <div class="col-sm-4">
-                    <label for="name" class="control-label">Подстатус</label>
-                    <select class="form-control" name="substatus_id">
-                        <option value="" @if(empty($order->subStatus->id)) selected @endif>Не выбран</option>
-                        @foreach($subStatuses as $subStatus)
-                            <option value="{{ $subStatus->id }}"
-                                    @if(($order->subStatus->id ?? null) === $subStatus->id) selected @endif>{{ $subStatus->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                @include('front.orders.parts.statuses', ['order' => $order, ])
             </div>
             <div class="row">
                 <div class="col-sm-4">
@@ -227,15 +199,6 @@
                 clearButton: true,
             });
         });
-
-        let statuses = {!!   json_encode(\App\Models\OrderStatus::select('id', 'status as text', 'color')->get()->toArray()) !!}
-            $(function() {
-                $('.js-example-basic-single').select2({
-                    data: statuses,
-                    allowClear: true,
-                    placeholder: "Выберите статус...",
-                });
-            });
 
         let couriers = {!!   json_encode(\App\Models\Courier::select('id', 'name as text')->get()->toArray()) !!}
         $(function() {
