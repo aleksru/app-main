@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\PriceType;
+use Illuminate\Support\Facades\Log;
 
 class ApiProductController extends Controller
 {
@@ -13,6 +14,7 @@ class ApiProductController extends Controller
      */
     public function api(Request $req)
     {
+        Log::channel('api_prices')->error(["App-Http-Controllers-ProductController.", $req->all()]);
         $count = 10;
         $skip = 0;
         

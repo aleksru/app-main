@@ -90,6 +90,13 @@ return [
             'days' => 2,
             'permission' => 0777,
         ],
+
+        'api_prices' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/api_prices.log'),
+            'days' => 2,
+            'permission' => 0777,
+        ],
     ],
 
 ];

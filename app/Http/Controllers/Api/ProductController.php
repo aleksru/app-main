@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\PriceType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -15,6 +16,7 @@ class ProductController extends Controller
      */
     public function products(Request $request)
     {
+        Log::channel('api_prices')->error(["App-Http-Controllers-Api-ProductController.", $request->all()]);
         $count = $request->get('count') ?? 500;
         $skip = 0;
         $priceList = PriceType::where('name', $request->get('pricelist'))->first();
