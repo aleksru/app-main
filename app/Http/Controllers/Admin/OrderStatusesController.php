@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\OrderStatusRequest;
 use App\Models\OrderStatus;
+use App\Models\OtherStatus;
 use Illuminate\Http\Request;
 
 class OrderStatusesController extends Controller
@@ -22,7 +23,9 @@ class OrderStatusesController extends Controller
      */
     public function create()
     {
-        return view('admin.statuses.form');
+        $otherStatuses = OtherStatus::query()->typeSubStatuses()->select('id', 'name as text')->get();
+
+        return view('admin.statuses.form', compact('otherStatuses'));
     }
 
     /**
@@ -41,7 +44,18 @@ class OrderStatusesController extends Controller
      */
     public function edit(OrderStatus $orderStatus)
     {
-        return view('admin.statuses.form' , ['status' => $orderStatus]);
+        $orderStatus->load('subStatuses');
+        $otherStatuses = OtherStatus::query()->typeSubStatuses()->select('id', 'name as text')->get()->toArray();
+        foreach ($otherStatuses as $key => $otherStatus){
+            $checkStatus = $orderStatus->subStatuses->first(function ($value, $key) use (&$otherStatus) {
+                return $value->id == $otherStatus['id'];
+            });
+            if($checkStatus){
+                $otherStatuses[$key]["selected"] = true;
+            }
+        }
+
+        return view('admin.statuses.form' , ['status' => $orderStatus, 'otherStatuses' => $otherStatuses]);
     }
 
     /**
@@ -52,6 +66,7 @@ class OrderStatusesController extends Controller
     public function update(OrderStatusRequest $statusRequest, OrderStatus $orderStatus)
     {
         $orderStatus->update($statusRequest->validated());
+        $orderStatus->subStatuses()->sync(array_filter($statusRequest->get('sub_statuses_ids')));
 
         return redirect()->route('admin.order-statuses.edit', $orderStatus->id)->with(['success' => 'Успешно обновлен!']);
     }

@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="description" class="col-sm-2 control-label">Описание</label>
+                    <label for="description" class="col-sm-2 control-label">Цвет</label>
 
                     <div class="col-sm-10">
                         <select class="form-control" name="color">
@@ -67,6 +67,15 @@
                             @foreach(get_class_colors() as $color)
                                 <option value="{{ $color }}" class="bg-{{$color}}">{{$color}}</option>
                             @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-sm-2 control-label">Подстатусы</label>
+
+                    <div class="col-sm-8">
+                        <select class="js-example-substatuses-multiple form-control" name="sub_statuses_ids[]" multiple="multiple">
+                            <option value="{{ null }}"></option>
                         </select>
                     </div>
                 </div>
@@ -88,6 +97,13 @@
         @if (session()->has('error'))
             toast.error('{{ session()->get('error') }}')
         @endif
-
+        let subStatuses = {!!   json_encode($otherStatuses) !!}
+        $(function() {
+            $('.js-example-substatuses-multiple').select2({
+                data: subStatuses,
+                allowClear: true,
+                placeholder: "Выберите подстатусы...",
+            });
+        });
     </script>
 @endpush

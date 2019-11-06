@@ -26,9 +26,10 @@ class OrderStatusRequest extends FormRequest
         $status = $this->route('order_status') ? ",{$this->route('order_status')->status},status" : '';
 
         return [
-            'status' => 'required|string|unique:order_statuses,status'.$status,
-            'description' => 'string|nullable',
-            'color' => 'string|nullable',
+            'status'           => 'required|string|unique:order_statuses,status'.$status,
+            'description'      => 'string|nullable',
+            'color'            => 'string|nullable',
+            'sub_statuses_ids' => 'array|nullable'
         ];
     }
 }

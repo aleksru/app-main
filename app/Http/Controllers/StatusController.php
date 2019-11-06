@@ -34,4 +34,9 @@ class StatusController extends Controller
 
         return response()->json(['message' => 'Успешно обновлено!']);
     }
+
+    public function subStatuses(OrderStatus $orderStatus)
+    {
+        return response()->json(['data' => $orderStatus->subStatuses]);
+    }
 }

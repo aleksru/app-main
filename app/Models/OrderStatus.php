@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class OrderStatus extends Model
 {
     protected $guarded = ['id'];
-
+    protected $fillable = ['status', 'description', 'color'];
     /**
      * Префикс статуса нового заказа
      * @var string
@@ -115,6 +115,10 @@ class OrderStatus extends Model
         return $status->id;
     }
 
+    /**
+     * @param string $type
+     * @return null
+     */
     public static function getStatusForType(string $type)
     {
         $status = OrderStatus::where('status', 'like', '%' . $type . '%' )->first();
@@ -124,5 +128,13 @@ class OrderStatus extends Model
         }
 
         return $status;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function subStatuses()
+    {
+        return $this->belongsToMany(OtherStatus::class, 'statuses_other_statuses', 'order_status_id')->typeSubStatuses();
     }
 }
