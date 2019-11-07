@@ -1,3 +1,6 @@
+@php
+    $isActiveJobTimeNav = isset($isActiveJobTimeNav) ? $isActiveJobTimeNav : false;
+@endphp
 @extends('layouts.adminlte.app')
 @section('content_header')
     <section class="content-header">
@@ -104,7 +107,7 @@
                 <!-- /.tab-pane -->
                 <div class="tab-pane @if($isActiveJobTimeNav) active @endif" id="tab_2">
                     <div class="box-body">
-                        @if($jobTime)
+                        @if(isset($jobTime))
                             <div class="row">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Список</h3>
