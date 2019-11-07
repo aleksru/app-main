@@ -8,10 +8,15 @@ use App\Repositories\CallsRepository;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 
 class Operator extends Model
 {
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'is_disabled' => 'bool',
+    ];
 
     /**
      * Получение оператора по sip
@@ -61,5 +66,21 @@ class Operator extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return ! $this->is_disabled;
+    }
+
+    /**
+     * @return Builder
+     */
+    public function scopeIsActive($query)
+    {
+        return $query->where('is_disabled', 0);
     }
 }

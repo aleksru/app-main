@@ -78,6 +78,21 @@
                                     <input type="text" class="form-control" name="extension"  value="{{ old('extension', $operator->extension ?? '') }}">
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label for="price_type_id" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-6">
+                                    <div class="pretty p-default p-curve p-thick">
+                                        <input type="hidden" value="0" name="is_disabled" />
+                                        <input class="form-control" type="checkbox" value="1" name="is_disabled"
+                                               @if(isset($operator) && $operator->is_disabled)checked @endif
+                                        />
+                                        <div class="state p-danger-o">
+                                            <label>Отключен</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="box-footer">

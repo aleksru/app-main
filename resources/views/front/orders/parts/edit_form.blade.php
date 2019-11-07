@@ -218,7 +218,7 @@
             });
         });
 
-        let operators = {!!   json_encode(\App\Models\Operator::select('id', 'name as text')->get()->toArray()) !!}
+        let operators = {!!   json_encode(\App\Models\Operator::query()->isActive()->select('id', 'name as text')->get()->toArray()) !!}
         $(function() {
             $('.js-example-operator-single').select2({
                 data: operators,

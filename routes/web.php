@@ -169,6 +169,7 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Операторы
     Route::resource('operators', 'OperatorController')->except('show');
     Route::get('operators-table', 'OperatorController@datatable')->name('operators.datatable');
+    Route::post('operators-disable-toggle/{operator}', 'OperatorController@toggleDisable')->name('operators.toggle.disable');
 
     //Курьеры
     Route::resource('couriers', 'CourierController')->except('show');

@@ -57,6 +57,11 @@
                         'width' => '10%',
                         'searchable' => true,
                     ],
+                    'is_disabled' => [
+                        'name' => 'Отключен',
+                        'width' => '10%',
+                        'searchable' => false,
+                    ],
                     'actions' => [
                         'name' => 'Действия',
                         'width' => '5%',

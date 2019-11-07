@@ -87,8 +87,27 @@ class OperatorController extends Controller
                     ]
                 ]);
             })
-            ->rawColumns(['actions'])
+            ->editColumn('is_disabled', function (Operator $operator) {
+                return view('datatable.toggle', [
+                    'route' => route('admin.operators.toggle.disable', $operator->id),
+                    'id' => $operator->id,
+                    'check' => $operator->is_disabled
+                ]);
+            })
+            ->rawColumns(['actions', 'is_disabled'])
             ->make(true);
+    }
+
+    /**
+     * @param Operator $operator
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function toggleDisable(Operator $operator)
+    {
+        $operator->is_disabled = ! $operator->is_disabled;
+        $operator->save();
+
+        return response()->json(['message' => 'Успешно обновлен!']);
     }
 
 }
