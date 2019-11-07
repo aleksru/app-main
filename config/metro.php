@@ -15,6 +15,7 @@ return [
         'hh' => [
             'moscow' => 'https://api.hh.ru/metro/1',
             'piter'  => 'https://api.hh.ru/metro/2',
+            'nn'     => 'https://api.hh.ru/metro/66'
         ],
     ],
 
@@ -24,6 +25,7 @@ return [
     'aliases' => [
         'Москва' => 'moscow',
         'Питер'  => 'piter',
+        'Нижний'  => 'nn',
     ],
 
     /**
