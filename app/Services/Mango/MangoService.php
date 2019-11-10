@@ -32,4 +32,24 @@ class MangoService
     {
         return (new MangoClient((array)$callback,'commands/callback'))->send();
     }
+
+    /**
+     * Schemas call
+     *
+     * @return array
+     */
+    public function getSchemas()
+    {
+        return (new MangoClient([],'schemas'))->send();
+    }
+
+    /**
+     * Lines call
+     *
+     * @return array
+     */
+    public function getLines()
+    {
+        return (new MangoClient([],'incominglines'))->send();
+    }
 }

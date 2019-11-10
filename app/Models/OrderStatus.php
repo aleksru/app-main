@@ -9,16 +9,13 @@ class OrderStatus extends Model
 {
     protected $guarded = ['id'];
     protected $fillable = ['status', 'description', 'color'];
+
     /**
-     * Префикс статуса нового заказа
+     * Префиксы статусов
      * @var string
      */
     const STATUS_NEW_PREFIX = 'новый';
 
-    /**
-     * Префикс статуса подтвержден
-     * @var string
-     */
     const STATUS_CONFIRM_PREFIX = 'подтвержден';
 
     const STATUS_CALLBACK_PREFIX = 'перезвон';
@@ -30,6 +27,8 @@ class OrderStatus extends Model
     const STATUS_SPAM_PREFIX = 'спам';
 
     const STATUS_PAYMENT_PREFIX = 'выкуп';
+
+    const STATUS_COMPLAINT_PREFIX = 'претензия';
 
     /**
      * Цвет по умолчанию

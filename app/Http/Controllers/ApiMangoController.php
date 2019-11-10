@@ -7,6 +7,7 @@ use App\ClientCall;
 use App\Enums\MangoCallEnums;
 use App\Enums\MangoResultCodes;
 use App\Events\ResultCallBack;
+use App\Jobs\CallCreateOrder;
 use App\Jobs\ClientCallConnected;
 use App\Jobs\SaveCall;
 use App\Models\Operator;
@@ -28,8 +29,6 @@ class ApiMangoController extends Controller
      */
     public function index(Request $request)
     {
-        $data = json_decode($request->json, true);
-
 //отладочные данные
         //входищий
 //        $dataRequest = [
@@ -48,41 +47,12 @@ class ApiMangoController extends Controller
 //              ],
 //        ];
 //        $data = $dataRequest['json'];
-
+        $data = json_decode($request->json, true);
         //Проверка на первый звонок
         if($data['seq'] === 1 && $data['call_state'] === 'Appeared'){
             //проверка на входящий звонок
             if ($data['location'] === 'ivr') {
-                //ищем клиента по номеру телефона
-                $client = Client::getClientByPhone($data['from']['number']);
-                //ищем магазин
-                $store = Store::where('phone', $data['to']['number'])->first();
-                //если новый клиент - создаем заявку
-                if ( ! $client ){
-                    $client = Client::create(['phone' => $data['from']['number']]);
-                    Order::create([
-                        'client_id' => $client->id,
-                        'store_text' => $store->name ?? 'No-' . $data['to']['number'] ?? '',
-                        'phone' => $data['from']['number'],
-                        'comment' =>'Входящий Звонок',
-                        'store_id' => $store->id ?? null,
-                        'status_id' => OrderStatus::getIdStatusNew() ?? null
-                    ]);
-
-                    return ['status' => 200];
-                }
-
-                $statusNew = OrderStatus::getIdStatusNew();
-                if($statusNew && $client->getOrdersCountForStatus($statusNew) == 0) {
-                    Order::create([
-                        'client_id' => $client->id,
-                        'store_text' => $store->name ?? 'No-' . $data['to']['number'] ?? '',
-                        'phone' => $data['from']['number'],
-                        'comment' =>'Входящий Звонок',
-                        'store_id' => $store->id ?? null,
-                        'status_id' => $statusNew
-                    ]);
-                }
+                CallCreateOrder::dispatch($data)->onQueue('calls-order');
             }
         }
 
