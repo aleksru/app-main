@@ -60,7 +60,7 @@ class OrderObserver
                     $order->flag_send_sms = true;
                 }
                 $logistOrderData = app(OrderLogistData::class, ['order' => $order]);
-                dispatch(new SendLogistGoogleTable($logistOrderData));
+                dispatch(new SendLogistGoogleTable($logistOrderData))->onQueue('google-tables');
             }
         }
 
