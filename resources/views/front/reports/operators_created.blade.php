@@ -52,7 +52,7 @@
         </div>
         <div class="box">
             <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body table-responsive" style="overflow-x: visible;">
                 <table class="table table-hover">
                     <tbody>
                     <tr>
@@ -64,17 +64,18 @@
                         @endforeach
                     </tr>
                     @foreach($results as $result)
-                        <tr>
+                        <tr class="dropdown">
                             <td>{{$result['operator']}}</td>
-                            <td>
-                                {{$result['count']}}
+                            <td >
+                                <div class="margin">
+                                    <div class="btn-group">
                                 <input type="button"
                                        class="btn btn-default btn-call-info"
                                        data-toggle="dropdown"
                                        aria-haspopup="true"
                                        aria-expanded="false"
-                                       value="#">
-                                <ul class="dropdown-menu">
+                                       value="{{$result['count']}}">
+                                <ul class="dropdown-menu" style="width: max-content;">
                                     <li role="presentation">
                                         @foreach($result['order_ids'] as $orderId)
                                             <a href="{{route('orders.edit', $orderId)}}"
@@ -85,6 +86,8 @@
                                         @endforeach
                                     </li>
                                 </ul>
+                                    </div>
+                                </div>
                             </td>
                             <td>{{$result['sum']}}</td>
                             @for($k=0; $k < $statuses->count(); $k++)
