@@ -171,14 +171,16 @@ class ReportController extends Controller
             return $item->user->createdOrders->isEmpty();
         });
         $results = [];
+
         $data->each(function ($item) use (&$results){
             $results[$item->id] = [
-                'count'    => $item->user->createdOrders->count(),
-                'operator' => $item->name,
-                'sum'      => $item->user->createdOrders->reduce(function ($prev, $val){
-                    return $prev + $val->fullSum;
-                }, 0),
-                'statuses' => $item->user->createdOrders->map(function ($val){
+                'count'     => $item->user->createdOrders->count(),
+                'order_ids' => $item->user->createdOrders->pluck('id'),
+                'operator'  => $item->name,
+                'sum'       => $item->user->createdOrders->reduce(function ($prev, $val){
+                                    return $prev + $val->fullSum;
+                                }, 0),
+                'statuses'  => $item->user->createdOrders->map(function ($val){
                     return $val->status;
                 })->filter()->groupBy('id')->map(function ($val){
                     return $val->count();

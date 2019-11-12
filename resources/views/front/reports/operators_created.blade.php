@@ -66,7 +66,26 @@
                     @foreach($results as $result)
                         <tr>
                             <td>{{$result['operator']}}</td>
-                            <td>{{$result['count']}}</td>
+                            <td>
+                                {{$result['count']}}
+                                <input type="button"
+                                       class="btn btn-default btn-call-info"
+                                       data-toggle="dropdown"
+                                       aria-haspopup="true"
+                                       aria-expanded="false"
+                                       value="#">
+                                <ul class="dropdown-menu">
+                                    <li role="presentation">
+                                        @foreach($result['order_ids'] as $orderId)
+                                            <a href="{{route('orders.edit', $orderId)}}"
+                                               target="_blank"
+                                               style="padding: 3px 5px; display: inline-block">
+                                                {{$orderId}}
+                                            </a>
+                                        @endforeach
+                                    </li>
+                                </ul>
+                            </td>
                             <td>{{$result['sum']}}</td>
                             @for($k=0; $k < $statuses->count(); $k++)
                                 <td class="bg-{{$statuses[$k]->color}}">
