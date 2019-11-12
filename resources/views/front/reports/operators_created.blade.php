@@ -75,7 +75,7 @@
                                        aria-haspopup="true"
                                        aria-expanded="false"
                                        value="{{$result['count']}}">
-                                <ul class="dropdown-menu" style="width: max-content;">
+                                <ul class="dropdown-menu" style="min-width: 1500%;">
                                     <li role="presentation">
                                         @foreach($result['order_ids'] as $orderId)
                                             <a href="{{route('orders.edit', $orderId)}}"
