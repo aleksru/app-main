@@ -27,7 +27,9 @@ class OrderController extends Controller
         //$data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
         $customer = Client::getClientByPhone($data['phone']);
         $store = Store::where('phone', $data['store_phone'])->first();
-
+        if($this->checkIgnoreOrder($store->name ?? '') && empty($data['products_text'])){
+            return ;
+        }
         if (!$customer) {
             $customer = Client::create([
                 'phone' => $data['phone'],
@@ -66,6 +68,16 @@ class OrderController extends Controller
         }
 
         return response()->json(['order' => $order->id], 200);
+    }
+
+    /**
+     * @param $store_name
+     * @return bool
+     */
+    private function checkIgnoreOrder($store_name)
+    {
+        $ignores = ['allo-shop.net'];
+        return in_array($store_name, $ignores);
     }
 
 }

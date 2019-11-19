@@ -40,6 +40,10 @@ class ApiOrdersController extends Controller
         $data['status_id'] = OrderStatus::getIdStatusNew();
 
         $store = Store::where('phone', $data['store_id'])->first();
+
+        if($this->checkIgnoreOrder($store->name ?? '') && empty($data['products_text'])){
+            return ;
+        }
         $data['store_id'] = $store ? $store->id : null;
 
         $order = Order::create($data);
@@ -64,5 +68,15 @@ class ApiOrdersController extends Controller
         }
         
         return response()->json(['order' => $order->id], 200);
+    }
+
+    /**
+     * @param $store_name
+     * @return bool
+     */
+    private function checkIgnoreOrder($store_name)
+    {
+        $ignores = ['allo-shop.net'];
+        return in_array($store_name, $ignores);
     }
 }
