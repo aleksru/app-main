@@ -7,9 +7,11 @@ use App\Models\OrderStatus;
 use App\Product;
 use App\Repositories\ClientRepository;
 use App\Store;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\ApiSetOrderRequest;
 use App\Order;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class ApiOrdersController extends Controller
@@ -32,6 +34,14 @@ class ApiOrdersController extends Controller
         if(!$client) {
             $client = Client::create(['phone' => $data['phone']]);
         }
+        $statusNew = Cache::remember('ID_ORDER_STATUS_NEW', Carbon::now()->addHours(4) ,function(){
+            return OrderStatus::getIdStatusNew();
+        });
+
+        if($statusNew && ($cntOrders = $client->getOrdersCountForStatus($statusNew)) > 0){
+            Log::error(['Создание заказа отклонено. Кол-во НОВЫХ заказов: ' . $cntOrders, $data]);
+            return ;
+        }
 
         $client->name = $client->name ? $client->name : $data['name_customer'] ?? 'Не указано';
         $client->save();
@@ -49,11 +59,14 @@ class ApiOrdersController extends Controller
         $order = Order::create($data);
 
         if ($order->products_text){
+            $cntProducts = 0;
             foreach ($order->products_text as $product) {
                 if(!isset($product['articul']) && !is_string($product['articul'])){
                     continue;
                 }
-
+                if($cntProducts >= 10){
+                    break;
+                }
                 $productModel = Product::byActicle($product['articul'])->first();
 
                 if (!$productModel) {
@@ -62,8 +75,12 @@ class ApiOrdersController extends Controller
                 $price = ($store && ! $store->is_disable_api_price) ? (float)$product['price'] : 0;
                 $quantity = (int)$product['quantity'] ?? 1;
                 for ($i=0; $i < $quantity; $i++){
+                    if($i >= 10){
+                        break;
+                    }
                     $order->realizations()->create(['quantity' => 1, 'price' => $price, 'product_id' => $productModel->id]);
                 }
+                $cntProducts++;
             }
         }
         

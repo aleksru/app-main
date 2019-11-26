@@ -10,6 +10,8 @@ use App\Models\OrderStatus;
 use App\Order;
 use App\Product;
 use App\Store;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -36,7 +38,14 @@ class OrderController extends Controller
                 'name'  => $data['name_customer'] ?? 'Не указано',
             ]);
         }
+        $statusNew = Cache::remember('ID_ORDER_STATUS_NEW', Carbon::now()->addHours(4) ,function(){
+            return OrderStatus::getIdStatusNew();
+        });
 
+        if($statusNew && ($cntOrders = $customer->getOrdersCountForStatus($statusNew)) > 0){
+            Log::error(['Создание заказа отклонено. Кол-во НОВЫХ заказов: ' . $cntOrders, $data]);
+            return ;
+        }
         $order = Order::create([
             'status_id'     => OrderStatus::getIdStatusNew(),
             'client_id'     => $customer->id,
@@ -48,21 +57,28 @@ class OrderController extends Controller
         ]);
 
         if ($order->products_text) {
+            $cntProducts = 0;
             foreach ($order->products_text as $product) {
                 if(isset($product['articul'])){
                     $productModel = Product::byActicle($product['articul'])->first();
                     if (!$productModel) {
                         continue;
                     }
+                    if($cntProducts >= 10){
+                        break;
+                    }
                     $quantity = (int)$product['quantity'] ?? 1;
                     for ($i = 0; $i < $quantity; $i++){
+                        if($i >= 10){
+                            break;
+                        }
                         $order->realizations()->create([
                             'quantity'   => 1,
                             'price'      => ($store && ! $store->is_disable_api_price) ? (float)$product['price'] : 0,
                             'product_id' => $productModel->id,
                         ]);
                     }
-
+                    $cntProducts++;
                 }
             }
         }
