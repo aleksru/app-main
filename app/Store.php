@@ -10,8 +10,8 @@ class Store extends Model
 {
     protected $guarded = ['id'];
 
-    const IGNORE_STORES_IDS = [
-        51
+    const IGNORE_STORES_NUMBERS = [
+        '74952239238'
     ];
 
     protected $casts = [
