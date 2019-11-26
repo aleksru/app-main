@@ -45,6 +45,10 @@ class CallCreateOrder implements ShouldQueue
         $client = Client::getClientByPhone($data['from']['number']);
         //ищем магазин
         $store = Store::where('phone', $data['to']['number'])->first();
+        if(in_array($store->id ?? 0, Store::IGNORE_STORES_IDS)){
+            return ;
+        }
+
         //если новый клиент - создаем заявку
         if ( ! $client ){
             $client = Client::create(['phone' => $data['from']['number']]);

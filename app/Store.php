@@ -10,6 +10,10 @@ class Store extends Model
 {
     protected $guarded = ['id'];
 
+    const IGNORE_STORES_IDS = [
+        51
+    ];
+
     protected $casts = [
         'is_hidden' => 'bool',
         'active_at' => 'datetime',
