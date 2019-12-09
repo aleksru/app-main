@@ -27,7 +27,7 @@
             @include('front.widgets.delivery_periods_widget')
         </div>
         <div class="block_info">
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <div class="box box-solid">
                     <div class="box-header with-border">
                         <i class="fa fa-users"></i>
@@ -146,7 +146,8 @@
                 $('#order-view-users').append(`<span class="badge bg-blue"
                                                       style="font-size: 15px;
                                                       padding: 5px;
-                                                      margin-right: 5px">${member.name} - ${member.time}</span>`);
+                                                      margin-right: 5px;
+                                                      margin-bottom: 5px">${member.name} - ${member.time}</span>`);
             }
         }
     </script>
