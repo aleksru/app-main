@@ -194,12 +194,12 @@ class OrderController extends Controller
      */
     public function datatable(OrdersDatatable $ordersDatatable)
     {
-//        $isOperator = Cache::remember('is_operator_user_id_' . Auth::user()->id, Carbon::now()->addHours(2), function (){
-//            return Auth::user()->isOperator();
-//        });
+        $isOperator = Cache::remember('is_operator_user_id_' . Auth::user()->id, Carbon::now()->addHours(2), function (){
+            return Auth::user()->isOperator();
+        });
         $ordersDatatable->setQuery(
             $ordersDatatable->getOrderQuery()
-                            //->whereNotNull($isOperator ? 'orders.status_id' : 'orders.id')
+                            ->whereNotNull($isOperator ? 'orders.status_id' : 'orders.id')
                             ->orderBy('updated_at', 'DESC')
                             ->orderBy('id', 'DESC'));
 
