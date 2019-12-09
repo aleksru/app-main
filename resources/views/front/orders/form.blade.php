@@ -27,6 +27,20 @@
             @include('front.widgets.delivery_periods_widget')
         </div>
         <div class="block_info">
+            <div class="col-md-4">
+                <div class="box box-solid">
+                    <div class="box-header with-border">
+                        <i class="fa fa-users"></i>
+                        <h3 class="box-title">В заказе находятся:</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body" id="order-view-users">
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
         </div>
     </div>
 
@@ -88,8 +102,9 @@
 
 @endsection
 
-@if(\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->isOperator())
-    @push('scripts')
+
+@push('scripts')
+    @if(\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->isOperator())
         <script>
             window.addEventListener('beforeunload', async function () {
                 axios.get("{{route('order.unload', [$order->id, \Illuminate\Support\Facades\Auth::user()->id])}}");
@@ -98,5 +113,41 @@
                 axios.get("{{route('order.onload', [$order->id, \Illuminate\Support\Facades\Auth::user()->id])}}");
             });
         </script>
-    @endpush
-@endif
+    @endif
+    <script>
+        window.addEventListener('load', function () {
+            let localMembers = [];
+            Echo.join("order-views.{{$order->id}}")
+                .here(function (members) {
+                    // запускается, когда вы заходите
+                    localMembers = members;
+                    updateMembers(localMembers)
+                })
+                .joining(function (joiningMember) {
+                    // запускается, когда входит другой пользователь
+                    toast.info(`Пользователь ${joiningMember.name} вошел в заказ`);
+                    localMembers.push(joiningMember);
+                    updateMembers(localMembers)
+                })
+                .leaving(function (leavingMember) {
+                    // запускается, когда выходит другой пользователь
+                    toast.info(`Пользователь ${leavingMember.name} покинул заказ`);
+                    localMembers.findIndex((elem) => leavingMember.id == elem.id);
+                    let index = localMembers.findIndex((elem) => leavingMember.id == elem.id);
+                    if(index != -1){
+                        localMembers.splice(index, 1);
+                    }
+                    updateMembers(localMembers)
+            });
+        });
+        function updateMembers(members) {
+            $('#order-view-users').empty();
+            for(let member of members){
+                $('#order-view-users').append(`<span class="badge bg-blue"
+                                                      style="font-size: 15px;
+                                                      padding: 5px;
+                                                      margin-right: 5px">${member.name} - ${member.time}</span>`);
+            }
+        }
+    </script>
+@endpush

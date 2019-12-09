@@ -34,3 +34,11 @@ Broadcast::channel('operator-callback.{command_uuid}', function ($user, $command
 Broadcast::channel('order', function () {
     return true;
 });
+
+Broadcast::channel('order-views.*', function ($user) {
+    return [
+        'id'   => $user->id,
+        'name' => ($user->description ?? $user->name) . (" ({$user->getUserGroupName()})" ?? ''),
+        'time' => date('H:i:s')
+    ];
+});
