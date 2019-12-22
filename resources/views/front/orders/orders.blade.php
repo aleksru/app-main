@@ -231,7 +231,7 @@
                 $(this).html(input);
                 input.off().on('keyup cut paste change', _.debounce((e) => {
                     tableOrders.columns(i).search(input.val()).draw(), tableOrders.settings()[0].searchDelay
-                }, 500));
+                }, 1000));
             }
 
             if(columnName in individualSearchingColumnsSelect) {
