@@ -92,7 +92,7 @@ class OrderController extends Controller
      */
     private function checkIgnoreOrder($store_name)
     {
-        $ignores = ['allo-shop.net'];
+        $ignores = [];
         return in_array($store_name, $ignores);
     }
 
