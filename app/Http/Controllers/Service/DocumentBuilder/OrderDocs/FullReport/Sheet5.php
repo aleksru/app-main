@@ -34,8 +34,8 @@ class Sheet5 extends BaseFullReport
     public function prepareDataSheet() : array
     {
         $stores = Store::with(['orders' => function($query){
-            $query->whereDate('orders.created_at', '>=', $this->dateStart->toDateTimeString())
-                    ->whereDate('orders.created_at', '<=', $this->dateEnd->toDateTimeString());
+            $query->where('orders.created_at', '>=', $this->dateStart->toDateTimeString())
+                    ->where('orders.created_at', '<=', $this->dateEnd->toDateTimeString());
         }, 'orders.realizations.product'])->get();
 
         $ordersCount = Order::has('store')
