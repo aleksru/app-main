@@ -49,7 +49,7 @@ class ReportController extends Controller
      */
     public function resources()
     {
-        return view('front.reports.index', ['table' => view('front.reports.tables.resources', ['tableName' => 'reportResources']),
+        return view('front.reports.resources.index', ['table' => view('front.reports.tables.resources', ['tableName' => 'reportResources']),
             'tableName' => 'reportResources']);
     }
 
@@ -85,8 +85,9 @@ class ReportController extends Controller
      */
     public function operatorsDatatable(Request $request)
     {
-        $dateFrom = Carbon::parse($request->get('dateFrom') ?? date('Y-m-d'));
-        $dateTo = Carbon::parse($request->get('dateTo') ?? $request->get('dateFrom') ?? date('Y-m-d'));
+        $dateFrom = Carbon::parse($request->get('dateFrom') ?? date('Y-m-d H:i:s'));
+        $dateTo = Carbon::parse($request->get('dateTo') ?? $request->get('dateFrom') ?? date('Y-m-d H:i:s'));
+        debug($dateFrom, $dateTo);
         $table = $request->get('tableName');
         $data = [];
 
