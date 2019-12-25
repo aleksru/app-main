@@ -72,7 +72,7 @@ class LogisticController extends Controller
         }
 
        return Cache::remember('logistics_simple_orders_table_' . $cacheKey,
-                                    Carbon::now()->addSeconds(60), function () use ($statusIds, $accessCitiesByLogistIds){
+                                    Carbon::now()->addSeconds(120), function () use ($statusIds, $accessCitiesByLogistIds){
             $orders = Order::with(
                 'status',
                 'store',
