@@ -12,6 +12,7 @@ use App\Services\Mango\MangoService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class ClientCallController extends Controller
@@ -72,7 +73,10 @@ class ClientCallController extends Controller
         if($request->get('forDate')) {
             $toDate = Carbon::parse($request->get('forDate'));
         }
-        $callsIds = $callsRepository->getIdsMissedCallsForDate($toDate);
+        $key = md5('MISSED_CALLS_IDS_' . $toDate->toDateString());
+        $callsIds = Cache::remember($key, Carbon::today()->addSeconds(10), function () use ($callsRepository, $toDate){
+            return $callsRepository->getIdsMissedCallsForDate($toDate);
+        });
         $calls = ClientCall::with('client', 'store')
                             ->whereIn('id', $callsIds)
                             ->orderBy('call_create_time', 'DESC')
