@@ -150,7 +150,7 @@
         rewriteSearchColumns();
         setInterval(function () {
             $('#orders-table').DataTable().ajax.reload(null, false);
-        }, 5000);
+        }, 7000);
 
         let tableOrders = $('#orders-table').DataTable();
         const indCreAt = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'created_at');
@@ -229,7 +229,7 @@
                 let input = $('<input type="' + individualSearchingColumnsInput[columnName]['type'] + '" value="" placeholder="Search..."' +
                                 ` class="${individualSearchingColumnsInput[columnName]['className']}">`);
                 $(this).html(input);
-                input.off().on('keyup cut paste change', _.debounce((e) => {
+                input.off().on('keyup cut paste change', _.debounce(async (e) => {
                     tableOrders.columns(i).search(input.val()).draw(), tableOrders.settings()[0].searchDelay
                 }, 1000));
             }
@@ -241,7 +241,7 @@
                     select.append( '<option value="' + individualSearchingColumnsSelect[columnName]['data'][key]['id'] + '">'
                         + individualSearchingColumnsSelect[columnName]['data'][key]['name']  + '</option>' );
                 }
-                select.on('change', function(){
+                select.on('change', async function(){
                     tableOrders.columns(i).search($(this).val()).draw(), tableOrders.settings()[0].searchDelay;
                 });
             }

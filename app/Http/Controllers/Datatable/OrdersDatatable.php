@@ -52,16 +52,18 @@ class OrdersDatatable
                 'operator',
                 'products',
                 'realizations:order_id,product_id',
-                'city',
-                'views')
-                ->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
-                ->join('clients as c', 'client_id', '=', 'c.id')
+                'city')
+                //->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
+                //->join('clients as c', 'client_id', '=', 'c.id')
 
         )
 
             ->filterColumn('phone', function ($query, $keyword) {
                 if (preg_match('/[0-9]{4,}/', $keyword)){
-                    $this->orderQuery->leftJoin('client_phones', 'orders.client_id', '=', 'client_phones.client_id');
+                    $query
+                        ->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
+                        ->join('clients as c', 'client_id', '=', 'c.id')
+                        ->leftJoin('client_phones', 'orders.client_id', '=', 'client_phones.client_id');
                     return $query->whereRaw('c.phone like ?', "%{$keyword}%")
                                 ->OrWhereRaw('client_phones.phone like ?', "%{$keyword}%");
                 }
@@ -104,7 +106,10 @@ class OrdersDatatable
             })
             ->filterColumn('name_customer', function ($query, $keyword) {
                 if (preg_match('/[A-Za-zА-Яа-я]{3,}/', $keyword)) {
-                    return $query->whereRaw('LOWER(c.name) like ?', "%{$keyword}%");
+                    return $query
+                                ->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
+                                ->join('clients as c', 'client_id', '=', 'c.id')
+                                ->whereRaw('LOWER(c.name) like ?', "%{$keyword}%");
                 }
             })
             ->filterColumn('utm_source', function ($query, $keyword) {
