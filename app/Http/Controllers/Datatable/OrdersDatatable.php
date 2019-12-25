@@ -60,7 +60,7 @@ class OrdersDatatable
 
             ->filterColumn('phone', function ($query, $keyword) {
                 if (preg_match('/[0-9]{4,}/', $keyword)){
-                    $query
+                    $this->orderQuery
                         ->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
                         ->join('clients as c', 'client_id', '=', 'c.id')
                         ->leftJoin('client_phones', 'orders.client_id', '=', 'client_phones.client_id');
@@ -106,7 +106,7 @@ class OrdersDatatable
             })
             ->filterColumn('name_customer', function ($query, $keyword) {
                 if (preg_match('/[A-Za-zА-Яа-я]{3,}/', $keyword)) {
-                    return $query
+                    return $this->orderQuery
                                 ->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
                                 ->join('clients as c', 'client_id', '=', 'c.id')
                                 ->whereRaw('LOWER(c.name) like ?', "%{$keyword}%");
