@@ -58,75 +58,94 @@ class LogisticController extends Controller
      */
     public function simpleOrdersDatatable(Request $request)
     {
-        $columns = $request->get('columns');
         $statusIds = Cache::remember('logistics.status.ids', Carbon::now()->addHours(4), function () {
             return OrderStatus::getIdsStatusesForLogistic();
         });
-        $accessCitiesByLogistIds = (Auth::user()->isLogist() && Auth::user()->account) ?
-                                        Auth::user()->account->cities->pluck('id') : collect();
-        $cacheKey =  $request->get('length') . "_" .
-                        $request->get('start') . '_' .
-                            implode('_', $accessCitiesByLogistIds->toArray());
-        if($columns[4]['search']['value']) {
-            $cacheKey = $cacheKey . '_search_' . $columns[4]['search']['value'];
-        }
-
-       return Cache::remember('logistics_simple_orders_table_' . $cacheKey,
-                                    Carbon::now()->addSeconds(120), function () use ($statusIds, $accessCitiesByLogistIds){
-            $orders = Order::with(
-                'status',
-                'store',
-                'client',
-                'client.additionalPhones',
-                'courier',
-                'metro',
-                'deliveryPeriod',
-                'deliveryType',
-                'operator',
-                'realizations.product'
-            )->where('updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
-            ->whereIn('status_id', $statusIds);
-
-            if( ! $accessCitiesByLogistIds->isEmpty() ) {
-                $orders->whereIn('city_id', $accessCitiesByLogistIds);
-            }
-
-            $data = (new Report($orders->get()))->prepareData()->getResultsData();
-
-            usort($data['product'], function ($a, $b){
-                if ( ! $a['product.is_copy_logist'] && ! $b['product.is_copy_logist'] ) {
-                    return $a['product.order'] <=> $b['product.order'];
-                }
-
-                return ((int)$a['product.is_copy_logist'] <=> (int)$b['product.is_copy_logist']);
-            });
-
-            return datatables()->of($data['product'])
-                ->editColumn('product.nodata', '-')
-                ->editColumn('product.real_denied', '')
-                ->editColumn('product.comment_logist', '')
-                ->editColumn('product.price_opt', function ($value){
-                    return (int)$value['product.price_opt'];
-                })
-                ->editColumn('product.price', function ($value){
-                    return (int)$value['product.price'];
-                })
-                ->editColumn('product.courier_payment', function ($value){
-                    return (int)$value['product.courier_payment'];
-                })
-                ->editColumn('product.profit', function ($value){
-                    return (int)$value['product.profit'];
-                })
-                ->setRowClass(function ($el){
-                    return $el['product.is_copy_logist'] ? 'alert-success' : 'alert-danger';
-                })
-                ->setRowAttr([
-                    'data-realizationid' => function ($el) {
-                        return $el['product.realization_id'];
-                    }
-                ])
-                ->toJson();
+        $user = Auth::user();
+        $accessCitiesByLogistIds = Cache::remember('ACCESS_CITIES_LOGIST_' . $user->id, Carbon::now()->addHours(4), function () use ($user){
+            return ($user->isLogist() && $user->account) ?
+                $user->account->cities->pluck('id') : collect();
         });
+
+        $orders = Order::with(
+            'status',
+            'store',
+            'client',
+            'client.additionalPhones',
+            'courier',
+            'metro',
+            'deliveryPeriod',
+            'deliveryType',
+            'operator'
+        )->selectRaw('orders.*, realizations.id as realization_id,  realizations.price, realizations.quantity, realizations.imei, realizations.price_opt, 
+                        realizations.supplier_id, realizations.courier_payment, realizations.is_copy_logist, 
+                        client.phone as client_phone, client.name as name_customer, suppliers.name as supplier, products.product_name, 
+                        (realizations.price - IFNULL(realizations.price_opt, 0)) as profit')
+            ->join('clients as client', 'client_id', '=', 'client.id')
+            ->join('realizations', 'orders.id', '=', 'realizations.order_id')
+            ->join('products', 'product_id', '=', 'products.id')
+            ->leftJoin('suppliers', 'supplier_id', '=', 'suppliers.id')
+            ->where('orders.updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
+            ->whereIn('orders.status_id', $statusIds)
+            ->orderBy('orders.id', 'DESC')
+            ->orderBy('is_copy_logist');
+
+        if( ! $accessCitiesByLogistIds->isEmpty() ) {
+            $orders->whereIn('city_id', $accessCitiesByLogistIds);
+        }
+        return datatables()->of($orders)
+            ->filterColumn('client_phone', function ($query, $keyword) {
+                if (preg_match('/[0-9]{4,}/', $keyword)){
+                    return $query->whereRaw('client.phone like ?', "%{$keyword}%");
+                }
+            })
+            ->filterColumn('name_customer', function ($query, $keyword) {
+                if (preg_match('/[A-Za-zА-Яа-я]{3,}/', $keyword)) {
+                    return $query->whereRaw('LOWER(client.name) like ?', "%{$keyword}%");
+                }
+            })
+            ->editColumn('nodata', '-')
+            ->editColumn('real_denied', '')
+            ->editColumn('comment_logist', '')
+            ->editColumn('operator', function (Order $order){
+                return $order->operator ? $order->operator->name : '';
+            })
+            ->editColumn('store', function (Order $order){
+                return $order->store ? $order->store->name : '';
+            })
+            ->editColumn('client_phone', function (Order $order){
+                return $order->client ? $order->client->allPhones->implode(', ') : '';
+            })
+            ->editColumn('status', function (Order $order){
+                return $order->status ? $order->status->status : '';
+            })
+            ->editColumn('delivery_time', function (Order $order){
+                return $order->deliveryPeriod ? $order->deliveryPeriod->period : '';
+            })
+            ->editColumn('address', function (Order $order){
+                return $order->fullAddress;
+            })
+            ->editColumn('courier_name', function (Order $order){
+                return $order->courier ? $order->courier->name : '';
+            })
+            ->editColumn('price_opt', function ($value){
+                return (int)$value['price_opt'];
+            })
+            ->editColumn('price', function ($value){
+                return (int)$value['price'];
+            })
+            ->editColumn('courier_payment', function ($value){
+                return (int)$value['courier_payment'];
+            })
+            ->setRowClass(function ($el){
+                return $el['is_copy_logist'] ? 'alert-success' : 'alert-danger';
+            })
+            ->setRowAttr([
+                'data-realizationid' => function (Order $order) {
+                    return $order->realization_id;
+                }
+            ])
+            ->make(true);
     }
 
     /**

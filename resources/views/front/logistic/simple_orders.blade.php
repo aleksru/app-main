@@ -36,112 +36,112 @@
             'route' => $routeDatatable ?? route('orders.datatable'),
             'ordering' => false,
             'columns' => [
-                'product.nodata' => [
+                'nodata' => [
                     'name' => '',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.date' => [
+                'created_at' => [
                     'name' => 'Дата',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.operator' => [
+                'operator' => [
                     'name' => 'Оператор',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.store' => [
+                'store' => [
                     'name' => 'Источник',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.order' => [
+                'id' => [
                     'name' => 'Номер заказа',
                     'width' => '1%',
                     'searchable' => true,
                 ],
-                'product.real_denied' => [
+                'real_denied' => [
                     'name' => 'Реал.прич. отказа',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.type' => [
+                'comment' => [
                     'name' => 'Коммент КЦ',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.comment_logist' => [
+                'comment_logist' => [
                     'name' => 'Коммент ЛОГ',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.status' => [
+                'status' => [
                     'name' => 'Статус',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.client_name' => [
+                'name_customer' => [
                     'name' => 'ФИО клиента',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.delivery_time' => [
+                'delivery_time' => [
                     'name' => 'Время доставки',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.address' => [
+                'address' => [
                     'name' => 'Адрес',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.client_phone' => [
+                'client_phone' => [
                     'name' => 'Телефон',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.name' => [
+                'product_name' => [
                     'name' => 'Модель',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product.imei' => [
+                'imei' => [
                     'name' => 'IMEI',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-               'product.quantity' => [
+               'quantity' => [
                     'name' => 'Кол-во',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-               'product.price_opt' => [
+               'price_opt' => [
                     'name' => 'Закупка',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-               'product.price' => [
+               'price' => [
                     'name' => 'Продажа',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-               'product.courier_payment' => [
+               'courier_payment' => [
                     'name' => 'ЗП курьера',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-               'product.profit' => [
+               'profit' => [
                     'name' => 'Прибыль',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-               'product.courier_name' => [
+               'courier_name' => [
                     'name' => 'Курьер',
                     'width' => '1%',
                     'searchable' => false,
                 ],
-               'product.supplier' => [
+               'supplier' => [
                     'name' => 'Поставщик',
                     'width' => '1%',
                     'searchable' => false,
@@ -159,7 +159,7 @@
     $(function () {
         setInterval( function () {
             $('#orders-table').DataTable().ajax.reload(null, false);
-        }, 10000 );
+        }, 7000 );
         $('#orders-table').on( 'draw.dt', function () {
             $('#orders-table tr').dblclick(function(e){
                 let range = document.createRange();
