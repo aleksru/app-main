@@ -78,7 +78,7 @@ class LogisticController extends Controller
             'deliveryType',
             'operator'
         )->selectRaw('orders.*, realizations.id as realization_id,  realizations.price, realizations.quantity, realizations.imei, realizations.price_opt, 
-                        realizations.supplier_id, realizations.courier_payment, realizations.is_copy_logist, 
+                        realizations.supplier_id, realizations.courier_payment, realizations.is_copy_logist,
                         client.phone as client_phone, client.name as name_customer, suppliers.name as supplier, products.product_name, 
                         (realizations.price - IFNULL(realizations.price_opt, 0)) as profit')
             ->join('clients as client', 'client_id', '=', 'client.id')
@@ -86,6 +86,7 @@ class LogisticController extends Controller
             ->join('products', 'product_id', '=', 'products.id')
             ->leftJoin('suppliers', 'supplier_id', '=', 'suppliers.id')
             ->where('orders.updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
+            ->whereNull('realizations.deleted_at')
             ->whereIn('orders.status_id', $statusIds)
             ->orderBy('orders.id', 'DESC')
             ->orderBy('is_copy_logist');
