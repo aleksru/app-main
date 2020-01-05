@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Events\RealizationCopyLogistEvent;
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
 use App\Models\FailDeliveryDate;
@@ -162,7 +163,7 @@ class LogisticController extends Controller
         }
         $realiz->is_copy_logist = true;
         $realiz->save();
-
+        event(new RealizationCopyLogistEvent($realiz));
         if(file_exists(storage_path('app/google/key_table.json'))){
             $rowGet = str_replace('<td>', '', $request->get('row'));
             $row = explode('</td>', $rowGet);

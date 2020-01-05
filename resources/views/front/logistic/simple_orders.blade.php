@@ -152,49 +152,61 @@
 @endsection
 
 @push('scripts')
-<script>
-    /**
-     *обновление таблицы
-     */
-    $(function () {
-        setInterval( function () {
-            $('#orders-table').DataTable().ajax.reload(null, false);
-        }, 7000 );
-        $('#orders-table').on( 'draw.dt', function () {
-            $('#orders-table tr').dblclick(function(e){
-                let range = document.createRange();
-                let sel = window.getSelection();
-                range.setStart(this.children[0], 0);
-                range.setEnd(this.children[this.children.length - 1], 0);
-                sel.removeAllRanges();
-                sel.addRange(range);
+    <script>
+        /**
+         *обновление таблицы
+         */
+        $(function () {
+    //        setInterval( function () {
+    //            $('#orders-table').DataTable().ajax.reload(null, false);
+    //        }, 7000 );
+            window.Echo.channel('order')
+                .listen('OrderConfirmedEvent', (e) => {
+                    $('#orders-table').DataTable().ajax.reload(null, false);
+                })
+                .listen('RealizationCopyLogistEvent', (e) => {
+                    let row = $('tr[data-realizationid="' + e.realization.id + '"]');
+                    row.removeClass('alert-danger').addClass('alert-success');
+                })
+                .listen('UpdateRealizationsConfirmedOrderEvent', (e) => {
+                    $('#orders-table').DataTable().ajax.reload(null, false);
+                });
 
-                try {
-                    document.execCommand('copy');
-                    if(this.dataset.productid == '') {
-                        throw 'product_is_null';
-                    }
-                    axios.post("{!! route('logistics.copy.toggle') !!}", {
-                        realization_id: this.dataset.realizationid,
-                        row: this.innerHTML,
-                    }).then((res) => {
-                        this.classList.remove('alert-danger');
-                        this.classList.add('alert-success');
-                        toast[res.data.type]('', {title: res.data.message});
-                    });
+            $('#orders-table').on( 'draw.dt', function () {
+                $('#orders-table tr').dblclick(function(e){
+                    let range = document.createRange();
+                    let sel = window.getSelection();
+                    range.setStart(this.children[0], 0);
+                    range.setEnd(this.children[this.children.length - 1], 0);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
 
-                } catch(err) {
-                    let mess = 'Произошла ошибка!';
-                    if(err === 'product_is_null') {
-                        mess += ' Отсутстуют товары';
+                    try {
+                        document.execCommand('copy');
+                        if(this.dataset.productid == '') {
+                            throw 'product_is_null';
+                        }
+                        axios.post("{!! route('logistics.copy.toggle') !!}", {
+                            realization_id: this.dataset.realizationid,
+                            row: this.innerHTML,
+                        }).then((res) => {
+                            this.classList.remove('alert-danger');
+                            this.classList.add('alert-success');
+                            toast[res.data.type]('', {title: res.data.message});
+                        });
+
+                    } catch(err) {
+                        let mess = 'Произошла ошибка!';
+                        if(err === 'product_is_null') {
+                            mess += ' Отсутстуют товары';
+                        }
+                        toast.error(mess);
+                        console.log('Error copy to buffer');
                     }
-                    toast.error(mess);
-                    console.log('Error copy to buffer');
-                }
-                sel.removeAllRanges();
+                    sel.removeAllRanges();
+                });
             });
         });
-    });
 
-</script>
+    </script>
 @endpush

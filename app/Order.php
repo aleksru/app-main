@@ -311,4 +311,12 @@ class Order extends Model
     {
         return $this->belongsToMany(User::class, 'orders_views');
     }
+
+    /**
+     * @return bool
+     */
+    public function isConfirmed() : bool
+    {
+        return $this->status_id == OrderStatus::getIdStatusConfirm();
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderUpdateRealizationsEvent;
 use App\Events\UpdatedOrderEvent;
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Requests\CommentLogistRequst;
@@ -170,6 +171,7 @@ class OrderController extends Controller
         $order->realizations()->saveMany($realizations);
 
         Realization::destroy($arrDiff);
+        event(new OrderUpdateRealizationsEvent($order));
 
         return response()->json(['success' => 'Товары успешно обновлены!', 'products' => $order->realizations()->with('product:id,product_name', 'supplier')->get()]);
     }

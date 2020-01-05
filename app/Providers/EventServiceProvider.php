@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\OrderUpdateRealizationsEvent;
 use App\Listeners\Login;
 use App\Listeners\LogoutListener;
+use App\Listeners\OrderStatusListener;
 use Illuminate\Auth\Events\Login as LoginEvent;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,6 +28,10 @@ class EventServiceProvider extends ServiceProvider
 
         Logout::class => [
             LogoutListener::class
+        ],
+
+        OrderUpdateRealizationsEvent::class => [
+            OrderStatusListener::class
         ],
     ];
 

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Events\CreatedOrderEvent;
+use App\Events\OrderConfirmedEvent;
 use App\Events\UpdatedOrderEvent;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
 use App\Jobs\SendLogistGoogleTable;
@@ -61,6 +62,7 @@ class OrderObserver
                 }
                 $logistOrderData = app(OrderLogistData::class, ['order' => $order]);
                 dispatch(new SendLogistGoogleTable($logistOrderData))->onQueue('google-tables');
+                event(new OrderConfirmedEvent($order));
             }
         }
 
