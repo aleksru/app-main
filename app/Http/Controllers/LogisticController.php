@@ -92,7 +92,7 @@ class LogisticController extends Controller
             ->orderBy('is_copy_logist');
 
         if( ! $accessCitiesByLogistIds->isEmpty() ) {
-            $orders->whereIn('city_id', $accessCitiesByLogistIds);
+            $orders->whereIn('orders.city_id', $accessCitiesByLogistIds);
         }
         return datatables()->of($orders)
             ->filterColumn('client_phone', function ($query, $keyword) {
