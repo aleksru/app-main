@@ -61,6 +61,8 @@ class SaveCall implements ShouldQueue
                 ClientCall::create([
                     'type' => ClientCall::incomingCall,
                     'from_number' => $data['from']['number'] ?? null,
+                    'to_number' => $data['to']['number'] ?? null,
+                    'line_number' => $data['line_number'] ?? null,
                     'call_create_time' => $data['create_time'],
                     'call_end_time' => $data['end_time'],
                     'client_id' => $client->id ?? null,
@@ -85,6 +87,8 @@ class SaveCall implements ShouldQueue
                 ClientCall::create([
                     'type' => ClientCall::incomingCall,
                     'from_number' => $data['from']['number'] ?? null,
+                    'to_number' => $data['to']['number'] ?? null,
+                    'line_number' => $data['line_number'] ?? null,
                     'call_create_time' => $data['create_time'],
                     'call_end_time' => $data['end_time'],
                     'client_id' => $client->id ?? null,
@@ -109,6 +113,8 @@ class SaveCall implements ShouldQueue
             ClientCall::create([
                 'type' => ClientCall::outgoingCall,
                 'from_number' => $data['to']['number'] ?? null,
+                'to_number' => $data['to']['number'] ?? null,
+                'line_number' => $data['line_number'] ?? null,
                 'call_create_time' => $data['create_time'],
                 'call_end_time' => $data['end_time'],
                 'operator_text' => $data['from']['number'] ?? null,
