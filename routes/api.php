@@ -38,3 +38,7 @@ Route::group(['middleware' =>'api.v2', 'prefix' => 'v2', 'as' => 'apiV2.', 'name
     Route::get('store/price-list', 'StoreController@getPriceList')->name('store.pricelist');
     Route::post('store/set-online', 'StoreController@onlineStore')->name('store.set_online');
 });
+
+Route::group(['prefix' => 'jivo', 'as' => 'jivo.', 'namespace' => 'Api'], function (){
+    Route::post('webhooks', 'JivoChatController@webhooks ')->name('webhooks');
+});
