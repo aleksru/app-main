@@ -40,5 +40,5 @@ Route::group(['middleware' =>'api.v2', 'prefix' => 'v2', 'as' => 'apiV2.', 'name
 });
 
 Route::group(['prefix' => 'jivo', 'as' => 'jivo.', 'namespace' => 'Api'], function (){
-    Route::post('webhooks', 'JivoChatController@webhooks ')->name('webhooks');
+    Route::post('webhooks', 'JivoChatController@webhooks')->name('webhooks');
 });
