@@ -89,8 +89,8 @@ class LogisticController extends Controller
             ->where('orders.updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
             ->whereNull('realizations.deleted_at')
             ->whereIn('orders.status_id', $statusIds)
-            ->orderBy('orders.id', 'DESC')
-            ->orderBy('is_copy_logist');
+            ->orderBy('is_copy_logist')
+            ->orderBy('orders.id', 'DESC');
 
         if( ! $accessCitiesByLogistIds->isEmpty() ) {
             $orders->whereIn('orders.city_id', $accessCitiesByLogistIds);
