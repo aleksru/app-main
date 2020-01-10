@@ -91,9 +91,35 @@
                             </td>
                             <td>{{$result['sum']}}</td>
                             @for($k=0; $k < $statuses->count(); $k++)
-                                <td class="bg-{{$statuses[$k]->color}}">
-                                    {{ $result['statuses'][$statuses[$k]->id] ?? 0}}
-                                </td>
+                                @if($idStatusConfirm == $statuses[$k]->id)
+                                    <td class="bg-{{$statuses[$k]->color}}">
+                                        <div class="margin">
+                                            <div class="btn-group">
+                                                <input type="button"
+                                                       class="btn btn-default btn-call-info"
+                                                       data-toggle="dropdown"
+                                                       aria-haspopup="true"
+                                                       aria-expanded="false"
+                                                       value="{{ $result['statuses'][$statuses[$k]->id] ?? 0}}">
+                                                <ul class="dropdown-menu" style="min-width: 1500%;">
+                                                    <li role="presentation">
+                                                        @foreach($result['confirm_orders_ids'] as $orderId)
+                                                            <a href="{{route('orders.edit', $orderId)}}"
+                                                               target="_blank"
+                                                               style="padding: 3px 5px; display: inline-block">
+                                                                {{$orderId}}
+                                                            </a>
+                                                        @endforeach
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                @else
+                                    <td class="bg-{{$statuses[$k]->color}}">
+                                        {{ $result['statuses'][$statuses[$k]->id] ?? 0}}
+                                    </td>
+                                @endif
                             @endfor
                         </tr>
                     @endforeach

@@ -159,6 +159,7 @@ class ReportController extends Controller
             $dateTo->addDay();
         }
         $statuses = OrderStatus::all();
+        $idStatusConfirm = OrderStatus::getIdStatusConfirm();
         $data = Operator::query()
                     ->has('user')
                     ->with(['user.createdOrders' => function($query) use ($dateFrom, $dateTo){
@@ -172,23 +173,25 @@ class ReportController extends Controller
             return $item->user->createdOrders->isEmpty();
         });
         $results = [];
-
-        $data->each(function ($item) use (&$results){
+        $data->each(function ($item) use (&$results, $idStatusConfirm){
             $results[$item->id] = [
-                'count'     => $item->user->createdOrders->count(),
-                'order_ids' => $item->user->createdOrders->pluck('id'),
-                'operator'  => $item->name,
-                'sum'       => $item->user->createdOrders->reduce(function ($prev, $val){
-                                    return $prev + $val->fullSum;
-                                }, 0),
-                'statuses'  => $item->user->createdOrders->map(function ($val){
-                    return $val->status;
-                })->filter()->groupBy('id')->map(function ($val){
-                    return $val->count();
-                }),
+                'count'              => $item->user->createdOrders->count(),
+                'order_ids'          => $item->user->createdOrders->pluck('id'),
+                'confirm_orders_ids' => $item->user->createdOrders->filter(function ($value, $key) use ($idStatusConfirm){
+                    return $value->status_id == $idStatusConfirm;
+                })->pluck('id'),
+                'operator'           => $item->name,
+                'sum'                => $item->user->createdOrders->reduce(function ($prev, $val){
+                                            return $prev + $val->fullSum;
+                                        }, 0),
+                'statuses'           => $item->user->createdOrders->map(function ($val){
+                                            return $val->status;
+                                        })->filter()->groupBy('id')->map(function ($val){
+                                            return $val->count();
+                                        }),
             ];
         });
 
-        return view('front.reports.operators_created', compact('statuses', 'results'));
+        return view('front.reports.operators_created', compact('statuses', 'results', 'idStatusConfirm'));
     }
 }
