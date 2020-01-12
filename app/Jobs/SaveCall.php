@@ -13,6 +13,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Log;
 
 class SaveCall implements ShouldQueue
 {
@@ -45,6 +46,7 @@ class SaveCall implements ShouldQueue
         //входящий звонок
         if($data['call_direction'] === MangoCallEnums::CALL_DIRECTION_INCOMING) {
             $callRepository = new CallsRepository();
+            Log::channel('custom')->error($data);
             //пропущенный
             if($data['entry_result'] === MangoCallEnums::CALL_RESULT_MISSED) {
                 $isFirst = false;
