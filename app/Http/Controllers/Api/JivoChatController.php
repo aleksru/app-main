@@ -18,7 +18,7 @@ class JivoChatController extends Controller
      */
     public function webhooks(Request $request)
     {
-        Log::channel('custom')->error($request->all());
+        //Log::channel('custom')->error($request->all());
         $responseData = ['result' => 'ok'];
         $data = $request->all();
         if($data['event_name'] == JivoEventsEnums::CHAT_ACCEPTED){
