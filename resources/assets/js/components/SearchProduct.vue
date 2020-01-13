@@ -44,7 +44,7 @@
 
 <script>
 
-    let emptyProduct = {id: null, product: {}, supplier_in_order: {},  courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: null, quantity: 1};
+    let emptyProduct = {id: null, product: {}, supplier_in_order: {},  courier_payment: 0, delta: 0, imei: '',  order_id: 0, price: 0, price_opt: 0, product_id: null, quantity: 1, product_type: ''};
     let newProduct = {product_name: null, type: null};
 
     export default {
@@ -62,14 +62,12 @@
         methods: {
             addProduct(prod = _.cloneDeep(emptyProduct)) {
                 if (this.selectedProduct) {
-                    prod.product.product_name = this.selectedProduct.product_name;
-                    prod.product.id = this.selectedProduct.id;
                     prod.product_id = this.selectedProduct.id;
-
+                    prod.product = this.selectedProduct;
                     this.selectedProduct = null;
                     this.showCreateProduct = false;
 
-                    this.$emit('addproduct', prod);
+                    this.$emit('addproduct',  prod);
                 }
             },
 
@@ -82,6 +80,7 @@
                     this.productSearch =  response.data.products;
                     if (this.productSearch.length === 0) {
                         this.showCreateProduct = true;
+                        this.newProductName.product_name = search;
                     }
                 }
             }, 250),
@@ -92,13 +91,9 @@
                     throw Error(e);
                 });
                 let prod = _.cloneDeep(emptyProduct);
-
-                prod.product.product_name = response.data.product.product_name;
-                prod.product.product_id = response.data.product.id;
-                prod.product_id = response.data.product.id;
-
-                this.$emit('addproduct', prod);
-
+                prod.product = response.data.product;
+                this.selectedProduct = response.data.product;
+                this.addProduct();
                 this.showCreateProduct = false;
                 this.newProductName = {...newProduct};
 

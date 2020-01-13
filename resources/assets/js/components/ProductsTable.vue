@@ -26,7 +26,7 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Кол-во</th>
+                        <th>Тип</th>
                         <th>Модель</th>
                         <th>IMEI</th>
                         <th>Цена</th>
@@ -39,9 +39,12 @@
                     <tbody>
                     <tr v-for="(product, index) in products" :key="product.id">
                         <td style="width: 2%">{{ index + 1  }}</td>
-                        <td style="width: 5%">
-                            <!--//quantity-->
-                            <input type="number" min="1" style="width: 100%" v-model="product.quantity">
+                        <td style="width: 10%">
+                            <v-select label="desc"
+                                      :options="initial_product_types"
+                                      index="name"
+                                      v-model="product.product.type">
+                            </v-select>
                         </td>
                         <!--//Model-->
                         <td style="width: 15%"> {{ product.product.product_name }} </td>
@@ -49,11 +52,11 @@
                             <!--//imei-->
                             <input type="text" class="form-control" v-model="product.imei">
                         </td>
-                        <td style="width: 10%">
+                        <td style="width: 5%">
                             <!--price-->
                             <input type="number" class="form-control" min="1" style="width: 100%" v-model="product.price">
                         </td>
-                        <td style="width: 10%">
+                        <td style="width: 5%">
                             <!--price_opt-->
                             <input type="number" class="form-control" min="1" style="width: 100%" v-model="product.price_opt">
                         </td>
