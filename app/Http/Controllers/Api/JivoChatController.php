@@ -91,6 +91,11 @@ class JivoChatController extends Controller
                 'link' => route('clients.show', $client->id),
                 'content' => $client->name ? $client->name : 'Карточка клиента',
             ];
+        }else{
+            $result['custom_data'] = [
+                'title' => 'Ссылка на карточку',
+                'content' => 'Клиент не найден'
+            ];
         }
 
         return $result;
