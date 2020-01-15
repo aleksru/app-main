@@ -38,7 +38,7 @@ class SendOrderQuickJob implements ShouldQueue
     {
         $c = (new QuickrunOrder ());
         $c->addOrder($this->order->prepareQuickData());
-        $c->setOrders();
+        $c->setOrders($this->order->date_delivery);
         $this->order->is_send_quick = true;
         $this->order->save();
     }

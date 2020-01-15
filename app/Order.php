@@ -35,7 +35,8 @@ class Order extends Model
         'communication_time' => 'datetime:d.m H:i',
         'created_at' => 'datetime:d.m.y H:i',
         'updated_at' => 'datetime:d.m.y H:i',
-        'is_send_quick' => 'boolean'
+        'is_send_quick' => 'boolean',
+        'date_delivery' => 'date'
     ];
 
     protected $dates = [
