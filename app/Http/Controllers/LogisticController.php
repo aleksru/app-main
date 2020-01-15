@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Events\RealizationCopyLogistEvent;
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
+use App\Jobs\SendOrderQuickJob;
 use App\Models\FailDeliveryDate;
 use App\Models\Logist;
 use App\Models\OrderStatus;
@@ -157,20 +158,26 @@ class LogisticController extends Controller
     public function logistCopyToggle(Request $request)
     {
         $realiz = Realization::findOrFail($request->get('realization_id'));
-
+        $message = 'Скопировано';
         if($realiz->is_copy_logist){
             return response()->json(['type' => 'error', 'message' => 'Уже скопировано']);
         }
+        $order = $realiz->order;
+        if(!$order->is_send_quick){
+            SendOrderQuickJob::dispatch($order);
+            $message .= '. Заказ отправлен в "Бегунок"!';
+        }
+
         $realiz->is_copy_logist = true;
         $realiz->save();
         event(new RealizationCopyLogistEvent($realiz));
-        if(file_exists(storage_path('app/google/key_table.json'))){
-            $rowGet = str_replace('<td>', '', $request->get('row'));
-            $row = explode('</td>', $rowGet);
-            (new GoogleSheets())->writeRow($row);
-        }
+//        if(file_exists(storage_path('app/google/key_table.json'))){
+//            $rowGet = str_replace('<td>', '', $request->get('row'));
+//            $row = explode('</td>', $rowGet);
+//            (new GoogleSheets())->writeRow($row);
+//        }
 
-        return response()->json(['type' => 'success', 'message' => 'Скопировано']);
+        return response()->json(['type' => 'success', 'message' => $message]);
     }
 
     /**

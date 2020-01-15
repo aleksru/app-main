@@ -13,6 +13,7 @@ use App\Models\Metro;
 use App\Models\OtherStatus;
 use App\Models\Realization;
 use App\Models\Traits\HasSms;
+use App\Services\Quickrun\Orders\QuickSetOrderData;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,7 @@ class Order extends Model
         'communication_time' => 'datetime:d.m H:i',
         'created_at' => 'datetime:d.m.y H:i',
         'updated_at' => 'datetime:d.m.y H:i',
+        'is_send_quick' => 'boolean'
     ];
 
     protected $dates = [
@@ -223,14 +225,33 @@ class Order extends Model
      */
     public function getFullAddressAttribute()
     {
-        $columns = ['address_city', 'address_street', 'address_home', 'address_apartment', 'address_other'];
-        $address = '';
+        $columns = [
+            'address_street'  => '',
+            'address_home' => 'д.',
+            'address_apartment' => 'кв.',
+            'address_other' => ''
+        ];
 
-        foreach($columns as $column) {
-            $address = $address . ($this->$column ? $this->$column . ', ' : '');
+        $city = $this->getCity();
+        $address = ($city ? $city . ', ' : '') . ($this->metro ? 'м.' . $this->metro->name . ', ' : '');
+
+        foreach($columns as $column => $mask) {
+            $address = $address . ($this->$column ? ($mask . $this->$column . ', ') : '');
         }
 
         return $address;
+    }
+
+    public function getCity()
+    {
+        if($this->address_city){
+            return $this->address_city;
+        }
+        if($this->city){
+            return $this->city->name;
+        }
+
+        return null;
     }
 
     /**
@@ -318,5 +339,41 @@ class Order extends Model
     public function isConfirmed() : bool
     {
         return $this->status_id == OrderStatus::getIdStatusConfirm();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAllProductsString() : string
+    {
+        $res = $this->products->pluck('product_name')->implode(', ');
+
+        return $res ? $res : '';
+    }
+
+
+    /**
+     * @return QuickSetOrderData
+     * @throws \Exception
+     */
+    public function prepareQuickData() : QuickSetOrderData
+    {
+        $data = new QuickSetOrderData();
+        $order = $this->load('deliveryPeriod', 'client');
+        if(!$order){
+            throw new \Exception();
+        }
+        //$data->id             = $order->id . '_' .$this->id;
+        $data->timeFrom       = $order->deliveryPeriod ? $order->deliveryPeriod->timeFrom . ':00' : null;
+        $data->timeTo         = $order->deliveryPeriod ? $order->deliveryPeriod->timeTo . ':00' : null;
+        $data->address        = $order->fullAddress;
+        $data->goods          = $order->getAllProductsString();
+        $data->buyerName      = $order->client ? $order->client->name : 'Не найдено';
+        $data->number         = $order->id;
+        $data->additionalInfo = $order->comment;
+        $data->price          = (int)$this->fullSum;
+        $data->phone          = $order->client ? $order->client->allPhones->implode(', ') : '';
+
+        return $data;
     }
 }
