@@ -352,6 +352,16 @@ class Order extends Model
         return $res ? $res : '';
     }
 
+    public function getAllProductsPriceString() : string
+    {
+        $this->load('realizations.product');
+        $res = $this->realizations->reduce(function ($prev, $cur){
+            return $prev . $cur->product->product_name . '-' . (int)$cur->price . 'р, ';
+        }, '');
+
+        return $res ? $res : '';
+    }
+
 
     /**
      * @return QuickSetOrderData
@@ -368,7 +378,7 @@ class Order extends Model
         $data->timeFrom       = $order->deliveryPeriod ? $order->deliveryPeriod->timeFrom . ':00' : null;
         $data->timeTo         = $order->deliveryPeriod ? $order->deliveryPeriod->timeTo . ':00' : null;
         $data->address        = $order->fullAddress;
-        $data->goods          = $order->getAllProductsString();
+        $data->goods          = $order->getAllProductsPriceString();
         $data->buyerName      = $order->client ? $order->client->name : 'Не найдено';
         $data->number         = $order->id;
         $data->additionalInfo = $order->comment;
