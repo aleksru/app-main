@@ -17,7 +17,7 @@ class DeliveryPeriodsController extends Controller
     public function index()
     {
         return view('admin.periods.form', [
-            'periods' => DeliveryPeriod::select('id', 'period')->get(),
+            'periods' => DeliveryPeriod::query()->get(),
             'otherPeriods' => OtherDelivery::all(),
         ]);
     }
@@ -35,11 +35,13 @@ class DeliveryPeriodsController extends Controller
                 $modelPeriod = new DeliveryPeriod;
             }
 
-            $modelPeriod->period = $period['period'];
+            $modelPeriod->period = $period['period'] ?? '';
+            $modelPeriod->timeFrom = $period['timeFrom'] ?? null;
+            $modelPeriod->timeTo = $period['timeTo']?? null;
             $modelPeriod->save();
         }
 
-        return response()->json(['periods' => DeliveryPeriod::select('id', 'period')->get(), 'message' => 'Добавлено!']);
+        return response()->json(['periods' => DeliveryPeriod::query()->get(), 'message' => 'Добавлено!']);
     }
 
     /**

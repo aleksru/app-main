@@ -10,7 +10,13 @@
                     @endif
                 </span>
                 <div class="info-box-content">
-                    <span class="info-box-text">{{$period->period ?? $period->name}}</span>
+                    <span class="info-box-text">
+                        @if($period instanceof \App\Models\DeliveryPeriod)
+                            {{$period->period_full}}
+                        @else
+                            {{$period->name}}
+                        @endif
+                    </span>
                     <div class="btn-group">
                         <button type="button"
                                 class="btn

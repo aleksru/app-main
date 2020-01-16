@@ -106,7 +106,7 @@
                 <div class="col-sm-4">
                     <label for="name" class="control-label">Время доставки</label>
                     <select class="js-example-period-single form-control" name="delivery_period_id">
-                        <option value="{{ $order->deliveryPeriod->id ?? null }}" selected>{{ $order->deliveryPeriod->period ?? 'Не выбран' }}</option>
+                        <option value="{{ $order->deliveryPeriod->id ?? null }}" selected>{{ $order->deliveryPeriod->period_full ?? 'Не выбран' }}</option>
                         <option value="{{ null }}">  </option>
                     </select>
                 </div>
@@ -209,7 +209,7 @@
             });
         });
 
-        let periods = {!!   json_encode(\App\Models\DeliveryPeriod::select('id', 'period as text')->get()->toArray()) !!}
+        let periods = {!!   json_encode(\App\Models\DeliveryPeriod::selectRaw('id, CONCAT(IFNULL(timeFrom, ""), "-", IFNULL(timeTo, ""), " ", IFNULL(period, "")) as text')->get()->toArray()) !!}
         $(function() {
             $('.js-example-period-single').select2({
                 data: periods,

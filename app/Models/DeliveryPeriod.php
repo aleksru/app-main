@@ -15,4 +15,9 @@ class DeliveryPeriod extends Model
     {
         return $this->morphMany(FailDeliveryDate::class, 'morph');
     }
+
+    public function getPeriodFullAttribute()
+    {
+        return $this->timeFrom . '-' . $this->timeTo . ' ' . $this->period;
+    }
 }

@@ -6,7 +6,11 @@
     @foreach($periods as $period)
         <span class="badge @if($period->failDeliveryDate->isEmpty())bg-green @else bg-red @endif"
               style="font-size: 15px;margin-left: 5%; padding: 10px">
-            {{$period->period ?? $period->name}}
+            @if($period instanceof \App\Models\DeliveryPeriod)
+                {{$period->period_full}}
+            @else
+                {{$period->name}}
+            @endif
         </span>
     @endforeach
 </div>
@@ -19,7 +23,11 @@
     @foreach($periodsTomorrow as $period)
         <span class="badge @if($period->failDeliveryDate->isEmpty())bg-green @else bg-red @endif"
               style="font-size: 15px;margin-left: 5%; padding: 10px">
-            {{$period->period ?? $period->name}}
+            @if($period instanceof \App\Models\DeliveryPeriod)
+                {{$period->period_full}}
+            @else
+                {{$period->name}}
+            @endif
         </span>
     @endforeach
 </div>

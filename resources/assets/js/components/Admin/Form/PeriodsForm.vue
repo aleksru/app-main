@@ -10,16 +10,27 @@
                     </i>
                 </label>
 
-                <div class="col-sm-6">
-                    <div class="input-group margin">
-                        <input type="text" class="form-control" :name="'periods['+ index +']'" v-model="periods[index].period">
+                <div class="col-sm-3">
+                        <label>Описание</label>
+                        <input type="text" placeholder="Описание" class="form-control" :name="'periods['+ index +']'" v-model="periods[index].period">
                         <input type="hidden" class="form-control" :name="'id['+ index +']'" v-model="periods[index].id">
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-danger" @click.prevent="deletePeriod(index)">
-                              <i class="fa fa-trash"></i> Удалить
-                          </button>
-                        </span>
-                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                        <label>Время ОТ</label>
+                        <input type="number" min="0" max="23" placeholder="Время ОТ" class="form-control" :name="'timeFrom['+ index +']'" v-model="periods[index].timeFrom">
+                </div>
+
+                <div class="col-sm-2">
+                        <label>Время ДО</label>
+                        <input type="number"  min="0" max="23"  placeholder="Время ДО" class="form-control" :name="'timeTo['+ index +']'" v-model="periods[index].timeTo">
+
+                </div>
+                <div class="col-sm-2">
+                    <label style="opacity: 0">DELETE</label>
+                    <button type="button" class="btn btn-danger form-control" @click.prevent="deletePeriod(index)">
+                        <i class="fa fa-trash"></i> Удалить
+                    </button>
                 </div>
             </div>
 
@@ -92,13 +103,13 @@
         },
         computed: {
             dones(){
-                var done = true;
+//                var done = true;
+//
+//                for(let i = 0; i < this.periods.length; i++){
+//                    this.periods[i].period !== '' ? '' : done = false;
+//                }
 
-                for(let i = 0; i < this.periods.length; i++){
-                    this.periods[i].period !== '' ? '' : done = false;
-                }
-
-                return done;
+                return true;
             }
         }
     }
