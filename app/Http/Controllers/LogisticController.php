@@ -158,12 +158,18 @@ class LogisticController extends Controller
     public function logistCopyToggle(Request $request)
     {
         $realiz = Realization::findOrFail($request->get('realization_id'));
+        $isForcedSendQuick = (bool)$request->get('is_forced_send_quick');
         $message = 'Скопировано';
-        if($realiz->is_copy_logist){
-            return response()->json(['type' => 'error', 'message' => 'Уже скопировано']);
-        }
         $order = $realiz->order;
-        if(!$order->is_send_quick){
+
+        if($realiz->is_copy_logist && $order->is_send_quick  && !$isForcedSendQuick){
+            return response()->json([
+                'is_send_quick' => $order->is_send_quick,
+                'order_id'      => $order->id
+            ]);
+        }
+
+        if(!$order->is_send_quick || $isForcedSendQuick){
             SendOrderQuickJob::dispatch($order);
             $message .= '. Заказ отправлен в "Бегунок"!';
         }

@@ -186,14 +186,20 @@
                         if(this.dataset.productid == '') {
                             throw 'product_is_null';
                         }
-                        axios.post("{!! route('logistics.copy.toggle') !!}", {
-                            realization_id: this.dataset.realizationid,
-                            row: this.innerHTML,
-                        }).then((res) => {
+                        send(this.dataset.realizationid).then((res) => {
                             this.classList.remove('alert-danger');
                             this.classList.add('alert-success');
-                            toast[res.data.type]('', {title: res.data.message});
-                        });
+                            if(res.data.is_send_quick){
+                                toast.confirm(`Заказ #${res.data.order_id} уже отправлен в Бегунок. Отправить заново?`, () => {
+                                    send(this.dataset.realizationid, is_forced_send_quick = true).then((res) => {
+                                        toast[res.data.type]('', {title: res.data.message});
+                                    });
+                                })
+                            }
+                            if(res.data.type && res.data.message){
+                                toast[res.data.type]('', {title: res.data.message});
+                            }
+                        })
 
                     } catch(err) {
                         let mess = 'Произошла ошибка!';
@@ -206,6 +212,15 @@
                     sel.removeAllRanges();
                 });
             });
+
+            async function send(realization_id, is_forced_send_quick = false) {
+                let res = await axios.post("{!! route('logistics.copy.toggle') !!}", {
+                    realization_id: realization_id,
+                    is_forced_send_quick
+                });
+
+                return res;
+            }
         });
 
     </script>
