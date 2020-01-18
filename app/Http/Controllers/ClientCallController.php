@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ClientCallController extends Controller
@@ -42,7 +43,7 @@ class ClientCallController extends Controller
                 ->to_number($request->get('phone'));
         $mangoService = new MangoService();
         $mangoService->callback($callback);
-        //Log::channel('custom')->error(['ClientCallController', (array)$callback]);
+        Log::channel('calls')->error(['ClientCallController', (array)$callback]);
 
         return response()->json(['command_id' => $uuid]);
     }

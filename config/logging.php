@@ -92,6 +92,14 @@ return [
             'level' => 'debug',
         ],
 
+        'calls' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/calls.log'),
+            'days' => 2,
+            'permission' => 0777,
+            'level' => 'debug',
+        ],
+
         'api' => [
             'driver' => 'daily',
             'path' => storage_path('logs/api.log'),
