@@ -10,6 +10,7 @@ use App\Models\OrderStatus;
 use App\Models\OtherStatus;
 use App\Models\Realization;
 use App\Notifications\ClientCallBack;
+use App\Product;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -88,7 +89,7 @@ class OrderController extends Controller
                 'order' => $order->load(['client.orders' => function($query){
                     $query->orderBy('id', 'DESC');
                 },
-                'realizations.product:id,product_name',
+                'realizations.product',
                 'realizations.supplier'
             ]),
             'operator' => $order->operator,
@@ -159,6 +160,11 @@ class OrderController extends Controller
         $realizationsId = [];
 
         foreach ($products as $product) {
+            $modelProduct = Product::find($product['product']['id']);
+            if($modelProduct && $product['product']['type']){
+                $modelProduct->update(['type' => $product['product']['type']]);
+            }
+            $product['product_type'] = $product['product']['type'];
             $realization = Realization::updateOrCreate(['id' => $product['id']], $product);
             $realizations[] = $realization;
             $realizationsId[] = $realization->id;
@@ -173,7 +179,7 @@ class OrderController extends Controller
         Realization::destroy($arrDiff);
         event(new OrderUpdateRealizationsEvent($order));
 
-        return response()->json(['success' => 'Товары успешно обновлены!', 'products' => $order->realizations()->with('product:id,product_name', 'supplier')->get()]);
+        return response()->json(['success' => 'Товары успешно обновлены!', 'products' => $order->realizations()->with('product', 'supplier')->get()]);
     }
 
     /**

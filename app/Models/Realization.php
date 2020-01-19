@@ -15,7 +15,7 @@ class Realization extends Model
 
     protected $guarded = ['id'];
     protected $fillable = [
-        "product_id", "price", "quantity", "imei", "price_opt", "supplier_id", "courier_payment", "delta"
+        "product_id", "price", "quantity", "imei", "price_opt", "supplier_id", "courier_payment", "delta", 'product_type'
     ];
     protected $dates = ['deleted_at'];
 
