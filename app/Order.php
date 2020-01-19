@@ -374,6 +374,7 @@ class Order extends Model
         if(!$order){
             throw new \Exception();
         }
+        $fullSum = (int)$this->fullSum;
         //$data->id             = $order->id . '_' .$this->id;
         $data->timeFrom       = $order->deliveryPeriod ? $order->deliveryPeriod->timeFrom . ':00' : null;
         $data->timeTo         = $order->deliveryPeriod ? $order->deliveryPeriod->timeTo . ':00' : null;
@@ -382,8 +383,9 @@ class Order extends Model
         $data->buyerName      = $order->client ? $order->client->name : 'Не найдено';
         $data->number         = $order->id;
         $data->additionalInfo = $order->comment;
-        $data->price          = (int)$this->fullSum;
+        $data->price          = $fullSum;
         $data->phone          = $order->client ? $order->client->allPhones->implode(', ') : '';
+        $data->weight         = $fullSum;
 
         return $data;
     }

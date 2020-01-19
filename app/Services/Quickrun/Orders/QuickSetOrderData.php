@@ -20,6 +20,10 @@ class QuickSetOrderData
     phone – строка, номер телефона получателя
     dimensions –габариты груза
     duration – число, время задержки курьера на заказе в минутах
+    length – число, длина
+    width – число, ширина
+    height – число, высота
+    weight – число, вес
      */
 //    public $id;
     public $timeFrom;
@@ -31,6 +35,7 @@ class QuickSetOrderData
     public $additionalInfo;
     public $price;
     public $phone;
+    public $weight;
 //    public $dimensions;
 //    public $duration;
 }
