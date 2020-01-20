@@ -396,7 +396,7 @@ class Order extends Model
         //$data->id             = $order->id . '_' .$this->id;
         $data->timeFrom       = $order->deliveryPeriod ? $order->deliveryPeriod->timeFrom . ':00' : null;
         $data->timeTo         = $order->deliveryPeriod ? $order->deliveryPeriod->timeTo . ':00' : null;
-        $data->address        = $order->fullAddress;
+        $data->address        = $order->full_address;
         $data->goods          = $order->getAllProductsPriceString();
         $data->buyerName      = $order->client ? $order->client->name : 'Не найдено';
         $data->number         = $order->id;
