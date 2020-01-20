@@ -126,7 +126,7 @@ class LogisticController extends Controller
                 return ($order->date_delivery ? $order->date_delivery->format('d.m') : '') .' '.($order->deliveryPeriod ? $order->deliveryPeriod->period_full : '');
             })
             ->editColumn('address', function (Order $order){
-                return $order->fullAddress;
+                return $order->full_address;
             })
             ->editColumn('courier_name', function (Order $order){
                 return $order->courier ? $order->courier->name : '';
