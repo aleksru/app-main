@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Enums\ProductType;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet1;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet2;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet4;
@@ -87,7 +88,7 @@ class ReportController extends Controller
     {
         $dateFrom = Carbon::parse($request->get('dateFrom') ?? date('Y-m-d H:i:s'));
         $dateTo = Carbon::parse($request->get('dateTo') ?? $request->get('dateFrom') ?? date('Y-m-d H:i:s'));
-        debug($dateFrom, $dateTo);
+
         $table = $request->get('tableName');
         $data = [];
 
@@ -193,5 +194,46 @@ class ReportController extends Controller
         });
 
         return view('front.reports.operators_created', compact('statuses', 'results', 'idStatusConfirm'));
+    }
+
+    public function reportOperators(Request $request)
+    {
+        $dateFrom = Carbon::parse($request->get('dateFrom'));
+        $dateTo = $request->get('dateTo') ? Carbon::parse($request->get('dateTo')) : null;
+        $idStatusConfirm = OrderStatus::getIdStatusConfirm();
+
+        if(!$dateTo){
+            $dateTo =  clone $dateFrom;
+            $dateTo->addDay();
+        }
+        $statuses = OrderStatus::all();
+        $operators = Operator::query()->with([
+            'orders' => function($query) use ($dateFrom, $dateTo){
+                $query->whereBetween('created_at', [$dateFrom->toDateString(), $dateTo->toDateString()]);
+            },
+            'orders.realizations',
+            'orders.status'
+        ])->get()
+          ->filter(function ($value){
+            return !$value->orders->isEmpty();
+        });
+
+        $operators->each(function ($item){
+            $item->sum_main_product = $item->orders->reduce(function ($prev, $cur){
+                return $prev + $cur->getSumProductForType(ProductType::TYPE_PRODUCT);
+            }, 0);
+            $item->sum_acc = $item->orders->reduce(function ($prev, $cur){
+                return $prev + $cur->getSumProductForType(ProductType::TYPE_ACCESSORY);
+            }, 0);
+            $item->count_orders = $item->orders->count();
+            $item->statuses_group = $item->orders->map(function ($val){
+                return $val->status;
+            })->filter()->groupBy('id')->map(function ($val){
+                return $val->count();
+            });
+        });
+
+        return view('front.reports.orders-operators',
+                        compact('statuses', 'operators', 'idStatusConfirm'));
     }
 }

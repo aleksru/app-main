@@ -345,6 +345,18 @@ class Order extends Model
     }
 
     /**
+     * @param string $type
+     * @return int
+     */
+    public function getSumProductForType(string $type) : int
+    {
+        return $this->realizations
+            ->reduce(function ($prev, $val) use ( $type ){
+                return $prev + ($val->product_type == $type ? ($val->quantity * $val->price) : 0);
+            }, 0);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function views()
@@ -379,7 +391,6 @@ class Order extends Model
 
         return $res ? $res : '';
     }
-
 
     /**
      * @return QuickSetOrderData

@@ -69,6 +69,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('utm', 'ReportController@utmReport')->name('utmReport');
         Route::get('utm-statuses', 'ReportController@utmStatus')->name('utm_status');
         Route::get('operator-created', 'ReportController@operatorCreatedOrders')->name('operators.created');
+        Route::get('operator-report', 'ReportController@reportOperators')->name('operators.orders');
     });
 
     //логи

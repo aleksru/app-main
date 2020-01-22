@@ -56,6 +56,7 @@
                 <li><a href="{{ route('reports.products') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Товары</span> </a></li>
                 <li><a href="{{ route('reports.resources') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Источники</span> </a></li>
                 <li><a href="{{ route('reports.operators.created') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Созданные заказы</span> </a></li>
+                <li><a href="{{ route('reports.operators.orders') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Заказы Операторы</span> </a></li>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-book"></i> <span>Маркетинг</span>
                         <span class="pull-right-container">
