@@ -24,6 +24,15 @@ class QuickSetOrderData
     width – число, ширина
     height – число, высота
     weight – число, вес
+     * "dimensions": {
+
+    "weight":10,
+
+    "height":10,
+
+    "length":10
+
+    }
      */
 //    public $id;
     public $timeFrom;
@@ -35,7 +44,15 @@ class QuickSetOrderData
     public $additionalInfo;
     public $price;
     public $phone;
-    public $weight;
+    public $dimensions = [];
+
+    public function setWeight(int $weight)
+    {
+        $this->dimensions['weight'] = $weight;
+
+        return $this;
+    }
+
 //    public $dimensions;
 //    public $duration;
 }

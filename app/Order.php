@@ -403,7 +403,7 @@ class Order extends Model
         $data->additionalInfo = $order->comment;
         $data->price          = $fullSum;
         $data->phone          = $order->client ? $order->client->allPhones->implode(', ') : '';
-        $data->weight         = $fullSum;
+        $data->setWeight($fullSum);
 
         return $data;
     }
