@@ -356,6 +356,14 @@ class Order extends Model
             }, 0);
     }
 
+    public function getCountProductForType(string $type) : int
+    {
+        return $this->realizations
+            ->reduce(function ($prev, $val) use ( $type ){
+                return $prev + ($val->product_type == $type ? 1 : 0);
+            }, 0);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

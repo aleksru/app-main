@@ -128,7 +128,7 @@
                             </td>
                             <td>{{$operator->sum_main_product + $operator->sum_acc}}</td>
                             <td>{{$operator->sum_main_product}}</td>
-                            <td>{{$operator->sum_acc}}</td>
+                            <td>{{$operator->sum_acc}} {{$operator->count_acc}}шт.</td>
                             @for($k=0; $k < $statuses->count(); $k++)
                                 @if($idStatusConfirm == $statuses[$k]->id)
                                     <td class="bg-{{$statuses[$k]->color}}">

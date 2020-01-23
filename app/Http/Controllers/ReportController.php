@@ -209,7 +209,8 @@ class ReportController extends Controller
         $statuses = OrderStatus::all();
         $operators = Operator::query()->with([
             'orders' => function($query) use ($dateFrom, $dateTo){
-                $query->whereBetween('created_at', [$dateFrom->toDateString(), $dateTo->toDateString()]);
+                $query->whereBetween('created_at', [$dateFrom->toDateString(), $dateTo->toDateString()])
+                    ->whereNotNull('status_id');
             },
             'orders.realizations',
             'orders.status'
@@ -218,14 +219,17 @@ class ReportController extends Controller
             return !$value->orders->isEmpty();
         });
 
-        $operators->each(function ($item){
-            $item->sum_main_product = $item->orders->reduce(function ($prev, $cur){
-                return $prev + $cur->getSumProductForType(ProductType::TYPE_PRODUCT);
+        $operators->each(function ($item) use ($idStatusConfirm) {
+            $item->sum_main_product = $item->orders->reduce(function ($prev, $cur) use ($idStatusConfirm) {
+                return $prev + ($cur->status_id == $idStatusConfirm ? $cur->getSumProductForType(ProductType::TYPE_PRODUCT) : 0);
             }, 0);
-            $item->sum_acc = $item->orders->reduce(function ($prev, $cur){
-                return $prev + $cur->getSumProductForType(ProductType::TYPE_ACCESSORY);
+            $item->sum_acc = $item->orders->reduce(function ($prev, $cur) use ($idStatusConfirm) {
+                return $prev + ($cur->status_id == $idStatusConfirm ? $cur->getSumProductForType(ProductType::TYPE_ACCESSORY) : 0);
             }, 0);
             $item->count_orders = $item->orders->count();
+            $item->count_acc  = $item->orders->reduce(function ($prev, $cur){
+                return $prev + $cur->getCountProductForType(ProductType::TYPE_ACCESSORY);
+            }, 0);
             $item->statuses_group = $item->orders->map(function ($val){
                 return $val->status;
             })->filter()->groupBy('id')->map(function ($val){
