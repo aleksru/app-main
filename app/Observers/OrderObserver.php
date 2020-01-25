@@ -60,6 +60,7 @@ class OrderObserver
                     $order->client->notify(new CreateOrder($order));
                     $order->flag_send_sms = true;
                 }
+                $order->confirmed_at = Carbon::now();
                 $logistOrderData = app(OrderLogistData::class, ['order' => $order]);
                 dispatch(new SendLogistGoogleTable($logistOrderData))->onQueue('google-tables');
                 event(new OrderConfirmedEvent($order));
