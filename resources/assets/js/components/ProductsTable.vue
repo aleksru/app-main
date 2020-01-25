@@ -43,7 +43,7 @@
                             <v-select label="desc"
                                       :options="initial_product_types"
                                       index="name"
-                                      v-model="!product.product_type ? product.product.type : product.product_type">
+                                      v-model="product.product_type">
                             </v-select>
                         </td>
                         <!--//Model-->

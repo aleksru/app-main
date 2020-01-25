@@ -76,6 +76,7 @@ class OrderController extends Controller
                             'quantity'   => 1,
                             'price'      => ($store && ! $store->is_disable_api_price) ? (float)$product['price'] : 0,
                             'product_id' => $productModel->id,
+                            'product_type' => $productModel->type
                         ]);
                     }
                     $cntProducts++;

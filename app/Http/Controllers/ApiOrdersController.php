@@ -78,7 +78,12 @@ class ApiOrdersController extends Controller
                     if($i >= 10){
                         break;
                     }
-                    $order->realizations()->create(['quantity' => 1, 'price' => $price, 'product_id' => $productModel->id]);
+                    $order->realizations()->create([
+                        'quantity' => 1,
+                        'price' => $price,
+                        'product_id' => $productModel->id,
+                        'product_type' => $productModel->type
+                    ]);
                 }
                 $cntProducts++;
             }

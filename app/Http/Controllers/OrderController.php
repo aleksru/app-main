@@ -161,10 +161,10 @@ class OrderController extends Controller
 
         foreach ($products as $product) {
             $modelProduct = Product::find($product['product']['id']);
-            if($modelProduct && $product['product']['type']){
-                $modelProduct->update(['type' => $product['product']['type']]);
+            if($modelProduct && $product['product_type']){
+                $modelProduct->update(['type' => $product['product_type']]);
             }
-            $product['product_type'] = $product['product']['type'];
+            //$product['product_type'] = $product['product']['type'];
             $realization = Realization::updateOrCreate(['id' => $product['id']], $product);
             $realizations[] = $realization;
             $realizationsId[] = $realization->id;

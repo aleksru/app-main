@@ -64,6 +64,7 @@
                 if (this.selectedProduct) {
                     prod.product_id = this.selectedProduct.id;
                     prod.product = this.selectedProduct;
+                    prod.product_type = this.selectedProduct.type;
                     this.selectedProduct = null;
                     this.showCreateProduct = false;
 
