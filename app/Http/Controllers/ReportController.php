@@ -210,6 +210,7 @@ class ReportController extends Controller
         $operators = Operator::query()->with([
             'orders' => function($query) use ($dateFrom, $dateTo){
                 $query->whereBetween('created_at', [$dateFrom->toDateString(), $dateTo->toDateString()])
+                    ->orWhereBetween('confirmed_at', [$dateFrom->toDateString(), $dateTo->toDateString()])
                     ->whereNotNull('status_id');
             },
             'orders.realizations',
