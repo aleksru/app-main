@@ -40,7 +40,8 @@ class OrderLogistData
             'operator',
             'realizations.product');
         $iteration = 0;
-        foreach ($this->order->realizations as $product) {
+        $realizations = $this->order->realizations->sortBy('product_type');
+        foreach ($realizations as $product) {
             $rows[$iteration]['nodata'] = '-';
             $rows[$iteration]['date'] = date("d.m.Y", strtotime($this->order->created_at));
             $rows[$iteration]['operator'] = $this->order->operator ? $this->order->operator->name : '';
@@ -52,7 +53,7 @@ class OrderLogistData
             $rows[$iteration]['status'] = $this->order->status ? $this->order->status->status : '';
             $rows[$iteration]['client_name'] = $this->order->client ? $this->order->client->name ?? '' : '';
             $rows[$iteration]['delivery_time'] = ($this->order->date_delivery ? $this->order->date_delivery->format('d.m.Y') : '') .
-                                                    ' ' . ($this->order->deliveryPeriod ? $this->order->deliveryPeriod->period : '');
+                                                    ' ' . ($this->order->deliveryPeriod ? $this->order->deliveryPeriod->period_full : '');
             $rows[$iteration]['address'] = ($this->order->metro ? 'м.' . $this->order->metro->name . ',' : '') .
                                             ' ' . ($this->order->fullAddress ?? '');
             $rows[$iteration]['client_phone'] = $this->order->client ? implode(', ', $this->order->client->allPhones->toArray()) : '';
