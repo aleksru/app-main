@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Chat;
 use App\Client;
 use App\ClientCall;
 use App\Models\Logist;
 use App\Models\StockUser;
 use App\Order;
+use App\Policies\ChatPolicy;
 use App\Policies\ClientCallPolicy;
 use App\Policies\ClientPolicy;
 use App\Policies\LogisticPolicy;
@@ -32,6 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         StockUser::class => StockPolicy::class,
         Logist::class => LogisticPolicy::class,
         ClientCall::class => ClientCallPolicy::class,
+        Chat::class => ChatPolicy::class
     ];
 
     /**

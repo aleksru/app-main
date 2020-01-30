@@ -137,6 +137,13 @@ Route::group(['middleware' =>'auth'], function() {
     Route::group(['prefix' => 'metro', 'as' => 'metro.'], function(){
         Route::get('city/{city}', 'MetroController@getMetrosByCity')->name('city');
     });
+
+    //Чаты
+    Route::get('chats', 'ChatController@index')->name('chats');
+    Route::get('chat/{chat}', 'ChatController@chat')->name('chat.show');
+    Route::post('chat/{chat}/message/create', 'ChatMessageController@create')->name('chat.message.create');
+    //Route::get('chat/{id}/messages', 'ChatController@messages')->name('chat.messages');
+    Route::get('front-chat-datatable', 'ChatController@datatable')->name('front.chat.datatable');
 });
 
 //Админка
@@ -211,4 +218,8 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Города
     Route::resource('cities', 'CityController')->except('show');
     Route::get('cities-table', 'CityController@datatable')->name('cities.datatable');
+
+    //Чаты
+    Route::resource('chats', 'ChatController')->except('show');
+    Route::get('chats-datatable', 'ChatController@datatable')->name('chats.datatable');
 });

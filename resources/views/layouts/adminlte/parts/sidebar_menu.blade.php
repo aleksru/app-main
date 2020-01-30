@@ -103,6 +103,7 @@
             </ul>
         </li>
     @endcan
+    <li><a href="{{ route('chats') }}"><i class="fa fa-comments" aria-hidden="true"></i><span>Чаты</span></a></li>
     <li><a href="{{ route('logs.version') }}"><i class="fa fa-cogs" aria-hidden="true"></i> <span>О системе</span></a></li>
     @if (Auth::user()->is_admin)
         <li class="treeview">
@@ -146,6 +147,7 @@
                         <li><a href="{{ route('admin.stock.index') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Склад</span> </a></li>
                         <li><a href="{{ route('admin.logists.index') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Логисты</span> </a></li>
                         <li><a href="{{ route('admin.cities.index') }}"><i class="fa fa-map-o" aria-hidden="true"></i> <span>Города</span> </a></li>
+                        <li><a href="{{ route('admin.chats.index') }}"><i class="fa fa-comments" aria-hidden="true"></i><span>Чаты</span></a></li>
                     </ul>
                 </li>
             </ul>
