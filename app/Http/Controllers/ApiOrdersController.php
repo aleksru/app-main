@@ -73,7 +73,7 @@ class ApiOrdersController extends Controller
                     continue;
                 }
                 $price = ($store && ! $store->is_disable_api_price) ? (float)$product['price'] : 0;
-                $quantity = (int)$product['quantity'] ?? 1;
+                $quantity = (int)$product['quantity'] > 0 ? (int)$product['quantity'] : 1;
                 for ($i=0; $i < $quantity; $i++){
                     if($i >= 10){
                         break;

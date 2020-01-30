@@ -67,7 +67,7 @@ class OrderController extends Controller
                     if($cntProducts >= 10){
                         break;
                     }
-                    $quantity = (int)$product['quantity'] ?? 1;
+                    $quantity = (int)$product['quantity'] > 0 ? (int)$product['quantity'] : 1;
                     for ($i = 0; $i < $quantity; $i++){
                         if($i >= 10){
                             break;
