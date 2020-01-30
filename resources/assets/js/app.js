@@ -63,6 +63,8 @@ Vue.component('SelectInput', require('./components/Front/SelectCityMetro.vue'));
 
 Vue.component('CallsQueue', require('./components/Front/CallsQueue.vue'));
 
+Vue.component('Chat', require('./components/Front/Chat/Chat.vue'));
+
 const app = new Vue({
     el: '#app'
 });

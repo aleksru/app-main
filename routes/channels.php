@@ -35,6 +35,10 @@ Broadcast::channel('order', function () {
     return true;
 });
 
+Broadcast::channel('chat.{id}', function () {
+    return true;
+});
+
 Broadcast::channel('order-views.*', function ($user) {
     return [
         'id'   => $user->id,

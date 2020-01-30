@@ -137,6 +137,12 @@ Route::group(['middleware' =>'auth'], function() {
     Route::group(['prefix' => 'metro', 'as' => 'metro.'], function(){
         Route::get('city/{city}', 'MetroController@getMetrosByCity')->name('city');
     });
+
+    //Чаты
+    Route::get('chats', 'ChatController@index')->name('chats');
+    Route::get('chat/{chat}', 'ChatController@chat')->name('chat.show');
+    Route::post('chat/{chat}/message/create', 'ChatMessageController@create')->name('chat.message.create');
+    //Route::get('chat/{id}/messages', 'ChatController@messages')->name('chat.messages');
 });
 
 //Админка
