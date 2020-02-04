@@ -36,99 +36,109 @@
                     <i class="fa fa-plus"></i> Новый заказ
                 </button></a>
         </div>
-        <div class="col-md-12">
-            @include('datatable.datatable',[
-                'id' => 'orders-table',
-                'route' => $routeDatatable ?? route('orders.datatable'),
-                'pageLength' => 100,
-                'columns' => [
-                    'id' => [
-                        'name' => 'ID',
-                        'width' => '1%',
-                        'searchable' => true,
-                    ],
-                    'status_text' => [
-                        'name' => 'Статус',
-                        'width' => '2%',
-                        'searchable' => true,
-                        'orderable' => 'false'
-                    ],
-                    'store_text' => [
-                        'name' => 'Магазин',
-                        'width' => '3%',
-                        'searchable' => true,
-                        'orderable' => 'false'
-                    ],
-                    'name_customer' => [
-                        'name' => 'Покупатель',
-                        'width' => '3%',
-                        'searchable' => true,
-                        'orderable' => 'false'
-                    ],
-                    'phone' => [
-                        'name' => 'Телефон',
-                        'width' => '3%',
-                        'searchable' => true,
-                        'orderable' => 'false'
-                    ],
-                    'additional_phones' => [
-                        'name' => 'Доп телефоны',
-                        'width' => '3%',
-                        'searchable' => false,
-                        'orderable' => 'false'
-                    ],
-                    'communication_time' => [
-                        'name' => 'Время перезвона',
-                        'width' => '3%',
-                        'searchable' => true,
-                        'orderable' => 'false'
-                    ],
-                    'operator' => [
-                        'name' => 'Оператор',
-                        'width' => '3%',
-                        'searchable' => true,
-                        'orderable' => 'false'
+        <div class="box box-danger">
+            <div class="box-body">
+                <div class="col-md-12">
+                    @include('datatable.datatable',[
+                        'id' => 'orders-table',
+                        'route' => $routeDatatable ?? route('orders.datatable'),
+                        'pageLength' => 100,
+                        'columns' => [
+                            'id' => [
+                                'name' => 'ID',
+                                'width' => '1%',
+                                'searchable' => true,
+                            ],
+                            'status_text' => [
+                                'name' => 'Статус',
+                                'width' => '2%',
+                                'searchable' => true,
+                                'orderable' => 'false'
+                            ],
+                            'store_text' => [
+                                'name' => 'Магазин',
+                                'width' => '3%',
+                                'searchable' => true,
+                                'orderable' => 'false'
+                            ],
+                            'name_customer' => [
+                                'name' => 'Покупатель',
+                                'width' => '3%',
+                                'searchable' => true,
+                                'orderable' => 'false'
+                            ],
+                            'phone' => [
+                                'name' => 'Телефон',
+                                'width' => '3%',
+                                'searchable' => true,
+                                'orderable' => 'false'
+                            ],
+                            'additional_phones' => [
+                                'name' => 'Доп телефоны',
+                                'width' => '3%',
+                                'searchable' => false,
+                                'orderable' => 'false'
+                            ],
+                            'communication_time' => [
+                                'name' => 'Время перезвона',
+                                'width' => '3%',
+                                'searchable' => true,
+                                'orderable' => 'false'
+                            ],
+                            'operator' => [
+                                'name' => 'Оператор',
+                                'width' => '3%',
+                                'searchable' => true,
+                                'orderable' => 'false'
 
-                    ],
-                    'courier' => [
-                        'name' => 'Курьер',
-                        'width' => '3%',
-                        'searchable' => true,
-                        'orderable' => 'false'
+                            ],
+                            'courier' => [
+                                'name' => 'Курьер',
+                                'width' => '3%',
+                                'searchable' => true,
+                                'orderable' => 'false'
 
-                    ],
-                    'products' => [
-                        'name' => 'Товары',
-                        'width' => '20%',
-                        'searchable' => false,
-                        'orderable' => 'false'
-                    ],
-                    'comment' => [
-                        'name' => 'Комментарий',
-                        'width' => '5%',
-                        'searchable' => false,
-                        'orderable' => 'false'
-                    ],
-                    'created_at' => [
-                        'name' => 'Дата создания',
-                        'width' => '5%',
-                        'orderable' => 'false',
-                        'searchable' => true,
-                    ],
-                    'city' => [
-                        'name' => 'Город',
-                        'width' => '2%',
-                        'orderable' => 'false',
-                        'searchable' => true,
-                    ],
-                    'actions' => [
-                        'name' => 'Действия',
-                        'width' => '2%',
-                        'orderable' => 'false'
-                    ],
+                            ],
+                            'products' => [
+                                'name' => 'Товары',
+                                'width' => '20%',
+                                'searchable' => false,
+                                'orderable' => 'false'
+                            ],
+                            'comment' => [
+                                'name' => 'Комментарий',
+                                'width' => '5%',
+                                'searchable' => false,
+                                'orderable' => 'false'
+                            ],
+                            'created_at' => [
+                                'name' => 'Дата создания',
+                                'width' => '5%',
+                                'orderable' => 'false',
+                                'searchable' => true,
+                            ],
+                            'city' => [
+                                'name' => 'Город',
+                                'width' => '2%',
+                                'orderable' => 'false',
+                                'searchable' => true,
+                            ],
+                            'actions' => [
+                                'name' => 'Действия',
+                                'width' => '2%',
+                                'orderable' => 'false'
+                            ],
 
-                ],
-            ])
+                        ],
+                    ])
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <!-- Loading (remove the following to stop the loading)-->
+            <div id="table_preloader" class="overlay" style="display: none">
+                <i class="fa fa-refresh fa-spin" style="top: 5%; font-size: 100px;color: #222d32;"></i>
+            </div>
+            <!-- end loading -->
         </div>
 
         @if(\Illuminate\Support\Facades\Auth::user()->isOperator() || \Illuminate\Support\Facades\Auth::user()->is_admin)
@@ -160,7 +170,8 @@
             clearButton: true,
             dateFormat: 'yyyy.mm.dd',
             onSelect(formattedDate, date, inst){
-                tableOrders.columns(indCreAt).search(formattedDate).draw(), tableOrders.settings()[0].searchDelay
+                tableOrders.columns(indCreAt).search(formattedDate).draw();//, tableOrders.settings()[0].searchDelay
+                $('#table_preloader').show();
             },
         });
 
@@ -172,6 +183,8 @@
         $('.row-link').click(function(){
             window.open($(this).find('a').first().attr('href'), '_blank');
         });
+
+        $('#table_preloader').hide();
     });
 
 
@@ -230,8 +243,10 @@
                                 ` class="${individualSearchingColumnsInput[columnName]['className']}">`);
                 $(this).html(input);
                 input.off().on('keyup cut paste change', _.debounce(async (e) => {
-                    tableOrders.columns(i).search(input.val()).draw(), tableOrders.settings()[0].searchDelay
+                    $('#table_preloader').show();
+                    tableOrders.columns(i).search(input.val()).draw();//, tableOrders.settings()[0].searchDelay
                 }, 1000));
+
             }
 
             if(columnName in individualSearchingColumnsSelect) {
@@ -242,7 +257,8 @@
                         + individualSearchingColumnsSelect[columnName]['data'][key]['name']  + '</option>' );
                 }
                 select.on('change', async function(){
-                    tableOrders.columns(i).search($(this).val()).draw(), tableOrders.settings()[0].searchDelay;
+                    $('#table_preloader').show();
+                    tableOrders.columns(i).search($(this).val()).draw();//, tableOrders.settings()[0].searchDelay;
                 });
             }
         } );
