@@ -91,7 +91,8 @@ class LogisticController extends Controller
             ->whereNull('realizations.deleted_at')
             ->whereIn('orders.status_id', $statusIds)
             ->orderBy('is_copy_logist')
-            ->orderBy('orders.id', 'DESC');
+            ->orderBy('orders.id', 'DESC')
+            ->orderBy('products.type', 'ASC');
 
         if( ! $accessCitiesByLogistIds->isEmpty() ) {
             $orders->whereIn('orders.city_id', $accessCitiesByLogistIds);
