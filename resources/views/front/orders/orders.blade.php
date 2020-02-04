@@ -215,7 +215,7 @@
             data: {!! json_encode(App\Models\Courier::select('id', 'name')->get()->toArray()) !!}
         },
         operator: {
-            data: {!! json_encode(App\Models\Operator::select('id', 'name')->get()->toArray()) !!}
+            data: {!! json_encode(App\Models\Operator::select('id', 'name')->isActive()->get()->toArray()) !!}
         },
         city: {
             data: {!! json_encode(App\Models\City::select('id', 'name')->get()->toArray()) !!}
