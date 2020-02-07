@@ -20,7 +20,8 @@ trait UserDynamicType
     private $accountRelations = [
         UserGroupsEnums::OPERATOR => Operator::class,
         UserGroupsEnums::STOCK => StockUser::class,
-        UserGroupsEnums::LOGIST => Logist::class
+        UserGroupsEnums::LOGIST => Logist::class,
+        UserGroupsEnums::SUPER_OPERATOR => Operator::class,
     ];
 
     /**

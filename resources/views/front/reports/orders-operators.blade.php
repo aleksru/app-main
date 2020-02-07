@@ -176,6 +176,16 @@
                             @endfor
                         </tr>
                     @endforeach
+                    <tr>
+                        <th>Итого:</th>
+                        <th>{{$mains['main_count_orders']}}</th>
+                        <th>{{$mains['main_sum_all']}}</th>
+                        <th>{{$mains['main_sum_product']}}</th>
+                        <th>{{$mains['main_sum_acc']}}</th>
+                        @foreach($statuses as $status)
+                            <th class="bg-{{$status->color}}">{{$mains["main_statuses"][$status->id] ?? 0}}</th>
+                        @endforeach
+                    </tr>
                     </tbody>
                 </table>
             </div>

@@ -14,6 +14,7 @@ use App\Models\OrderStatus;
 use App\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -198,6 +199,10 @@ class ReportController extends Controller
 
     public function reportOperators(Request $request)
     {
+        $query = Operator::query();
+        if(Auth::user()->isOperator() && !Auth::user()->isSuperOperator() && Auth::user()->account){
+            $query = Operator::query()->where('id', Auth::user()->account->id);
+        }
         $dateFrom = Carbon::parse($request->get('dateFrom'));
         $dateTo = $request->get('dateTo') ? Carbon::parse($request->get('dateTo')) : null;
         $idStatusConfirm = OrderStatus::getIdStatusConfirm();
@@ -207,10 +212,12 @@ class ReportController extends Controller
             $dateTo->addDay();
         }
         $statuses = OrderStatus::all();
-        $operators = Operator::query()->with([
+        $operators = $query->with([
             'orders' => function($query) use ($dateFrom, $dateTo){
+                $union = clone $query;
+                $union->whereBetween('confirmed_at', [$dateFrom->toDateString(), $dateTo->toDateString()]);
                 $query->whereBetween('created_at', [$dateFrom->toDateString(), $dateTo->toDateString()])
-                    ->orWhereBetween('confirmed_at', [$dateFrom->toDateString(), $dateTo->toDateString()])
+                    ->union($union)
                     ->whereNotNull('status_id');
             },
             'orders.realizations',
@@ -220,7 +227,15 @@ class ReportController extends Controller
             return !$value->orders->isEmpty();
         });
 
-        $operators->each(function ($item) use ($idStatusConfirm) {
+        $mains = [
+            'main_sum_product'  => 0,
+            'main_sum_acc'      => 0,
+            'main_sum_all'      => 0,
+            'main_count_orders' => 0,
+            'main_statuses'    => []
+        ];
+
+        $operators->each(function ($item) use ($idStatusConfirm, &$mains) {
             $item->sum_main_product = $item->orders->reduce(function ($prev, $cur) use ($idStatusConfirm) {
                 return $prev + ($cur->status_id == $idStatusConfirm ? $cur->getSumProductForType(ProductType::TYPE_PRODUCT) : 0);
             }, 0);
@@ -233,12 +248,24 @@ class ReportController extends Controller
             }, 0);
             $item->statuses_group = $item->orders->map(function ($val){
                 return $val->status;
-            })->filter()->groupBy('id')->map(function ($val){
-                return $val->count();
+            })->filter()->groupBy('id')->map(function ($val) use (&$mains){
+                $cnt = $val->count();
+                if(!isset($mains['main_statuses'][$val->first()->id])){
+                    $mains['main_statuses'][$val->first()->id] = 0;
+                }
+                $mains['main_statuses'][$val->first()->id] += $cnt;
+                return $cnt;
             });
+
+            $mains['main_sum_product'] += $item->sum_main_product;
+            $mains['main_sum_acc'] += $item->sum_acc;
+            $mains['main_sum_all'] += $item->sum_acc + $item->sum_main_product;
+            $mains['main_count_orders'] += $item->count_orders;
         });
 
+        debug($mains);
+
         return view('front.reports.orders-operators',
-                        compact('statuses', 'operators', 'idStatusConfirm'));
+                        compact('statuses', 'operators', 'idStatusConfirm', 'mains'));
     }
 }
