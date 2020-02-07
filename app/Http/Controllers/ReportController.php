@@ -263,8 +263,6 @@ class ReportController extends Controller
             $mains['main_count_orders'] += $item->count_orders;
         });
 
-        debug($mains);
-
         return view('front.reports.orders-operators',
                         compact('statuses', 'operators', 'idStatusConfirm', 'mains'));
     }
