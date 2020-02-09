@@ -51,3 +51,15 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    @if (session()->has('success'))
+        toast.success('{{ session()->get('success') }}')
+    @endif
+    @if (session()->has('error'))
+        toast.error('{{ session()->get('error') }}')
+    @endif
+
+</script>
+@endpush
