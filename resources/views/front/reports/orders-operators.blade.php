@@ -143,7 +143,7 @@
                                                 @if($operator->statuses_group[$statuses[$k]->id] ?? false)
                                                     <br/>
                                                     <span>
-                                                        {{round($operator->statuses_group[$statuses[$k]->id] / $operator->count_orders * 100, 1)}}%
+                                                        {{$mains['main_avg_status'][$statuses[$k]->id][] = round($operator->statuses_group[$statuses[$k]->id] / $operator->count_orders * 100, 1)}}%
                                                     </span>
                                                 @endif
                                                 <ul class="dropdown-menu" style="min-width: 1500%;">
@@ -168,7 +168,7 @@
                                         @if($operator->statuses_group[$statuses[$k]->id] ?? false)
                                             <br/>
                                             <span>
-                                                {{round($operator->statuses_group[$statuses[$k]->id] / $operator->count_orders * 100, 1)}}%
+                                                {{$mains['main_avg_status'][$statuses[$k]->id][] = (round($operator->statuses_group[$statuses[$k]->id] / $operator->count_orders * 100, 1))}}%
                                             </span>
                                         @endif
                                     </td>
@@ -183,7 +183,12 @@
                         <th>{{$mains['main_sum_product']}}</th>
                         <th>{{$mains['main_sum_acc']}}</th>
                         @foreach($statuses as $status)
-                            <th class="bg-{{$status->color}}">{{$mains["main_statuses"][$status->id] ?? 0}}</th>
+                            <th class="bg-{{$status->color}}">{{$mains["main_statuses"][$status->id] ?? 0}} <br/>
+                                {{($mains['main_avg_status'][$status->id] ?? false) ?
+                                    round(array_sum($mains['main_avg_status'][$status->id]) / count($mains['main_avg_status'][$status->id]), 1) . '%'
+                                    : 0
+                                 }}
+                            </th>
                         @endforeach
                     </tr>
                     </tbody>

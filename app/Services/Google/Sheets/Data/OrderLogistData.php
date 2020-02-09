@@ -5,6 +5,7 @@ namespace App\Services\Google\Sheets\Data;
 
 
 use App\Order;
+use Carbon\Carbon;
 
 class OrderLogistData
 {
@@ -67,6 +68,7 @@ class OrderLogistData
             $rows[$iteration]['profit'] = (int)$product->price - (int)$product->price_opt - (int)$product->courier_payment;
             $rows[$iteration]['courier_name'] = $this->order->courier->name ?? '';
             $rows[$iteration]['supplier'] = $product->supplier ? $product->supplier->name : '';
+            $rows[$iteration]['send_date'] = Carbon::now()->toDateTimeString();
             $iteration++;
         }
 
