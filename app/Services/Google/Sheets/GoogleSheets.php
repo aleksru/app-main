@@ -35,7 +35,7 @@ class GoogleSheets
                 'valueInputOption' => 'USER_ENTERED',
                 'insertDataOption' => 'INSERT_ROWS'
             ];
-            $service->spreadsheets_values->append($spreadsheetId, 'Sheet!A241', $body, $options);
+            $service->spreadsheets_values->append($spreadsheetId, 'Sheet!A5', $body, $options);
         }catch (\Exception $e){
             Log::channel('custom')->error($e);
         }
