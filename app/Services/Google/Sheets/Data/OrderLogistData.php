@@ -4,6 +4,7 @@
 namespace App\Services\Google\Sheets\Data;
 
 
+use App\Enums\ProductType;
 use App\Order;
 use Carbon\Carbon;
 
@@ -41,7 +42,21 @@ class OrderLogistData
             'operator',
             'realizations.product');
         $iteration = 0;
-        $realizations = $this->order->realizations->sortBy('product_type');
+        $realizations = $this->order->realizations->sort(function ($a, $b){
+            if($a["product_type"] == $b["product_type"]){
+                return 0;
+            }
+            if($a["product_type"] == ProductType::TYPE_PRODUCT){
+                return -1;
+            }
+
+            if($a["product_type"] == ProductType::TYPE_ACCESSORY && $b["product_type"] == ProductType::TYPE_SERVICE){
+                return -1;
+            }
+
+            return +1;
+        });
+
         foreach ($realizations as $product) {
             $rows[$iteration]['nodata'] = '-';
             $rows[$iteration]['date'] = date("d.m.Y", strtotime($this->order->created_at));
