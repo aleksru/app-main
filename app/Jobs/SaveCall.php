@@ -74,7 +74,7 @@ class SaveCall implements ShouldQueue
                     'store_id' => $store->id ?? null,
                     'extension' => $data['to']['extension'] ?? null,
                     'is_first' => $isFirst,
-                    'talk_time' => $data['talk_time'] ?? 0
+                    'call_talk_time' => $data['talk_time'] ?? 0
                 ]);
             }
 
@@ -103,7 +103,7 @@ class SaveCall implements ShouldQueue
                     'operator_text' => $data['to']['number'] ?? null,
                     'extension' => $data['to']['extension'] ?? null,
                     'is_first' => $isFirst ?? false,
-                    'talk_time' => $data['talk_time'] ?? 0
+                    'call_talk_time' => $data['talk_time'] ?? 0
                 ]);
             }
         }
@@ -127,7 +127,7 @@ class SaveCall implements ShouldQueue
                 'client_id' => $client->id ?? null,
                 'status_call' => $data['entry_result'],
                 'operator_id' => $operator->id ?? null,
-                'talk_time' => $data['talk_time'] ?? 0
+                'call_talk_time' => $data['talk_time'] ?? 0
             ]);
         }
     }
