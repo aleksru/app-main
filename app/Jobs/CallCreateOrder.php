@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Client;
+use App\Enums\TypeCreatedOrder;
 use App\Models\OrderStatus;
 use App\Order;
 use App\Store;
@@ -13,6 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class CallCreateOrder implements ShouldQueue
 {
@@ -52,13 +54,15 @@ class CallCreateOrder implements ShouldQueue
         //если новый клиент - создаем заявку
         if ( ! $client ){
             $client = Client::create(['phone' => $data['from']['number']]);
+            Log::channel('custom')->error($data);
             Order::create([
                 'client_id' => $client->id,
                 'store_text' => $store->name ?? 'No-' . $data['to']['number'] ?? '',
                 'phone' => $data['from']['number'],
                 'comment' =>'Входящий Звонок',
                 'store_id' => $store->id ?? null,
-                'status_id' => OrderStatus::getIdStatusNew() ?? null
+                'status_id' => OrderStatus::getIdStatusNew() ?? null,
+                'type_created_order' => TypeCreatedOrder::CALL
             ]);
 
             return ;
@@ -77,14 +81,15 @@ class CallCreateOrder implements ShouldQueue
             if($idStatusComp){
                 $isComplaining = $client->getOrdersCountForStatus($idStatusComp) > 0;
             }
-
+            Log::channel('custom')->error($data);
             Order::create([
-                'client_id'  => $client->id,
-                'store_text' => $store->name ?? 'No-' . $data['to']['number'] ?? '',
-                'phone'      => $data['from']['number'],
-                'comment'    => $isComplaining ? 'Звонок клиента по претензии' : 'Входящий Звонок',
-                'store_id'   => $store->id ?? null,
-                'status_id'  => $isComplaining ? $idStatusComp : $statusNew
+                'client_id'         => $client->id,
+                'store_text'        => $store->name ?? 'No-' . $data['to']['number'] ?? '',
+                'phone'             => $data['from']['number'],
+                'comment'           => $isComplaining ? 'Звонок клиента по претензии' : 'Входящий Звонок',
+                'store_id'          => $store->id ?? null,
+                'status_id'         => $isComplaining ? $idStatusComp : $statusNew,
+                'type_created_order' => TypeCreatedOrder::CALL
             ]);
         }
     }

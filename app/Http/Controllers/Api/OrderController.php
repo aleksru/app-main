@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Client;
+use App\Enums\TypeCreatedOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CreateOrderRequest;
 use App\Models\OrderStatus;
@@ -54,6 +55,7 @@ class OrderController extends Controller
             'comment'       => $data['comment'] ?? '',
             'products_text' => $data['products_text'] ?? [],
             'utm_source'    => $data['utm_source'] ?? null,
+            'type_created_order' => TypeCreatedOrder::API
         ]);
 
         if ($order->products_text) {

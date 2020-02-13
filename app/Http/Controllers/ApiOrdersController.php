@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Enums\TypeCreatedOrder;
 use App\Models\OrderStatus;
 use App\Product;
 use App\Repositories\ClientRepository;
@@ -55,6 +56,7 @@ class ApiOrdersController extends Controller
             return ;
         }
         $data['store_id'] = $store ? $store->id : null;
+        $data['type_created_order'] = TypeCreatedOrder::API;
 
         $order = Order::create($data);
 
