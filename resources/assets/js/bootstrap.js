@@ -13,6 +13,11 @@ try {
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        statusCode: {
+            401: function(){
+                window.location.href = '/';
+            }
         }
     });
     require('bootstrap-sass');
