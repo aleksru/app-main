@@ -59,22 +59,23 @@ class SaveCall implements ShouldQueue
                 if($callRepository->getCountCallsFromNumber($data['from']['number']) === 0){
                     $isFirst = true;
                 }
-                Log::channel('custom')->error('///////////////////////////пропущенный');
-                Log::channel('custom')->error($data);
+                //Log::channel('custom')->error('///////////////////////////пропущенный');
+                //Log::channel('custom')->error($data);
 
                 ClientCall::create([
-                    'type' => ClientCall::incomingCall,
-                    'from_number' => $data['from']['number'] ?? null,
-                    'to_number' => $data['to']['number'] ?? null,
-                    'line_number' => $data['line_number'] ?? null,
-                    'call_create_time' => $data['create_time'],
-                    'call_end_time' => $data['end_time'],
-                    'client_id' => $client->id ?? null,
-                    'status_call' => $data['entry_result'],
-                    'store_id' => $store->id ?? null,
-                    'extension' => $data['to']['extension'] ?? null,
-                    'is_first' => $isFirst,
-                    'call_talk_time' => $data['talk_time'] ?? 0
+                    'type'              => ClientCall::incomingCall,
+                    'from_number'       => $data['from']['number'] ?? null,
+                    'to_number'         => $data['to']['number'] ?? null,
+                    'line_number'       => $data['line_number'] ?? null,
+                    'call_create_time'  => $data['create_time'],
+                    'call_end_time'     => $data['end_time'],
+                    'client_id'         => $client->id ?? null,
+                    'status_call'       => $data['entry_result'],
+                    'store_id'          => $store->id ?? null,
+                    'extension'         => $data['to']['extension'] ?? null,
+                    'is_first'          => $isFirst,
+                    'call_talk_time'    => $data['talk_time'] ?? 0,
+                    'entry_id'          => $data['entry_id'] ?? null
                 ]);
             }
 
@@ -90,20 +91,21 @@ class SaveCall implements ShouldQueue
                     $isFirst = true;
                 }
                 ClientCall::create([
-                    'type' => ClientCall::incomingCall,
-                    'from_number' => $data['from']['number'] ?? null,
-                    'to_number' => $data['to']['number'] ?? null,
-                    'line_number' => $data['line_number'] ?? null,
-                    'call_create_time' => $data['create_time'],
-                    'call_end_time' => $data['end_time'],
-                    'client_id' => $client->id ?? null,
-                    'status_call' => $data['entry_result'],
-                    'store_id' => $store->id ?? null,
-                    'operator_id' => $getOperator ? $getOperator->id : null,
-                    'operator_text' => $data['to']['number'] ?? null,
-                    'extension' => $data['to']['extension'] ?? null,
-                    'is_first' => $isFirst ?? false,
-                    'call_talk_time' => $data['talk_time'] ?? 0
+                    'type'              => ClientCall::incomingCall,
+                    'from_number'       => $data['from']['number'] ?? null,
+                    'to_number'         => $data['to']['number'] ?? null,
+                    'line_number'       => $data['line_number'] ?? null,
+                    'call_create_time'  => $data['create_time'],
+                    'call_end_time'     => $data['end_time'],
+                    'client_id'         => $client->id ?? null,
+                    'status_call'       => $data['entry_result'],
+                    'store_id'          => $store->id ?? null,
+                    'operator_id'       => $getOperator ? $getOperator->id : null,
+                    'operator_text'     => $data['to']['number'] ?? null,
+                    'extension'         => $data['to']['extension'] ?? null,
+                    'is_first'          => $isFirst ?? false,
+                    'call_talk_time'    => $data['talk_time'] ?? 0,
+                    'entry_id'          => $data['entry_id'] ?? null
                 ]);
             }
         }
@@ -117,17 +119,18 @@ class SaveCall implements ShouldQueue
             $client = Client::getClientByPhone($data['to']['number']);
 
             ClientCall::create([
-                'type' => ClientCall::outgoingCall,
-                'from_number' => $data['to']['number'] ?? null,
-                'to_number' => $data['to']['number'] ?? null,
-                'line_number' => $data['line_number'] ?? null,
-                'call_create_time' => $data['create_time'],
-                'call_end_time' => $data['end_time'],
-                'operator_text' => $data['from']['number'] ?? null,
-                'client_id' => $client->id ?? null,
-                'status_call' => $data['entry_result'],
-                'operator_id' => $operator->id ?? null,
-                'call_talk_time' => $data['talk_time'] ?? 0
+                'type'              => ClientCall::outgoingCall,
+                'from_number'       => $data['to']['number'] ?? null,
+                'to_number'         => $data['to']['number'] ?? null,
+                'line_number'       => $data['line_number'] ?? null,
+                'call_create_time'  => $data['create_time'],
+                'call_end_time'     => $data['end_time'],
+                'operator_text'     => $data['from']['number'] ?? null,
+                'client_id'         => $client->id ?? null,
+                'status_call'       => $data['entry_result'],
+                'operator_id'       => $operator->id ?? null,
+                'call_talk_time'    => $data['talk_time'] ?? 0,
+                'entry_id'          => $data['entry_id'] ?? null
             ]);
         }
     }

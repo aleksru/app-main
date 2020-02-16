@@ -26,7 +26,7 @@ class Order extends Model
                             'delivery_period_id','operator_id','date_delivery','products_text', 'metro_id', 'address',
                             'store_id', 'flag_denial_acc', 'order_id', 'communication_time', 'denial_reason_id', 'delivery_type_id', 'flag_send_sms',
                             'address_city', 'address_street', 'address_home', 'address_apartment', 'address_other', 'comment_logist', 'substatus_id',
-                            'stock_status_id', 'logistic_status_id', 'city_id', 'utm_source', 'creator_user_id', 'full_address', 'confirmed_at', 'type_created_order'
+                            'stock_status_id', 'logistic_status_id', 'city_id', 'utm_source', 'creator_user_id', 'full_address', 'confirmed_at', 'type_created_order', 'entry_id'
     ];
     
     protected $casts = [
@@ -426,5 +426,13 @@ class Order extends Model
         $data->setWeight($fullSum);
 
         return $data;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function call()
+    {
+        return $this->hasOne(ClientCall::class, 'entry_id', 'entry_id');
     }
 }

@@ -54,15 +54,16 @@ class CallCreateOrder implements ShouldQueue
         //если новый клиент - создаем заявку
         if ( ! $client ){
             $client = Client::create(['phone' => $data['from']['number']]);
-            Log::channel('custom')->error($data);
+            //Log::channel('custom')->error($data);
             Order::create([
-                'client_id' => $client->id,
-                'store_text' => $store->name ?? 'No-' . $data['to']['number'] ?? '',
-                'phone' => $data['from']['number'],
-                'comment' =>'Входящий Звонок',
-                'store_id' => $store->id ?? null,
-                'status_id' => OrderStatus::getIdStatusNew() ?? null,
-                'type_created_order' => TypeCreatedOrder::CALL
+                'client_id'         => $client->id,
+                'store_text'        => $store->name ?? 'No-' . $data['to']['number'] ?? '',
+                'phone'             => $data['from']['number'],
+                'comment'           =>'Входящий Звонок',
+                'store_id'          => $store->id ?? null,
+                'status_id'         => OrderStatus::getIdStatusNew() ?? null,
+                'type_created_order' => TypeCreatedOrder::CALL,
+                'entry_id'           => $data['entry_id']
             ]);
 
             return ;
@@ -81,7 +82,7 @@ class CallCreateOrder implements ShouldQueue
             if($idStatusComp){
                 $isComplaining = $client->getOrdersCountForStatus($idStatusComp) > 0;
             }
-            Log::channel('custom')->error($data);
+            //Log::channel('custom')->error($data);
             Order::create([
                 'client_id'         => $client->id,
                 'store_text'        => $store->name ?? 'No-' . $data['to']['number'] ?? '',
@@ -89,7 +90,8 @@ class CallCreateOrder implements ShouldQueue
                 'comment'           => $isComplaining ? 'Звонок клиента по претензии' : 'Входящий Звонок',
                 'store_id'          => $store->id ?? null,
                 'status_id'         => $isComplaining ? $idStatusComp : $statusNew,
-                'type_created_order' => TypeCreatedOrder::CALL
+                'type_created_order' => TypeCreatedOrder::CALL,
+                'entry_id'          => $data['entry_id']
             ]);
         }
     }
