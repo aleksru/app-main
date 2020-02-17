@@ -4,6 +4,8 @@
 namespace App\Http\Controllers;
 
 
+use App\ClientCall;
+use App\Enums\MangoCallEnums;
 use App\Enums\ProductType;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet1;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet2;
@@ -265,5 +267,34 @@ class ReportController extends Controller
 
         return view('front.reports.orders-operators',
                         compact('statuses', 'operators', 'idStatusConfirm', 'mains'));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function missedCalls(Request $request)
+    {
+        $dateFrom = Carbon::parse($request->get('dateFrom'));
+        $dateTo = $request->get('dateTo') ? Carbon::parse($request->get('dateTo')) : null;
+
+        if(!$dateTo){
+            $dateTo =  clone $dateFrom;
+            $dateTo->addDay();
+        }
+
+        $orders = Order::query()->with('status')
+            ->select('orders.*')
+            ->join('client_calls', 'orders.entry_id', '=', 'client_calls.entry_id')
+            ->whereNotNull('orders.entry_id')
+            ->where('client_calls.status_call', MangoCallEnums::CALL_RESULT_MISSED)
+            ->where('client_calls.type', ClientCall::incomingCall)
+            ->whereBetween('orders.created_at', [$dateFrom->toDateString(), $dateTo->toDateString()])
+            ->get();
+        $orders = $orders->groupBy(function($item, $key){
+            return $item->created_at->toDateString();
+        });
+
+        return view('front.reports.missed_calls', compact('orders'));
     }
 }
