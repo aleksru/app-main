@@ -49,7 +49,8 @@
                             <td>
                                 @foreach($ordersLoc as $order)
                                     <a href="{{route('orders.edit', $order->id)}}"
-                                       class="badge bg-{{$order->status->color}}"
+                                       class="badge bg-{{$order->status ? $order->status->color : ''}}"
+                                       title="{{$order->status ? $order->status->status : ''}}"
                                        target="_blank"
                                        style="padding: 3px 5px; display: inline-block">
                                         {{$order->id}}
