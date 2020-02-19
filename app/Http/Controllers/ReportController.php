@@ -297,4 +297,94 @@ class ReportController extends Controller
 
         return view('front.reports.missed_calls', compact('orders'));
     }
+
+    public function reportOperatorsEvening(Request $request)
+    {
+        $query = Operator::query();
+        if(Auth::user()->isOperator() && !Auth::user()->isSuperOperator() && Auth::user()->account){
+            $query = Operator::query()->where('id', Auth::user()->account->id);
+        }
+        $dateFrom = Carbon::parse($request->get('dateFrom'));
+        $dateTo = $request->get('dateTo') ? Carbon::parse($request->get('dateTo')) : null;
+        $idStatusConfirm = OrderStatus::getIdStatusConfirm();
+
+        if(!$dateTo){
+            $dateTo =  clone $dateFrom;
+            $dateTo->addDay();
+        }
+        $statuses = OrderStatus::all();
+        $operators = $query->with([
+            'orders' => function($query) use ($dateFrom, $dateTo){
+                $union = clone $query;
+                $union->whereBetween('confirmed_at', [$dateFrom->toDateString(), $dateTo->toDateString()]);
+                $query->whereBetween('created_at', [$dateFrom->toDateString(), $dateTo->toDateString()])
+                    ->union($union)
+                    ->whereNotNull('status_id');
+            },
+            'orders.realizations',
+            'orders.products',
+            'orders.status',
+            'calls' => function($query) use ($dateFrom, $dateTo){
+                $query->selectRaw('client_calls.operator_id, client_calls.type, COUNT(*) as cnt')
+                    ->whereBetween('created_at', [$dateFrom->toDateString(), $dateTo->toDateString()])
+                    ->groupBy('client_calls.operator_id', 'client_calls.type');
+
+            }
+
+        ])->get()
+        ->filter(function ($value){
+            return !$value->orders->isEmpty();
+        });
+
+        $mains = [
+            'main_count_orders' => 0,
+            'main_count_acc' => 0,
+            'main_count_confirms' => 0,
+            'main_count_airpods' => 0,
+            'main_count_mibands' => 0,
+            'main_count_outgoings' => 0,
+            'main_count_incomings' => 0,
+        ];
+
+        $operators->each(function ($item) use ($idStatusConfirm, &$mains) {
+            $item->count_orders = $item->orders->count();
+            $item->count_acc  = $item->orders->reduce(function ($prev, $cur){
+                return $prev + $cur->getCountProductForType(ProductType::TYPE_ACCESSORY);
+            }, 0);
+            $item->count_confirms = $item->getCountOrdersForStatus($idStatusConfirm);
+            $item->count_airpods = $item->orders->map(function ($item){
+                return $item->products;
+            })->filter(function ($value){
+                return !$value->isEmpty();
+            })->collapse()
+            ->reduce(function ($prev, $cur){
+                return $prev + ($cur->isAirPods() ? 1 : 0);
+            }, 0);
+            $item->count_mibands = $item->orders->map(function ($item){
+                return $item->products;
+            })->filter(function ($value){
+                return !$value->isEmpty();
+            })
+            ->collapse()
+            ->reduce(function ($prev, $cur){
+                return $prev + ($cur->isMiBand() ? 1 : 0);
+            }, 0);
+            $item->count_outgoings = $item->calls->first(function ($val){
+                return $val->type == ClientCall::outgoingCall;
+            });
+            $item->count_incomings = $item->calls->first(function ($val){
+                return $val->type == ClientCall::incomingCall;
+            });
+            $mains['main_count_acc'] += $item->count_acc;
+            $mains['main_count_orders'] += $item->count_orders;
+            $mains['main_count_confirms'] += $item->count_confirms;
+            $mains['main_count_airpods'] += $item->count_airpods;
+            $mains['main_count_mibands'] += $item->count_mibands;
+            $mains['main_count_outgoings'] += $item->count_outgoings ? $item->count_outgoings->cnt : 0;
+            $mains['main_count_incomings'] += $item->count_incomings ? $item->count_incomings->cnt : 0;
+        });
+
+        return view('front.reports.operators_evening',
+            compact('statuses', 'operators', 'idStatusConfirm', 'mains'));
+    }
 }

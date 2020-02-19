@@ -83,4 +83,11 @@ class Operator extends Model
     {
         return $query->where('is_disabled', 0);
     }
+
+    public function getCountOrdersForStatus(int $idStatus)
+    {
+        return $this->orders->reduce(function ($prev, $cur) use ($idStatus){
+            return $prev + ($cur->status_id == $idStatus ? 1 : 0);
+        }, 0);
+    }
 }

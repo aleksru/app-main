@@ -89,4 +89,14 @@ class Product extends Model
         }
     }
 
+    public function isAirPods() : bool
+    {
+        return $this->type == ProductType::TYPE_PRODUCT && preg_match('/AirPods/', $this->product_name);
+    }
+
+    public function isMiBand() : bool
+    {
+        return $this->type == ProductType::TYPE_PRODUCT && preg_match('/Mi Band/', $this->product_name);
+    }
+
 }
