@@ -307,7 +307,7 @@ class ReportController extends Controller
             $item->orders_group = $item->orders->groupBy('status_id');
             $mains['count_orders'] += $item->orders->count();
             foreach ($item->orders_group as $id => $value){
-                if($mains['count_statuses'][$id] ?? true){
+                if(!isset($mains['count_statuses'][$id])){
                     $mains['count_statuses'][$id] = 0;
                 }
                 $mains['count_statuses'][$id] += $value->count();
