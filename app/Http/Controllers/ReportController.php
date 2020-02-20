@@ -277,25 +277,44 @@ class ReportController extends Controller
     {
         $dateFrom = Carbon::parse($request->get('dateFrom'));
         $dateTo = $request->get('dateTo') ? Carbon::parse($request->get('dateTo')) : null;
-
+        $query = Operator::query();
+        if(Auth::user()->isOperator() && !Auth::user()->isSuperOperator() && Auth::user()->account){
+            $query = Operator::query()->where('id', Auth::user()->account->id);
+        }
+        $statuses = OrderStatus::all();
         if(!$dateTo){
             $dateTo =  clone $dateFrom;
             $dateTo->addDay();
         }
-
-        $orders = Order::query()->with('status')
-            ->select('orders.*')
-            ->join('client_calls', 'orders.entry_id', '=', 'client_calls.entry_id')
-            ->whereNotNull('orders.entry_id')
-            ->where('client_calls.status_call', MangoCallEnums::CALL_RESULT_MISSED)
-            ->where('client_calls.type', ClientCall::incomingCall)
-            ->whereBetween('orders.created_at', [$dateFrom->toDateString(), $dateTo->toDateString()])
-            ->get();
-        $orders = $orders->groupBy(function($item, $key){
-            return $item->created_at->toDateString();
+        $mains = [
+            'count_orders' => 0,
+            'count_statuses' => []
+        ];
+        $operators = $query->with([
+            'orders' => function($query) use ($dateFrom, $dateTo){
+                $query->select('orders.*')
+                    ->join('client_calls', 'orders.entry_id', '=', 'client_calls.entry_id')
+                    ->whereNotNull('orders.entry_id')
+                    ->where('client_calls.status_call', MangoCallEnums::CALL_RESULT_MISSED)
+                    ->where('client_calls.type', ClientCall::incomingCall)
+                    ->whereBetween('orders.created_at', [$dateFrom->toDateString(), $dateTo->toDateString()]);
+            },
+            'orders.status'
+        ])->get()
+        ->filter(function ($value){
+            return !$value->orders->isEmpty();
+        })->each(function ($item) use (&$mains){
+            $item->orders_group = $item->orders->groupBy('status_id');
+            $mains['count_orders'] += $item->orders->count();
+            foreach ($item->orders_group as $id => $value){
+                if($mains['count_statuses'][$id] ?? true){
+                    $mains['count_statuses'][$id] = 0;
+                }
+                $mains['count_statuses'][$id] += $value->count();
+            }
         });
 
-        return view('front.reports.missed_calls', compact('orders'));
+        return view('front.reports.missed_calls', compact('operators', 'statuses', 'mains'));
     }
 
     public function reportOperatorsEvening(Request $request)

@@ -33,32 +33,72 @@
             </div>
         </div>
         <div class="box">
-            <!-- /.box-header -->
             <div class="box-body table-responsive" style="overflow-x: visible;">
                 <table class="table table-hover">
                     <tbody>
-                    <tr>
-                        <th>Дата</th>
-                        <th>Кол-во</th>
-                        <th>Заказы</th>
-                    </tr>
-                    @foreach($orders as $date => $ordersLoc)
                         <tr>
-                            <td style="width: 110px">{{$date}}</td>
-                            <td style="width: 70px">{{$ordersLoc->count()}}</td>
-                            <td>
-                                @foreach($ordersLoc as $order)
-                                    <a href="{{route('orders.edit', $order->id)}}"
-                                       class="badge bg-{{$order->status ? $order->status->color : ''}}"
-                                       title="{{$order->status ? $order->status->status : ''}}"
-                                       target="_blank"
-                                       style="padding: 3px 5px; display: inline-block">
-                                        {{$order->id}}
-                                    </a>
-                                @endforeach
-                            </td>
+                            <th>Оператор</th>
+                            <th>Кол-во заказов</th>
+                            @foreach($statuses as $status)
+                                <th class="bg-{{$status->color}}">{{$status->status}}</th>
+                            @endforeach
                         </tr>
-                    @endforeach
+                        @foreach($operators as $operator)
+                            <tr class="dropdown">
+                                <td>{{$operator->name}}</td>
+                                <td >
+                                    <div class="margin">
+                                        <div class="btn-group">
+                                            <input type="button"
+                                                   class="btn btn-default btn-call-info"
+                                                   data-toggle="dropdown"
+                                                   aria-haspopup="true"
+                                                   aria-expanded="false"
+                                                   value="{{$operator->orders->count()}}">
+                                        </div>
+                                    </div>
+                                </td>
+                                @for($k=0; $k < $statuses->count(); $k++)
+                                    <td class="bg-{{$statuses[$k]->color}}">
+                                        <div class="margin">
+                                            <div class="btn-group">
+                                                <input type="button"
+                                                       class="btn btn-default btn-call-info"
+                                                       data-toggle="dropdown"
+                                                       aria-haspopup="true"
+                                                       aria-expanded="false"
+                                                       value="{{ ($operator->orders_group[$statuses[$k]->id] ?? false) ? ($operator->orders_group[$statuses[$k]->id])->count() : 0}}">
+                                                <br/>
+                                                {{isset($operator->orders_group[$statuses[$k]->id]) && $operator->orders_group[$statuses[$k]->id]->count() > 0 ?
+                                                        round($operator->orders_group[$statuses[$k]->id]->count() / $operator->orders->count() * 100, 1) : 0}}%
+                                                <ul class="dropdown-menu" style="min-width: 1500%;">
+                                                    <li role="presentation">
+                                                        @foreach(($operator->orders_group[$statuses[$k]->id] ?? []) as $order)
+                                                            <a href="{{route('orders.edit', $order->id)}}"
+                                                               target="_blank"
+                                                               style="padding: 3px 5px; display: inline-block">
+                                                                {{$order->id}}
+                                                            </a>
+                                                        @endforeach
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                @endfor
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <th>Итого:</th>
+                            <th>{{$mains['count_orders']}}</th>
+                            @foreach($statuses as $status)
+                                <th class="bg-{{$status->color}}">
+                                    {{$mains['count_statuses'][$status->id] ?? 0}} <br/>
+                                    {{isset($mains['count_statuses'][$status->id]) && $mains['count_statuses'][$status->id] > 0 ?
+                                    round($mains['count_statuses'][$status->id] / $mains['count_orders'] * 100, 1) : 0}}%
+                                </th>
+                            @endforeach
+                        </tr>
                     </tbody>
                 </table>
             </div>
