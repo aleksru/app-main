@@ -367,11 +367,15 @@ class ReportController extends Controller
 
         $operators->each(function ($item) use ($idStatusConfirm, &$mains) {
             $item->count_orders = $item->orders->count();
-            $item->count_acc  = $item->orders->reduce(function ($prev, $cur){
+            $item->count_acc  = $item->orders->filter(function ($value) use ($idStatusConfirm){
+                return $value->status_id == $idStatusConfirm;
+            })->reduce(function ($prev, $cur){
                 return $prev + $cur->getCountProductForType(ProductType::TYPE_ACCESSORY);
             }, 0);
             $item->count_confirms = $item->getCountOrdersForStatus($idStatusConfirm);
-            $item->count_airpods = $item->orders->map(function ($item){
+            $item->count_airpods = $item->orders->filter(function ($value) use ($idStatusConfirm){
+                return $value->status_id == $idStatusConfirm;
+            })->map(function ($item){
                 return $item->products;
             })->filter(function ($value){
                 return !$value->isEmpty();
@@ -379,7 +383,9 @@ class ReportController extends Controller
             ->reduce(function ($prev, $cur){
                 return $prev + ($cur->isAirPods() ? 1 : 0);
             }, 0);
-            $item->count_mibands = $item->orders->map(function ($item){
+            $item->count_mibands = $item->orders->filter(function ($value) use ($idStatusConfirm){
+                return $value->status_id == $idStatusConfirm;
+            })->map(function ($item){
                 return $item->products;
             })->filter(function ($value){
                 return !$value->isEmpty();
