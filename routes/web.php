@@ -72,6 +72,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('operator-report', 'ReportController@reportOperators')->name('operators.orders');
         Route::get('missed-calls-report', 'ReportController@missedCalls')->name('missed_calls');
         Route::get('operator-report-evening', 'ReportController@reportOperatorsEvening')->name('operators.evening');
+        Route::get('operator-calls', 'ReportController@operatorsCalls')->name('operators.calls');
     });
 
     //логи

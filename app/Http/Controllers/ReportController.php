@@ -13,6 +13,7 @@ use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet4;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\FullReport\Sheet5;
 use App\Models\Operator;
 use App\Models\OrderStatus;
+use App\Models\Queries\OperatorQuery;
 use App\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -411,5 +412,45 @@ class ReportController extends Controller
 
         return view('front.reports.operators_evening',
             compact('statuses', 'operators', 'idStatusConfirm', 'mains'));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function operatorsCalls(Request $request)
+    {
+        if($request->ajax()){
+            $dateFrom = Carbon::parse($request->get('dateFrom'));
+            $dateTo = $request->get('dateTo') ? Carbon::parse($request->get('dateTo')) : null;
+            if(!$dateTo){
+                $dateTo =  clone $dateFrom;
+                $dateTo->addDay();
+            }
+            $operatorQuery = new OperatorQuery();
+            $outgoings = $operatorQuery->getCountOutgoingsByDates($dateFrom, $dateTo);
+            $incomings = $operatorQuery->getCountIncomingsByDates($dateFrom, $dateTo);
+            $avgTalks =  $operatorQuery->getAvgTalkByDates($dateFrom, $dateTo);
+            $avgTime =   $operatorQuery->getCallTimesByDates($dateFrom, $dateTo);
+            $result = DB::table('operators')
+                ->selectRaw('operators.name, outgoings.cnt_outgoings, incomings.cnt_incomings,
+                        avg_talks.avg_talk, call_times.avg_call_time')
+                ->joinSub($outgoings, 'outgoings', function ($join) {
+                    $join->on('operators.id', '=', 'outgoings.operator_id');
+                })
+                ->joinSub($incomings, 'incomings', function ($join) {
+                    $join->on('operators.id', '=', 'incomings.operator_id');
+                })
+                ->joinSub($avgTalks, 'avg_talks', function ($join) {
+                    $join->on('operators.id', '=', 'avg_talks.operator_id');
+                })
+                ->joinSub($avgTime, 'call_times', function ($join) {
+                    $join->on('operators.id', '=', 'call_times.operator_id');
+                });
+
+            return datatables()->of($result)->make(true);
+        }
+
+        return view('front.reports.operators_calls');
     }
 }

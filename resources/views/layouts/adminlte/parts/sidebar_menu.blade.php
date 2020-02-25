@@ -59,6 +59,7 @@
                 <li><a href="{{ route('reports.operators.orders') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Заказы Операторы</span> </a></li>
                 <li><a href="{{ route('reports.missed_calls') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Пропущенные звонки</span> </a></li>
                 <li><a href="{{ route('reports.operators.evening') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Вечерний отчет</span> </a></li>
+                <li><a href="{{ route('reports.operators.calls') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Звонки</span> </a></li>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-book"></i> <span>Маркетинг</span>
                         <span class="pull-right-container">
