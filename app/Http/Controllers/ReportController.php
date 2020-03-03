@@ -322,7 +322,7 @@ class ReportController extends Controller
     {
         $query = Operator::query();
         if(Auth::user()->isOperator() && !Auth::user()->isSuperOperator() && Auth::user()->account){
-            $query = Operator::query()->where('id', Auth::user()->account->id);
+            //$query = Operator::query()->where('id', Auth::user()->account->id);
         }
         $dateFrom = Carbon::parse($request->get('dateFrom'));
         $dateTo = $request->get('dateTo') ? Carbon::parse($request->get('dateTo')) : null;

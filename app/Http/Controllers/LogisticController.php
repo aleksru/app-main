@@ -87,18 +87,7 @@ class LogisticController extends Controller
             ->join('realizations', 'orders.id', '=', 'realizations.order_id')
             ->join('products', 'product_id', '=', 'products.id')
             ->leftJoin('suppliers', 'supplier_id', '=', 'suppliers.id')
-
-
-
-
-
-
-
-
-
-
-
-            ->where('orders.updated_at', '>=', Carbon::now()->subDays(10)->toDateString())
+            ->where('orders.updated_at', '>=', Carbon::now()->subDays(3)->toDateString())
             ->whereNull('realizations.deleted_at')
             ->whereIn('orders.status_id', $statusIds)
             ->orderBy('is_copy_logist')
