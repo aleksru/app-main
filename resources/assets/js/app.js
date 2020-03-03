@@ -65,6 +65,8 @@ Vue.component('CallsQueue', require('./components/Front/CallsQueue.vue'));
 
 Vue.component('Chat', require('./components/Front/Chat/Chat.vue'));
 
+Vue.component('FastOrder', require('./components/Front/Logistic/FastOrder.vue'));
+
 const app = new Vue({
     el: '#app'
 });

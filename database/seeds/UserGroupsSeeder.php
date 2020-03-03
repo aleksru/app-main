@@ -10,6 +10,7 @@ class UserGroupsSeeder extends Seeder
         ['name' => \App\Enums\UserGroupsEnums::STOCK, 'description' =>'Склад'],
         ['name' => \App\Enums\UserGroupsEnums::LOGIST, 'description' =>'Логистика'],
         ['name' => \App\Enums\UserGroupsEnums::SUPER_OPERATOR, 'description' =>'Старший оператор'],
+        ['name' => \App\Enums\UserGroupsEnums::COURIER, 'description' =>'Курьер'],
     ];
 
     public function run()

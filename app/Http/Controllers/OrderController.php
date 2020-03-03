@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Events\OrderUpdateRealizationsEvent;
 use App\Events\UpdatedOrderEvent;
+use App\Events\UpdateRealizationsConfirmedOrderEvent;
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Requests\CommentLogistRequst;
+use App\Http\Requests\OrderLogisticRequest;
+use App\Http\Requests\RealizationLogisticRequest;
 use App\Models\OrderStatus;
 use App\Models\OtherStatus;
 use App\Models\Realization;
@@ -248,5 +251,29 @@ class OrderController extends Controller
         if($statusIdNew == $order->status_id) {
             event(new UpdatedOrderEvent($order->load('status', 'client', 'operator', 'store')));
         }
+    }
+
+    /**
+     * @param Order $order
+     * @param OrderLogisticRequest $orderLogisticRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function orderLogisticUpdate(Order $order, OrderLogisticRequest $orderLogisticRequest)
+    {
+        $order->update($orderLogisticRequest->validated());
+
+        return response()->json($order);
+    }
+
+    /**
+     * @param Realization $realization
+     * @param RealizationLogisticRequest $realizationLogisticRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function realizationLogisticUpdate(Realization $realization, RealizationLogisticRequest $realizationLogisticRequest)
+    {
+        $realization->update($realizationLogisticRequest->validated());
+
+        return response()->json($realization->load('product'));
     }
 }

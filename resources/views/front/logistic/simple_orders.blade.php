@@ -46,6 +46,11 @@
                     'width' => '1%',
                     'searchable' => false,
                 ],
+                'date_delivery' => [
+                    'name' => 'Дата доставки',
+                    'width' => '1%',
+                    'searchable' => false,
+                ],
                 'operator' => [
                     'name' => 'Оператор',
                     'width' => '1%',
@@ -68,6 +73,11 @@
                 ],
                 'comment' => [
                     'name' => 'Коммент КЦ',
+                    'width' => '1%',
+                    'searchable' => false,
+                ],
+                'comment_stock' => [
+                    'name' => 'Коммент СКЛАД',
                     'width' => '1%',
                     'searchable' => false,
                 ],
@@ -146,8 +156,14 @@
                     'width' => '1%',
                     'searchable' => false,
                 ],
+                'btn_details' => [
+                    'name' => '-',
+                    'width' => '1%',
+                    'searchable' => false,
+                ],
             ],
         ])
+        <fast-order :table-id="'orders-table'"></fast-order>
     </div>
 @endsection
 

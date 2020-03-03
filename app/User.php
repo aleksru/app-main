@@ -106,6 +106,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return bool
+     */
+    public function isCourier()
+    {
+        return $this->getUserGroupName() === UserGroupsEnums::COURIER ;
+    }
+
+    /**
      * Получение имени группы пользователя
      *
      * @return null|string

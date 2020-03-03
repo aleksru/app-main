@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 
 use App\Enums\UserGroupsEnums;
+use App\Models\Courier;
 use App\Models\Logist;
 use App\Models\Operator;
 use App\Models\StockUser;
@@ -22,6 +23,7 @@ trait UserDynamicType
         UserGroupsEnums::STOCK => StockUser::class,
         UserGroupsEnums::LOGIST => Logist::class,
         UserGroupsEnums::SUPER_OPERATOR => Operator::class,
+        UserGroupsEnums::COURIER => Courier::class
     ];
 
     /**

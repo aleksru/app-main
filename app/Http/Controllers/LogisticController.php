@@ -80,14 +80,25 @@ class LogisticController extends Controller
             'deliveryType',
             'operator'
         )->selectRaw('orders.*, realizations.id as realization_id,  realizations.price, realizations.quantity, realizations.imei, realizations.price_opt, 
-                        realizations.supplier_id, realizations.courier_payment, realizations.is_copy_logist,
+                        realizations.supplier_id, realizations.is_copy_logist,
                         client.phone as client_phone, client.name as name_customer, suppliers.name as supplier, products.product_name, 
                         (realizations.price - IFNULL(realizations.price_opt, 0)) as profit')
             ->join('clients as client', 'client_id', '=', 'client.id')
             ->join('realizations', 'orders.id', '=', 'realizations.order_id')
             ->join('products', 'product_id', '=', 'products.id')
             ->leftJoin('suppliers', 'supplier_id', '=', 'suppliers.id')
-            ->where('orders.updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
+
+
+
+
+
+
+
+
+
+
+
+            ->where('orders.updated_at', '>=', Carbon::now()->subDays(10)->toDateString())
             ->whereNull('realizations.deleted_at')
             ->whereIn('orders.status_id', $statusIds)
             ->orderBy('is_copy_logist')
@@ -138,8 +149,14 @@ class LogisticController extends Controller
             ->editColumn('price', function ($value){
                 return (int)$value['price'];
             })
-            ->editColumn('courier_payment', function ($value){
-                return (int)$value['courier_payment'];
+            ->editColumn('courier_payment', function (Order $order){
+                return $order->courier_payment;
+            })
+            ->editColumn('btn_details', function (Order $order){
+                return view('front.logistic.parts.btn_details', [ 'id' => $order->id ]);
+            })
+            ->editColumn('date_delivery', function (Order $order){
+                return $order->date_delivery ? $order->date_delivery->format('d.m') : '';
             })
             ->setRowClass(function ($el){
                 return $el['is_copy_logist'] ? 'alert-success' : 'alert-danger';
@@ -149,6 +166,7 @@ class LogisticController extends Controller
                     return $order->realization_id;
                 }
             ])
+            ->rawColumns(['btn_details'])
             ->make(true);
     }
 
