@@ -40,10 +40,14 @@ class OrderLogisticRequest extends FormRequest
             ];
         }
 
-        return [
-            'courier_id' => 'integer|nullable',
-            'comment_stock' => 'string|nullable'
-        ];
+        if(Auth::user()->isStock()) {
+            return [
+                'comment_stock' => 'string|nullable',
+                'courier_id' => 'integer|nullable',
+            ];
+        }
+
+        return [];
 
     }
 
