@@ -82,9 +82,12 @@ class LogisticController extends Controller
             'deliveryType',
             'operator',
             'products'
-        )->where('orders.updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
+        )->selectRaw('orders.*, delivery_periods.timeFrom')
+            ->leftJoin('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
+            ->where('orders.date_delivery', '>=', Carbon::now()->toDateString())
             ->whereIn('orders.status_id', $statusIds)
-            ->orderBy('orders.id', 'DESC');
+            ->orderBy('orders.date_delivery', 'ASC')
+            ->orderBy('timeFrom', 'ASC');
 
         if( ! $accessCitiesByLogistIds->isEmpty() ) {
             $orders->whereIn('orders.city_id', $accessCitiesByLogistIds);
