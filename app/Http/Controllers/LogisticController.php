@@ -109,6 +109,9 @@ class LogisticController extends Controller
             ->editColumn('store', function (Order $order){
                 return $order->store ? $order->store->name : '';
             })
+            ->editColumn('name_customer', function (Order $order){
+                return $order->client ? $order->client->name : '';
+            })
             ->editColumn('client_phone', function (Order $order){
                 return $order->client ? $order->client->allPhones->implode(', ') : '';
             })
