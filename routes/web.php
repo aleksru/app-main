@@ -41,6 +41,10 @@ Route::group(['middleware' =>'auth'], function() {
     Route::post('orders-logistic/{order}/update', 'OrderController@orderLogisticUpdate')->name('order.logistic.update');
     Route::post('realizations-logistic/{realization}/update', 'OrderController@realizationLogisticUpdate')->name('realization.logistic.update');
 
+    //бегунок
+    Route::post('quick/send/order/{order}', 'QuickController@sendOrder')->name('quick.send.order');
+    Route::post('quick/check/order/{order}', 'QuickController@checkSendOrder')->name('quick.send.order.check');
+
     //заказ с загрузкой реализаций
     Route::post('realizations/{order}', 'OrderController@getOrderWithRealizations')->name('order.realizations');
 
@@ -103,6 +107,8 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('deliveries', 'LogisticController@deliveries')->name('deliveries');
         Route::post('delivery-toggle', 'LogisticController@deliveryToggle')->name('delivery.toggle');
         Route::get('delivery-widget', 'LogisticController@deliveriesForWidget')->name('deliveries.widget');
+        Route::get('on-update-logist-table', 'LogisticController@onLogistTableUpdate')->name('on.update.logist-table');
+        Route::get('send-google-tables/{order}', 'LogisticController@sendGoogleTables')->name('send.google-tables');
     });
 
     //звонки

@@ -5,28 +5,16 @@ namespace App\Events;
 
 use App\Order;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class UpdateRealizationsConfirmedOrderEvent implements ShouldBroadcast
+class LogistTableUpdateEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var Order
-     */
-    public $order;
-
-    /**
-     * CreatedOrderEvent constructor.
-     * @param Order $order
-     */
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
 
     /**
      * Get the channels the event should broadcast on.
@@ -35,6 +23,6 @@ class UpdateRealizationsConfirmedOrderEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('logistic-table');
+        return new PrivateChannel('logistic-table');
     }
 }

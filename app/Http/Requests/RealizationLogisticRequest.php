@@ -31,6 +31,7 @@ class RealizationLogisticRequest extends FormRequest
             return [
                 'supplier_id' => 'integer|nullable',
                 'imei' => 'string|nullable',
+                'price_opt' => 'numeric|nullable',
             ];
         }
         if(Auth::user()->isCourier()) {
@@ -42,6 +43,7 @@ class RealizationLogisticRequest extends FormRequest
             return [
                 'supplier_id' => 'integer|nullable',
                 'imei' => 'string|nullable',
+                'price_opt' => 'numeric|nullable',
             ];
         }
 

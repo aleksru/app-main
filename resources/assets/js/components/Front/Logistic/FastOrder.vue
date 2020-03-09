@@ -1,17 +1,44 @@
 <template>
     <modal name="products"
            :adaptive="true"
-           :min-width="900"
+           :draggable="true"
+           width="70%"
            :scrollable="true"
            :reset="true"
            :resizable="true"
+           @before-close="beforeClose"
            height="auto">
-        <logistic-form  :initial_order="order"
-                        :initial_suppliers="suppliers"
-                        :initial_couriers="couriers"
-                        @update-order="onUpdateOrder($event)">
-        </logistic-form>
-        <button type="button" class="btn btn-block btn-warning btn-sm" @click="hideModal()">Close</button>
+
+        <div slot="top-right">
+            <button @click="hideModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </button>
+        </div>
+        <div class="box-header with-border" style="min-height: 45px">
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool btn-lg" @click="hideModal()">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="badge bg-blue" style="font-size: 15px;padding: 5px;margin-right: 5px;margin-bottom: 5px">
+                        В заказе:
+                    </span>
+                    <span v-for="user in editing_order" class="badge bg-blue"
+                          style="font-size: 15px;padding: 5px;margin-right: 5px;margin-bottom: 5px">
+                        {{user.name}}
+                    </span>
+                </div>
+            </div>
+            <logistic-form  :initial_order="order"
+                            :initial_suppliers="suppliers"
+                            :initial_couriers="couriers"
+                            @update-order="onUpdateOrder($event)">
+            </logistic-form>
+        </div>
     </modal>
 </template>
 
@@ -36,20 +63,35 @@
             return {
                 order: {},
                 suppliers: [],
-                couriers: []
+                couriers: [],
+                editing_order: []
             }
         },
 
         methods: {
+            beforeClose (event) {
+                this.editing_order = [];
+                this.leaveTableChannel();
+            },
+
             async getOrdersDetails(orderId) {
                 const response = await axios.post('/realizations/' + orderId, {query: ''});
 
                 return response;
             },
 
+            async createEventTableUpdate(){
+                let response = await axios.get('/logistics/on-update-logist-table');
+
+                return response.data;
+            },
+
             onUpdateOrder(e){
-                this.order = e;
-                $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
+                this.order = Object.assign(this.order, e);
+                setTimeout(() => {
+                    this.hideModal();
+                }, 3000);
+                this.createEventTableUpdate();
             },
 
             showModal () {
@@ -72,28 +114,97 @@
                 this.couriers = response.data;
 
                 return response.data;
+            },
+
+            async orderProcess(orderId){
+                try{
+                    let response = await this.getOrdersDetails(orderId);
+                    this.order = response.data;
+                    this.channelOrder();
+                    this.showModal();
+                }catch(e){
+                    toast.error('Произошла ошибка. Попробуйте еще');
+                    throw e;
+                }
+            },
+
+            channelOrder(){
+                this.editing_order = [];
+                window.Echo.join(`logistic-table.${this.order.id}`)
+                    .here((members) => {
+                        // запускается, когда вы заходите
+                        this.editing_order = members;
+                    })
+                    .joining( (joiningMember) =>  {
+                        // запускается, когда входит другой пользователь
+                        let check = this.editing_order.find( (val) => val.id == joiningMember.id );
+                        if(check === undefined){
+                            this.editing_order.push(joiningMember);
+                        }
+                    })
+                    .leaving( (leavingMember) => {
+                        // запускается, когда выходит другой пользователь
+                        let index = this.editing_order.findIndex((val) => val.id == leavingMember.id);
+                        if(index !== -1){
+                            this.editing_order.splice(index, 1);
+                        }
+                    });
+            },
+
+            leaveTableChannel(){
+                window.Echo.leave(`logistic-table.${this.order.id}`);
+            },
+
+            async sendGoogleTables(orderId){
+                let response = await axios.get(`/logistics/send-google-tables/${orderId}`);
+
+                return response.data;
+            },
+
+            async orderSendGoogleTables(orderId){
+                try{
+                    let response = await this.sendGoogleTables(orderId);
+                    toast.success(response.message);
+                }catch(e){
+                    toast.error('Произошла ошибка. Попробуйте еще');
+                    throw e;
+                }
             }
         },
 
         mounted() {
-            this.getSuppliers();
-            this.getCouriers();
+            (async () => {
+                await this.getSuppliers();
+                await this.getCouriers();
+            })();
+
             $(`#${this.tableId}`).on( 'draw.dt', () => {
-                $('.btn-logist-details').click( async (e) => {
+                $('.btn-logist-details').click((e) => {
                     if(e.target.dataset.id === undefined){
                         toast.error('Произошла ошибка. Попробуйте еще');
                         throw Exception('Order id not defined!');
                     }
-                    try{
-                        let response = await this.getOrdersDetails(e.target.dataset.id);
-                        this.order = response.data;
-                        this.showModal();
-                    }catch(e){
+                    this.orderProcess(e.target.dataset.id);
+                });
+                $('.btn-send-google').click((e) => {
+                    if(e.target.dataset.id === undefined){
                         toast.error('Произошла ошибка. Попробуйте еще');
-                        throw e;
+                        throw Exception('Order id not defined!');
                     }
+                    this.orderSendGoogleTables(e.target.dataset.id);
                 });
             });
+
+            window.Echo.private('logistic-table')
+                .listen('OrderConfirmedEvent', (e) => {
+                    $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
+                })
+                .listen('UpdateRealizationsConfirmedOrderEvent', (e) => {
+                    $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
+                })
+                .listen('LogistTableUpdateEvent', (e) => {
+                    $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
+                });
         },
     }
 </script>

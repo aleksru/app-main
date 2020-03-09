@@ -1,5 +1,5 @@
 <template>
-    <div class="box">
+    <div>
         <div class="box-header">
             <h3 class="box-title">Позиции заказа</h3>
 
@@ -64,6 +64,7 @@
                                 <th>#</th>
                                 <th>Модель</th>
                                 <th>IMEI</th>
+                                <th>Закупка</th>
                                 <th>Поставщик</th>
                             </tr>
                         </thead>
@@ -75,6 +76,10 @@
                                 <td style="width: 10%">
                                     <!--//imei-->
                                     <input type="text" class="form-control" v-model="order.realizations[index].imei">
+                                </td>
+                                <td style="width: 10%">
+                                    <!--//price_opt-->
+                                    <input type="number" class="form-control" v-model="order.realizations[index].price_opt">
                                 </td>
                                 <td style="width: 10%">
                                     <v-select label="name"
@@ -109,8 +114,8 @@
         },
         methods: {
             async submit(){
+                const idToastLoading  = toast.loading('Обновление...');
                 try{
-                    const idToastLoading  = toast.loading('Обновление...');
                     const responseOrder = await this.submitOrder();
                     const responseRealizations = [];
 
@@ -124,7 +129,13 @@
                     toast.success('Успешно обновлено!');
                 }catch (e){
                     toast.hide(idToastLoading);
-                    toast.error('Произошла ошибка. Попробуйте еще');
+                    if(e.response.data.errors){
+                        for(let error in e.response.data.errors){
+                            e.response.data.errors[error].map((e) => toast.error(e));
+                        }
+                    }else{
+                        toast.error('Произошла ошибка. Попробуйте еще');
+                    }
                     throw e;
                 }
             },
@@ -138,6 +149,6 @@
                                                                                         this.order.realizations[index]);
                 return response;
             },
-        },
+        }
     }
 </script>

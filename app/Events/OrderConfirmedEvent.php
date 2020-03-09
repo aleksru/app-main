@@ -5,6 +5,7 @@ namespace App\Events;
 
 use App\Order;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -35,6 +36,6 @@ class OrderConfirmedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('order');
+        return new PrivateChannel('logistic-table');
     }
 }

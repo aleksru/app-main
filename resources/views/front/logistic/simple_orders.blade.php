@@ -36,11 +36,6 @@
             'route' => $routeDatatable ?? route('orders.datatable'),
             'ordering' => false,
             'columns' => [
-                'nodata' => [
-                    'name' => '',
-                    'width' => '1%',
-                    'searchable' => false,
-                ],
                 'created_at' => [
                     'name' => 'Дата',
                     'width' => '1%',
@@ -111,28 +106,8 @@
                     'width' => '1%',
                     'searchable' => false,
                 ],
-                'product_name' => [
-                    'name' => 'Модель',
-                    'width' => '1%',
-                    'searchable' => false,
-                ],
-                'imei' => [
-                    'name' => 'IMEI',
-                    'width' => '1%',
-                    'searchable' => false,
-                ],
-               'quantity' => [
-                    'name' => 'Кол-во',
-                    'width' => '1%',
-                    'searchable' => false,
-                ],
-               'price_opt' => [
-                    'name' => 'Закупка',
-                    'width' => '1%',
-                    'searchable' => false,
-                ],
-               'price' => [
-                    'name' => 'Продажа',
+                'products' => [
+                    'name' => 'Товары',
                     'width' => '1%',
                     'searchable' => false,
                 ],
@@ -141,18 +116,8 @@
                     'width' => '1%',
                     'searchable' => false,
                 ],
-               'profit' => [
-                    'name' => 'Прибыль',
-                    'width' => '1%',
-                    'searchable' => false,
-                ],
                'courier_name' => [
                     'name' => 'Курьер',
-                    'width' => '1%',
-                    'searchable' => false,
-                ],
-               'supplier' => [
-                    'name' => 'Поставщик',
                     'width' => '1%',
                     'searchable' => false,
                 ],
@@ -187,56 +152,6 @@
                 .listen('UpdateRealizationsConfirmedOrderEvent', (e) => {
                     $('#orders-table').DataTable().ajax.reload(null, false);
                 });
-
-            $('#orders-table').on( 'draw.dt', function () {
-                $('#orders-table tr').dblclick(function(e){
-                    let range = document.createRange();
-                    let sel = window.getSelection();
-                    range.setStart(this.children[0], 0);
-                    range.setEnd(this.children[this.children.length - 1], 0);
-                    sel.removeAllRanges();
-                    sel.addRange(range);
-
-                    try {
-                        document.execCommand('copy');
-                        if(this.dataset.productid == '') {
-                            throw 'product_is_null';
-                        }
-                        send(this.dataset.realizationid).then((res) => {
-                            this.classList.remove('alert-danger');
-                            this.classList.add('alert-success');
-                            if(res.data.is_send_quick){
-                                toast.confirm(`Заказ #${res.data.order_id} уже отправлен в Бегунок. Отправить заново?`, () => {
-                                    send(this.dataset.realizationid, is_forced_send_quick = true).then((res) => {
-                                        toast[res.data.type]('', {title: res.data.message});
-                                    });
-                                })
-                            }
-                            if(res.data.type && res.data.message){
-                                toast[res.data.type]('', {title: res.data.message});
-                            }
-                        })
-
-                    } catch(err) {
-                        let mess = 'Произошла ошибка!';
-                        if(err === 'product_is_null') {
-                            mess += ' Отсутстуют товары';
-                        }
-                        toast.error(mess);
-                        console.log('Error copy to buffer');
-                    }
-                    sel.removeAllRanges();
-                });
-            });
-
-            async function send(realization_id, is_forced_send_quick = false) {
-                let res = await axios.post("{!! route('logistics.copy.toggle') !!}", {
-                    realization_id: realization_id,
-                    is_forced_send_quick
-                });
-
-                return res;
-            }
         });
 
     </script>

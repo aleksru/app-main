@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 
+use App\Events\LogistTableUpdateEvent;
 use App\Events\RealizationCopyLogistEvent;
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
+use App\Jobs\SendLogistGoogleTable;
 use App\Jobs\SendOrderQuickJob;
 use App\Models\FailDeliveryDate;
 use App\Models\Logist;
@@ -13,6 +15,7 @@ use App\Models\OrderStatus;
 use App\Models\Realization;
 use App\Order;
 use App\Repositories\DeliveryPeriodsRepository;
+use App\Services\Google\Sheets\Data\OrderLogistData;
 use App\Services\Google\Sheets\GoogleSheets;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -72,27 +75,16 @@ class LogisticController extends Controller
         $orders = Order::with(
             'status',
             'store',
-            'client',
             'client.additionalPhones',
             'courier',
             'metro',
             'deliveryPeriod',
             'deliveryType',
-            'operator'
-        )->selectRaw('orders.*, realizations.id as realization_id,  realizations.price, realizations.quantity, realizations.imei, realizations.price_opt, 
-                        realizations.supplier_id, realizations.is_copy_logist,
-                        client.phone as client_phone, client.name as name_customer, suppliers.name as supplier, products.product_name, 
-                        (realizations.price - IFNULL(realizations.price_opt, 0)) as profit')
-            ->join('clients as client', 'client_id', '=', 'client.id')
-            ->join('realizations', 'orders.id', '=', 'realizations.order_id')
-            ->join('products', 'product_id', '=', 'products.id')
-            ->leftJoin('suppliers', 'supplier_id', '=', 'suppliers.id')
-            ->where('orders.updated_at', '>=', Carbon::now()->subDays(3)->toDateString())
-            ->whereNull('realizations.deleted_at')
+            'operator',
+            'products'
+        )->where('orders.updated_at', '>=', Carbon::now()->subDays(4)->toDateString())
             ->whereIn('orders.status_id', $statusIds)
-            ->orderBy('is_copy_logist')
-            ->orderBy('orders.id', 'DESC')
-            ->orderBy('products.type', 'ASC');
+            ->orderBy('orders.id', 'DESC');
 
         if( ! $accessCitiesByLogistIds->isEmpty() ) {
             $orders->whereIn('orders.city_id', $accessCitiesByLogistIds);
@@ -108,9 +100,6 @@ class LogisticController extends Controller
                     return $query->whereRaw('LOWER(client.name) like ?', "%{$keyword}%");
                 }
             })
-            ->editColumn('nodata', '-')
-            ->editColumn('real_denied', '')
-            ->editColumn('comment_logist', '')
             ->editColumn('operator', function (Order $order){
                 return $order->operator ? $order->operator->name : '';
             })
@@ -132,29 +121,18 @@ class LogisticController extends Controller
             ->editColumn('courier_name', function (Order $order){
                 return $order->courier ? $order->courier->name : '';
             })
-            ->editColumn('price_opt', function ($value){
-                return (int)$value['price_opt'];
-            })
-            ->editColumn('price', function ($value){
-                return (int)$value['price'];
-            })
             ->editColumn('courier_payment', function (Order $order){
                 return $order->courier_payment;
             })
             ->editColumn('btn_details', function (Order $order){
-                return view('front.logistic.parts.btn_details', [ 'id' => $order->id ]);
+                return view('front.logistic.parts.btn_order_group', [ 'id' => $order->id ]);
             })
             ->editColumn('date_delivery', function (Order $order){
                 return $order->date_delivery ? $order->date_delivery->format('d.m') : '';
             })
-            ->setRowClass(function ($el){
-                return $el['is_copy_logist'] ? 'alert-success' : 'alert-danger';
+            ->editColumn('products', function (Order $order) {
+                return $order->products ? $order->products->pluck('product_name')->implode(', ') : '';
             })
-            ->setRowAttr([
-                'data-realizationid' => function (Order $order) {
-                    return $order->realization_id;
-                }
-            ])
             ->rawColumns(['btn_details'])
             ->make(true);
     }
@@ -192,6 +170,24 @@ class LogisticController extends Controller
 //        }
 
         return response()->json(['type' => 'success', 'message' => $message]);
+    }
+
+    public function sendGoogleTables(Order $order)
+    {
+        $logistOrderData = app(OrderLogistData::class, ['order' => $order]);
+        dispatch(new SendLogistGoogleTable($logistOrderData))->onQueue('google-tables');
+
+        return response()->json(['message' => 'Успешно отправлено!']);
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function onLogistTableUpdate()
+    {
+        event(new LogistTableUpdateEvent());
+
+        return response()->json(['status' => 'send']);
     }
 
     /**

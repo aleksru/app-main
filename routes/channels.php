@@ -39,6 +39,17 @@ Broadcast::channel('chat.{id}', function () {
     return true;
 });
 
+Broadcast::channel('logistic-table', function () {
+    return true;
+});
+
+Broadcast::channel('logistic-table.{order_id}', function ($user) {
+    return [
+        'id'   => $user->id,
+        'name'   => $user->name
+    ];
+});
+
 Broadcast::channel('order-views.*', function ($user) {
     return [
         'id'   => $user->id,
