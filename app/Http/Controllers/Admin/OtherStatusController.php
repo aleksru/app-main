@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\OtherStatusEnums;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\OtherStatusRequest;
 use App\Models\OtherStatus;
@@ -17,8 +18,10 @@ class OtherStatusController extends Controller
         $subStatuses = OtherStatus::typeSubStatuses()->get();
         $stockStatuses = OtherStatus::typeStockStatuses()->get();
         $logisticStatuses = OtherStatus::typeLogisticStatuses()->get();
+        $activeNav = \request()->get('type') !== NULL ? \request()->get('type') : OtherStatusEnums::SUBSTATUS_TYPE;
 
-        return view('admin.other_statuses.form', compact('subStatuses', 'stockStatuses', 'logisticStatuses'));
+        return view('admin.other_statuses.form',
+                    compact('subStatuses', 'stockStatuses', 'logisticStatuses', 'activeNav'));
     }
 
     /**
@@ -29,7 +32,8 @@ class OtherStatusController extends Controller
     {
         OtherStatus::create($otherStatusRequest->validated());
 
-        return redirect()->route('admin.other-statuses.index')->with(['success' => 'Успешно создано!']);
+        return redirect()->route('admin.other-statuses.index', ['type' => $otherStatusRequest->get('type')])
+                        ->with(['success' => 'Успешно создано!']);
     }
 
     /**

@@ -34,12 +34,18 @@
                 <!-- Custom Tabs -->
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Подстатусы</a></li>
-                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Склад</a></li>
-                        <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Логистика</a></li>
+                        <li class="{{$activeNav == \App\Enums\OtherStatusEnums::SUBSTATUS_TYPE ? 'active' : ''}}">
+                            <a href="#tab_1" data-toggle="tab" aria-expanded="{{$activeNav == \App\Enums\OtherStatusEnums::SUBSTATUS_TYPE ? 'true' : 'false'}}">Подстатусы</a>
+                        </li>
+                        <li class="{{$activeNav == \App\Enums\OtherStatusEnums::STOCK_TYPE ? 'active' : ''}}">
+                            <a href="#tab_2" data-toggle="tab" aria-expanded="{{$activeNav == \App\Enums\OtherStatusEnums::STOCK_TYPE ? 'true' : 'false'}}">Склад</a>
+                        </li>
+                        <li class="{{$activeNav == \App\Enums\OtherStatusEnums::LOGISTIC_TYPE ? 'active' : ''}}">
+                            <a href="#tab_3" data-toggle="tab" aria-expanded="{{$activeNav == \App\Enums\OtherStatusEnums::LOGISTIC_TYPE ? 'true' : 'false'}}">Логистика</a>
+                        </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab_1">
+                        <div class="tab-pane {{$activeNav == \App\Enums\OtherStatusEnums::SUBSTATUS_TYPE ? 'active' : ''}}" id="tab_1">
                             <div class="row">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Список подстатусов</h3>
@@ -81,11 +87,12 @@
                                         <div class="form-group">
                                             <label for="name" class="col-sm-2 control-label">Название</label>
 
-                                            <div class="col-sm-8">
+                                            <div class="col-sm-4">
                                                 <input type="text" class="form-control" name="name" placeholder="Название" value="{{ old('name') }}">
                                                 <input type="text" class="form-control" name="type"  value="{{ \App\Enums\OtherStatusEnums::SUBSTATUS_TYPE }}" style="display: none">
                                             </div>
                                         </div>
+
                                     </form>
                                 </div>
                                 <div class="box-footer">
@@ -99,7 +106,7 @@
                             </div>
                         </div>
                         <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_2">
+                        <div class="tab-pane {{$activeNav == \App\Enums\OtherStatusEnums::STOCK_TYPE ? 'active' : ''}}" id="tab_2">
                             <div class="row">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Список статусов склада</h3>
@@ -111,12 +118,18 @@
                                         <tr>
                                             <th style="width: 10px">#</th>
                                             <th>Название</th>
+                                            <th>Цвет</th>
                                             <th>Действия</th>
                                         </tr>
                                         @foreach ($stockStatuses as $stockStatus)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $stockStatus->name }}</td>
+                                                <td>
+                                                    <span class="badge bg-{{$stockStatus->color}}" style="padding: 10px;">
+                                                    {{ $stockStatus->color }}
+                                                    </span>
+                                                </td>
                                                 <td>
                                                     @include('datatable.actions', [
                                                         'edit' => [
@@ -146,6 +159,13 @@
                                                 <input type="text" class="form-control" name="type"  value="{{ \App\Enums\OtherStatusEnums::STOCK_TYPE }}" style="display: none">
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="name" class="col-sm-2 control-label">Цвет</label>
+
+                                            <div class="col-sm-4">
+                                                @include('admin.parts.select_color', ['name' => 'color'])
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="box-footer">
@@ -159,7 +179,7 @@
                             </div>
                         </div>
                         <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_3">
+                        <div class="tab-pane {{$activeNav == \App\Enums\OtherStatusEnums::LOGISTIC_TYPE ? 'active' : ''}}" id="tab_3">
                             <div class="row">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Список статусов логистики</h3>
@@ -171,12 +191,18 @@
                                         <tr>
                                             <th style="width: 10px">#</th>
                                             <th>Название</th>
+                                            <th>Цвет</th>
                                             <th>Действия</th>
                                         </tr>
                                         @foreach ($logisticStatuses as $logisticStatus)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $logisticStatus->name }}</td>
+                                                <td>
+                                                    <span class="badge bg-{{$logisticStatus->color}}" style="padding: 10px;">
+                                                    {{ $logisticStatus->color }}
+                                                    </span>
+                                                </td>
                                                 <td>
                                                     @include('datatable.actions', [
                                                         'edit' => [
@@ -204,6 +230,14 @@
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" name="name" placeholder="Название" value="{{ old('name') }}">
                                                 <input type="text" class="form-control" name="type"  value="{{ \App\Enums\OtherStatusEnums::LOGISTIC_TYPE }}" style="display: none">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="name" class="col-sm-2 control-label">Цвет</label>
+
+                                            <div class="col-sm-4">
+                                                @include('admin.parts.select_color', ['name' => 'color'])
                                             </div>
                                         </div>
                                     </form>
