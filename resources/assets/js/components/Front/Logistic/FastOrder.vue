@@ -36,6 +36,8 @@
             <logistic-form  :initial_order="order"
                             :initial_suppliers="suppliers"
                             :initial_couriers="couriers"
+                            :stock_statuses="stockStatuses"
+                            :logistic_statuses="logisticStatuses"
                             @update-order="onUpdateOrder($event)">
             </logistic-form>
         </div>
@@ -57,7 +59,10 @@
         },
 
         props: {
-            tableId: null
+            tableId: null,
+            stockStatuses: Array,
+            logisticStatuses: Array
+
         },
         data() {
             return {

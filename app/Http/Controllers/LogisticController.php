@@ -81,7 +81,8 @@ class LogisticController extends Controller
             'deliveryPeriod',
             'deliveryType',
             'operator',
-            'products'
+            'products',
+            'logisticStatus'
         )->selectRaw('orders.*, delivery_periods.timeFrom')
             ->leftJoin('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
             ->where('orders.date_delivery', '>=', Carbon::now()->toDateString())
@@ -140,6 +141,11 @@ class LogisticController extends Controller
                 return $order->products ? $order->products->pluck('product_name')->implode(', ') : '';
             })
             ->rawColumns(['btn_details'])
+            ->setRowClass(function (Order $order) {
+                $class = ($order->logisticStatus ? ' bg-' . $order->logisticStatus->color : '');
+
+                return $class;
+            })
             ->make(true);
     }
 

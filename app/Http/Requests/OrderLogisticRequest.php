@@ -32,11 +32,16 @@ class OrderLogisticRequest extends FormRequest
                 'courier_id' => 'integer|nullable',
                 'comment_stock' => 'string|nullable',
                 'courier_payment' => 'integer|nullable',
+                'logistic_status_id' => 'integer|nullable',
+                'stock_status_id' => 'integer|nullable',
+                'comment_logist' => 'string|nullable',
             ];
         }
         if(Auth::user()->isLogist()) {
             return [
                 'courier_payment' => 'integer|nullable',
+                'logistic_status_id' => 'integer|nullable',
+                'comment_logist' => 'string|nullable',
             ];
         }
 
@@ -44,6 +49,7 @@ class OrderLogisticRequest extends FormRequest
             return [
                 'comment_stock' => 'string|nullable',
                 'courier_id' => 'integer|nullable',
+                'stock_status_id' => 'integer|nullable',
             ];
         }
 

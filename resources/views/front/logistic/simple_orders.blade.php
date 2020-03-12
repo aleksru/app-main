@@ -128,7 +128,10 @@
                 ],
             ],
         ])
-        <fast-order :table-id="'orders-table'"></fast-order>
+        <fast-order :table-id="'orders-table'"
+                    :stock-statuses='@json(\App\Models\OtherStatus::typeStockStatuses()->get())'
+                    :logistic-statuses='@json(\App\Models\OtherStatus::typeLogisticStatuses()->get())'>
+        </fast-order>
     </div>
 @endsection
 

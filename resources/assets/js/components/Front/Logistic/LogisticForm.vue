@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="box-header">
-            <h3 class="box-title">Позиции заказа</h3>
+            <h3 class="box-title">Позиции заказа №{{order.id}}</h3>
 
             <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 1000px;">
@@ -19,7 +19,7 @@
         <div class="box-body">
             <div class="row">
                 <form class="form-horizontal">
-                    <div class="col-sm-12">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label for="name" class="col-sm-4 control-label">Коммент СКЛАД</label>
 
@@ -28,11 +28,46 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-4 control-label">Статус СКЛАДА</label>
+
+                            <div class="col-sm-8">
+                                <v-select label="name"
+                                          index="id"
+                                          :options="stock_statuses"
+                                          v-model="order.stock_status_id">
+                                </v-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-4 control-label">Статус ЛОГИСТИКА</label>
+
+                            <div class="col-sm-8">
+                                <v-select label="name"
+                                          index="id"
+                                          :options="logistic_statuses"
+                                          v-model="order.logistic_status_id">
+                                </v-select>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="row">
                 <form class="form-horizontal">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-4 control-label">Коммент ЛОГИСТ</label>
+
+                            <div class="col-sm-8">
+                                <textarea class="form-control" v-model="order.comment_logist"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label for="name" class="col-sm-4 control-label">Курьер</label>
 
@@ -45,12 +80,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label for="name" class="col-sm-4 control-label">Зп курьера</label>
 
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" v-model="order.courier_payment">
+                                <input type="number" min="0" step="50" class="form-control" v-model="order.courier_payment">
                             </div>
                         </div>
                     </div>
@@ -64,6 +99,7 @@
                                 <th>#</th>
                                 <th>Модель</th>
                                 <th>IMEI</th>
+                                <th>Продажа</th>
                                 <th>Закупка</th>
                                 <th>Поставщик</th>
                             </tr>
@@ -77,9 +113,13 @@
                                     <!--//imei-->
                                     <input type="text" class="form-control" v-model="order.realizations[index].imei">
                                 </td>
-                                <td style="width: 10%">
+                                <td style="width: 7%">
+                                    <!--//price-->
+                                    <input disabled type="number" min="0" step="50" class="form-control" v-model="order.realizations[index].price">
+                                </td>
+                                <td style="width: 7%">
                                     <!--//price_opt-->
-                                    <input type="number" class="form-control" v-model="order.realizations[index].price_opt">
+                                    <input type="number" min="0" step="50" class="form-control" v-model="order.realizations[index].price_opt">
                                 </td>
                                 <td style="width: 10%">
                                     <v-select label="name"
@@ -90,6 +130,24 @@
                                 </td>
                             </tr>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Итого:</th>
+                                <th></th>
+                                <th></th>
+                                <th>{{sumSale}}</th>
+                                <th>{{sumPurchase}}</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th>Прибыль:</th>
+                                <th :class="(sumProfit < 0) ? 'bg-red' : 'bg-green'">{{sumProfit}}</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -104,7 +162,9 @@
         props: {
             initial_order: Object,
             initial_suppliers: Array,
-            initial_couriers: Array
+            initial_couriers: Array,
+            stock_statuses: Array,
+            logistic_statuses: Array
         },
 
         data() {
@@ -149,6 +209,33 @@
                                                                                         this.order.realizations[index]);
                 return response;
             },
-        }
+        },
+
+        computed: {
+            sumSale(){
+                return this.order.realizations.reduce((prev, curr) => {
+                    let price = parseInt(curr.price);
+                    return prev + (isNaN(price) ? 0 : price);
+                }, 0);
+            },
+            sumPurchase(){
+                return this.order.realizations.reduce((prev, curr) => {
+                    let price = parseInt(curr.price_opt);
+                    return prev + (isNaN(price) ? 0 : price);
+                }, 0);
+            },
+
+            sumProfit(){
+                let payment = parseInt(this.order.courier_payment);
+                return this.sumSale - this.sumPurchase - (isNaN(payment) ? 0 : payment);
+            }
+        },
+        watch: {
+            sumProfit: _.throttle ((newSum, oldOld) => {
+                if(newSum < 0){
+                    toast.warning('Заказ с отрицательной прибылью!!!!!', {title: 'Внимание!', timeout: 2500});
+                }
+            }, 2000)
+        },
     }
 </script>

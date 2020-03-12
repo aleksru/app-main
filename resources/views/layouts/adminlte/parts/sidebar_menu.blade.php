@@ -100,8 +100,8 @@
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="{{ route('logistics.index') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Заказы</span></a></li>
-                <li><a href="{{ route('logistics.simple.orders') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Таблица заказов</span></a></li>
+                <li><a href="{{ route('logistics.index') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Общая таблица</span></a></li>
+                <li><a href="{{ route('logistics.simple.orders') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Реализация</span></a></li>
                 <li><a href="{{ route('logistics.deliveries') }}"><i class="fa fa-truck" aria-hidden="true"></i> <span>Периоды доставки</span></a></li>
             </ul>
         </li>
