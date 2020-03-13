@@ -39,6 +39,9 @@ class OrderLogisticRequest extends FormRequest
         }
         if(Auth::user()->isLogist()) {
             return [
+                //временно
+                'courier_id' => 'integer|nullable',
+
                 'courier_payment' => 'integer|nullable',
                 'logistic_status_id' => 'integer|nullable',
                 'comment_logist' => 'string|nullable',
