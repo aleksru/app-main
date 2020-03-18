@@ -18,6 +18,7 @@ use App\Repositories\DeliveryPeriodsRepository;
 use App\Services\Google\Sheets\Data\OrderLogistData;
 use App\Services\Google\Sheets\GoogleSheets;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -82,21 +83,23 @@ class LogisticController extends Controller
             'deliveryType',
             'operator',
             'products',
-            'logisticStatus'
+            'logisticStatus',
+            'realizations'
         )->selectRaw('orders.*, delivery_periods.timeFrom')
             ->leftJoin('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
-            ->where('orders.date_delivery', '>=', Carbon::now()->toDateString())
+            ->where('orders.date_delivery', '>=', Carbon::now()->subDays(7)->toDateString())
             ->whereIn('orders.status_id', $statusIds)
             ->orderBy('orders.date_delivery', 'ASC')
-            ->orderBy('timeFrom', 'ASC');
+            ->orderBy('delivery_periods.timeFrom', 'ASC');
 
         if( ! $accessCitiesByLogistIds->isEmpty() ) {
             $orders->whereIn('orders.city_id', $accessCitiesByLogistIds);
         }
         return datatables()->of($orders)
-            ->filterColumn('client_phone', function ($query, $keyword) {
+            ->filterColumn('client_phone', function (Builder $query, $keyword) use ($orders){
                 if (preg_match('/[0-9]{4,}/', $keyword)){
-                    return $query->whereRaw('client.phone like ?', "%{$keyword}%");
+                    $orders->leftJoin('clients', 'orders.client_id', '=', 'clients.id');
+                     return $query->OrWhereRaw('clients.phone like ?', "%{$keyword}%");
                 }
             })
             ->filterColumn('name_customer', function ($query, $keyword) {
@@ -104,23 +107,46 @@ class LogisticController extends Controller
                     return $query->whereRaw('LOWER(client.name) like ?', "%{$keyword}%");
                 }
             })
-            ->editColumn('operator', function (Order $order){
-                return $order->operator ? $order->operator->name : '';
+            ->filterColumn('imei', function ($query, $keyword) use ($orders){
+                $orders->leftJoin('realizations', 'orders.id', '=', 'realizations.order_id');
+                return $query->whereRaw('LOWER(realizations.imei) like ?', "%{$keyword}%");
             })
-            ->editColumn('store', function (Order $order){
-                return $order->store ? $order->store->name : '';
+            ->filterColumn('courier_name', function ($query, $keyword) use ($orders){
+                $orders->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id');
+                return $query->where('couriers.id', $keyword);
             })
-            ->editColumn('name_customer', function (Order $order){
-                return $order->client ? $order->client->name : '';
+            ->filterColumn('address', function ($query, $keyword){
+                return $query->whereRaw('LOWER(orders.address_street) like ?', "%{$keyword}%");
             })
+            ->filterColumn('date_delivery', function ($query, $keyword) {
+                if (preg_match('/\d{4}.\d{2}.\d{2}/', $keyword)){
+                    $dates = explode(',', $keyword);
+                    if(count($dates) === 1){
+                        return $query->whereDate('orders.date_delivery', $dates[0]);
+                    }
+                    if(count($dates) === 2){
+                        return $query->whereBetween('orders.date_delivery', [$dates[0], $dates[1]]);
+                    }
+                }
+            })
+//            ->editColumn('operator', function (Order $order){
+//                return $order->operator ? $order->operator->name : '';
+//            })
+//            ->editColumn('store', function (Order $order){
+//                return $order->store ? $order->store->name : '';
+//            })
+//            ->editColumn('name_customer', function (Order $order){
+//                return $order->client ? $order->client->name : '';
+//            })
             ->editColumn('client_phone', function (Order $order){
                 return $order->client ? $order->client->allPhones->implode(', ') : '';
             })
-            ->editColumn('status', function (Order $order){
-                return $order->status ? $order->status->status : '';
-            })
+//            ->editColumn('status', function (Order $order){
+//                return $order->status ? $order->status->status : '';
+//            })
             ->editColumn('delivery_time', function (Order $order){
-                return ($order->date_delivery ? $order->date_delivery->format('d.m') : '') .' '.($order->deliveryPeriod ? $order->deliveryPeriod->period_full : '');
+                //return ($order->date_delivery ? $order->date_delivery->format('d.m') : '') .' '.($order->deliveryPeriod ? $order->deliveryPeriod->period_full : '');
+                return ($order->deliveryPeriod ? $order->deliveryPeriod->period_full : '');
             })
             ->editColumn('address', function (Order $order){
                 return $order->full_address;
@@ -128,23 +154,61 @@ class LogisticController extends Controller
             ->editColumn('courier_name', function (Order $order){
                 return $order->courier ? $order->courier->name : '';
             })
-            ->editColumn('courier_payment', function (Order $order){
-                return $order->courier_payment;
-            })
+//            ->editColumn('courier_payment', function (Order $order){
+//                return $order->courier_payment;
+//            })
             ->editColumn('btn_details', function (Order $order){
                 return view('front.logistic.parts.btn_order_group', [ 'id' => $order->id ]);
             })
             ->editColumn('date_delivery', function (Order $order){
                 return $order->date_delivery ? $order->date_delivery->format('d.m') : '';
             })
-            ->editColumn('products', function (Order $order) {
-                return $order->products ? $order->products->pluck('product_name')->implode(', ') : '';
+
+            ->editColumn('sum_price_opt', function (Order $order) {
+                return $order->realizations ? $order->realizations->sum('price_opt') : 0;
             })
-            ->rawColumns(['btn_details'])
+            ->editColumn('sum_sales', function (Order $order) {
+                return $order->realizations ? $order->realizations->sum('price') : 0;
+            })
+            ->editColumn('sum_profit', function (Order $order) {
+                return ($order->realizations ? $order->realizations->sum('price') : 0) -
+                            ($order->realizations ? $order->realizations->sum('price_opt') : 0);
+            })
+            ->editColumn('products', function (Order $order) {
+                //return $order->products ? $order->products->pluck('product_name')->implode(', ') : '';
+                return $order->products ?
+                    view('front.logistic.parts.imei_table', ['realizations' => $order->products->pluck('product_name')]) :
+                    '';
+            })
+            ->editColumn('imei', function (Order $order) {
+                return $order->realizations ?
+                        view('front.logistic.parts.imei_table', ['realizations' => $order->realizations->pluck('imei')])
+                        : "";
+            })
+            ->rawColumns(['btn_details', 'imei', 'products'])
             ->setRowClass(function (Order $order) {
                 $class = ($order->logisticStatus ? ' bg-' . $order->logisticStatus->color : '');
 
                 return $class;
+            })
+            ->withQuery('total_price', function($query) {
+                $queryClone = clone $query->getQuery();
+                $queryClone->limit = null;
+                $queryClone->offset = null;
+                return Realization::query()
+                    ->whereIn('order_id', $queryClone->pluck('orders.id'))
+                    ->whereNull('deleted_at')
+                    ->sum('price');
+            })
+
+            ->withQuery('total_price_opt', function($query) {
+                $queryClone = clone $query;
+                $queryClone->getQuery()->limit = null;
+                $queryClone->getQuery()->offset = null;
+                return Realization::query()
+                    ->whereIn('order_id', $queryClone->pluck('orders.id'))
+                    ->whereNull('deleted_at')
+                    ->sum('price_opt');
             })
             ->make(true);
     }
