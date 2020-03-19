@@ -56,8 +56,9 @@ class LogisticController extends Controller
     public function simpleOrders()
     {
         $this->authorize('view', Logist::class);
-        $couriersSelect = Courier::select('id', 'name')->orderBy('name')->get()->toArray();
-        $couriersSelect[] = ['id' => NULL, 'name' => 'Без курьера'];
+        $couriersSelect = [];
+        $couriersSelect[] = ['id' => 0, 'text' => 'Без курьера'];
+        $couriersSelect = array_merge($couriersSelect, Courier::select('id', 'name as text')->orderBy('name')->get()->toArray());
 
         return view('front.logistic.simple_orders', [
             'routeDatatable' => route('logistics.simple.orders.datatable'),

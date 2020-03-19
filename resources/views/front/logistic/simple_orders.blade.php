@@ -55,17 +55,17 @@
                         ],
                         'comment_stock' => [
                             'name' => 'Коммент СКЛАД',
-                            'width' => '1%',
+                            'width' => '3%',
                             'searchable' => false,
                         ],
                         'comment_logist' => [
                             'name' => 'Коммент ЛОГ',
-                            'width' => '1%',
+                            'width' => '3%',
                             'searchable' => false,
                         ],
                         'address' => [
                             'name' => 'Адрес',
-                            'width' => '1%',
+                            'width' => '5%',
                             'searchable' => true,
                         ],
                         'client_phone' => [
@@ -75,13 +75,13 @@
                         ],
                         'courier_name' => [
                             'name' => 'Курьер',
-                            'width' => '1%',
+                            'width' => '6%',
                             'searchable' => true,
                         ],
 
                         'products' => [
                             'name' => 'Товары',
-                            'width' => '1%',
+                            'width' => '7%',
                             'searchable' => false,
                         ],
 
@@ -105,7 +105,7 @@
 
                         'imei' => [
                             'name' => 'IMEI',
-                            'width' => '1%',
+                            'width' => '5%',
                             'searchable' => true,
                         ],
 
@@ -187,7 +187,8 @@
          */
         const individualSearchingColumnsSelect = {
             courier_name: {
-                data: {!! json_encode($couriersSelect) !!}
+                className: 'js-example-couriers-single',
+                data: []
             },
         };
         /**
@@ -198,6 +199,9 @@
             //инициализация таблицы
             $('#orders-table').on( 'init.dt', function () {
                 rewriteSearchColumns();
+                $('.js-example-couriers-single').select2({
+                    data: {!!   json_encode($couriersSelect) !!},
+                });
                 let tableOrders = $('#orders-table').DataTable();
                 const indDateDelivery = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'date_delivery');
 
@@ -256,13 +260,14 @@
                     }
 
                     if(columnName in individualSearchingColumnsSelect) {
-                        let select = $('<select><option value=""></option></select>');
+                        const className = individualSearchingColumnsSelect[columnName]['className'];
+                        let select = $('<select '+ (className ? `class=${className}` : "") + '><option value="">Не выбран</option></select>');
                         $(this).html(select);
                         for(let key in individualSearchingColumnsSelect[columnName]['data']) {
                             select.append( '<option value="' + individualSearchingColumnsSelect[columnName]['data'][key]['id'] + '">'
                                 + individualSearchingColumnsSelect[columnName]['data'][key]['name']  + '</option>' );
                         }
-                        select.on('change', async function(){
+                        select.on('change', async function(e){
                             $('#table_preloader').show();
                             tableOrders.columns(i).search($(this).val()).draw();//, tableOrders.settings()[0].searchDelay;
                         });
