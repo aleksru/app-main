@@ -187,7 +187,7 @@
          */
         const individualSearchingColumnsSelect = {
             courier_name: {
-                data: {!! json_encode(App\Models\Courier::select('id', 'name')->get()->toArray()) !!}
+                data: {!! json_encode($couriersSelect) !!}
             },
         };
         /**
@@ -205,6 +205,7 @@
                     range: true,
                     clearButton: true,
                     dateFormat: 'yyyy.mm.dd',
+                    autoClose: true,
                     onSelect(formattedDate, date, inst){
                         tableOrders.columns(indDateDelivery).search(formattedDate).draw();//, tableOrders.settings()[0].searchDelay
                         $('#table_preloader').show();
@@ -222,9 +223,10 @@
                     const sumAllPriceIndex = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'sum_sales');
                     const sumAllPriceOptIndex = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'sum_price_opt');
                     const sumAllProfitIndex = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'sum_profit');
-                    $(row[sumAllPriceIndex]).text(settings.json.total_price);
-                    $(row[sumAllPriceOptIndex]).text(settings.json.total_price_opt);
-                    $(row[sumAllProfitIndex]).text(settings.json.total_price - settings.json.total_price_opt);
+                    $(row[sumAllPriceIndex]).text(parseInt(settings.json.total_price));
+                    $(row[sumAllPriceOptIndex]).text(parseInt(settings.json.total_price_opt));
+                    $(row[sumAllProfitIndex]).text(parseInt(settings.json.total_price - settings.json.total_price_opt));
+
                 }, 0);
 
                 $('#table_preloader').hide();

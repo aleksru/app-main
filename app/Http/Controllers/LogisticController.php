@@ -9,6 +9,7 @@ use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
 use App\Jobs\SendLogistGoogleTable;
 use App\Jobs\SendOrderQuickJob;
+use App\Models\Courier;
 use App\Models\FailDeliveryDate;
 use App\Models\Logist;
 use App\Models\OrderStatus;
@@ -55,8 +56,13 @@ class LogisticController extends Controller
     public function simpleOrders()
     {
         $this->authorize('view', Logist::class);
+        $couriersSelect = Courier::select('id', 'name')->orderBy('name')->get()->toArray();
+        $couriersSelect[] = ['id' => NULL, 'name' => 'Без курьера'];
 
-        return view('front.logistic.simple_orders', ['routeDatatable' => route('logistics.simple.orders.datatable')]);
+        return view('front.logistic.simple_orders', [
+            'routeDatatable' => route('logistics.simple.orders.datatable'),
+            'couriersSelect'  => $couriersSelect
+        ]);
     }
 
     /**
@@ -112,8 +118,13 @@ class LogisticController extends Controller
                 return $query->whereRaw('LOWER(realizations.imei) like ?', "%{$keyword}%");
             })
             ->filterColumn('courier_name', function ($query, $keyword) use ($orders){
-                $orders->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id');
-                return $query->where('couriers.id', $keyword);
+                if((int)$keyword > 0){
+                    $orders->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id');
+                    return $query->where('couriers.id', $keyword);
+                }else{
+                    return $query->whereNull('orders.courier_id');
+                }
+
             })
             ->filterColumn('address', function ($query, $keyword){
                 return $query->whereRaw('LOWER(orders.address_street) like ?', "%{$keyword}%");
@@ -191,6 +202,11 @@ class LogisticController extends Controller
 
                 return $class;
             })
+            ->setRowAttr([
+                'data-order-id' => function (Order $order) {
+                    return $order->id;
+                }
+            ])
             ->withQuery('total_price', function($query) {
                 $queryClone = clone $query->getQuery();
                 $queryClone->limit = null;
@@ -198,9 +214,9 @@ class LogisticController extends Controller
                 return Realization::query()
                     ->whereIn('order_id', $queryClone->pluck('orders.id'))
                     ->whereNull('deleted_at')
+                    ->where('price_opt', '<>', 0)
                     ->sum('price');
             })
-
             ->withQuery('total_price_opt', function($query) {
                 $queryClone = clone $query;
                 $queryClone->getQuery()->limit = null;

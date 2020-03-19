@@ -95,7 +95,7 @@
                 this.order = Object.assign(this.order, e);
                 setTimeout(() => {
                     this.hideModal();
-                }, 3000);
+                }, 1000);
                 this.createEventTableUpdate();
             },
 
@@ -197,6 +197,17 @@
                         throw Exception('Order id not defined!');
                     }
                     this.orderSendGoogleTables(e.target.dataset.id);
+                });
+
+                $(`#${this.tableId} tbody tr td`).dblclick((e) => {
+                    const row = e.target.parentNode;
+                    const orderId = row.dataset.orderId;
+
+                    if(orderId === undefined){
+                        toast.error('Произошла ошибка. Попробуйте еще');
+                        throw Exception('Order id not defined!');
+                    }
+                    this.orderProcess(orderId);
                 });
             });
 
