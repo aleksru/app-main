@@ -143,8 +143,8 @@
                                 <th>Итого:</th>
                                 <th></th>
                                 <th></th>
-                                <th>{{sumSale}}</th>
                                 <th>{{sumPurchase}}</th>
+                                <th>{{sumSale}}</th>
                                 <th></th>
                             </tr>
                             <tr>
