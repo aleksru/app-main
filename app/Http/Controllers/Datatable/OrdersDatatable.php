@@ -120,6 +120,16 @@ class OrdersDatatable
                     return $query->whereRaw('orders.city_id = ' . $keyword);
                 }
             })
+            ->filterColumn('additional_phones', function ($query, $keyword) {
+                if (preg_match('/[0-9]{4,}/', $keyword)){
+                    $this->orderQuery
+                        ->selectRaw('orders.*, c.phone as phone, c.name as name_customer')
+                        ->join('clients as c', 'client_id', '=', 'c.id')
+                        ->leftJoin('client_phones', 'orders.client_id', '=', 'client_phones.client_id');
+                    return $query->whereRaw('c.phone like ?', "%{$keyword}%")
+                        ->OrWhereRaw('client_phones.phone like ?', "%{$keyword}%");
+                }
+            })
             ->editColumn('additional_phones', function (Order $order) {
                 return $order->client->allAdditionalPhones;
             })

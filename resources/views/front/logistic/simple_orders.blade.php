@@ -160,7 +160,9 @@
                 ])
                 <fast-order :table-id="'orders-table'"
                             :stock-statuses='@json(\App\Models\OtherStatus::typeStockStatuses()->get())'
-                            :logistic-statuses='@json(\App\Models\OtherStatus::typeLogisticStatuses()->get())'>
+                            :logistic-statuses='@json(\App\Models\OtherStatus::typeLogisticStatuses()->get())'
+                            :min-margin="{{config('realization.min_margin_order')}}"
+                            :min-margin-product="{{config('realization.min_margin_product')}}">
                 </fast-order>
             </div>
         </div>
@@ -200,7 +202,7 @@
             $('#orders-table').on( 'init.dt', function () {
                 rewriteSearchColumns();
                 $('.js-example-couriers-single').select2({
-                    data: {!!   json_encode($couriersSelect) !!},
+                    data: {!! json_encode($couriersSelect) !!},
                 });
                 let tableOrders = $('#orders-table').DataTable();
                 const indDateDelivery = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'date_delivery');

@@ -99,30 +99,38 @@
                                 <th>#</th>
                                 <th>Модель</th>
                                 <th>IMEI</th>
-                                <th>Продажа</th>
                                 <th>Закупка</th>
+                                <th>Продажа</th>
                                 <th>Поставщик</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(product, index) in order.realizations" :key="product.id">
+                            <tr v-for="(product, index) in order.realizations"
+                                :key="product.id"
+                                :class="productMarginCheckByProductType(index) ? '' : 'bg-red'">
                                 <td style="width: 2%">{{ index + 1  }}</td>
                                 <!--//Model-->
                                 <td style="width: 15%"> {{ order.realizations[index].product.product_name }} </td>
-                                <td style="width: 10%">
+                                <td style="width: 10%" >
                                     <!--//imei-->
-                                    <input type="text" class="form-control" v-model="order.realizations[index].imei">
+                                    <input :disabled="!showImeiForProduct(index)" type="text" class="form-control" v-model="order.realizations[index].imei">
+                                </td>
+                                <td style="width: 7%">
+                                    <!--//price_opt-->
+                                    <input type="number" min="0" step="50" class="form-control" v-model="order.realizations[index].price_opt">
+                                    <span v-if="isProduct(index)"
+                                          v-show="!productMarginCheckByProductType(index)"
+                                          class="help-block"
+                                          style="color: #ffffff; font-size: 11px">Минимальная маржа {{minMarginProduct}}
+                                    </span>
                                 </td>
                                 <td style="width: 7%">
                                     <!--//price-->
                                     <input disabled type="number" min="0" step="50" class="form-control" v-model="order.realizations[index].price">
                                 </td>
-                                <td style="width: 7%">
-                                    <!--//price_opt-->
-                                    <input type="number" min="0" step="50" class="form-control" v-model="order.realizations[index].price_opt">
-                                </td>
                                 <td style="width: 10%">
-                                    <v-select label="name"
+                                    <v-select v-if="showSuppliersForProduct(index)"
+                                              label="name"
                                               index="id"
                                               :options="initial_suppliers"
                                               v-model="order.realizations[index].supplier_id">
@@ -141,7 +149,7 @@
                             </tr>
                             <tr>
                                 <th>Прибыль:</th>
-                                <th :class="(sumProfit < 0) ? 'bg-red' : 'bg-green'">{{sumProfit}}</th>
+                                <th :class="(sumProfit < minMargin) ? 'bg-red' : 'bg-green'">{{sumProfit}}</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -157,6 +165,9 @@
 
 
 <script>
+    const PRODUCT_TYPE = 'PRODUCT';
+    const ACCESSORY_TYPE = 'ACCESSORY';
+    const SERVICE_TYPE = 'SERVICE';
 
     export default {
         props: {
@@ -164,7 +175,15 @@
             initial_suppliers: Array,
             initial_couriers: Array,
             stock_statuses: Array,
-            logistic_statuses: Array
+            logistic_statuses: Array,
+            minMargin: {
+                type: Number,
+                default: 0
+            },
+            minMarginProduct: {
+                type: Number,
+                default: 0
+            }
         },
 
         data() {
@@ -173,6 +192,27 @@
             }
         },
         methods: {
+            isProduct(i){
+                return this.order.realizations[i].product_type === PRODUCT_TYPE
+            },
+
+            showSuppliersForProduct(index){
+                return this.order.realizations[index].product_type === PRODUCT_TYPE ||
+                    this.order.realizations[index].product_type === ACCESSORY_TYPE;
+            },
+
+            showImeiForProduct(index){
+                return this.order.realizations[index].product_type === PRODUCT_TYPE;
+            },
+
+            productMarginCheckByProductType(index){
+                return this.order.realizations[index].product_type === PRODUCT_TYPE ? this.productMarginCheck(index) : true;
+            },
+
+            productMarginCheck(index){
+                return parseInt(this.order.realizations[index].price - this.order.realizations[index].price_opt) >= this.minMarginProduct;
+            },
+
             async submit(){
                 const idToastLoading  = toast.loading('Обновление...');
                 try{
@@ -203,7 +243,6 @@
                 const response = await axios.post(`/orders-logistic/${this.order.id}/update`, this.order);
                 return response;
             },
-
             async submitRealizations(index){
                 const response = await axios.post(`/realizations-logistic/${this.order.realizations[index].id}/update`,
                                                                                         this.order.realizations[index]);
@@ -231,11 +270,11 @@
             }
         },
         watch: {
-            sumProfit: _.throttle ((newSum, oldOld) => {
-                if(newSum < 0){
-                    toast.warning('Заказ с отрицательной прибылью!!!!!', {title: 'Внимание!', timeout: 2500});
+            sumProfit: _.throttle (function(newSum, oldOld){
+                if(newSum < this.minMargin){
+                    toast.warning(`Прибыль заказа меньше минимальной!`, {title: 'Внимание!', timeout: 2500});
                 }
-            }, 2000)
+            }, 2000),
         },
     }
 </script>

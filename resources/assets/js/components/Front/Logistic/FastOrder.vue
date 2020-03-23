@@ -38,7 +38,9 @@
                             :initial_couriers="couriers"
                             :stock_statuses="stockStatuses"
                             :logistic_statuses="logisticStatuses"
-                            @update-order="onUpdateOrder($event)">
+                            @update-order="onUpdateOrder($event)"
+                            :min-margin="minMargin"
+                            :min-margin-product="minMarginProduct">
             </logistic-form>
         </div>
     </modal>
@@ -61,7 +63,15 @@
         props: {
             tableId: null,
             stockStatuses: Array,
-            logisticStatuses: Array
+            logisticStatuses: Array,
+            minMargin: {
+                type: Number,
+                default: 0
+            },
+            minMarginProduct: {
+                type: Number,
+                default: 0
+            }
 
         },
         data() {
