@@ -161,6 +161,13 @@ Route::group(['middleware' =>'auth'], function() {
     Route::post('chat/{chat}/message/create', 'ChatMessageController@create')->name('chat.message.create');
     //Route::get('chat/{id}/messages', 'ChatController@messages')->name('chat.messages');
     Route::get('front-chat-datatable', 'ChatController@datatable')->name('front.chat.datatable');
+
+    //Курьеры
+    Route::group(['namespace' => 'Admin'], function(){
+        Route::resource('couriers', 'CourierController')->except('show');
+        Route::get('couriers-table', 'CourierController@datatable')->name('couriers.datatable');
+    });
+
 });
 
 //Админка
@@ -195,10 +202,6 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     Route::resource('operators', 'OperatorController')->except('show');
     Route::get('operators-table', 'OperatorController@datatable')->name('operators.datatable');
     Route::post('operators-disable-toggle/{operator}', 'OperatorController@toggleDisable')->name('operators.toggle.disable');
-
-    //Курьеры
-    Route::resource('couriers', 'CourierController')->except('show');
-    Route::get('couriers-table', 'CourierController@datatable')->name('couriers.datatable');
 
     //Прайс-листы
     Route::resource('price-types', 'PriceTypeController')->only('index', 'store', 'destroy');

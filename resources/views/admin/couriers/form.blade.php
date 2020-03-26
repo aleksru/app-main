@@ -31,7 +31,7 @@
             @endif
 
             <form id="user-form" role="form" method="post" class="form-horizontal" action="{{
-                isset($courier) ? route('admin.couriers.update', $courier->id) : route('admin.couriers.store')
+                isset($courier) ? route('couriers.update', $courier->id) : route('couriers.store')
             }}">
                 {{ csrf_field() }}
 
@@ -51,7 +51,7 @@
                     <label for="birth_day" class="col-sm-2 control-label">Дата рождения</label>
 
                     <div class="col-sm-10">
-                        <input type="date" class="form-control" name="birth_day"  value="{{ old('birth_day', $courier->birth_day ? $courier->birth_day->toDateString() : '') }}">
+                        <input type="date" class="form-control" name="birth_day"  value="{{ old('birth_day', isset($courier) ? $courier->birth_day->toDateString() : '') }}">
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@
                     <label for="passport_date" class="col-sm-2 control-label">Дата выдачи паспорта</label>
 
                     <div class="col-sm-10">
-                        <input type="date" class="form-control" name="passport_date"  value="{{ old('passport_date', $courier->passport_date ? $courier->passport_date->toDateString() : '') }}">
+                        <input type="date" class="form-control" name="passport_date"  value="{{ old('passport_date', isset($courier) ? $courier->passport_date->toDateString() : '') }}">
                     </div>
                 </div>
 

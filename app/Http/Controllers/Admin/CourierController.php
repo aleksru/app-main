@@ -31,7 +31,7 @@ class CourierController extends Controller
      */
     public function store(CourierRequest $courierRequest)
     {
-        return redirect()->route('admin.couriers.edit', Courier::create($courierRequest->validated())->id)->with(['success' => 'Успешно создан!']);
+        return redirect()->route('couriers.edit', Courier::create($courierRequest->validated())->id)->with(['success' => 'Успешно создан!']);
     }
 
     /**
@@ -52,7 +52,7 @@ class CourierController extends Controller
     {
         $courier->update($courierRequest->validated());
 
-        return redirect()->route('admin.couriers.edit', $courier->id)->with(['success' => 'Успешно обновлен!']);
+        return redirect()->route('couriers.edit', $courier->id)->with(['success' => 'Успешно обновлен!']);
     }
 
     /**
@@ -75,12 +75,12 @@ class CourierController extends Controller
             ->editColumn('actions', function (Courier $courier) {
                 return view('datatable.actions', [
                     'edit' => [
-                        'route' => route('admin.couriers.edit', $courier->id),
+                        'route' => route('couriers.edit', $courier->id),
                     ],
                     'delete' => [
                         'id' => $courier->id,
                         'name' => $courier->name,
-                        'route' => route('admin.couriers.destroy', $courier->id)
+                        'route' => route('couriers.destroy', $courier->id)
                     ]
                 ]);
             })

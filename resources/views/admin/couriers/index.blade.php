@@ -27,7 +27,7 @@
     <div class="box box-warning">
 
         <div class="box-header">
-            <a href="{{route('admin.couriers.create')}}"><button class="btn btn-sm btn-primary pull-right">
+            <a href="{{route('couriers.create')}}"><button class="btn btn-sm btn-primary pull-right">
                     <i class="fa fa-plus"></i> Создать
                 </button></a>
         </div>
@@ -35,7 +35,7 @@
         <div class="box-body">
             @include('datatable.datatable',[
                 'id' => 'couriers-table',
-                'route' => route('admin.couriers.datatable'),
+                'route' => route('couriers.datatable'),
                 'columns' => [
                     'id' => [
                         'name' => 'ID',

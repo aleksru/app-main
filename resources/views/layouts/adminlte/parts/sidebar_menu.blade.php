@@ -103,6 +103,7 @@
                 <li><a href="{{ route('logistics.index') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Общая таблица</span></a></li>
                 <li><a href="{{ route('logistics.simple.orders') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Реализация</span></a></li>
                 <li><a href="{{ route('logistics.deliveries') }}"><i class="fa fa-truck" aria-hidden="true"></i> <span>Периоды доставки</span></a></li>
+                <li><a href="{{ route('couriers.index') }}"><i class="fa fa-street-view" aria-hidden="true"></i> <span>Курьеры</span> </a></li>
             </ul>
         </li>
     @endcan
@@ -144,7 +145,7 @@
                         </li>
                         <li><a href="{{ route('admin.suppliers.index') }}"><i class="fa fa-shopping-bag" aria-hidden="true"></i> <span>Поставщики</span> </a></li>
                         <li><a href="{{ route('admin.operators.index') }}"><i class="fa fa-headphones" aria-hidden="true"></i> <span>Операторы</span> </a></li>
-                        <li><a href="{{ route('admin.couriers.index') }}"><i class="fa fa-street-view" aria-hidden="true"></i> <span>Курьеры</span> </a></li>
+                        <li><a href="{{ route('couriers.index') }}"><i class="fa fa-street-view" aria-hidden="true"></i> <span>Курьеры</span> </a></li>
                         <li><a href="{{ route('admin.price-types.index') }}"><i class="fa fa-money" aria-hidden="true"></i> <span>Прайс-листы</span> </a></li>
                         <li><a href="{{ route('admin.delivery-types.index') }}"><i class="fa fa-car" aria-hidden="true"></i> <span>Типы доставки</span> </a></li>
                         <li><a href="{{ route('admin.stock.index') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Склад</span> </a></li>
