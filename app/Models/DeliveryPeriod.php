@@ -18,6 +18,11 @@ class DeliveryPeriod extends Model
 
     public function getPeriodFullAttribute()
     {
-        return $this->timeFrom . '-' . $this->timeTo . ' ' . $this->period;
+        return $this->getPeriodTextAttribute() . ' ' . $this->period;
+    }
+
+    public function getPeriodTextAttribute()
+    {
+        return $this->timeFrom . '-' . $this->timeTo;
     }
 }

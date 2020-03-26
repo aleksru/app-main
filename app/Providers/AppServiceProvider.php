@@ -10,7 +10,10 @@ use App\Models\Realization;
 use App\Observers\LogObserver;
 use App\Observers\OrderObserver;
 use App\Order;
+use App\Services\Docs\DomPdfService;
+use App\Services\Docs\PdfServiceInterface;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
@@ -29,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
        $this->registerObservers();
        $this->registerViewComposers();
         Paginator::defaultView('vendor.pagination.default');
+        App::bind(PdfServiceInterface::class, DomPdfService::class);
     }
 
     /**

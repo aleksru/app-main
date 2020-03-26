@@ -65,6 +65,13 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('courier-obligation/{courier}', 'DocumentController@warranty')->name('obligation');
     });
 
+    //документы новые
+    Route::group( ['prefix' => 'documents', 'as' => 'documents.', 'namespace' => 'Documents'], function (){
+        Route::get('voucher', 'VoucherController@get')->name('voucher.get');
+        Route::get('voucher/order/{order}/invoice', 'VoucherController@orderInvoice')->name('order.invoice.get');
+        Route::get('voucher/order/{order}/delivery', 'VoucherController@orderDelivery')->name('order.delivery.get');
+    });
+
     //Отчеты
     Route::group( ['prefix' => 'reports', 'as' => 'reports.'], function (){
         Route::get('operators', 'ReportController@operators')->name('operators');
@@ -251,6 +258,12 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     //Юр лицо
     Route::get('corporate-info', 'CorporateInfoController@index')->name('corporate-info.index');
     Route::post('corporate-info', 'CorporateInfoController@store')->name('corporate-info.store');
+    Route::get('delivery-info', 'CorporateInfoController@delivery')->name('delivery-info.index');
+    Route::post('delivery-info', 'CorporateInfoController@deliveryStore')->name('delivery-info.store');
+
+    //Гарантийные тексты
+    Route::get('warranty-text', 'CorporateInfoController@indexText')->name('warranty-text.index');
+    Route::post('warranty-text', 'CorporateInfoController@storeText')->name('warranty-text.store');
 
     //Магазины апи
     Route::group( ['prefix' => 'remote-store', 'as' => 'remote-store.', 'namespace' => 'Stores'], function (){

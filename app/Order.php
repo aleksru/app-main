@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Enums\ProductCategoryEnums;
+use App\Enums\TextTypeEnums;
 use App\Models\City;
 use App\Models\Courier;
 use App\Models\DeliveryPeriod;
@@ -13,6 +15,7 @@ use App\Models\Metro;
 use App\Models\OtherStatus;
 use App\Models\Realization;
 use App\Models\Traits\HasSms;
+use App\Services\Docs\Client\VoucherData;
 use App\Services\Quickrun\Orders\QuickSetOrderData;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -435,5 +438,64 @@ class Order extends Model
     public function call()
     {
         return $this->hasOne(ClientCall::class, 'entry_id', 'entry_id');
+    }
+
+    public function getStringCustomerInfo()
+    {
+        $data = [
+            $this->client->name,
+            'Телефон' => $this->client->all_phones->implode(', '),
+            'Адрес' => $this->full_address,
+            'Время' => $this->deliveryPeriod ? $this->deliveryPeriod->period_text : null
+        ];
+        $data = array_filter($data);
+        $result = '';
+        foreach ($data as $key => $value){
+            if($key){
+                $result .= $key . ': ' . $value . '. ';
+            }else{
+                $result .= $value . '. ';
+            }
+
+        }
+
+        return $result;
+    }
+
+    public function isWithDelivery() : bool
+    {
+        return $this->products->contains(function (Product $value) {
+            return $value->isDelivery();
+        });
+    }
+
+    public function voucherDataFactory() : VoucherData
+    {
+        $voucher = new VoucherData();
+        $voucher->setNumberOrder($this->id);
+        $voucher->setDateDelivery($this->date_delivery);
+        $voucher->setRealizations($this->realizations->reject(function ($value, $key) {
+            return $value->product->isDelivery();
+        })->all());
+        $voucher->setClientInfo($this->getStringCustomerInfo());
+        $voucher->setCorporateInfo(get_string_corp_info());
+        $voucher->setWarrantyText(setting(TextTypeEnums::VOUCHER_FULL) ?? '');
+
+        return $voucher;
+    }
+
+    public function voucherDeliveryDataFactory() : VoucherData
+    {
+        $voucher = new VoucherData();
+        $voucher->setNumberOrder($this->id);
+        $voucher->setDateDelivery($this->date_delivery);
+        $voucher->setRealizations($this->realizations->filter(function ($value, $key) {
+            return $value->product->isDelivery();
+        })->all());
+        $voucher->setClientInfo($this->getStringCustomerInfo());
+        $voucher->setCorporateInfo(get_string_delivery_corp_info());
+        $voucher->setWarrantyText(setting(TextTypeEnums::DELIVERY_FULL) ?? '');
+
+        return $voucher;
     }
 }

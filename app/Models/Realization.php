@@ -33,6 +33,11 @@ class Realization extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function getStringProductName()
+    {
+        return $this->product->product_name;
+    }
+
     /**
      * Поставщик
      *

@@ -104,4 +104,9 @@ class Product extends Model
         return $this->type == ProductType::TYPE_PRODUCT && preg_match('/Mi Band/', $this->product_name);
     }
 
+    public function isDelivery() : bool
+    {
+        return $this->category == ProductCategoryEnums::DELIVERY;
+    }
+
 }

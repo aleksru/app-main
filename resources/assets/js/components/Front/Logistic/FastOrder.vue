@@ -23,7 +23,7 @@
         </div>
         <div class="box-body">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <span class="badge bg-blue" style="font-size: 15px;padding: 5px;margin-right: 5px;margin-bottom: 5px">
                         В заказе:
                     </span>
@@ -31,6 +31,15 @@
                           style="font-size: 15px;padding: 5px;margin-right: 5px;margin-bottom: 5px">
                         {{user.name}}
                     </span>
+                </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-warning pull-right" @click.prevent="onBtnInvoice">
+                        <i class="fa fa-file-text"></i> Чек товар
+                    </button>
+                    <button class="btn btn-success pull-right" @click.prevent="onBtnDelivery">
+                        <i class="fa fa-file-text-o"></i> Чек доставка
+                        </button>
                 </div>
             </div>
             <logistic-form  :initial_order="order"
@@ -87,6 +96,14 @@
             beforeClose (event) {
                 this.editing_order = [];
                 this.leaveTableChannel();
+            },
+
+            onBtnInvoice(){
+                window.open(`/documents/voucher/order/${this.order.id}/invoice`)
+            },
+
+            onBtnDelivery(){
+                window.open(`/documents/voucher/order/${this.order.id}/delivery`)
             },
 
             async getOrdersDetails(orderId) {

@@ -73,3 +73,52 @@ if (! function_exists('reduction_string')) {
         return implode(' ', $words);
     }
 }
+
+
+if (! function_exists('get_string_corp_info')) {
+    /**
+     * @return string
+     */
+    function get_string_corp_info()
+    {
+//  "name" => "Название организации"
+//  "inn" => "ИНН"
+//  "kpp" => "КПП"
+//  "ogrn" => "ОГРН"
+//  "address" => "Адрес организации"
+//  "gendir" => "Генеральный директор"
+        $data = setting('corporate');
+        $result = '';
+        foreach ($data as $key => $value){
+            if(!empty($value)){
+                $result .= \App\Enums\CorporateInfoEnums::getDescriptionForField($key) . " " . $value . ", ";
+            }
+        }
+
+        return $result;
+    }
+}
+
+if (! function_exists('get_string_delivery_corp_info')) {
+    /**
+     * @return string
+     */
+    function get_string_delivery_corp_info()
+    {
+//  "name" => "Название организации"
+//  "inn" => "ИНН"
+//  "kpp" => "КПП"
+//  "ogrn" => "ОГРН"
+//  "address" => "Адрес организации"
+//  "gendir" => "Генеральный директор"
+        $data = setting('delivery');
+        $result = '';
+        foreach ($data as $key => $value){
+            if(!empty($value)){
+                $result .= \App\Enums\DeliveryInfoEnums::getDescriptionForField($key) . " " . $value . ", ";
+            }
+        }
+
+        return $result;
+    }
+}
