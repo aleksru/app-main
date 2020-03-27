@@ -125,7 +125,7 @@
             },
 
             async getCouriers(){
-                let response = await axios.get('/courier/get');
+                let response = await axios.get(`/courier/order/${this.order.id}/get`);
                 this.couriers = response.data;
 
                 return response.data;
@@ -135,6 +135,7 @@
                 try{
                     let response = await this.getOrdersDetails(orderId);
                     this.order = response.data;
+                    this.getCouriers();
                     this.channelOrder();
                     this.showModal();
                 }catch(e){
@@ -190,7 +191,6 @@
         mounted() {
             (async () => {
                 await this.getSuppliers();
-                await this.getCouriers();
             })();
 
             $(`#${this.tableId}`).on( 'draw.dt', () => {

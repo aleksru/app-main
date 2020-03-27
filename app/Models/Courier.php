@@ -22,4 +22,9 @@ class Courier extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function status()
+    {
+        return $this->belongsTo(CourierStatus::class, 'courier_status_id', 'id');
+    }
 }

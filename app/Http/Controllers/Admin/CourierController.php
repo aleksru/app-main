@@ -71,7 +71,7 @@ class CourierController extends Controller
      */
     public function datatable()
     {
-        return datatables() ->of(Courier::query())
+        return datatables() ->of(Courier::query()->with('status'))
             ->editColumn('actions', function (Courier $courier) {
                 return view('datatable.actions', [
                     'edit' => [
@@ -83,6 +83,9 @@ class CourierController extends Controller
                         'route' => route('couriers.destroy', $courier->id)
                     ]
                 ]);
+            })
+            ->editColumn('status', function (Courier $courier) {
+                return $courier->status ? $courier->status->name : '';
             })
             ->rawColumns(['actions'])
             ->make(true);

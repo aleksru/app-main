@@ -104,6 +104,7 @@
                 <li><a href="{{ route('logistics.simple.orders') }}"><i class="fa fa-random" aria-hidden="true"></i> <span>Реализация</span></a></li>
                 <li><a href="{{ route('logistics.deliveries') }}"><i class="fa fa-truck" aria-hidden="true"></i> <span>Периоды доставки</span></a></li>
                 <li><a href="{{ route('couriers.index') }}"><i class="fa fa-street-view" aria-hidden="true"></i> <span>Курьеры</span> </a></li>
+                <li><a href="{{ route('courier-statuses.index') }}"><i class="fa fa-street-view" aria-hidden="true"></i> <span>Статусы курьера</span> </a></li>
             </ul>
         </li>
     @endcan

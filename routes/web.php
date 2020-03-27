@@ -96,6 +96,7 @@ Route::group(['middleware' =>'auth'], function() {
 
     //Курьеры
     Route::get('courier/get/{courier?}', 'CourierController@get')->name('courier.get');
+    Route::get('courier/order/{order}/get', 'CourierController@forOrder')->name('courier.order.get');
 
     //Логистика
     Route::group(['prefix' => 'logistics', 'as' => 'logistics.'], function(){
@@ -167,6 +168,10 @@ Route::group(['middleware' =>'auth'], function() {
         Route::resource('couriers', 'CourierController')->except('show');
         Route::get('couriers-table', 'CourierController@datatable')->name('couriers.datatable');
     });
+
+    //Статусы курьера
+    Route::resource('courier-statuses', 'CourierStatusController')->except('show');
+    Route::get('courier-statuses-table', 'CourierStatusController@datatable')->name('courier-statuses.datatable');
 
 });
 

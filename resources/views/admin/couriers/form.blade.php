@@ -94,6 +94,17 @@
                         <input type="text" class="form-control" name="description" placeholder="Описание" value="{{ old('description', $courier->description ?? '') }}">
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="email" class="col-sm-2 control-label">Статус</label>
+
+                    <div class="col-sm-10">
+                        <select class="js-example-courier-status-single form-control" name="courier_status_id">
+                            <option value="{{ $courier->status->id ?? null }}" selected>{{ $courier->status->name ?? 'Не выбран' }}</option>
+                            <option value="{{ null }}">  </option>
+                        </select>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="box-footer">
@@ -106,6 +117,14 @@
 
 @push('scripts')
     <script>
+        let courierStatuses = {!!   json_encode(\App\Models\CourierStatus::select('id', 'name as text')->get()->toArray()) !!}
+        $(function() {
+            $('.js-example-courier-status-single').select2({
+                data: courierStatuses,
+                allowClear: true,
+                placeholder: "Выберите статус...",
+            });
+        });
         @if (session()->has('success'))
             toast.success('{{ session()->get('success') }}')
         @endif

@@ -3,7 +3,7 @@
     <section class="content-header">
         <h1>
             Админ панель
-            <small>Курьеры</small>
+            <small>Статусы курьеров</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
@@ -27,15 +27,15 @@
     <div class="box box-warning">
 
         <div class="box-header">
-            <a href="{{route('couriers.create')}}"><button class="btn btn-sm btn-primary pull-right">
+            <a href="{{route('courier-statuses.create')}}"><button class="btn btn-sm btn-primary pull-right">
                     <i class="fa fa-plus"></i> Создать
                 </button></a>
         </div>
 
         <div class="box-body">
             @include('datatable.datatable',[
-                'id' => 'couriers-table',
-                'route' => route('couriers.datatable'),
+                'id' => 'couriers-statuses-table',
+                'route' => route('courier-statuses.datatable'),
                 'columns' => [
                     'id' => [
                         'name' => 'ID',
@@ -47,15 +47,10 @@
                         'width' => '10%',
                         'searchable' => true,
                     ],
-                    'description' => [
-                        'name' => 'Описание',
+                    'max_sum_order' => [
+                        'name' => 'Макс сумма заказа',
                         'width' => '10%',
                         'searchable' => true,
-                    ],
-                    'status' => [
-                        'name' => 'Статус',
-                        'width' => '10%',
-                        'searchable' => false,
                     ],
                     'actions' => [
                         'name' => 'Действия',
