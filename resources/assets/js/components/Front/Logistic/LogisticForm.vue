@@ -116,8 +116,13 @@
                                     <input :disabled="!showImeiForProduct(index)" type="text" class="form-control" v-model="order.realizations[index].imei">
                                 </td>
                                 <td style="width: 7%">
-                                    <!--//price_opt-->
-                                    <input type="number" min="0" step="50" class="form-control" v-model="order.realizations[index].price_opt">
+                                    <!--//price_opt //v-model.number="order.realizations[index].price_opt"-->
+                                    <input v-show="!isService(index)"
+                                           type="number"
+                                           class="form-control"
+                                           @focus="order.realizations[index].price_opt === 0 ? order.realizations[index].price_opt = null : ''"
+                                           @blur="order.realizations[index].price_opt === null ? order.realizations[index].price_opt = 0 : ''"
+                                           v-model.number="order.realizations[index].price_opt">
                                     <span v-if="isProduct(index)"
                                           v-show="!productMarginCheckByProductType(index)"
                                           class="help-block"
@@ -162,7 +167,13 @@
         </div>
     </div>
 </template>
-
+<style scoped>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin:0;
+    }
+</style>
 
 <script>
     const PRODUCT_TYPE = 'PRODUCT';
@@ -194,6 +205,12 @@
         methods: {
             isProduct(i){
                 return this.order.realizations[i].product_type === PRODUCT_TYPE
+            },
+            isAccessory(i){
+                return this.order.realizations[i].product_type === ACCESSORY_TYPE
+            },
+            isService(i){
+                return this.order.realizations[i].product_type === SERVICE_TYPE
             },
 
             showSuppliersForProduct(index){
