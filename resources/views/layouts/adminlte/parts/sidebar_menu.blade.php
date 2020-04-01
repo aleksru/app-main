@@ -89,7 +89,17 @@
     @endcan
 
     @can('view', App\Models\StockUser::class)
-        <li><a href="{{ route('stock.index') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Склад</span></a></li>
+        <li class="treeview">
+            <a href="#"><i class="fa fa-recycle" aria-hidden="true"></i><span>Склад</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="{{ route('stock.index') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Склад</span></a></li>
+                <li><a href="{{ route('admin.suppliers.index') }}"><i class="fa fa-shopping-bag" aria-hidden="true"></i> <span>Поставщики</span> </a></li>
+            </ul>
+        </li>
     @endcan
 
     @can('view', App\Models\Logist::class)
@@ -144,7 +154,7 @@
                                 <li><a href="{{ route('admin.denial-reasons.index') }}"><i class="fa fa-hand-paper-o" aria-hidden="true"></i> <span>Причины отказа</span> </a></li>
                             </ul>
                         </li>
-                        <li><a href="{{ route('admin.suppliers.index') }}"><i class="fa fa-shopping-bag" aria-hidden="true"></i> <span>Поставщики</span> </a></li>
+
                         <li><a href="{{ route('admin.operators.index') }}"><i class="fa fa-headphones" aria-hidden="true"></i> <span>Операторы</span> </a></li>
                         <li><a href="{{ route('couriers.index') }}"><i class="fa fa-street-view" aria-hidden="true"></i> <span>Курьеры</span> </a></li>
                         <li><a href="{{ route('admin.price-types.index') }}"><i class="fa fa-money" aria-hidden="true"></i> <span>Прайс-листы</span> </a></li>

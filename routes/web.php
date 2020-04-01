@@ -175,6 +175,12 @@ Route::group(['middleware' =>'auth'], function() {
 
 });
 
+Route::group(['middleware' =>['auth', 'role:head_stock'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function()
+{    //Поставщики
+    Route::resource('suppliers', 'SupplierController')->except('show');
+    Route::get('suppliers-table', 'SupplierController@datatable')->name('suppliers.datatable');
+});
+
 //Админка
 Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
     //Пользователи
@@ -198,10 +204,6 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     Route::resource('order-statuses', 'OrderStatusesController')->except('show');
     Route::get('order-statuses-table', 'OrderStatusesController@datatable')->name('order-statuses.datatable');
     Route::resource('other-statuses', 'OtherStatusController')->except('show', 'edit', 'update');
-
-    //Поставщики
-    Route::resource('suppliers', 'SupplierController')->except('show');
-    Route::get('suppliers-table', 'SupplierController@datatable')->name('suppliers.datatable');
 
     //Операторы
     Route::resource('operators', 'OperatorController')->except('show');

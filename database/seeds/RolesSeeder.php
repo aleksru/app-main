@@ -12,6 +12,7 @@ class RolesSeeder extends Seeder
         ['name' =>'change_price_list', 'description' =>'Загрузка прайс-листа'],
         ['name' =>'view_stock', 'description' =>'Просмотр склада'],
         ['name' =>'view_logistics', 'description' =>'Просмотр логистики'],
+        ['name' => \App\Enums\RoleOrderEnums::HEAD_STOCK, 'description' =>'Начальник склада'],
     ];
 
     public function run()
