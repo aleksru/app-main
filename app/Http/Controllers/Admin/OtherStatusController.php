@@ -25,6 +25,26 @@ class OtherStatusController extends Controller
     }
 
     /**
+     * @param OtherStatus $otherStatus
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit(OtherStatus $otherStatus)
+    {
+        return view('admin.other_statuses.edit', compact('otherStatus'));
+    }
+
+    /**
+     * @param OtherStatus $otherStatus
+     * @param OtherStatusRequest $otherStatusRequest
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(OtherStatus $otherStatus, OtherStatusRequest $otherStatusRequest)
+    {
+        $otherStatus->update($otherStatusRequest->validated());
+        return redirect()->route('admin.other-statuses.edit', compact('otherStatus'))->with(['success' => 'Успешно обновлен!']);
+    }
+
+    /**
      * @param OtherStatusRequest $otherStatusRequest
      * @return \Illuminate\Http\RedirectResponse
      */

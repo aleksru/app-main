@@ -133,7 +133,7 @@
                                                 <td>
                                                     @include('datatable.actions', [
                                                         'edit' => [
-                                                            'route' => null,
+                                                            'route' => route('admin.other-statuses.edit', $stockStatus->id),
                                                         ],
                                                         'delete' => [
                                                         'id' => $stockStatus->id,
@@ -206,7 +206,7 @@
                                                 <td>
                                                     @include('datatable.actions', [
                                                         'edit' => [
-                                                            'route' => null,
+                                                            'route' => route('admin.other-statuses.edit', $logisticStatus->id),
                                                         ],
                                                         'delete' => [
                                                         'id' => $logisticStatus->id,

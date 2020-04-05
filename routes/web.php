@@ -180,6 +180,10 @@ Route::group(['middleware' =>['auth', 'role:head_stock'], 'prefix' => 'admin', '
     Route::resource('suppliers', 'SupplierController')->except('show');
     Route::get('suppliers-table', 'SupplierController@datatable')->name('suppliers.datatable');
 });
+Route::group(['middleware' =>['auth', 'role:view_logistics'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function()
+{    //Поставщики
+    Route::resource('other-statuses', 'OtherStatusController')->except('show');
+});
 
 //Админка
 Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
