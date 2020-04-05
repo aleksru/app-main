@@ -70,12 +70,12 @@
                         ],
                         'status_stock' => [
                             'name' => 'Статус Склад',
-                            'width' => '3%',
+                            'width' => '5%',
                             'searchable' => true,
                         ],
                         'status_logist' => [
                             'name' => 'Статус Логист',
-                            'width' => '3%',
+                            'width' => '5%',
                             'searchable' => true,
                         ],
                         'address' => [
