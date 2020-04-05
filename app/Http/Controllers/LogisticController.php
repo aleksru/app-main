@@ -13,6 +13,7 @@ use App\Models\Courier;
 use App\Models\FailDeliveryDate;
 use App\Models\Logist;
 use App\Models\OrderStatus;
+use App\Models\OtherStatus;
 use App\Models\Realization;
 use App\Order;
 use App\Repositories\DeliveryPeriodsRepository;
@@ -60,9 +61,19 @@ class LogisticController extends Controller
         $couriersSelect[] = ['id' => 0, 'text' => 'Без курьера'];
         $couriersSelect = array_merge($couriersSelect, Courier::select('id', 'name as text')->orderBy('name')->get()->toArray());
 
+        $statusesStockSelect = [];
+        $statusesStockSelect[] = ['id' => 0, 'text' => 'Без статуса'];
+        $statusesStockSelect = array_merge($statusesStockSelect, OtherStatus::typeStockStatuses()->select('id', 'name as text')->orderBy('name')->get()->toArray());
+
+        $statusesLogisticSelect = [];
+        $statusesLogisticSelect[] = ['id' => 0, 'text' => 'Без статуса'];
+        $statusesLogisticSelect = array_merge($statusesLogisticSelect, OtherStatus::typeLogisticStatuses()->select('id', 'name as text')->orderBy('name')->get()->toArray());
+
         return view('front.logistic.simple_orders', [
-            'routeDatatable' => route('logistics.simple.orders.datatable'),
-            'couriersSelect'  => $couriersSelect
+            'routeDatatable'         => route('logistics.simple.orders.datatable'),
+            'couriersSelect'         => $couriersSelect,
+            'statusesStockSelect'    => $statusesStockSelect,
+            'statusesLogisticSelect' => $statusesLogisticSelect
         ]);
     }
 
@@ -91,11 +102,13 @@ class LogisticController extends Controller
             'operator',
             'products',
             'logisticStatus',
-            'realizations'
+            'realizations',
+            'stockStatus'
         )->selectRaw('orders.*, delivery_periods.timeFrom')
             ->leftJoin('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
             ->where('orders.date_delivery', '>=', Carbon::now()->subDays(7)->toDateString())
             ->whereIn('orders.status_id', $statusIds)
+            ->orderBy('orders.updated_at', 'DESC')
             ->orderBy('orders.date_delivery', 'ASC')
             ->orderBy('delivery_periods.timeFrom', 'ASC');
 
@@ -141,6 +154,23 @@ class LogisticController extends Controller
                     }
                 }
             })
+            ->filterColumn('status_stock', function ($query, $keyword) use ($orders){
+                if((int)$keyword > 0){
+                    $orders->leftJoin('other_statuses', 'orders.stock_status_id', '=', 'other_statuses.id');
+                    return $query->where('other_statuses.id', $keyword);
+                }else{
+                    return $query->whereNull('orders.stock_status_id');
+                }
+            })
+            ->filterColumn('status_logist', function ($query, $keyword) use ($orders){
+                if((int)$keyword > 0){
+                    $orders->leftJoin('other_statuses as other_statuses_logist', 'orders.logistic_status_id', '=', 'other_statuses_logist.id');
+                    return $query->where('other_statuses_logist.id', $keyword);
+                }else{
+                    return $query->whereNull('orders.logistic_status_id');
+                }
+            })
+
 //            ->editColumn('operator', function (Order $order){
 //                return $order->operator ? $order->operator->name : '';
 //            })
@@ -197,9 +227,18 @@ class LogisticController extends Controller
                         view('front.logistic.parts.imei_table', ['realizations' => $order->realizations->pluck('imei')])
                         : "";
             })
-            ->rawColumns(['btn_details', 'imei', 'products'])
+            ->editColumn('status_stock', function (Order $order) {
+                return $order->stockStatus ?
+                    view('front.logistic.parts.other_status_cell', ['status' => $order->stockStatus]) : "";
+            })
+
+            ->editColumn('status_logist', function (Order $order) {
+                return $order->logisticStatus ?
+                    view('front.logistic.parts.other_status_cell', ['status' => $order->logisticStatus]) : "";
+            })
+            ->rawColumns(['btn_details', 'imei', 'products', 'status_stock', 'status_logist'])
             ->setRowClass(function (Order $order) {
-                $class = ($order->logisticStatus ? ' bg-' . $order->logisticStatus->color : '');
+                $class = ($order->stockStatus ? ' bg-' . $order->stockStatus->color : '');
 
                 return $class;
             })
@@ -274,11 +313,16 @@ class LogisticController extends Controller
     }
 
     /**
+     * @param Order|null $order
      * @return \Illuminate\Http\JsonResponse
      */
-    public function onLogistTableUpdate()
+    public function onLogistTableUpdate(Order $order = null)
     {
-        event(new LogistTableUpdateEvent());
+        if($order){
+            event(new LogistTableUpdateEvent($order));
+        }else{
+            event(new LogistTableUpdateEvent());
+        }
 
         return response()->json(['status' => 'send']);
     }

@@ -15,6 +15,20 @@ class LogistTableUpdateEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * @var Order
+     */
+    public $order;
+
+    /**
+     * LogistTableUpdateEvent constructor.
+     * @param Order|null $order
+     */
+    public function __construct(Order $order = null)
+    {
+        $this->order = $order;
+    }
+
 
     /**
      * Get the channels the event should broadcast on.

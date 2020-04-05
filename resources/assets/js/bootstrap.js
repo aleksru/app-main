@@ -26,7 +26,7 @@ try {
     require('jquery-datatables-checkboxes');
     require ('admin-lte');
     require('jquery-slimscroll');
-    require('select2');
+    require('select2/dist/js/select2.full.js');
     require('jquery-mask-plugin');
     require('air-datepicker');
 } catch (e) {}

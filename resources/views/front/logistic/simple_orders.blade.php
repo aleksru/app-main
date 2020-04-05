@@ -53,6 +53,11 @@
                             'width' => '1%',
                             'searchable' => true,
                         ],
+                        'comment' => [
+                            'name' => 'Коммент КЦ',
+                            'width' => '1%',
+                            'searchable' => false,
+                        ],
                         'comment_stock' => [
                             'name' => 'Коммент СКЛАД',
                             'width' => '3%',
@@ -62,6 +67,16 @@
                             'name' => 'Коммент ЛОГ',
                             'width' => '3%',
                             'searchable' => false,
+                        ],
+                        'status_stock' => [
+                            'name' => 'Статус Склад',
+                            'width' => '3%',
+                            'searchable' => true,
+                        ],
+                        'status_logist' => [
+                            'name' => 'Статус Логист',
+                            'width' => '3%',
+                            'searchable' => true,
                         ],
                         'address' => [
                             'name' => 'Адрес',
@@ -192,6 +207,14 @@
                 className: 'js-example-couriers-single',
                 data: []
             },
+            status_stock: {
+                className: 'js-example-status-stock-single',
+                data: []
+            },
+            status_logist: {
+                className: 'js-example-status-logist-single',
+                data: []
+            },
         };
         /**
          *обновление таблицы
@@ -203,6 +226,15 @@
                 rewriteSearchColumns();
                 $('.js-example-couriers-single').select2({
                     data: {!! json_encode($couriersSelect) !!},
+                    dropdownCssClass: 'fs-12',
+                });
+                $('.js-example-status-stock-single').select2({
+                    data: {!! json_encode($statusesStockSelect) !!},
+                    dropdownCssClass: 'fs-12',
+                });
+                $('.js-example-status-logist-single').select2({
+                    data: {!! json_encode($statusesLogisticSelect) !!},
+                    dropdownCssClass: 'fs-12',
                 });
                 let tableOrders = $('#orders-table').DataTable();
                 const indDateDelivery = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'date_delivery');

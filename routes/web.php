@@ -108,7 +108,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('deliveries', 'LogisticController@deliveries')->name('deliveries');
         Route::post('delivery-toggle', 'LogisticController@deliveryToggle')->name('delivery.toggle');
         Route::get('delivery-widget', 'LogisticController@deliveriesForWidget')->name('deliveries.widget');
-        Route::get('on-update-logist-table', 'LogisticController@onLogistTableUpdate')->name('on.update.logist-table');
+        Route::get('on-update-logist-table/{order?}', 'LogisticController@onLogistTableUpdate')->name('on.update.logist-table');
         Route::get('send-google-tables/{order}', 'LogisticController@sendGoogleTables')->name('send.google-tables');
     });
 

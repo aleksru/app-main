@@ -96,7 +96,7 @@
             },
 
             async createEventTableUpdate(){
-                let response = await axios.get('/logistics/on-update-logist-table');
+                let response = await axios.get(`/logistics/on-update-logist-table/${this.order.id}`);
 
                 return response.data;
             },
@@ -114,6 +114,7 @@
             },
 
             hideModal () {
+                this.order = {};
                 this.$modal.hide('products');
             },
 
@@ -230,6 +231,15 @@
                 })
                 .listen('LogistTableUpdateEvent', (e) => {
                     $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
+                    if(e.order){
+                        toast.info(`Заказ #${e.order.id} обновлен`);
+                        if(this.order.id === e.order.id) {
+                            (async () => {
+                                let newOrder = await this.getOrdersDetails(this.order.id);
+                                this.order = Object.assign(this.order, newOrder.data);
+                            })();
+                        }
+                    }
                 });
         },
     }
