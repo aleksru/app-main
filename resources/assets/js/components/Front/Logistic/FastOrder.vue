@@ -227,6 +227,9 @@
                     $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
                 })
                 .listen('OrderConfirmedUpdateEvent', (e) => {
+                    if(e.order){
+                        toast.info(`Заказ #${e.order.id} обновлен`);
+                    }
                     $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
                 })
                 .listen('UpdateRealizationsConfirmedOrderEvent', (e) => {
