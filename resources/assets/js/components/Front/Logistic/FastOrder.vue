@@ -226,6 +226,9 @@
                 .listen('OrderConfirmedEvent', (e) => {
                     $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
                 })
+                .listen('OrderConfirmedUpdateEvent', (e) => {
+                    $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
+                })
                 .listen('UpdateRealizationsConfirmedOrderEvent', (e) => {
                     $(`#${this.tableId}`).DataTable().ajax.reload(null, false);
                 })

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderConfirmedUpdateEvent;
 use App\Events\OrderUpdateRealizationsEvent;
 use App\Events\UpdatedOrderEvent;
 use App\Events\UpdateRealizationsConfirmedOrderEvent;
@@ -181,6 +182,9 @@ class OrderController extends Controller
 
         Realization::destroy($arrDiff);
         event(new OrderUpdateRealizationsEvent($order));
+        if($order->isConfirmed()){
+            event(new OrderConfirmedUpdateEvent($order));
+        }
 
         return response()->json(['success' => 'Товары успешно обновлены!', 'products' => $order->realizations()->with('product', 'supplier')->get()]);
     }
