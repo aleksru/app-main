@@ -49,12 +49,9 @@
 
                     <div class="col-sm-4">
                         <select class="form-control" name="color">
-                            <option value="{{ old('color', $otherStatus->color ?? '') }}"
-                                    class="bg-{{ old('color', $otherStatus->color ?? '') }}"
-                                    selected>{{ old('color', $otherStatus->color ?? '') }}
-                            </option>
+                            <option value="" class="">Нет</option>
                             @foreach(get_class_colors() as $color)
-                                <option value="{{ $color }}" class="bg-{{$color}}">{{$color}}</option>
+                                <option value="{{ $color }}" class="bg-{{$color}}" @if($color == $otherStatus->color) selected @endif>{{$color}}</option>
                             @endforeach
                         </select>
                     </div>
