@@ -10,7 +10,17 @@
     @endcan
 
     @can('index', App\Product::class)
-        <li><a href="{{ route('price-lists.index') }}"><i class="fa fa-credit-card"></i> <span>Прайс-листы</span></a></li>
+        <li class="treeview">
+            <a href="#"><i class="fa fa-book"></i> <span>Работа товарами</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="{{ route('price-lists.index') }}"><i class="fa fa-credit-card"></i> <span>Прайс-листы</span></a></li>
+                <li><a href="{{ route('admin.products.index') }}"><i class="fa fa-archive" aria-hidden="true"></i> <span>Товары</span> </a></li>
+            </ul>
+        </li>
     @endcan
 
     @can('view', App\Order::class)

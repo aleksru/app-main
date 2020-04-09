@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\ProductCategoryEnums;
 use App\Enums\ProductType;
 use App\Models\Realization;
 use App\Models\Supplier;
@@ -87,6 +88,10 @@ class Product extends Model
             default:
                 return '';
         }
+    }
+
+    public function getTextCategory(){
+        return ProductCategoryEnums::getCategoriesDescription()[$this->category] ?? '';
     }
 
     public function isAirPods() : bool

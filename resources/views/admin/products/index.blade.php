@@ -42,6 +42,11 @@
                         'width' => '1%',
                         'searchable' => false,
                     ],
+                    'article' => [
+                        'name' => 'article',
+                        'width' => '1%',
+                        'searchable' => true,
+                    ],
                     'product_name' => [
                         'name' => 'Товар',
                         'width' => '10%',
@@ -49,12 +54,17 @@
                     ],
                     'type' => [
                         'name' => 'Тип',
-                        'width' => '10%',
+                        'width' => '5%',
+                        'searchable' => false,
+                    ],
+                    'category' => [
+                        'name' => 'Категория',
+                        'width' => '5%',
                         'searchable' => false,
                     ],
                     'actions' => [
                         'name' => 'Действия',
-                        'width' => '5%',
+                        'width' => '10%',
                         'orderable' => 'false'
                     ],
 

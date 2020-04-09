@@ -185,6 +185,15 @@ Route::group(['middleware' =>['auth', 'role:view_logistics'], 'prefix' => 'admin
     Route::resource('other-statuses', 'OtherStatusController')->except('show');
 });
 
+Route::group(['middleware' =>['auth', 'role:change_price_list'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function(){
+    //Товары
+    Route::get('products', 'ProductController@index')->name('products.index');
+    Route::get('products-table', 'ProductController@datatable')->name('products.datatable');
+    Route::post('products-toggle/{product}', 'ProductController@toggleSetType')->name('products.toggle.set-type');
+    Route::post('products-category-toggle/{product}', 'ProductController@toggleSetCategory')->name('products.toggle.category');
+});
+
+
 //Админка
 Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
     //Пользователи
@@ -231,10 +240,11 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
     Route::resource('logists', 'LogistController')->except('show');
     Route::get('logists-table', 'LogistController@datatable')->name('logists.datatable');
 
-    //Товары
-    Route::get('products', 'ProductController@index')->name('products.index');
-    Route::get('products-table', 'ProductController@datatable')->name('products.datatable');
-    Route::post('products-toggle/{product}', 'ProductController@toggleSetType')->name('products.toggle.set-type');
+//    //Товары
+//    Route::get('products', 'ProductController@index')->name('products.index');
+//    Route::get('products-table', 'ProductController@datatable')->name('products.datatable');
+//    Route::post('products-toggle/{product}', 'ProductController@toggleSetType')->name('products.toggle.set-type');
+//    Route::post('products-category-toggle/{product}', 'ProductController@toggleSetCategory')->name('products.toggle.category');
 
     //Юр лицо
     Route::get('corporate-info', 'CorporateInfoController@index')->name('corporate-info.index');

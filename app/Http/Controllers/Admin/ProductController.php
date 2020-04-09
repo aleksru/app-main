@@ -28,9 +28,13 @@ class ProductController extends Controller
             ->editColumn('type', function (Product $product) {
                 return $product->getTextType();
             })
+            ->editColumn('category', function (Product $product) {
+                return $product->getTextCategory();
+            })
             ->editColumn('actions', function (Product $product) {
-                return view('admin.products.parts.toggle', [
-                    'route' => route('admin.products.toggle.set-type', $product->id),
+                return view('admin.products.parts.btn_group_actions', [
+                    'route_toggle' => route('admin.products.toggle.set-type', $product->id),
+                    'route_category' => route('admin.products.toggle.category', $product->id),
                     'id' => $product->id
                 ]);
             })
@@ -54,5 +58,16 @@ class ProductController extends Controller
         $type = $product->getTextType();
 
         return response()->json(['message' => "Тип успешно изменен на {$type}!"]);
+    }
+
+    public function toggleSetCategory(Request $request, Product $product)
+    {
+        if($request->get('type')) {
+            $product->category = $request->get('type');
+            $product->save();
+        }
+        $type = $product->getTextCategory();
+
+        return response()->json(['message' => "Категория изменена {$type}!"]);
     }
 }
