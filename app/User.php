@@ -184,4 +184,11 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'creator_user_id', 'id');
     }
 
+    /**
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole(string $role){
+        return $this->roles->pluck('name')->contains($role);
+    }
 }

@@ -3,6 +3,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\RoleOrderEnums;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Validation\Validator;
@@ -27,7 +28,7 @@ class OrderLogisticRequest extends FormRequest
      */
     public function rules()
     {
-        if(Auth::user()->is_admin) {
+        if(Auth::user()->is_admin || Auth::user()->hasRole(RoleOrderEnums::FULL_LOGISTIC)) {
             return [
                 'courier_id' => 'integer|nullable',
                 'comment_stock' => 'string|nullable',
