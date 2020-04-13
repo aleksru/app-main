@@ -26,11 +26,11 @@
 
     <div class="box box-warning">
 
-        {{--<div class="box-header">--}}
-            {{--<a href="{{route('admin.stock.create')}}"><button class="btn btn-sm btn-primary pull-right">--}}
-                    {{--<i class="fa fa-plus"></i> Создать--}}
-                {{--</button></a>--}}
-        {{--</div>--}}
+        <div class="box-header">
+            <a href="{{route('admin.products.create')}}"><button class="btn btn-sm btn-primary pull-right">
+                    <i class="fa fa-plus"></i> Создать
+                </button></a>
+        </div>
 
         <div class="box-body">
             @include('datatable.datatable',[

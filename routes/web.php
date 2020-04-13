@@ -188,6 +188,8 @@ Route::group(['middleware' =>['auth', 'role:view_logistics'], 'prefix' => 'admin
 Route::group(['middleware' =>['auth', 'role:change_price_list'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function(){
     //Товары
     Route::get('products', 'ProductController@index')->name('products.index');
+    Route::get('products/create', 'ProductController@create')->name('products.create');
+    Route::post('products/store', 'ProductController@store')->name('products.store');
     Route::get('products-table', 'ProductController@datatable')->name('products.datatable');
     Route::post('products-toggle/{product}', 'ProductController@toggleSetType')->name('products.toggle.set-type');
     Route::post('products-category-toggle/{product}', 'ProductController@toggleSetCategory')->name('products.toggle.category');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ProductType;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CreateProductRequest;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -16,6 +17,25 @@ class ProductController extends Controller
     public function index()
     {
         return view('admin.products.index');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create()
+    {
+        return view('admin.products.form');
+    }
+
+    public function store(CreateProductRequest $productRequest)
+    {
+        $data = $productRequest->validated();
+        $article = Product::where('article', 'LIKE', '%'.Product::PREFIX_CUSTOM_PRODUCT.'%')->orderBy('id', 'desc')->first();
+        $article = $article ? ((int)$article->article + 1).Product::PREFIX_CUSTOM_PRODUCT : '1000'.Product::PREFIX_CUSTOM_PRODUCT;
+        $data['article'] = $article;
+        Product::create($data);
+
+        return redirect()->route('admin.products.index');
     }
 
 
