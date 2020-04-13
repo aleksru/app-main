@@ -34,12 +34,8 @@
                     <tbody>
                     <tr v-for="(product, index) in products" :key="product.id">
                         <td>{{ index + 1  }}</td>
-                        <td >
-                            <v-select label="desc"
-                                      :options="initial_product_types"
-                                      index="name"
-                                      v-model="product.product_type">
-                            </v-select>
+                        <td>
+                            <input disabled type="text" class="form-control" :value="getProductDesc(product.product_type)">
                         </td>
                         <!--//Model-->
                         <td > {{ product.product.product_name }} </td>
@@ -87,6 +83,14 @@
             }
         },
         methods: {
+            getProductDesc(type){
+                for(let initType of this.initial_product_types){
+                    if(initType.name === type){
+                        return initType.desc;
+                    }
+                }
+                return '';
+            },
             localSubmit(){
                 this.submit().then((res) => {
                     toast.success(res.success);
