@@ -58,7 +58,7 @@
     <div class="row">
         <div class="col-xs-12">
             <order-form inline-template>
-                <products-table ref="ProductsTable"
+                <products-table-operator ref="ProductsTable"
                                 @submit-form="submit()"
                                 :initial_data="{{ json_encode($order->realizations, true) }}"
                                 :initial_order="{{ json_encode($order->id, true) }}"

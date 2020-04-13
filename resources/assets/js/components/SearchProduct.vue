@@ -17,7 +17,7 @@
                 </div>
             </div>
             <br/>
-            <div class="row" v-show="showCreateProduct">
+            <div class="row" v-if="false">
                 <label for="name" class="col-sm-2 control-label">Создать новый товар</label>
 
                 <div class="col-sm-4">

@@ -67,6 +67,8 @@ Vue.component('Chat', require('./components/Front/Chat/Chat.vue'));
 
 Vue.component('FastOrder', require('./components/Front/Logistic/FastOrder.vue'));
 
+Vue.component('ProductsTableOperator', require('./components/Front/ProductsTableOperator.vue'));
+
 const app = new Vue({
     el: '#app'
 });
