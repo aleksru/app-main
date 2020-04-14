@@ -27,6 +27,114 @@ use Illuminate\Support\Facades\Cache;
 
 class LogisticController extends Controller
 {
+    const COLUMNS_SIMPLE_TABLE = [
+            'date_delivery' => [
+                'name' => 'Дата доставки',
+                'width' => '1%',
+                'searchable' => true,
+            ],
+            'delivery_time' => [
+                'name' => 'Время доставки',
+                'width' => '1%',
+                'searchable' => false,
+                'orderable' => true
+            ],
+            'id' => [
+                'name' => 'Номер заказа',
+                'width' => '1%',
+                'searchable' => true,
+                'orderable' => true
+            ],
+            'comment' => [
+                'name' => 'Коммент КЦ',
+                'width' => '1%',
+                'searchable' => false,
+                'orderable' => true
+            ],
+            'comment_stock' => [
+                'name' => 'Коммент СКЛАД',
+                'width' => '3%',
+                'searchable' => false,
+                'orderable' => true
+            ],
+            'comment_logist' => [
+                'name' => 'Коммент ЛОГ',
+                'width' => '3%',
+                'searchable' => false,
+                'orderable' => true
+            ],
+            'status_stock' => [
+                'name' => 'Статус Склад',
+                'width' => '5%',
+                'searchable' => true,
+                'orderable' => true
+            ],
+            'status_logist' => [
+                'name' => 'Статус Логист',
+                'width' => '5%',
+                'searchable' => true,
+                'orderable' => true
+            ],
+            'address' => [
+                'name' => 'Адрес',
+                'width' => '5%',
+                'searchable' => true,
+                'orderable' => true
+            ],
+            'client_phone' => [
+                'name' => 'Телефон',
+                'width' => '1%',
+                'searchable' => true,
+                'orderable' => true
+            ],
+            'courier_name' => [
+                'name' => 'Курьер',
+                'width' => '6%',
+                'searchable' => true,
+            ],
+
+            'products' => [
+                'name' => 'Товары',
+                'width' => '7%',
+                'searchable' => false,
+                'orderable' => true
+            ],
+
+            'sum_price_opt' => [
+                'name' => 'Закупка',
+                'width' => '1%',
+                'searchable' => false,
+                'orderable' => true
+            ],
+
+            'sum_sales' => [
+                'name' => 'Продажа',
+                'width' => '1%',
+                'searchable' => false,
+                'orderable' => true
+            ],
+
+            'sum_profit' => [
+                'name' => 'Прибыль',
+                'width' => '1%',
+                'searchable' => false,
+                'orderable' => true
+            ],
+
+            'imei' => [
+                'name' => 'IMEI',
+                'width' => '5%',
+                'searchable' => true,
+                'orderable' => true
+            ],
+
+            'btn_details' => [
+                'name' => '-',
+                'width' => '1%',
+                'searchable' => false,
+                'orderable' => true
+            ]
+        ];
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -104,13 +212,14 @@ class LogisticController extends Controller
             'logisticStatus',
             'realizations',
             'stockStatus'
-        )->selectRaw('orders.*, delivery_periods.timeFrom')
+        )->selectRaw('orders.*, delivery_periods.timeFrom, couriers.name as courier_name')
             ->leftJoin('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
+            ->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id')
             ->where('orders.date_delivery', '>=', Carbon::now()->subDays(7)->toDateString())
-            ->whereIn('orders.status_id', $statusIds)
-            ->orderBy('orders.updated_at', 'DESC')
-            ->orderBy('orders.date_delivery', 'ASC')
-            ->orderBy('delivery_periods.timeFrom', 'ASC');
+            ->whereIn('orders.status_id', $statusIds);
+//            ->orderBy('orders.updated_at', 'DESC');
+//            ->orderBy('orders.date_delivery', 'ASC')
+//            ->orderBy('delivery_periods.timeFrom', 'ASC');
 
         if( ! $accessCitiesByLogistIds->isEmpty() ) {
             $orders->whereIn('orders.city_id', $accessCitiesByLogistIds);
@@ -133,7 +242,7 @@ class LogisticController extends Controller
             })
             ->filterColumn('courier_name', function ($query, $keyword) use ($orders){
                 if((int)$keyword > 0){
-                    $orders->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id');
+                    //$orders->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id');
                     return $query->where('couriers.id', $keyword);
                 }else{
                     return $query->whereNull('orders.courier_id');
@@ -265,6 +374,31 @@ class LogisticController extends Controller
                     ->whereIn('order_id', $queryClone->pluck('orders.id'))
                     ->whereNull('deleted_at')
                     ->sum('price_opt');
+            })
+            ->order(function ($query) {
+                $ordering = request()->get('order');
+                $columns = request()->get('columns');
+                $isFirstColumnSort = false;
+
+                if(is_array($ordering) && !empty($ordering)){
+                    foreach ($ordering as $value){
+                        if(isset($columns[(int)$value['column']])&&
+                            is_array($columns[(int)$value['column']])&&
+                            $columns[(int)$value['column']]["orderable"] == "true"){
+                            if($value['column'] == 0){
+                                $query->orderBy('orders.updated_at', 'DESC');
+                                $isFirstColumnSort = true;
+                            }
+                            $query->orderBy($columns[(int)$value['column']]["name"], $value['dir']);
+                        }
+                    }
+                }
+                if($isFirstColumnSort){
+                    $query->orderBy('delivery_periods.timeFrom', 'ASC');
+                }else{
+                    $query->orderBy('orders.updated_at', 'DESC')
+                        ->orderBy('delivery_periods.timeFrom', 'ASC');
+                }
             })
             ->make(true);
     }
