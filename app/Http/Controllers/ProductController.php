@@ -44,7 +44,9 @@ class ProductController extends Controller
      */
     public function search(Request $request)
     {
-        return response()->json(['products' =>Product::where('product_name', 'LIKE', '%'.$request->get('query').'%')->get()]);
+        $query = $request->get('query');
+        $query = strtolower($query);
+        return response()->json(['products' => Product::query()->whereRaw('LOWER(product_name) like ?', "%{$query}%")->get()]);
     }
 
     /**
