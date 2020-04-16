@@ -40,7 +40,7 @@
                     'id' => [
                         'name' => 'ID',
                         'width' => '1%',
-                        'searchable' => false,
+                        'searchable' => true,
                     ],
                     'article' => [
                         'name' => 'article',
