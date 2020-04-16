@@ -37,6 +37,11 @@ class ProductCategoryEnums
     const CONSOLE = "CONSOLE";
 
     /**
+     * Доставка
+     */
+    const DELIVERY = "DELIVERY";
+
+    /**
      * @return array
      */
     static function getConstants() {
@@ -57,6 +62,7 @@ class ProductCategoryEnums
             ['name' => self::ORIGINAL, 'desc' => 'Оригинальные'],
             ['name' => self::PRESENT, 'desc' => 'Подарок'],
             ['name' => self::CONSOLE, 'desc' => 'Приставка'],
+            ['name' => self::DELIVERY, 'desc' => 'Доставка'],
         ];
     }
 
@@ -69,6 +75,7 @@ class ProductCategoryEnums
             self::ORIGINAL => 'Оригинальные',
             self::PRESENT => 'Подарок',
             self::CONSOLE => 'Приставка',
+            self::DELIVERY => 'Доставка',
         ];
     }
 }
