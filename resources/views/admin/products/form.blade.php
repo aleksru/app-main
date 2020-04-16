@@ -38,6 +38,17 @@
                 @if (isset($product))
                     {{ method_field('PUT') }}
                 @endif
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Артикул</label>
+
+                    <div class="col-sm-10">
+                        <input type="text"
+                               class="form-control"
+                               name="article"
+                               placeholder="Артикул"
+                               value="{{ old('article', $product->article ?? '') }}">
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label for="name" class="col-sm-2 control-label">Название</label>

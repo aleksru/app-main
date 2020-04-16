@@ -22,7 +22,7 @@ class Product extends Model
     /**
      * Префикс товаров созданных вручную
      */
-    const PREFIX_CUSTOM_PRODUCT = '-custom';
+    const PREFIX_CUSTOM_PRODUCT = '-custom-new';
 
     /**
      * пустой массив товаров

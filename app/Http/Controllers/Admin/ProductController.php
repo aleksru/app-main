@@ -30,9 +30,11 @@ class ProductController extends Controller
     public function store(CreateProductRequest $productRequest)
     {
         $data = $productRequest->validated();
-        $article = Product::where('article', 'LIKE', '%'.Product::PREFIX_CUSTOM_PRODUCT.'%')->orderBy('id', 'desc')->first();
-        $article = $article ? ((int)$article->article + 1).Product::PREFIX_CUSTOM_PRODUCT : '1000'.Product::PREFIX_CUSTOM_PRODUCT;
-        $data['article'] = $article;
+        if(empty($data['article'])){
+            $article = Product::where('article', 'LIKE', '%'.Product::PREFIX_CUSTOM_PRODUCT.'%')->orderBy('id', 'desc')->first();
+            $article = $article ? ((int)$article->article + 1).Product::PREFIX_CUSTOM_PRODUCT : '1000'.Product::PREFIX_CUSTOM_PRODUCT;
+            $data['article'] = $article;
+        }
         Product::create($data);
 
         return redirect()->route('admin.products.index');

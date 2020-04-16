@@ -27,3 +27,8 @@
         data-id="{{ $id }}" data-type="{{ \App\Enums\ProductCategoryEnums::CONSOLE }}">
     <i class="fa fa-gamepad"></i>
 </button>
+
+<button class="btn btn-sm btn-success btn-type-toggle" data-route="{{ $route }}" title = "Установить кат. Доставка"
+        data-id="{{ $id }}" data-type="{{ \App\Enums\ProductCategoryEnums::DELIVERY }}">
+    <i class="fa fa-truck"></i>
+</button>
