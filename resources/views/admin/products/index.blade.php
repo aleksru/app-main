@@ -45,12 +45,12 @@
                     'article' => [
                         'name' => 'article',
                         'width' => '1%',
-                        'searchable' => true,
+                        'searchable' => false,
                     ],
                     'product_name' => [
                         'name' => 'Товар',
                         'width' => '10%',
-                        'searchable' => true,
+                        'searchable' => false,
                     ],
                     'type' => [
                         'name' => 'Тип',
@@ -65,7 +65,7 @@
                     'actions' => [
                         'name' => 'Действия',
                         'width' => '10%',
-                        'orderable' => 'false'
+                        'orderable' => false
                     ],
 
                 ],
