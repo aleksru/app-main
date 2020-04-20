@@ -88,6 +88,9 @@ if (! function_exists('get_string_corp_info')) {
 //  "address" => "Адрес организации"
 //  "gendir" => "Генеральный директор"
         $data = setting('corporate');
+        if( ! $data ){
+            return '';
+        }
         $result = '';
         foreach ($data as $key => $value){
             if(!empty($value)){
@@ -112,6 +115,9 @@ if (! function_exists('get_string_delivery_corp_info')) {
 //  "address" => "Адрес организации"
 //  "gendir" => "Генеральный директор"
         $data = setting('delivery');
+        if( ! $data ){
+            return '';
+        }
         $result = '';
         foreach ($data as $key => $value){
             if(!empty($value)){
