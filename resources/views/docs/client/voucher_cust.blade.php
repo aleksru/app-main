@@ -95,5 +95,19 @@
         {{--Я, ____________________________________________________________ со свойствами товара, гарантийными условиями и правилами продажи ознакомлен,--}}
         {{--претензий к внешнему виду не имею.--}}
     {{--</div>--}}
-    {{--<br /><br />--}}
+    <br /><br />
+    <div style="font-size: 10pt;">
+        <div>
+            <span style="font-weight: bold;">Заказчик</span>
+            <span style="font-weight: bold;margin-left: 410px;">Поставщик</span>
+        </div>
+        <hr style="margin: 0">
+       <div style="font-weight: bold;font-style: italic;font-size: 8px; ">
+           <span style="margin-left: 100px;">расшифровка подписи</span>
+           <span style="margin-left: 130px;">подпись</span>
+           <span style="margin-left: 240px;">расшифровка подписи</span>
+           <span style="margin-left: 130px;">подпись</span>
+       </div>
+    </div>
+    <br /><br />
 </div>
