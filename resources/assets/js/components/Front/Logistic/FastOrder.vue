@@ -23,7 +23,7 @@
         </div>
         <div class="box-body">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <span class="badge bg-blue" style="font-size: 15px;padding: 5px;margin-right: 5px;margin-bottom: 5px">
                         В заказе:
                     </span>
@@ -33,13 +33,25 @@
                     </span>
                 </div>
 
-                <div class="col-md-4">
-                    <button class="btn btn-warning pull-right" @click.prevent="onBtnInvoice">
-                        <i class="fa fa-file-text"></i> Чек товар
-                    </button>
-                    <button class="btn btn-success pull-right" @click.prevent="onBtnDelivery">
-                        <i class="fa fa-file-text-o"></i> Чек доставка
-                        </button>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-warning pull-right" @click.prevent="onBtnInvoice">
+                                <i class="fa fa-file-text"></i> Чек товар
+                            </button>
+                            <button class="btn btn-success pull-right" @click.prevent="onBtnDelivery">
+                                <i class="fa fa-file-text-o"></i> Чек доставка
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-warning pull-right" @click.prevent="onBtnInvoiceShow">
+                                <i class="fa fa-search"></i> Чек товар
+                            </button>
+                            <button class="btn btn-success pull-right" @click.prevent="onBtnDeliveryShow">
+                                <i class="fa fa-search"></i> Чек доставка
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <logistic-form  :initial_order="order"
@@ -97,7 +109,12 @@
                 this.editing_order = [];
                 this.leaveTableChannel();
             },
-
+            onBtnInvoiceShow(){
+                window.open(`/documents/voucher/order/${this.order.id}/invoice?show=1`)
+            },
+            onBtnDeliveryShow(){
+                window.open(`/documents/voucher/order/${this.order.id}/delivery?show=1`)
+            },
             onBtnInvoice(){
                 window.open(`/documents/voucher/order/${this.order.id}/invoice`)
             },
