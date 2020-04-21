@@ -126,6 +126,18 @@
                 <li><a href="{{ route('couriers.index') }}"><i class="fa fa-street-view" aria-hidden="true"></i> <span>Курьеры</span> </a></li>
                 <li><a href="{{ route('courier-statuses.index') }}"><i class="fa fa-street-view" aria-hidden="true"></i> <span>Статусы курьера</span> </a></li>
                 <li><a href="{{ route('admin.other-statuses.index') }}"><i class="fa fa-tags" aria-hidden="true"></i> <span>Статусы</span> </a></li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-book"></i> <span>Юр лица и пр</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{ route('admin.corporate-info.index') }}"><i class="fa fa-briefcase" aria-hidden="true"></i> <span>Юр лицо</span> </a></li>
+                        <li><a href="{{ route('admin.delivery-info.index') }}"><i class="fa fa-briefcase" aria-hidden="true"></i> <span>Юр лицо доставка</span> </a></li>
+                        <li><a href="{{ route('admin.warranty-text.index') }}"><i class="fa fa-briefcase" aria-hidden="true"></i> <span>Тексты</span> </a></li>
+                    </ul>
+                </li>
             </ul>
         </li>
     @endcan

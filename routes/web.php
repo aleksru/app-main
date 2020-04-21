@@ -203,6 +203,15 @@ Route::group(['middleware' =>['auth', 'role:change_price_list'], 'prefix' => 'ad
 });
 
 
+Route::group(['middleware' =>['auth', 'role:view_logistics'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function()
+{
+    //Юр лицо
+    Route::get('corporate-info', 'CorporateInfoController@index')->name('corporate-info.index');
+    Route::post('corporate-info', 'CorporateInfoController@store')->name('corporate-info.store');
+    Route::get('delivery-info', 'CorporateInfoController@delivery')->name('delivery-info.index');
+    Route::post('delivery-info', 'CorporateInfoController@deliveryStore')->name('delivery-info.store');
+});
+
 //Админка
 Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
     //Пользователи
@@ -255,11 +264,11 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
 //    Route::post('products-toggle/{product}', 'ProductController@toggleSetType')->name('products.toggle.set-type');
 //    Route::post('products-category-toggle/{product}', 'ProductController@toggleSetCategory')->name('products.toggle.category');
 
-    //Юр лицо
-    Route::get('corporate-info', 'CorporateInfoController@index')->name('corporate-info.index');
-    Route::post('corporate-info', 'CorporateInfoController@store')->name('corporate-info.store');
-    Route::get('delivery-info', 'CorporateInfoController@delivery')->name('delivery-info.index');
-    Route::post('delivery-info', 'CorporateInfoController@deliveryStore')->name('delivery-info.store');
+//    //Юр лицо
+//    Route::get('corporate-info', 'CorporateInfoController@index')->name('corporate-info.index');
+//    Route::post('corporate-info', 'CorporateInfoController@store')->name('corporate-info.store');
+//    Route::get('delivery-info', 'CorporateInfoController@delivery')->name('delivery-info.index');
+//    Route::post('delivery-info', 'CorporateInfoController@deliveryStore')->name('delivery-info.store');
 
     //Гарантийные тексты
     Route::get('warranty-text', 'CorporateInfoController@indexText')->name('warranty-text.index');
