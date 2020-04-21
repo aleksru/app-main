@@ -26,15 +26,15 @@
             <td style="width: 30mm; vertical-align: top; font-weight: bold">
                 <div style=" padding-left:2px; ">Поставщик:    </div>
             </td>
-            <td>
-                <div style="padding-left:2px;">
+            <td style="vertical-align: top;">
+                <div style="padding-left:2px;vertical-align: top;">
                     {{$voucherData->getCorporateInfo()}}
                 </div>
             </td>
             <td style="width: 30mm; vertical-align: top;font-weight: bold">
                 <div style=" padding-left:2px;">Покупатель:    </div>
             </td>
-            <td>
+            <td style="vertical-align: top;">
                 <div style="padding-left:2px;">
                     {{$voucherData->getClientInfo()}}
                 </div>
