@@ -22,7 +22,7 @@
     </div>
     <div style="background-color:#000000; width:100%; font-size:1px; height:2px;">&nbsp;</div>
 
-    <table width="100%" style="">
+    <table width="100%" style="margin-bottom: 10px">
         <tr>
             <td style="width: 30mm; vertical-align: top;">
                 <div style=" padding-left:2px; ">Поставщик:    </div>
@@ -91,9 +91,9 @@
         {!! $voucherData->getWarrantyText() !!}
     </div>
     <br />
-    <div style="font-size: 10pt;">
-        Я, ____________________________________________________________ со свойствами товара, гарантийными условиями и правилами продажи ознакомлен,
-        претензий к внешнему виду не имею.
-    </div>
-    <br /><br />
+    {{--<div style="font-size: 10pt;">--}}
+        {{--Я, ____________________________________________________________ со свойствами товара, гарантийными условиями и правилами продажи ознакомлен,--}}
+        {{--претензий к внешнему виду не имею.--}}
+    {{--</div>--}}
+    {{--<br /><br />--}}
 </div>
