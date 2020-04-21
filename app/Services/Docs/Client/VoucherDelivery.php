@@ -10,7 +10,7 @@ class VoucherDelivery extends Voucher
 {
     protected function renderView(): string
     {
-        return $this->renderedDelivery = view('docs.client.voucher_cust',
+        return $this->renderedDelivery = view('docs.client.voucher_delivery',
                 ['voucherData' => $this->order->voucherDeliveryDataFactory()])
                 ->render();
     }
