@@ -27,7 +27,7 @@
                 <div style=" padding-left:2px; ">Поставщик:    </div>
             </td>
             <td style="vertical-align: top;">
-                <div style="padding-left:2px;vertical-align: top;">
+                <div style="padding-left:2px;">
                     {{$voucherData->getCorporateInfo()}}
                 </div>
             </td>
