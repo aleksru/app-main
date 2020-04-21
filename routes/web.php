@@ -210,6 +210,10 @@ Route::group(['middleware' =>['auth', 'role:view_logistics'], 'prefix' => 'admin
     Route::post('corporate-info', 'CorporateInfoController@store')->name('corporate-info.store');
     Route::get('delivery-info', 'CorporateInfoController@delivery')->name('delivery-info.index');
     Route::post('delivery-info', 'CorporateInfoController@deliveryStore')->name('delivery-info.store');
+
+    //Гарантийные тексты
+    Route::get('warranty-text', 'CorporateInfoController@indexText')->name('warranty-text.index');
+    Route::post('warranty-text', 'CorporateInfoController@storeText')->name('warranty-text.store');
 });
 
 //Админка
@@ -270,9 +274,9 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
 //    Route::get('delivery-info', 'CorporateInfoController@delivery')->name('delivery-info.index');
 //    Route::post('delivery-info', 'CorporateInfoController@deliveryStore')->name('delivery-info.store');
 
-    //Гарантийные тексты
-    Route::get('warranty-text', 'CorporateInfoController@indexText')->name('warranty-text.index');
-    Route::post('warranty-text', 'CorporateInfoController@storeText')->name('warranty-text.store');
+//    //Гарантийные тексты
+//    Route::get('warranty-text', 'CorporateInfoController@indexText')->name('warranty-text.index');
+//    Route::post('warranty-text', 'CorporateInfoController@storeText')->name('warranty-text.store');
 
     //Магазины апи
     Route::group( ['prefix' => 'remote-store', 'as' => 'remote-store.', 'namespace' => 'Stores'], function (){
