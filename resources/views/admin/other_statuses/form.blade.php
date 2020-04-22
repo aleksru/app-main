@@ -57,12 +57,14 @@
                                             <tr>
                                                 <th style="width: 10px">#</th>
                                                 <th>Название</th>
+                                                <th>Сортировка</th>
                                                 <th>Действия</th>
                                             </tr>
                                             @foreach ($subStatuses as $subStatus)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $subStatus->name }}</td>
+                                                    <td>{{ $subStatus->ordering }}</td>
                                                     <td>
                                                     @include('datatable.actions', [
                                                         'edit' => [
@@ -119,6 +121,7 @@
                                             <th style="width: 10px">#</th>
                                             <th>Название</th>
                                             <th>Цвет</th>
+                                            <th>Сортировка</th>
                                             <th>Действия</th>
                                         </tr>
                                         @foreach ($stockStatuses as $stockStatus)
@@ -130,6 +133,7 @@
                                                     {{ $stockStatus->color }}
                                                     </span>
                                                 </td>
+                                                <td>{{ $stockStatus->ordering }}</td>
                                                 <td>
                                                     @include('datatable.actions', [
                                                         'edit' => [
@@ -191,6 +195,7 @@
                                         <tr>
                                             <th style="width: 10px">#</th>
                                             <th>Название</th>
+                                            <th>Сортировка</th>
                                             <th>Цвет</th>
                                             <th>Действия</th>
                                         </tr>
@@ -198,6 +203,7 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $logisticStatus->name }}</td>
+                                                <td>{{ $logisticStatus->ordering }}</td>
                                                 <td>
                                                     <span class="badge bg-{{$logisticStatus->color}}" style="padding: 10px;">
                                                     {{ $logisticStatus->color }}

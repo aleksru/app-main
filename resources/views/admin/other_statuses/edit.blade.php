@@ -45,6 +45,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Сортировка</label>
+
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control" name="ordering" value="{{ old('ordering', $otherStatus->ordering) }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="name" class="col-sm-2 control-label">Цвет</label>
 
                     <div class="col-sm-4">

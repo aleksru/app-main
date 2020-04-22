@@ -67,7 +67,7 @@ class LogisticController extends Controller
                 'name' => 'Статус Склад',
                 'width' => '5%',
                 'searchable' => true,
-                'orderable' => true
+                'orderable' => false
             ],
             'status_logist' => [
                 'name' => 'Статус Логист',
@@ -135,6 +135,12 @@ class LogisticController extends Controller
                 'orderable' => true
             ]
         ];
+
+    public static function getNameColumnOnIndex(int $index)
+    {
+        $keys = array_keys(self::COLUMNS_SIMPLE_TABLE);
+        return $keys[$index];
+    }
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -215,6 +221,7 @@ class LogisticController extends Controller
         )->selectRaw('orders.*, delivery_periods.timeFrom, couriers.name as courier_name')
             ->leftJoin('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
             ->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id')
+            ->leftJoin('other_statuses', 'orders.stock_status_id', '=', 'other_statuses.id')
             ->where('orders.date_delivery', '>=', Carbon::now()->subDays(7)->toDateString())
             ->whereIn('orders.status_id', $statusIds);
 //            ->orderBy('orders.updated_at', 'DESC');
@@ -265,7 +272,7 @@ class LogisticController extends Controller
             })
             ->filterColumn('status_stock', function ($query, $keyword) use ($orders){
                 if((int)$keyword > 0){
-                    $orders->leftJoin('other_statuses', 'orders.stock_status_id', '=', 'other_statuses.id');
+                    //$orders->leftJoin('other_statuses', 'orders.stock_status_id', '=', 'other_statuses.id');
                     return $query->where('other_statuses.id', $keyword);
                 }else{
                     return $query->whereNull('orders.stock_status_id');
@@ -389,7 +396,13 @@ class LogisticController extends Controller
                                 $query->orderBy('orders.updated_at', 'DESC');
                                 $isFirstColumnSort = true;
                             }
-                            $query->orderBy($columns[(int)$value['column']]["name"], $value['dir']);
+                            if(self::getNameColumnOnIndex($value['column']) == 'status_stock'){
+                                $query->orderBy('other_statuses.ordering', $value['dir'])
+                                    ->orderBy('couriers.name');
+                            }else{
+                                $query->orderBy($columns[(int)$value['column']]["name"], $value['dir']);
+                            }
+
                         }
                     }
                 }
