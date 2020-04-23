@@ -1,36 +1,17 @@
-<div class="callout callout-info">
-    <span class="badge bg-yellow"
-          style="font-size: 25px;padding: 10px">
-        {{\Carbon\Carbon::today()->format('d.m.Y')}}:
-    </span>
-    @foreach($periods as $period)
-        <span class="badge @if($period->failDeliveryDate->isEmpty())bg-green @else bg-red @endif"
-              style="font-size: 15px;margin-left: 5%; padding: 10px">
-            @if($period instanceof \App\Models\DeliveryPeriod)
-                {{$period->period_full}}
-            @else
-                {{$period->name}}
-            @endif
-        </span>
-    @endforeach
-</div>
 
-<div class="callout callout-info">
-    <span class="badge bg-yellow"
-          style="font-size: 25px;padding: 10px">
-        {{\Carbon\Carbon::tomorrow()->format('d.m.Y')}}:
-    </span>
-    @foreach($periodsTomorrow as $period)
-        <span class="badge @if($period->failDeliveryDate->isEmpty())bg-green @else bg-red @endif"
-              style="font-size: 15px;margin-left: 5%; padding: 10px">
-            @if($period instanceof \App\Models\DeliveryPeriod)
-                {{$period->period_full}}
-            @else
-                {{$period->name}}
-            @endif
-        </span>
-    @endforeach
-</div>
+@include('front.widgets.delivery_period_item', [
+    'periodText' => \Carbon\Carbon::today()->format('d.m.Y'),
+    'periods' => $periods
+])
+@include('front.widgets.delivery_period_item', [
+    'periodText' => \Carbon\Carbon::tomorrow()->format('d.m.Y'),
+    'periods' => $periodsTomorrow
+])
+@include('front.widgets.delivery_period_item', [
+    'periodText' => \Carbon\Carbon::today()->addDay(2)->format('d.m.Y'),
+    'periods' => $periodsTomorrow2
+])
+
 
 
 
