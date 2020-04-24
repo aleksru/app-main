@@ -18,4 +18,6 @@ interface PdfServiceInterface
     public function download($fileName);
 
     public function loadData($data);
+
+    public function setPaper(string $paper, string $orientation);
 }

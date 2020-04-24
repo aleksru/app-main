@@ -20,7 +20,11 @@
             </ul>
         </div>
     @endif
+
     <div class="box-header">
+        <div class="col-md-6">
+            <courier-print></courier-print>
+        </div>
         <a href="{{route('orders.create')}}" target="_blank"><button class="btn btn-sm btn-primary pull-right">
                 <i class="fa fa-plus"></i> Новый заказ
             </button></a>

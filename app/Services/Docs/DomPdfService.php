@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\App;
 class DomPdfService implements PdfServiceInterface
 {
     private $service;
+    const ORIENTATION_PORTRAIT = 'portrait';
+    const ORIENTATION_LANDSCAPE = 'landscape';
 
     /**
      * DomPdfService constructor.
@@ -21,7 +23,6 @@ class DomPdfService implements PdfServiceInterface
                 'dpi' => 110,
                 'fontDir' => public_path('fonts'),
                 'defaultFont' => 'sans-serif',
-                'debugCss' => true
             ])->setPaper('a3');
     }
 
@@ -43,5 +44,10 @@ class DomPdfService implements PdfServiceInterface
     public function download($fileName)
     {
         return $this->service->download($fileName);
+    }
+
+    public function setPaper(string $paper, string $orientation = self::ORIENTATION_PORTRAIT)
+    {
+        $this->service->setPaper($paper, $orientation);
     }
 }

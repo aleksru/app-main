@@ -69,6 +69,8 @@ Vue.component('FastOrder', require('./components/Front/Logistic/FastOrder.vue'))
 
 Vue.component('ProductsTableOperator', require('./components/Front/ProductsTableOperator.vue'));
 
+Vue.component('CourierPrint', require('./components/Front/Logistic/CourierPrint.vue'));
+
 const app = new Vue({
     el: '#app'
 });

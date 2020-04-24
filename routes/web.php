@@ -70,6 +70,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('voucher', 'VoucherController@get')->name('voucher.get');
         Route::get('voucher/order/{order}/invoice', 'VoucherController@orderInvoice')->name('order.invoice.get');
         Route::get('voucher/order/{order}/delivery', 'VoucherController@orderDelivery')->name('order.delivery.get');
+        Route::get('route-list/{courier}', 'CourierController@routeList')->name('route-list.get');
     });
 
     //Отчеты
