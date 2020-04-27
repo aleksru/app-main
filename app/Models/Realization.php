@@ -15,7 +15,8 @@ class Realization extends Model
 
     protected $guarded = ['id'];
     protected $fillable = [
-        "product_id", "price", "quantity", "imei", "price_opt", "supplier_id", "courier_payment", "delta", 'product_type'
+        "product_id", "price", "quantity",
+        "imei", "price_opt", "supplier_id", "courier_payment", "delta", 'product_type', 'reason_refusal_id'
     ];
     protected $dates = ['deleted_at'];
 
@@ -66,6 +67,15 @@ class Realization extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * Причина отказа на товар
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function reasonRefusal()
+    {
+        return $this->belongsTo(OtherStatus::class);
     }
 
     /**

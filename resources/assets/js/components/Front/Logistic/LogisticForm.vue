@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="name" class="col-sm-4 control-label">Статус ЛОГИСТИКА</label>
+                            <label for="name" class="col-sm-4 control-label">Причина отказа</label>
 
                             <div class="col-sm-8">
                                 <v-select label="name"
@@ -102,6 +102,7 @@
                                 <th>Закупка</th>
                                 <th>Продажа</th>
                                 <th>Поставщик</th>
+                                <th>Причина отказа</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -139,6 +140,13 @@
                                               index="id"
                                               :options="initial_suppliers"
                                               v-model="order.realizations[index].supplier_id">
+                                    </v-select>
+                                </td>
+                                <td style="width: 10%">
+                                    <v-select label="name"
+                                              index="id"
+                                              :options="logistic_statuses"
+                                              v-model="order.realizations[index].reason_refusal_id">
                                     </v-select>
                                 </td>
                             </tr>
