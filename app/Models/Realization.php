@@ -6,6 +6,7 @@ use App\Log;
 use App\Order;
 use App\Product;
 use App\Services\Quickrun\Orders\QuickSetOrderData;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -101,5 +102,10 @@ class Realization extends Model
         $data->phone          = $order->client ? $order->client->allPhones->implode(', ') : '';
 
         return $data;
+    }
+
+    public function scopeWithoutRefusal(Builder $query)
+    {
+        return $query->whereNull('reason_refusal_id');
     }
 }

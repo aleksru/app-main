@@ -126,14 +126,18 @@
                     const sumAllPriceIndex = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'sum_sales');
                     const sumAllPriceOptIndex = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'sum_price_opt');
                     const sumAllProfitIndex = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'sum_profit');
-                    $(row[sumAllPriceIndex]).text(parseInt(settings.json.total_price));
-                    $(row[sumAllPriceOptIndex]).text(parseInt(settings.json.total_price_opt));
-                    $(row[sumAllProfitIndex]).text(parseInt(settings.json.total_price - settings.json.total_price_opt));
-
+                    $(row[sumAllPriceIndex]).text(divideNumberByPieces(parseInt(settings.json.total_price)));
+                    $(row[sumAllPriceOptIndex]).text(divideNumberByPieces(parseInt(settings.json.total_price_opt)));
+                    $(row[sumAllProfitIndex]).text(divideNumberByPieces(parseInt(settings.json.total_price - settings.json.total_price_opt)));
                 }, 0);
 
                 $('#table_preloader').hide();
             });
+
+            function divideNumberByPieces(x, delimiter) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, delimiter || " ");
+            }
+
             /**
              * Добавляем поля для поиска, вешаем события
              */

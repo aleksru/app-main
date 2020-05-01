@@ -32,7 +32,10 @@ class Courier extends Model
 
     public function getRouteListDataFactory(Carbon $date) : RouteListData
     {
-        $orders = $this->orders()->with('client', 'realizations.product', 'deliveryPeriod')
+        $orders = $this->orders()
+            ->with(['realizations' => function($query){
+                $query->withoutRefusal();
+                }, 'client', 'realizations.product', 'deliveryPeriod'])
             ->whereDate('date_delivery', $date)
             ->get()
             ->sortBy(function ($order, $key) {

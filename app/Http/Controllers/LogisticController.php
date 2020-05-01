@@ -205,7 +205,7 @@ class LogisticController extends Controller
                 $user->account->cities->pluck('id') : collect();
         });
 
-        $orders = Order::with(
+        $orders = Order::with([
             'status',
             'store',
             'client.additionalPhones',
@@ -216,9 +216,11 @@ class LogisticController extends Controller
             'operator',
             'products',
             'logisticStatus',
-            'realizations',
+            'realizations' => function($query){
+                $query->withoutRefusal();
+            },
             'stockStatus'
-        )->selectRaw('orders.*, delivery_periods.timeFrom, couriers.name as courier_name')
+        ])->selectRaw('orders.*, delivery_periods.timeFrom, couriers.name as courier_name')
             ->leftJoin('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
             ->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id')
             ->leftJoin('other_statuses', 'orders.stock_status_id', '=', 'other_statuses.id')
@@ -333,10 +335,11 @@ class LogisticController extends Controller
                             ($order->realizations ? $order->realizations->sum('price_opt') : 0);
             })
             ->editColumn('products', function (Order $order) {
-                //return $order->products ? $order->products->pluck('product_name')->implode(', ') : '';
-                return $order->products ?
-                    view('front.logistic.parts.imei_table', ['realizations' => $order->products->pluck('product_name')]) :
-                    '';
+                $products = [];
+                foreach ($order->realizations as $realization){
+                    $products[] = $realization->product->product_name;
+                }
+                return view('front.logistic.parts.imei_table', ['realizations' => $products]);
             })
             ->editColumn('imei', function (Order $order) {
                 return $order->realizations ?
@@ -367,20 +370,24 @@ class LogisticController extends Controller
                 $queryClone = clone $query->getQuery();
                 $queryClone->limit = null;
                 $queryClone->offset = null;
-                return Realization::query()
+                $sum =  Realization::query()
+                    ->withoutRefusal()
                     ->whereIn('order_id', $queryClone->pluck('orders.id'))
                     ->whereNull('deleted_at')
                     ->where('price_opt', '<>', 0)
                     ->sum('price');
+                return $sum;
             })
             ->withQuery('total_price_opt', function($query) {
                 $queryClone = clone $query;
                 $queryClone->getQuery()->limit = null;
                 $queryClone->getQuery()->offset = null;
-                return Realization::query()
+                $sum = Realization::query()
+                    ->withoutRefusal()
                     ->whereIn('order_id', $queryClone->pluck('orders.id'))
                     ->whereNull('deleted_at')
                     ->sum('price_opt');
+                return $sum;
             })
             ->order(function ($query) {
                 $ordering = request()->get('order');

@@ -474,7 +474,7 @@ class Order extends Model
         $voucher = new VoucherData();
         $voucher->setNumberOrder($this->id);
         $voucher->setDateDelivery($this->date_delivery);
-        $voucher->setRealizations($this->realizations->reject(function ($value, $key) {
+        $voucher->setRealizations($this->realizations()->withoutRefusal()->get()->reject(function ($value, $key) {
             return $value->product->isDelivery();
         })->all());
         $voucher->setClientInfo($this->getStringCustomerInfo());
@@ -489,7 +489,7 @@ class Order extends Model
         $voucher = new VoucherData();
         $voucher->setNumberOrder($this->id);
         $voucher->setDateDelivery($this->date_delivery);
-        $voucher->setRealizations($this->realizations->filter(function ($value, $key) {
+        $voucher->setRealizations($this->realizations()->withoutRefusal()->get()->filter(function ($value, $key) {
             return $value->product->isDelivery();
         })->all());
         $voucher->setClientInfo($this->getStringCustomerInfo());

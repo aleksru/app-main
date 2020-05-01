@@ -88,6 +88,14 @@
                                 <input type="number" min="0" step="50" class="form-control" v-model="order.courier_payment">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" v-model="isShowRefusals">
+                                    Показать отказы
+                                 </label>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -108,7 +116,9 @@
                         <tbody>
                             <tr v-for="(product, index) in order.realizations"
                                 :key="product.id"
-                                :class="productMarginCheckByProductType(index) ? '' : 'bg-red'">
+                                :class="productMarginCheckByProductType(index) ? '' : 'bg-red'"
+                                :style="order.realizations[index].reason_refusal_id !== null ? {opacity: 0.4} : ''"
+                                v-show="showRealizationRefusal(index)">
                                 <td style="width: 2%">{{ index + 1  }}</td>
                                 <!--//Model-->
                                 <td style="width: 15%"> {{ order.realizations[index].product.product_name }} </td>
@@ -207,10 +217,17 @@
 
         data() {
             return {
-                order: this.initial_order
+                order: this.initial_order,
+                isShowRefusals: false
             }
         },
         methods: {
+            showRealizationRefusal(index){
+                if(this.order.realizations[index].reason_refusal_id !== null){
+                    return this.isShowRefusals;
+                };
+                return true;
+            },
             isProduct(i){
                 return this.order.realizations[i].product_type === PRODUCT_TYPE
             },
@@ -278,13 +295,13 @@
         computed: {
             sumSale(){
                 return this.order.realizations.reduce((prev, curr) => {
-                    let price = parseInt(curr.price);
+                    let price = curr.reason_refusal_id === null ? parseInt(curr.price) : 0;
                     return prev + (isNaN(price) ? 0 : price);
                 }, 0);
             },
             sumPurchase(){
                 return this.order.realizations.reduce((prev, curr) => {
-                    let price = parseInt(curr.price_opt);
+                    let price = curr.reason_refusal_id === null ? parseInt(curr.price_opt) : 0;
                     return prev + (isNaN(price) ? 0 : price);
                 }, 0);
             },
