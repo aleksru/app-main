@@ -71,6 +71,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('voucher/order/{order}/invoice', 'VoucherController@orderInvoice')->name('order.invoice.get');
         Route::get('voucher/order/{order}/delivery', 'VoucherController@orderDelivery')->name('order.delivery.get');
         Route::get('route-list/{courier}', 'CourierController@routeList')->name('route-list.get');
+        Route::get('courier-check-list/{courier}', 'CheckListController@checkList')->name('check-list');
     });
 
     //Отчеты

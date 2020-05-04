@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Order;
+use App\Services\Docs\Courier\CheckListData;
 use App\Services\Docs\Courier\RouteListData;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -48,5 +49,28 @@ class Courier extends Model
         $routeListData->setOrders($orders->all());
 
         return $routeListData;
+    }
+
+    public function getCheckListDataFactory(Carbon $date) : CheckListData
+    {
+        $realizations = [];
+        $orders = $this->orders()
+            ->with(['realizations' => function($query){
+                $query->withoutRefusal();
+            }, 'realizations.product'])
+            ->whereDate('date_delivery', $date)
+            ->get();
+        $orders->each(function (Order $item) use (&$realizations) {
+            $realizations = array_merge($realizations, $item->realizations->filter(function ($value) {
+                return ! $value->product->isDelivery();
+            })->all());
+        });
+        $checkListData = new CheckListData();
+        $checkListData->setCourier($this);
+        $checkListData->setCorporateInfo(get_string_corp_info());
+        $checkListData->setDateDelivery($date);
+        $checkListData->setRealizations($realizations);
+
+        return $checkListData;
     }
 }

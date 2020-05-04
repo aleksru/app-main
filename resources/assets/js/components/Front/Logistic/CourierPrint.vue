@@ -45,6 +45,13 @@
                 <button class="btn btn-warning" @click="onRouteList($event, true)" :disabled="!valid">
                     <i class="fa fa-search"></i> Маршрутный лист
                 </button>
+
+                <button class="btn btn-success" @click="onCheckList" :disabled="!valid">
+                    <i class="fa fa-file-text"></i> Расписка
+                </button>
+                <button class="btn btn-warning" @click="onCheckList($event, true)" :disabled="!valid">
+                    <i class="fa fa-search"></i> Расписка
+                </button>
             </div>
           </div>
     </div>
@@ -65,6 +72,9 @@
         },
 
         methods: {
+            onCheckList(event, isShow=false){
+                window.open(`/documents/courier-check-list/${this.courierId}?date=${this.date}` + (isShow ? '&show=1' : ''));
+            },
             onRouteList(event, isShow=false){
                 window.open(`/documents/route-list/${this.courierId}?date=${this.date}` + (isShow ? '&show=1' : ''));
             },
