@@ -28,7 +28,8 @@ $courier = $checkListData->getCourier();
         <tr>
             <td>
                 <div style="padding-left:2px;">
-                    Я, {{$courier->name}}, дата рождения {{$courier->birth_day}}, паспорт {{$courier->passport_number}}, выдан {{$courier->passport_date}}, {{$courier->passport_issued_by}},
+                    Я, {{$courier->name}}, дата рождения {{$courier->birth_day ? $courier->birth_day->format('d.m.Y') : ''}}, паспорт {{$courier->passport_number}},
+                    выдан {{$courier->passport_date ? $courier->passport_date->format('d.m.Y') : ''}}, {{$courier->passport_issued_by}},
                     зарегистрирован(а) по адресу: {{$courier->passport_address}}, даю данную расписку, целиком осознавая ее последствия,
                     Генеральному директору ({{$checkListData->getCorporateInfo()}}),
                     действующему на основании Устава, в нижеследующем:
