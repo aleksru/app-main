@@ -64,6 +64,19 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Роль статистики</label>
+
+                    <div class="col-sm-4">
+                        <select class="form-control" name="result">
+                            <option value="" class="">Нет</option>
+                            @foreach(\App\Enums\StatusResults::getStatusesWithDescription() as $status)
+                                <option value="{{ $status['value'] }}" @if($status['value'] === $otherStatus->result) selected @endif>{{$status['label']}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="box-footer">

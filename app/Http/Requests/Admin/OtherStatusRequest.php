@@ -31,6 +31,7 @@ class OtherStatusRequest extends FormRequest
             'name' => 'string|required',
             'color' => 'string|nullable',
             'ordering' => 'integer|nullable',
+            'result' => 'integer|nullable',
             'type' => 'string|required|in:' . $statusTypes
         ];
     }
