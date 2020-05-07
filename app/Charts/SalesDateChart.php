@@ -2,20 +2,18 @@
 
 namespace App\Charts;
 
+use App\Charts\Abstractions\BaseDatePeriodsChart;
 use App\Enums\StatusResults;
 use App\Repositories\StatisticRepository;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
-use ConsoleTVs\Charts\Classes\Chartjs\Chart;
 use Illuminate\Support\Collection;
 
-class SalesDateChart extends Chart
+class SalesDateChart extends BaseDatePeriodsChart
 {
-    protected $dateFrom;
-    protected $dateTo;
-    protected $dates = [];
+    /**
+     * @var StatisticRepository
+     */
     protected $statRepository;
-
 
     /**
      * SalesDateChart constructor.
@@ -24,15 +22,16 @@ class SalesDateChart extends Chart
      */
     public function __construct(Carbon $dateFrom, Carbon $dateTo = null)
     {
-        parent::__construct();
-        $this->dateFrom = $dateFrom;
-        $this->dateTo = $dateTo;
-        if($dateTo === null){
-            $this->dateTo = clone $dateFrom;
-        }
+        parent::__construct($dateFrom, $dateTo);
         $this->statRepository= new StatisticRepository();
-        $this->generatePeriods();
         $this->title('Продажи/Отказы ' . $this->dateFrom->format('d.m.Y') . '-' . $this->dateTo->format('d.m.Y'));
+    }
+
+    public function generateChart()
+    {
+        $this->addSuccessSales()
+            ->addRefusalSales()
+            ->addAllSales();
     }
 
     public function addSuccessSales()
@@ -69,19 +68,5 @@ class SalesDateChart extends Chart
         return $this->statRepository->getStatCountSalesByDate($this->dateFrom, $this->dateTo, $type)->mapWithKeys(function ($item) {
             return [$item->created_day => $item->count_sales];
         });
-    }
-
-    protected function generatePeriods()
-    {
-        $periods = CarbonPeriod::create($this->dateFrom, $this->dateTo);
-        foreach ($periods as $period){
-            $this->dates[$period->format('Y-m-d')] = 0;
-        }
-        $this->labels(array_keys($this->dates));
-    }
-
-    protected function prepareDataForDataset(Collection $data) : array
-    {
-        return array_values(array_merge($this->dates, $data->toArray()));
     }
 }
