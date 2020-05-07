@@ -30,6 +30,7 @@ abstract class BaseDateChart extends Chart implements IGenerateChart
         $this->dateTo = $dateTo;
         if($dateTo === null){
             $this->dateTo = clone $dateFrom;
+            $this->dateTo->addDay();
         }
     }
 }

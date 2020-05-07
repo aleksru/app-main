@@ -4,17 +4,33 @@
 namespace App\Http\Controllers\Statistics;
 
 
+use App\Charts\SalesCategoryDateChart;
 use App\Charts\SalesDateChart;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class SalesStatController extends Controller
 {
-    public function sales()
+    public function sales(Request $request)
     {
-        $chart = new SalesDateChart(Carbon::today()->subDays(57), Carbon::today());
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo');
+        if( ! $dateFrom ){
+            $dateFrom = Carbon::today()->subDays(7);
+        }else{
+            $dateFrom = Carbon::parse($dateFrom);
+        }
+        if( ! $dateTo ){
+            $dateTo = Carbon::today();
+        }else{
+            $dateTo = Carbon::parse($dateTo);
+        }
+        $chart = new SalesDateChart($dateFrom, $dateTo);
         $chart->generateChart();
+        $pieCategories = new SalesCategoryDateChart($dateFrom, $dateTo);
+        $pieCategories->generateChart();
 
-        return view('statistic.sales', compact('chart'));
+        return view('statistic.sales', compact('chart', 'pieCategories'));
     }
 }
