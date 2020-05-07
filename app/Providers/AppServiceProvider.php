@@ -14,6 +14,7 @@ use App\Services\Docs\DomPdfService;
 use App\Services\Docs\PdfServiceInterface;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
@@ -42,7 +43,26 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->registerPushOnce();
+    }
+
+    private function registerPushOnce()
+    {
+        Blade::directive('pushonce', function ($expression) {
+            $stack = explode(',', $expression)[0];
+            $name = explode(',', $expression)[1];
+            return
+                //check if identifier array exists
+                "<?php if (!isset(\$__env->singlePush)) { \$__env->singlePush = []; } ?>" .
+                //check if given stack exists
+                "<?php if (!isset(\$__env->singlePush[{$stack}])) { \$__env->singlePush[{$stack}] = []; } ?>" .
+                //start push to the stack
+                "<?php if (!isset(\$__env->singlePush[{$stack}][{$name}])) : \$__env->singlePush[{$stack}][{$name}] = true; \$__env->startPush({$stack}); ?>";
+        });
+        Blade::directive('endpushonce', function () {
+            //end push
+            return "<?php \$__env->stopPush(); endif; ?>";
+        });
     }
 
     /**

@@ -90,6 +90,10 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('operator-calls', 'ReportController@operatorsCalls')->name('operators.calls');
     });
 
+    Route::group( ['prefix' => 'statistic', 'as' => 'statistic.', 'namespace' => 'Statistics'], function (){
+        Route::get('sales', 'SalesStatController@sales')->name('sales');
+    });
+
     //логи
     Route::group( ['prefix' => 'logs', 'as' => 'logs.'], function (){
         Route::get('order/{order}', 'LogController@order')->name('order');
