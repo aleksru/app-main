@@ -7,7 +7,6 @@
         </div>
         <div class="box-body">
             <form id="report" method="get" action="{{ route('statistic.sales') }}">
-                {{ csrf_field() }}
                 <div class="row">
                     <div class="col-md-2">
                         <label>Дата начала</label>
@@ -42,6 +41,16 @@
 
             <div class="box-body">
                 @include('charts.chart', ['chart' => $pieCategories])
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="box">
+            <div class="box-header">Топ товаров</div>
+
+            <div class="box-body">
+                @include('charts.chart', ['chart' => $pieTopProducts])
             </div>
         </div>
     </div>
