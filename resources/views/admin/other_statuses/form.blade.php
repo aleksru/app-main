@@ -58,6 +58,7 @@
                                                 <th style="width: 10px">#</th>
                                                 <th>Название</th>
                                                 <th>Сортировка</th>
+                                                <th>Роль в статистике</th>
                                                 <th>Действия</th>
                                             </tr>
                                             @foreach ($subStatuses as $subStatus)
@@ -65,6 +66,9 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $subStatus->name }}</td>
                                                     <td>{{ $subStatus->ordering }}</td>
+                                                    <td>
+                                                        {{ $subStatus->result !== null ? \App\Enums\StatusResults::getDescription($subStatus->result) : ''}}
+                                                    </td>
                                                     <td>
                                                     @include('datatable.actions', [
                                                         'edit' => [
@@ -122,6 +126,7 @@
                                             <th>Название</th>
                                             <th>Цвет</th>
                                             <th>Сортировка</th>
+                                            <th>Роль в статистике</th>
                                             <th>Действия</th>
                                         </tr>
                                         @foreach ($stockStatuses as $stockStatus)
@@ -134,6 +139,7 @@
                                                     </span>
                                                 </td>
                                                 <td>{{ $stockStatus->ordering }}</td>
+                                                <td>{{ $stockStatus->result !== null ? \App\Enums\StatusResults::getDescription($stockStatus->result) : ''}}</td>
                                                 <td>
                                                     @include('datatable.actions', [
                                                         'edit' => [
@@ -197,6 +203,7 @@
                                             <th>Название</th>
                                             <th>Сортировка</th>
                                             <th>Цвет</th>
+                                            <th>Роль в статистике</th>
                                             <th>Действия</th>
                                         </tr>
                                         @foreach ($logisticStatuses as $logisticStatus)
@@ -209,6 +216,7 @@
                                                     {{ $logisticStatus->color }}
                                                     </span>
                                                 </td>
+                                                <td>{{ $logisticStatus->result !== null ? \App\Enums\StatusResults::getDescription($logisticStatus->result) : ''}}</td>
                                                 <td>
                                                     @include('datatable.actions', [
                                                         'edit' => [

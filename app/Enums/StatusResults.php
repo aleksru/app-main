@@ -16,4 +16,25 @@ class StatusResults
             ['value' => self::REFUSAL, 'label' => 'Отказ']
         ];
     }
+
+    /**
+     * @return array
+     */
+    static function getConstants()
+    {
+        $oClass = new \ReflectionClass(static::class);
+        return $oClass->getConstants();
+    }
+
+    public static function getDescription(int $result)
+    {
+        $res = self::getStatusesWithDescription();
+        for($i = 0; $i < count($res); $i++){
+            if($res[$i]['value'] == $result){
+                return $res[$i]['label'];
+            }
+        }
+
+        return null;
+    }
 }
