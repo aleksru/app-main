@@ -129,8 +129,22 @@ class DeliveryTimeStatistic extends BaseStatistic implements IGeneralStatisticGe
         return $this->avgSales;
     }
 
+    public function genAvgMainInvoice()
+    {
+        $result = [];
+        $items = $this->repository->getAllSalesOnDates($this->dateFrom, $this->dateTo);
+        foreach ($items as $item){
+            $field = new DeliveryTimeStatisticItem($item->delivery_desc);
+            $field->setAvgMainInvoice($item->avg_sales);
+            $result[] = $field;
+        }
+
+        return $result;
+    }
+
     protected function genAvgSales()
     {
         $this->avgSales = $this->repository->getAvgSales($this->dateFrom, $this->dateTo);
     }
+
 }

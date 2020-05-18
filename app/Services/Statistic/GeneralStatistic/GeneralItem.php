@@ -15,8 +15,25 @@ class GeneralItem extends BaseStatisticItem
     public $percentMissed = 0;
     public $profit = 0;
     public $avgInvoice = 0;
+    public $avgMainInvoice = 0;
     public $avgProfit = 0;
     public $percentOfTotal = 0;
+
+    /**
+     * @return int
+     */
+    public function getAvgMainInvoice()
+    {
+        return $this->avgMainInvoice;
+    }
+
+    /**
+     * @param int $avgMainInvoice
+     */
+    public function setAvgMainInvoice($avgMainInvoice)
+    {
+        $this->avgMainInvoice = round((float)$avgMainInvoice, 2);
+    }
 
     /**
      * @return mixed

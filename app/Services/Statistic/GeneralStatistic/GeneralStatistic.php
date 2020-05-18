@@ -31,6 +31,7 @@ class GeneralStatistic
         $this->genAvgInvoice();
         $this->genAvgProfit();
         $this->genPercentOfFullSales();
+        $this->genAvgMainInvoice();
     }
 
     public function genDone()
@@ -78,6 +79,18 @@ class GeneralStatistic
             }
             $field = $this->getOrCreateFieldOnContainer($item);
             $field->setAvgInvoice($item->getAvgInvoice());
+        }
+    }
+
+    public function genAvgMainInvoice()
+    {
+        $items = $this->statisticGenerate->genAvgMainInvoice();
+        foreach ($items as $item){
+            if( ! ($item instanceof GeneralItem) ){
+                throw new \InvalidArgumentException(get_class($item) . ' not instanceof GeneralItem!');
+            }
+            $field = $this->getOrCreateFieldOnContainer($item);
+            $field->setAvgMainInvoice($item->getAvgMainInvoice());
         }
     }
 

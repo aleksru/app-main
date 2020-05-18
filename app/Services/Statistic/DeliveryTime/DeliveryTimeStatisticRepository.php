@@ -109,4 +109,19 @@ class DeliveryTimeStatisticRepository
             ->getBaseSuccessRealizationsOnOrdersQuery($dateFrom, $dateTo)
             ->count();
     }
+
+    public function getAllSalesOnDates(Carbon $dateFrom, Carbon $dateTo)
+    {
+        $query = $this->queryRepository
+            ->getBaseOrderAllSalesQuery($dateFrom, $dateTo)
+            ->selectRaw('CONCAT(delivery_periods.timeFrom, "-", delivery_periods.timeTo) as delivery_desc, SUM(realizations.price) AS sum_order')
+            ->join('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
+            ->groupBy('delivery_desc', 'orders.id');
+
+        return DB::table(DB::raw("({$query->toSql()}) as sales"))
+            ->mergeBindings($query)
+            ->selectRaw('delivery_desc, AVG(sum_order) AS avg_sales')
+            ->groupBy('delivery_desc')
+            ->get();
+    }
 }

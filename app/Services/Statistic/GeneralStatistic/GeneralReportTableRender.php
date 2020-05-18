@@ -44,6 +44,10 @@ class GeneralReportTableRender extends BaseReportTableRender
             'name' => 'Средний чек',
             'width' => '5%',
         ],
+        'avgMainInvoice' => [
+            'name' => 'Средний чек(общ)',
+            'width' => '5%',
+        ],
         'avgProfit' => [
             'name' => 'Средняя прибыль',
             'width' => '5%',

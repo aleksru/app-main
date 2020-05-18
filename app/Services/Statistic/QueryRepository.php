@@ -16,7 +16,7 @@ class QueryRepository
     {
         return DB::table('orders')
             ->join('other_statuses', 'orders.stock_status_id', '=', 'other_statuses.id')
-            ->whereBetween('orders.created_at', [$dateFrom->toDateString(), $dateTo->toDateString()]);
+            ->whereBetween('orders.date_delivery', [$dateFrom->toDateString(), $dateTo->toDateString()]);
     }
 
     public function getBaseSuccessRealizationsOnOrdersQuery(Carbon $dateFrom, Carbon $dateTo)  : Builder
@@ -34,6 +34,16 @@ class QueryRepository
     public function getBaseOrderSalesQuery(Carbon $dateFrom, Carbon $dateTo)  : Builder
     {
         return $this->getBaseSuccessRealizationsOnOrdersQuery($dateFrom, $dateTo)
+            ->join('realizations', 'orders.id', '=', 'realizations.order_id')
+            ->join('products', 'realizations.product_id', '=', 'products.id')
+            ->where('products.category', '!=', ProductCategoryEnums::DELIVERY)
+            ->whereNull('realizations.deleted_at')
+            ->whereNull('realizations.reason_refusal_id');
+    }
+
+    public function getBaseOrderAllSalesQuery(Carbon $dateFrom, Carbon $dateTo)  : Builder
+    {
+        return $this->getBaseStatisticOnOrdersQuery($dateFrom, $dateTo)
             ->join('realizations', 'orders.id', '=', 'realizations.order_id')
             ->join('products', 'realizations.product_id', '=', 'products.id')
             ->where('products.category', '!=', ProductCategoryEnums::DELIVERY)

@@ -14,6 +14,8 @@ interface IGeneralStatisticGenerate
 
     public function genAvgInvoice();
 
+    public function genAvgMainInvoice();
+
     public function genAvgProfit();
 
     public function getSumSales();
