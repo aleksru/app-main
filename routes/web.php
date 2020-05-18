@@ -90,8 +90,11 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('operator-calls', 'ReportController@operatorsCalls')->name('operators.calls');
     });
 
+    //Статистика
     Route::group( ['prefix' => 'statistic', 'as' => 'statistic.', 'namespace' => 'Statistics'], function (){
         Route::get('sales', 'SalesStatController@sales')->name('sales');
+        Route::get('delivery-time', 'DeliveryTimeController@index')->name('delivery_time');
+        Route::get('delivery-time-table', 'DeliveryTimeController@datatable')->name('delivery_time.table');
     });
 
     //логи
