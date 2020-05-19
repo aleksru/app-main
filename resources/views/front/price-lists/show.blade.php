@@ -31,7 +31,7 @@
                 'article' => [
                     'name' => 'Артикул',
                     'width' => '5%',
-                    'searchable' => true,
+                    'searchable' => false,
                 ],
                 'product_name' => [
                     'name' => 'Товар',

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\PriceType;
 use App\Product;
+use Illuminate\Database\Eloquent\Builder;
 
 class PriceListController extends Controller
 {
@@ -50,7 +51,21 @@ class PriceListController extends Controller
      */
     public function showDatatable(PriceType $priceList)
     {
-        return datatables()->of($priceList->products())
+        $query = PriceType::query()
+            ->select([
+                'products.article',
+                'products.product_name',
+                'price_type_product.price',
+                'price_type_product.price_special',
+                'price_type_product.updated_at'
+            ])
+            ->where('price_types.id', $priceList->id)
+            ->join('price_type_product', 'price_types.id', '=', 'price_type_product.price_type_id')
+            ->join('products', 'price_type_product.product_id', '=', 'products.id');
+        return datatables()->eloquent($query)
+                            ->filterColumn('product_name', function (Builder $query, $input){
+                                return $query->whereRaw('products.product_name like ?', "%{$input}%");
+                            })
                             ->make(true);
     }
 }
