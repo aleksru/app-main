@@ -23,14 +23,14 @@ abstract class BaseStatistic
         $this->dateTo = $dateTo;
     }
 
-    protected function getOrCreateFieldOnContainer(BaseStatisticItem $item) : BaseStatisticItem
+    protected function getOrCreateFieldOnContainer($key)
     {
-        $field = $this->container->getField($item->getField());
+        $field = $this->container->getField($key);
         if( ! $field ){
-            $this->container->addField($item->getField(), $item);
+            $this->container->addField($field, self::createDataItem($key));
         }
 
-        return $this->container->getField($item->getField());
+        return $this->container->getField($key);
     }
 
     public function getDataContainer()
@@ -42,6 +42,8 @@ abstract class BaseStatistic
     {
         return collect($this->getDataContainer());
     }
+
+    abstract static function createDataItem($field);
 
     abstract public function generateAll();
 

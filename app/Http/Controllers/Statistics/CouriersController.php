@@ -1,15 +1,17 @@
 <?php
 
+
 namespace App\Http\Controllers\Statistics;
 
+
 use App\Http\Controllers\Statistics\ReportTables\MainReportController;
-use App\Services\Statistic\DeliveryTime\DeliveryTimeStatistic;
+use App\Services\Statistic\Couriers\CourierStatistic;
 
 
-class DeliveryTimeController extends MainReportController
+class CouriersController extends MainReportController
 {
     protected function getStatisticField()
     {
-        return DeliveryTimeStatistic::class;
+        return CourierStatistic::class;
     }
 }

@@ -43,5 +43,9 @@ abstract class MainReportController extends Controller
 
     abstract protected function getStatisticField();
 
-    abstract protected function createStatisticField(Carbon $dateFrom , Carbon $dateTo) : BaseStatistic;
+    protected function createStatisticField(Carbon $dateFrom , Carbon $dateTo) : BaseStatistic
+    {
+        $field = $this->getStatisticField();
+        return new $field($dateFrom, $dateTo);
+    }
 }

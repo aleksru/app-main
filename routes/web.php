@@ -95,6 +95,8 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('sales', 'SalesStatController@sales')->name('sales');
         Route::get('delivery-time', 'DeliveryTimeController@index')->name('delivery_time');
         Route::get('delivery-time-table', 'DeliveryTimeController@datatable')->name('delivery_time.table');
+        Route::get('couriers', 'CouriersController@index')->name('couriers');
+        Route::get('couriers-table', 'CouriersController@datatable')->name('couriers.table');
     });
 
     //логи

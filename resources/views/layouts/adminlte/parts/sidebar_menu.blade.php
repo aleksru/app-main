@@ -147,6 +147,7 @@
                     <ul class="treeview-menu">
                         <li><a href="{{ route('statistic.sales') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Продажи</span></a></li>
                         <li><a href="{{ route('statistic.delivery_time') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Время доставки</span></a></li>
+                        <li><a href="{{ route('statistic.couriers') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Курьеры</span></a></li>
                     </ul>
                 </li>
             </ul>

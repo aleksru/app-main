@@ -4,23 +4,28 @@
 namespace App\Services\Statistic\GeneralStatistic;
 
 
+use App\Services\Statistic\Abstractions\BaseStatistic;
+use App\Services\Statistic\Abstractions\GeneralStatisticRepository;
 use App\Services\Statistic\Abstractions\IContainer;
-use App\Services\Statistic\Abstractions\IGeneralStatisticGenerate;
 
 class GeneralStatistic
 {
     protected $container;
-    protected $statisticGenerate;
+    protected $repository;
+    protected $generalStatisticGenerate;
 
     /**
      * GeneralStatistic constructor.
      * @param IContainer $container
-     * @param IGeneralStatisticGenerate $statisticGenerate
+     * @param GeneralStatisticRepository $repository
+     * @param BaseStatistic $generalStatisticGenerate
      */
-    public function __construct(IContainer $container, IGeneralStatisticGenerate $statisticGenerate)
+    public function __construct(IContainer $container, GeneralStatisticRepository $repository,
+                                BaseStatistic $generalStatisticGenerate)
     {
         $this->container = $container;
-        $this->statisticGenerate = $statisticGenerate;
+        $this->repository = $repository;
+        $this->generalStatisticGenerate = $generalStatisticGenerate;
     }
 
     public function genAll()
@@ -30,101 +35,91 @@ class GeneralStatistic
         $this->genProfit();
         $this->genAvgInvoice();
         $this->genAvgProfit();
-        $this->genPercentOfFullSales();
-        $this->genAvgMainInvoice();
+        $this->genAvgAllInvoices();
+        $this->genPercentOfTotalSales();
     }
 
     public function genDone()
     {
-        $items = $this->statisticGenerate->genDone();
-        foreach ($items as $item){
-            if( ! ($item instanceof GeneralItem) ){
-                throw new \InvalidArgumentException(get_class($item) . ' not instanceof GeneralItem!');
-            }
-            $field = $this->getOrCreateFieldOnContainer($item);
-            $field->setDone($item->getDone());
+        $items = $this->repository->getDoneCount();
+        foreach ($items as $item) {
+            $field = $this->getOrCreateFieldOnContainer($item->{$this->repository->getFieldName()});
+            $field->setDone($item->{GeneralStatisticDBContract::DONE_COUNT});
         }
     }
 
     public function genMissed()
     {
-        $items = $this->statisticGenerate->genMissed();
-        foreach ($items as $item){
-            if( ! ($item instanceof GeneralItem) ){
-                throw new \InvalidArgumentException(get_class($item) . ' not instanceof GeneralItem!');
-            }
-            $field = $this->getOrCreateFieldOnContainer($item);
-            $field->setMissed($item->getMissed());
+        $items = $this->repository->getMissedCount();
+        foreach ($items as $item) {
+            $field = $this->getOrCreateFieldOnContainer($item->{$this->repository->getFieldName()});
+            $field->setMissed($item->{GeneralStatisticDBContract::MISSED_COUNT});
         }
     }
 
     public function genProfit()
     {
-        $items = $this->statisticGenerate->genProfit();
-        foreach ($items as $item){
-            if( ! ($item instanceof GeneralItem) ){
-                throw new \InvalidArgumentException(get_class($item) . 'Item not instanceof GeneralItem!');
-            }
-            $field = $this->getOrCreateFieldOnContainer($item);
-            $field->setProfit($item->getProfit());
+        $items = $this->repository->getProfitByDates();
+        foreach ($items as $item) {
+            $field = $this->getOrCreateFieldOnContainer($item->{$this->repository->getFieldName()});
+            $field->setProfit($item->{GeneralStatisticDBContract::PROFIT});
         }
     }
 
     public function genAvgInvoice()
     {
-        $items = $this->statisticGenerate->genAvgInvoice();
-        foreach ($items as $item){
-            if( ! ($item instanceof GeneralItem) ){
-                throw new \InvalidArgumentException(get_class($item) . ' not instanceof GeneralItem!');
-            }
-            $field = $this->getOrCreateFieldOnContainer($item);
-            $field->setAvgInvoice($item->getAvgInvoice());
-        }
-    }
-
-    public function genAvgMainInvoice()
-    {
-        $items = $this->statisticGenerate->genAvgMainInvoice();
-        foreach ($items as $item){
-            if( ! ($item instanceof GeneralItem) ){
-                throw new \InvalidArgumentException(get_class($item) . ' not instanceof GeneralItem!');
-            }
-            $field = $this->getOrCreateFieldOnContainer($item);
-            $field->setAvgMainInvoice($item->getAvgMainInvoice());
+        $items = $this->repository->getAvgInvoice();
+        foreach ($items as $item) {
+            $field = $this->getOrCreateFieldOnContainer($item->{$this->repository->getFieldName()});
+            $field->setAvgInvoice($item->{GeneralStatisticDBContract::AVG_INVOICE});
         }
     }
 
     public function genAvgProfit()
     {
-        $items = $this->statisticGenerate->genAvgProfit();
-        foreach ($items as $item){
-            if( ! ($item instanceof GeneralItem) ){
-                throw new \InvalidArgumentException(get_class($item) . ' not instanceof GeneralItem!');
-            }
-            $field = $this->getOrCreateFieldOnContainer($item);
-            $field->setAvgProfit($item->getAvgProfit());
+        $items = $this->repository->getAvgProfit();
+        foreach ($items as $item) {
+            $field = $this->getOrCreateFieldOnContainer($item->{$this->repository->getFieldName()});
+            $field->setAvgProfit($item->{GeneralStatisticDBContract::AVG_PROFIT});
         }
     }
 
-    public function genPercentOfFullSales()
+    public function genAvgAllInvoices()
     {
-        $totalSum = $this->statisticGenerate->getSumSales();
-        foreach ($this->container->getContainer() as $item){
-            if( ! ($item instanceof GeneralItem) ){
-                throw new \InvalidArgumentException(get_class($item) . ' not instanceof GeneralItem!');
-            }
-            $item->setPercentOfTotal($item->getDone() / $totalSum * 100);
+        $items = $this->repository->getAvgAllInvoices();
+        foreach ($items as $item) {
+            $field = $this->getOrCreateFieldOnContainer($item->{$this->repository->getFieldName()});
+            $field->setAvgMainInvoice($item->{GeneralStatisticDBContract::AVG_ALL_INVOICES});
         }
     }
 
-    protected function getOrCreateFieldOnContainer(GeneralItem $item) : GeneralItem
+    public function genPercentOfTotalSales()
     {
-        $field = $this->container->getField($item->getField());
+        $totalSum = $this->calcTotalSumSales();
+        foreach ($this->container->getContainer() as $item) {
+            if (!($item instanceof GeneralItem)) {
+                throw new \InvalidArgumentException(get_class($item) . ' not instanceof GeneralItem!');
+            }
+            $percent = $totalSum > 0 ? $item->getProfit() / $totalSum * 100 : 0;
+            $item->setPercentOfTotal($percent);
+        }
+    }
+
+    protected function calcTotalSumSales()
+    {
+        return array_reduce($this->container->getContainer(), function ($prev, GeneralItem $curr){
+                return $prev += $curr->getProfit();
+        }, 0);
+    }
+
+    protected function getOrCreateFieldOnContainer($key) : GeneralItem
+    {
+        $field = $this->container->getField($key);
         if( ! $field ){
-            $this->container->addField($item->getField(), $item);
+            $this->container->addField($key, $this->generalStatisticGenerate::createDataItem($key));
         }
 
-        return $this->container->getField($item->getField());
+        return $this->container->getField($key);
     }
 
 }
