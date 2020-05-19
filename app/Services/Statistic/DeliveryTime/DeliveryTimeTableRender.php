@@ -17,7 +17,7 @@ class DeliveryTimeTableRender extends GeneralReportTableRender
      */
     public function __construct(string $routeIndex, string $routeDatatable, string $labelHeader = null, string $name = null)
     {
-        parent::__construct($routeIndex,  $routeDatatable,  $labelHeader = null,  ($name === null) ? 'delivery' : $name);
+        parent::__construct($routeIndex,  $routeDatatable,  $labelHeader,  ($name === null) ? 'delivery' : $name);
     }
 
 }
