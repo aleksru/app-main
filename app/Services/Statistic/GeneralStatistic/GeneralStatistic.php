@@ -7,25 +7,27 @@ namespace App\Services\Statistic\GeneralStatistic;
 use App\Services\Statistic\Abstractions\BaseStatistic;
 use App\Services\Statistic\Abstractions\GeneralStatisticRepository;
 use App\Services\Statistic\Abstractions\IContainer;
+use App\Services\Statistic\Abstractions\IGeneralStaticItem;
+use App\Services\Statistic\Abstractions\IGeneralStatisticRepository;
 
 class GeneralStatistic
 {
     protected $container;
     protected $repository;
-    protected $generalStatisticGenerate;
+    protected $generalStatisticItem;
 
     /**
      * GeneralStatistic constructor.
      * @param IContainer $container
-     * @param GeneralStatisticRepository $repository
-     * @param BaseStatistic $generalStatisticGenerate
+     * @param IGeneralStatisticRepository $repository
+     * @param IGeneralStaticItem $generalStaticItem
      */
-    public function __construct(IContainer $container, GeneralStatisticRepository $repository,
-                                BaseStatistic $generalStatisticGenerate)
+    public function __construct(IContainer $container, IGeneralStatisticRepository $repository,
+                                IGeneralStaticItem $generalStaticItem)
     {
         $this->container = $container;
         $this->repository = $repository;
-        $this->generalStatisticGenerate = $generalStatisticGenerate;
+        $this->generalStatisticItem = $generalStaticItem;
     }
 
     public function genAll()
@@ -116,7 +118,7 @@ class GeneralStatistic
     {
         $field = $this->container->getField($key);
         if( ! $field ){
-            $this->container->addField($key, $this->generalStatisticGenerate::createDataItem($key));
+            $this->container->addField($key, $this->generalStatisticItem->createGeneralItem($key));
         }
 
         return $this->container->getField($key);

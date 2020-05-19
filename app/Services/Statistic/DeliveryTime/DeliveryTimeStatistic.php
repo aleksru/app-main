@@ -5,11 +5,13 @@ namespace App\Services\Statistic\DeliveryTime;
 
 use App\Services\Statistic\Abstractions\BaseReportTableRender;
 use App\Services\Statistic\Abstractions\BaseStatistic;
+use App\Services\Statistic\Abstractions\IGeneralStaticItem;
 use App\Services\Statistic\Abstractions\IGeneralStatisticGenerate;
+use App\Services\Statistic\GeneralStatistic\GeneralItem;
 use App\Services\Statistic\GeneralStatistic\GeneralStatistic;
 use Carbon\Carbon;
 
-class DeliveryTimeStatistic extends BaseStatistic
+class DeliveryTimeStatistic extends BaseStatistic implements IGeneralStaticItem
 {
     protected $repository;
 
@@ -54,5 +56,10 @@ class DeliveryTimeStatistic extends BaseStatistic
     protected function getOrCreateFieldOnContainer($key) : DeliveryTimeStatisticItem
     {
         return parent::getOrCreateFieldOnContainer($key);
+    }
+
+    public function createGeneralItem($field): GeneralItem
+    {
+        return self::createDataItem($field);
     }
 }

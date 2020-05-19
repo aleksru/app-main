@@ -6,10 +6,12 @@ namespace App\Services\Statistic\Dates;
 
 use App\Services\Statistic\Abstractions\BaseReportTableRender;
 use App\Services\Statistic\Abstractions\BaseStatistic;
+use App\Services\Statistic\Abstractions\IGeneralStaticItem;
+use App\Services\Statistic\GeneralStatistic\GeneralItem;
 use App\Services\Statistic\GeneralStatistic\GeneralStatistic;
 use Carbon\Carbon;
 
-class DatesStatistic extends BaseStatistic
+class DatesStatistic extends BaseStatistic implements IGeneralStaticItem
 {
     protected $repository;
 
@@ -38,5 +40,10 @@ class DatesStatistic extends BaseStatistic
     public static function createDefaultTableRender(): BaseReportTableRender
     {
         return self::createTableRender(route('statistic.dates'), route('statistic.dates.table'), 'Статистика по датам');
+    }
+
+    public function createGeneralItem($field): GeneralItem
+    {
+        return self::createDataItem($field);
     }
 }

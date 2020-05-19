@@ -5,10 +5,12 @@ namespace App\Services\Statistic\Couriers;
 
 use App\Services\Statistic\Abstractions\BaseReportTableRender;
 use App\Services\Statistic\Abstractions\BaseStatistic;
+use App\Services\Statistic\Abstractions\IGeneralStaticItem;
+use App\Services\Statistic\GeneralStatistic\GeneralItem;
 use App\Services\Statistic\GeneralStatistic\GeneralStatistic;
 use Carbon\Carbon;
 
-class CourierStatistic extends BaseStatistic
+class CourierStatistic extends BaseStatistic implements IGeneralStaticItem
 {
     protected $repository;
 
@@ -85,5 +87,10 @@ class CourierStatistic extends BaseStatistic
     protected function getOrCreateFieldOnContainer($key) : CourierStatisticItem
     {
         return parent::getOrCreateFieldOnContainer($key);
+    }
+
+    function createGeneralItem($field): GeneralItem
+    {
+        return self::createDataItem($field);
     }
 }
