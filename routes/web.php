@@ -97,6 +97,8 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('delivery-time-table', 'DeliveryTimeController@datatable')->name('delivery_time.table');
         Route::get('couriers', 'CouriersController@index')->name('couriers');
         Route::get('couriers-table', 'CouriersController@datatable')->name('couriers.table');
+        Route::get('dates', 'DatesController@index')->name('dates');
+        Route::get('dates-table', 'DatesController@datatable')->name('dates.table');
     });
 
     //логи
