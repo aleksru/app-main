@@ -99,6 +99,8 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('couriers-table', 'CouriersController@datatable')->name('couriers.table');
         Route::get('dates', 'DatesController@index')->name('dates');
         Route::get('dates-table', 'DatesController@datatable')->name('dates.table');
+        Route::get('operators', 'OperatorsController@index')->name('operators');
+        Route::get('operators-table', 'OperatorsController@datatable')->name('operators.table');
     });
 
     //логи
