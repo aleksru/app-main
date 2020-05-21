@@ -151,6 +151,7 @@
                         <li><a href="{{ route('statistic.dates') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Даты</span></a></li>
                         <li><a href="{{ route('statistic.operators') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Операторы</span></a></li>
                         <li><a href="{{ route('statistic.stores') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Магазины</span></a></li>
+                        <li><a href="{{ route('statistic.products_categories') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Категории товара</span></a></li>
                     </ul>
                 </li>
             </ul>

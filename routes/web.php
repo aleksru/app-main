@@ -103,6 +103,8 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('operators-table', 'OperatorsController@datatable')->name('operators.table');
         Route::get('stores', 'StoresController@index')->name('stores');
         Route::get('stores-table', 'StoresController@datatable')->name('stores.table');
+        Route::get('products-categories', 'ProductsCategoriesController@index')->name('products_categories');
+        Route::get('products-categories-table', 'ProductsCategoriesController@datatable')->name('products_categories.table');
     });
 
     //логи
