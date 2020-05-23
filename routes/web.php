@@ -107,6 +107,8 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('products-categories-table', 'ProductsCategoriesController@datatable')->name('products_categories.table');
         Route::get('couriers-acc', 'CouriersAccController@index')->name('couriers_acc');
         Route::get('couriers-acc-table', 'CouriersAccController@datatable')->name('couriers_acc.table');
+        Route::get('suppliers', 'SuppliersController@index')->name('suppliers');
+        Route::get('suppliers-table', 'SuppliersController@datatable')->name('suppliers.table');
     });
 
     //логи
