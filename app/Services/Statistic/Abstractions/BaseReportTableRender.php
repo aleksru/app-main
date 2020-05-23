@@ -4,6 +4,8 @@
 namespace App\Services\Statistic\Abstractions;
 
 
+use Illuminate\Support\Str;
+
 class BaseReportTableRender
 {
     protected $routeIndex;
@@ -22,7 +24,7 @@ class BaseReportTableRender
     {
         $this->routeIndex = $routeIndex;
         $this->routeDatatable = $routeDatatable;
-        $this->name = $name ? $name : $this->randomString();
+        $this->name = $name ? $name : Str::random(7);
         $this->labelHeader = $labelHeader;
     }
 
@@ -71,15 +73,5 @@ class BaseReportTableRender
     public function getLabelHeader()
     {
         return $this->labelHeader;
-    }
-
-    private function randomString()
-    {
-        $characters = 'abcdefghijklmnopqrstuvwxyz';
-        $randString = '';
-        for ($i = 0; $i < 7; $i++) {
-            $randString .= $characters[rand(0, strlen($characters) - 1)];
-        }
-        return $randString;
     }
 }
