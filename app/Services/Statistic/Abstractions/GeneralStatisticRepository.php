@@ -95,25 +95,25 @@ abstract class GeneralStatisticRepository implements IGeneralStatisticRepository
     public function getAvgAllInvoices()
     {
         $query = $this->buildJoin($this->queryRepository->getBaseOrderAllSalesQuery($this->dateFrom, $this->dateTo));
-        $query->selectRaw($this->getSelection() . ', orders.id, SUM(realizations.price) AS sum_order')
+        $query->selectRaw($this->getSelection() . ', SUM(realizations.price) AS sum_order')
             ->groupBy($this->getGroupBy(), 'orders.id');
         return DB::table(DB::raw("({$query->toSql()}) as sales"))
             ->mergeBindings($query)
             ->selectRaw($this->getFieldName() . ', AVG(sum_order) AS ' . GeneralStatisticDBContract::AVG_ALL_INVOICES)
-            ->groupBy($this->getGroupByFieldName())
+            ->groupBy($this->getFieldName())
             ->get();
     }
 
     protected function getAvgInvoiceProfit()
     {
         $query = $this->buildJoin($this->queryRepository->getBaseOrderSalesProfitQuery($this->dateFrom, $this->dateTo));
-        $query->selectRaw($this->getSelection() . ', orders.id, SUM(realizations.price) AS sum_order')
+        $query->selectRaw($this->getSelection() . ', SUM(realizations.price) AS sum_order')
             ->groupBy($this->getGroupBy(), 'orders.id');
         $this->avgSales = DB::table(DB::raw("({$query->toSql()}) as sales"))
             ->mergeBindings($query)
-            ->selectRaw($this->getFieldName() . ', AVG(sum_order) AS ' .
-                GeneralStatisticDBContract::AVG_INVOICE.', AVG(profit) AS ' . GeneralStatisticDBContract::AVG_PROFIT)
-            ->groupBy($this->getGroupByFieldName())
+            ->selectRaw($this->getFieldName() . ', AVG(sum_order) AS ' . GeneralStatisticDBContract::AVG_INVOICE .
+                            ', AVG(profit) AS ' . GeneralStatisticDBContract::AVG_PROFIT)
+            ->groupBy($this->getFieldName())
             ->get();
     }
 

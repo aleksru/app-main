@@ -38,7 +38,7 @@ class QueryRepository
 
     public function getBaseOrderAllSalesQuery(Carbon $dateFrom, Carbon $dateTo): Builder
     {
-        return $this->buildBaseRealizations($this->getBaseStatisticOnOrdersQuery($dateFrom, $dateTo));
+        return $this->buildBaseAllRealizations($this->getBaseStatisticOnOrdersQuery($dateFrom, $dateTo));
     }
 
     public function getBaseOrderSalesProfitQuery(Carbon $dateFrom, Carbon $dateTo): Builder
@@ -55,5 +55,14 @@ class QueryRepository
                 ->whereRaw('IFNULL(products.category, "Без категории") != "' . ProductCategoryEnums::DELIVERY . '"')
                 ->whereNull('realizations.deleted_at')
                 ->whereNull('realizations.reason_refusal_id');
+    }
+
+    protected function buildBaseAllRealizations(Builder $builder): Builder
+    {
+        return $builder
+            ->join('realizations', 'orders.id', '=', 'realizations.order_id')
+            ->join('products', 'realizations.product_id', '=', 'products.id')
+            ->whereRaw('IFNULL(products.category, "Без категории") != "' . ProductCategoryEnums::DELIVERY . '"')
+            ->whereNull('realizations.deleted_at');
     }
 }
