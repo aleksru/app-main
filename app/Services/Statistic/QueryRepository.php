@@ -39,7 +39,7 @@ class QueryRepository
     public function getBaseOrderAllSalesQuery(Carbon $dateFrom, Carbon $dateTo): Builder
     {
         return $this->buildBaseAllRealizations($this->getBaseStatisticOnOrdersQuery($dateFrom, $dateTo))
-                ->whereNotNull('orders.stock_status_id');
+                ->whereNotNull('other_statuses.result');
     }
 
     public function getBaseOrderSalesProfitQuery(Carbon $dateFrom, Carbon $dateTo): Builder
