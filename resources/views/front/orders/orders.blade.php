@@ -155,12 +155,16 @@
         toast.error('{{ session()->get('error') }}')
     @endif
 
+    let lockUpdate = false;
     //инициализация таблицы
     $('#orders-table').on( 'init.dt', function () {
         rewriteSearchColumns();
         setInterval(function () {
-            $('#orders-table').DataTable().ajax.reload(null, false);
-        }, 7000);
+            if(lockUpdate === false) {
+                $('#orders-table').DataTable().ajax.reload(null, false);
+                lockUpdate = true;
+            }
+        }, 5000);
 
         let tableOrders = $('#orders-table').DataTable();
         const indCreAt = tableOrders.settings().init().columns.findIndex((element, index) => element.name == 'created_at');
@@ -183,7 +187,7 @@
         $('.row-link').click(function(){
             window.open($(this).find('a').first().attr('href'), '_blank');
         });
-
+        lockUpdate = false;
         $('#table_preloader').hide();
     });
 
@@ -244,6 +248,7 @@
                 $(this).html(input);
                 input.off().on('keyup cut paste change', _.debounce(async (e) => {
                     $('#table_preloader').show();
+                    lockUpdate = true;
                     tableOrders.columns(i).search(input.val()).draw();//, tableOrders.settings()[0].searchDelay
                 }, 1000));
 
@@ -258,6 +263,7 @@
                 }
                 select.on('change', async function(){
                     $('#table_preloader').show();
+                    lockUpdate = true;
                     tableOrders.columns(i).search($(this).val()).draw();//, tableOrders.settings()[0].searchDelay;
                 });
             }
