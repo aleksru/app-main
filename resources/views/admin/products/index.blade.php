@@ -40,7 +40,7 @@
                     'id' => [
                         'name' => 'ID',
                         'width' => '1%',
-                        'searchable' => true,
+                        'searchable' => false,
                     ],
                     'article' => [
                         'name' => 'article',
@@ -50,7 +50,7 @@
                     'product_name' => [
                         'name' => 'Товар',
                         'width' => '10%',
-                        'searchable' => false,
+                        'searchable' => true,
                     ],
                     'type' => [
                         'name' => 'Тип',
