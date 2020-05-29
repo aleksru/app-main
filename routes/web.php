@@ -111,6 +111,8 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('suppliers-table', 'SuppliersController@datatable')->name('suppliers.table');
         Route::get('pickup', 'PickUpController@index')->name('pickup');
         Route::get('pickup-table', 'PickUpController@datatable')->name('pickup.table');
+        Route::get('product-stores', 'ProductStoreController@index')->name('product_stores');
+        Route::get('product-stores-table', 'ProductStoreController@datatable')->name('product_stores.table');
     });
 
     //логи

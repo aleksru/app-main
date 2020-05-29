@@ -155,6 +155,7 @@
                         <li><a href="{{ route('statistic.couriers_acc') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Курьеры аксы</span></a></li>
                         <li><a href="{{ route('statistic.suppliers') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Поставщики</span></a></li>
                         <li><a href="{{ route('statistic.pickup') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Самовывоз</span></a></li>
+                        <li><a href="{{ route('statistic.product_stores') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Товары по магазинам</span></a></li>
                     </ul>
                 </li>
             </ul>

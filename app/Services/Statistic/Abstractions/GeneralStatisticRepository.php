@@ -122,7 +122,7 @@ abstract class GeneralStatisticRepository implements IGeneralStatisticRepository
         return $this->getTableName() . '.' .$this->getFieldName();
     }
 
-    protected function getGroupBy(): string
+    protected function getGroupBy()
     {
         return $this->getTableName() . '.' . $this->getGroupByFieldName();
     }
