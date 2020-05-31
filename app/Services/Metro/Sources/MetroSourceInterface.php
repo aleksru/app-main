@@ -3,8 +3,9 @@
 
 namespace App\Services\Metro\Sources;
 
+use App\Services\Metro\LineStationsData;
 
 interface MetroSourceInterface
 {
-    public function update();
+    public function getLineStations() : LineStationsData;
 }

@@ -113,6 +113,12 @@ return [
             'days' => 2,
             'permission' => 0777,
         ],
+
+        'metro' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/metro.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

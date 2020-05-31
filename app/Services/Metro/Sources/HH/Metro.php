@@ -4,7 +4,8 @@
 namespace App\Services\Metro\Sources\HH;
 
 use App\Models\City;
-use App\Models\Metro as MetroModel;
+use App\Services\Metro\LineStations;
+use App\Services\Metro\LineStationsData;
 use App\Services\Metro\Sources\MetroSourceInterface;
 use GuzzleHttp\Client;
 
@@ -16,28 +17,40 @@ class Metro implements MetroSourceInterface
     private $city;
 
     /**
+     * @var LineStationsData
+     */
+    private $lineStationsData;
+
+    /**
      * Metro constructor.
      * @param City $city
      */
     public function __construct(City $city)
     {
         $this->city = $city;
+        $this->lineStationsData = new LineStationsData();
     }
 
     /**
      *
      */
-    public function update()
+    public function getLineStations() : LineStationsData
     {
         $data = $this->getData();
         foreach ($data['lines'] as $line){
+            $lineStations = new LineStations($line['name'], $line['hex_color']);
             foreach ($line['stations'] as $station){
-                MetroModel::firstOrCreate([
-                    'name' => $station['name'],
-                    'city_id' => $this->city->id,
-                ]);
+                $lineStations->addStation(
+                    LineStations::stationFactory(
+                        $station['name'],
+                            $station['lat'] ?? null,
+                            $station['lng'] ?? null)
+                );
             }
+            $this->lineStationsData->addLineStations($lineStations);
         }
+
+        return $this->lineStationsData;
     }
 
     /**

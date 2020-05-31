@@ -14,6 +14,11 @@ class MetroController extends Controller
      */
     public function getMetrosByCity(City $city)
     {
-        return response()->json(['metros' => $city->metros()->orderBy('name')->get()]);
+        return response()->json([
+            'metros' => $city->metros()
+                ->selectRaw("id, CONCAT(IFNULL(line, ''), '/', name) as name")
+                ->orderBy('name')
+                ->get()
+        ]);
     }
 }

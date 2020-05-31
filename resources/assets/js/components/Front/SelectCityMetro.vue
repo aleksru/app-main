@@ -9,14 +9,20 @@
         <div class="col-sm-3">
             <label for="metro_id" class="control-label">Метро</label>
             <input name="metro_id" type="text" :value="selectedMetro" v-show="false"/>
-            <v-select label="name" index="id" :value="valueMetro" :options="optionsMetros" v-model="selectedMetro">
+            <v-select class="cust-v-select" label="name" index="id" :value="valueMetro" :options="optionsMetros" v-model="selectedMetro">
             </v-select>
         </div>
     </div>
 </template>
 
-<style scoped>
-
+<style>
+    .v-select.cust-v-select .dropdown-menu{
+        min-width: 150%;
+        font-size: 12px;
+    }
+    .v-select.cust-v-select .dropdown-toggle .vs__selected-options .selected-tag{
+        font-size: 12px;
+    }
 </style>
 
 <script>
