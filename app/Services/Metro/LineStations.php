@@ -41,6 +41,23 @@ class LineStations extends Line
     }
 
     /**
+     * @param int $index
+     * @return Station|null
+     */
+    public function getStation(int $index) : ?Station
+    {
+        return $this->stations[$index] ?? null;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountStations(): int
+    {
+        return count($this->stations);
+    }
+
+    /**
      * @return Station
      */
     public function popStation() : ?Station

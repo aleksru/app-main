@@ -47,7 +47,7 @@ class Metro implements MetroSourceInterface
                             $station['lng'] ?? null)
                 );
             }
-            $this->lineStationsData->addLineStations($lineStations);
+            $this->lineStationsData[] = $lineStations;
         }
 
         return $this->lineStationsData;

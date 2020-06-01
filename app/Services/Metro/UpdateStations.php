@@ -43,7 +43,7 @@ class UpdateStations
         try{
             $service = $this->getService();
             $data = $service->getLineStations();
-            while ($lineStations = $data->popLineStation()){
+            foreach ($data as $lineStations){
                 $isIgnoreLine = $this->isIgnoreLine($lineStations);
                 if( ! $isIgnoreLine ){
                     $this->createStations($lineStations);
@@ -59,7 +59,8 @@ class UpdateStations
 
     private function createStations(LineStations $lineStations)
     {
-        while ($station = $lineStations->popStation()){
+        for ($i=0; $i < $cnt = $lineStations->getCountStations(); $i++){
+            $station = $lineStations->getStation($i);
             Log::channel(self::LOG_TAG)->error('Добавлена станция ' . $lineStations->getName() . '/' . $station->getName());
             Metro::firstOrCreate([
                 'name' => $station->getName(),
@@ -71,7 +72,8 @@ class UpdateStations
 
     private function deleteStations(LineStations $lineStations)
     {
-        while ($station = $lineStations->popStation()){
+        for ($i=0; $i < $cnt = $lineStations->getCountStations(); $i++){
+            $station = $lineStations->getStation($i);
             Log::channel(self::LOG_TAG)->error('Удалена станция ' . $lineStations->getName() . '/' . $station->getName());
             Metro::where('name', $station->getName())->where('line', $lineStations->getName())->delete();
         }

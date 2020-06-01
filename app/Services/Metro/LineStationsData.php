@@ -3,28 +3,26 @@
 
 namespace App\Services\Metro;
 
+use App\Helpers\BaseIterableData;
 
-class LineStationsData
+class LineStationsData extends BaseIterableData
 {
-    protected $lineStations = [];
-
-    public function addLineStations(LineStations $lineStations)
+    public function current() : ?LineStations
     {
-        $this->lineStations[] = $lineStations;
+        return parent::current();
     }
 
-    public function getLineStationsIterable()
+    public function offsetGet($offset) : ?LineStations
     {
-        foreach ($this->lineStations as $lineStation){
-            yield $lineStation;
+        return parent::offsetGet($offset);
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        if (!$value instanceof LineStations) {
+            throw new \InvalidArgumentException("value must be instance of LineStations.");
         }
-    }
 
-    /**
-     * @return LineStations|null
-     */
-    public function popLineStation() : ?LineStations
-    {
-        return array_pop($this->lineStations);
+        parent::offsetSet($offset, $value);
     }
 }
