@@ -39,6 +39,7 @@ Route::group(['middleware' =>'auth'], function() {
     Route::get('orders/{order}/unload/{user}', 'OrderController@unLoad')->name('order.unload');
     Route::get('orders/{order}/onload/{user}', 'OrderController@onLoad')->name('order.onload');
     Route::post('orders-logistic/{order}/update', 'OrderController@orderLogisticUpdate')->name('order.logistic.update');
+    Route::post('orders-logistic-mass-change-status/update', 'OrderController@orderMassStatusUpdate')->name('order.logistic.mass.statuses.update');
     Route::post('realizations-logistic/{realization}/update', 'OrderController@realizationLogisticUpdate')->name('realization.logistic.update');
 
     //бегунок

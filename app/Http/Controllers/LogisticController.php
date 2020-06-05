@@ -133,7 +133,13 @@ class LogisticController extends Controller
                 'width' => '1%',
                 'searchable' => false,
                 'orderable' => true
-            ]
+            ],
+            'checkbox' => [
+                'name' => '',
+                'width' => '1%',
+                'searchable' => false,
+                'orderable' => true
+            ],
         ];
 
     public static function getNameColumnOnIndex(int $index)
@@ -314,9 +320,6 @@ class LogisticController extends Controller
             ->editColumn('courier_name', function (Order $order){
                 return $order->courier ? $order->courier->name : '';
             })
-//            ->editColumn('courier_payment', function (Order $order){
-//                return $order->courier_payment;
-//            })
             ->editColumn('btn_details', function (Order $order){
                 return view('front.logistic.parts.btn_order_group', [ 'id' => $order->id ]);
             })
@@ -355,7 +358,10 @@ class LogisticController extends Controller
                 return $order->logisticStatus ?
                     view('front.logistic.parts.other_status_cell', ['status' => $order->logisticStatus]) : "";
             })
-            ->rawColumns(['btn_details', 'imei', 'products', 'status_stock', 'status_logist'])
+            ->editColumn('checkbox', function (Order $order){
+                return '<input name="checked_order" type="checkbox">';
+            })
+            ->rawColumns(['btn_details', 'imei', 'products', 'status_stock', 'status_logist', 'checkbox'])
             ->setRowClass(function (Order $order) {
                 $class = ($order->stockStatus ? ' bg-' . $order->stockStatus->color : '');
 

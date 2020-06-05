@@ -34,7 +34,8 @@ class OrderLogisticRequest extends FormRequest
                 'comment_stock' => 'string|nullable',
                 'courier_payment' => 'integer|nullable',
                 'logistic_status_id' => 'integer|nullable',
-                'stock_status_id' => 'integer|nullable',
+                'stock_status_id' => 'integer|nullable|required_with:order_ids',
+                'order_ids' => 'array|filled',
                 'comment_logist' => 'string|nullable',
             ];
         }
@@ -53,7 +54,8 @@ class OrderLogisticRequest extends FormRequest
             return [
                 'comment_stock' => 'string|nullable',
                 'courier_id' => 'integer|nullable',
-                'stock_status_id' => 'integer|nullable',
+                'stock_status_id' => 'integer|nullable|required_with:order_ids',
+                'order_ids' => 'array|filled',
             ];
         }
 

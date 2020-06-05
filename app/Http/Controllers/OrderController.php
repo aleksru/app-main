@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LogistTableUpdateEvent;
 use App\Events\OrderConfirmedUpdateEvent;
 use App\Events\OrderUpdateRealizationsEvent;
 use App\Events\UpdatedOrderEvent;
@@ -274,6 +275,15 @@ class OrderController extends Controller
         $order->update($orderLogisticRequest->validated());
 
         return response()->json($order);
+    }
+
+    public function orderMassStatusUpdate(OrderLogisticRequest $orderLogisticRequest)
+    {
+        if($stockStatusId = $orderLogisticRequest->get('stock_status_id')){
+            Order::whereIn('id', $orderLogisticRequest->get('order_ids'))->update(['stock_status_id' => $stockStatusId]);
+            event(new LogistTableUpdateEvent());
+        }
+        return response()->json('ok');
     }
 
     /**

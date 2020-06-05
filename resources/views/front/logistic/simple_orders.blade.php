@@ -25,9 +25,51 @@
         <div class="col-md-6">
             <courier-print></courier-print>
         </div>
-        <a href="{{route('orders.create')}}" target="_blank"><button class="btn btn-sm btn-primary pull-right">
-                <i class="fa fa-plus"></i> Новый заказ
-            </button></a>
+        <div class="col-md-6">
+            <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Статус склада</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" style="display: none;">
+                    <div class="box-body">
+                        <div class="col-sm-6">
+                            <form id="mass_change_stock_status" type="submit" method="POST" enctype="multipart/form-data">
+                                <div class="row">
+                                        <div class="form-group">
+                                            <label for="" class="col-sm-4 control-label">Статус склада</label>
+
+                                            <div class="col-sm-8">
+                                                <select class="js-example-status-stock-single form-control" name="stock_status_id">
+                                                    <option value="" selected>Не выбран</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-success">
+                                            <i class="fa fa-save"></i> Сохранить
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="box box-warning">
         <div class="box-body">
@@ -81,6 +123,60 @@
                 data: []
             },
         };
+
+        $(function() {
+            let stockStatuses = {!! json_encode(\App\Models\OtherStatus::typeStockStatuses()->select('id', 'name as text')->get()->toArray()) !!};
+            $('.js-example-status-stock-single').select2({
+                data: stockStatuses,
+                allowClear: true,
+                placeholder: "Выберите статус...",
+            });
+
+            $("#mass_change_stock_status").on("submit", function(e){
+                e.preventDefault();
+                const formData = new FormData(e.target);
+
+                if(formData.get('stock_status_id') == false){
+                    toast.error('Не выбран статус!');
+                    return false;
+                }
+                sendMassChange(formData).then((res) => {
+                    toast.success('Успешно обновлено!');
+                }).catch((err) => {
+                    if(err instanceof ErrorValidateException){
+                        toast.error(err.toString());
+                    }else{
+                        toast.error('Что то пошло не так (');
+                    }
+                });
+
+            });
+
+            async function sendMassChange(formData) {
+                let isAppendForm = false;
+                $("input[name='checked_order']").each(function () {
+                    if(this.checked){
+                        formData.append('order_ids[]', $(this).parent().parent().data("order-id"));
+                        isAppendForm = true;
+                    }
+                });
+                if( ! isAppendForm ){
+                    throw new ErrorValidateException('Не выбраны заказы!');
+                }
+
+                const response = await axios.post('/orders-logistic-mass-change-status/update', formData);
+
+                return response;
+            }
+
+            function ErrorValidateException(message) {
+                this.message = message;
+                this.toString = function() {
+                    return this.message
+                };
+            }
+        });
+
         /**
          *обновление таблицы
          */
