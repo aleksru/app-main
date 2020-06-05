@@ -86,6 +86,10 @@
                             :min-margin="{{config('realization.min_margin_order')}}"
                             :min-margin-product="{{config('realization.min_margin_product')}}">
                 </fast-order>
+                <fast-changes :table-id="'orders-table'"
+                              :stock_statuses='@json(\App\Models\OtherStatus::typeStockStatuses()->get())'>
+
+                </fast-changes>
             </div>
         </div>
 
