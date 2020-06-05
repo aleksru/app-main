@@ -359,7 +359,7 @@ class LogisticController extends Controller
                     view('front.logistic.parts.other_status_cell', ['status' => $order->logisticStatus]) : "";
             })
             ->editColumn('checkbox', function (Order $order){
-                return '<input name="checked_order" type="checkbox">';
+                return '<input name="checked_order" type="checkbox" style="height: 25px;width: 25px">';
             })
             ->rawColumns(['btn_details', 'imei', 'products', 'status_stock', 'status_logist', 'checkbox'])
             ->setRowClass(function (Order $order) {
