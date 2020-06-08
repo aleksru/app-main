@@ -411,7 +411,7 @@ class LogisticController extends Controller
                             }
                             if(self::getNameColumnOnIndex($value['column']) == 'status_stock'){
                                 $query->orderBy('other_statuses.ordering', $value['dir'])
-                                    ->orderBy('couriers.name');
+                                    ->orderBy('couriers.name', 'DESC');
                             }else{
                                 $query->orderBy($columns[(int)$value['column']]["name"], $value['dir']);
                             }
