@@ -140,6 +140,39 @@
                     toast.error('Произошла ошибка!');
                 });
             });
+
+            $('.select-courier').select2({
+                minimumResultsForSearch: Infinity,
+                dropdownAutoWidth: true,
+                ajax: {
+                    url: function (params) {
+                        return `/courier/order/${this[0].dataset.orderId}/get`;
+                    },
+
+                    processResults: function (data) {
+                        let items = [];
+                        for (let courier of data){
+                            items.push({id: courier.id, text: courier.name})
+                        }
+                        return {
+                            results: items
+                        };
+                    }
+                }
+            });
+
+            $('.select-courier').on('select2:select', function (e) {
+                axios.post(`/orders-logistic-event/${this.dataset.orderId}/update`, {
+                    courier_id: this.value
+                })
+                .then((res) => {
+                    toast.success('Успешно обновлено!');
+                })
+                .catch((err) => {
+                    console.log(err);
+                    toast.error('Произошла ошибка!');
+                });
+            });
         });
 
         $(function() {
