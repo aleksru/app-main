@@ -70,7 +70,7 @@ class LogisticController extends Controller
                 'orderable' => false
             ],
             'status_logist' => [
-                'name' => 'Статус Логист',
+                'name' => 'Причина отказа',
                 'width' => '5%',
                 'searchable' => true,
                 'orderable' => true
