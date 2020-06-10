@@ -136,4 +136,12 @@ class OrderStatus extends Model
     {
         return $this->belongsToMany(OtherStatus::class, 'statuses_other_statuses', 'order_status_id')->typeSubStatuses();
     }
+
+    /**
+     * @return int|null
+     */
+    public static function getIdsStatusComplaining()
+    {
+        return self::getIdStatusForType(self::STATUS_COMPLAINT_PREFIX);
+    }
 }

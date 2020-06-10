@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\ClientPhone;
 use App\Models\Traits\HasSms;
+use App\Repositories\OrderStatusRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -147,5 +148,14 @@ class Client extends Model
     public function getOrdersCountForStatus(int $statusId) : int
     {
         return $this->orders()->where('status_id', $statusId)->count();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isComplaining() : bool
+    {
+        $ids = app(OrderStatusRepository::class)->getIdsStatusComplaining();
+        return $this->getOrdersCountForStatus($ids == null ? -1 : $ids) > 0;
     }
 }
