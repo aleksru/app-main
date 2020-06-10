@@ -150,7 +150,7 @@
                     },
 
                     processResults: function (data) {
-                        let items = [];
+                        let items = [{id: '', text: 'Не выбран'}];
                         for (let courier of data){
                             items.push({id: courier.id, text: courier.name})
                         }
