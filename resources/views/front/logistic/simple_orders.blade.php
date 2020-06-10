@@ -128,6 +128,20 @@
             },
         };
 
+        $('#orders-table').on( 'draw.dt', function (e, settings) {
+            $('.select-stock-statuses').on('change', function() {
+                axios.post(`/orders-logistic/${this.dataset.orderId}/update`, {
+                    stock_status_id: this.value
+                })
+                .then((res) => {
+                    toast.success('Успешно обновлено!');
+                }).catch((err) => {
+                    console.log(err);
+                    toast.error('Произошла ошибка!');
+                });
+            });
+        });
+
         $(function() {
             let stockStatuses = {!! json_encode(\App\Models\OtherStatus::typeStockStatuses()->select('id', 'name as text')->get()->toArray()) !!};
             $('.js-example-status-stock-single').select2({

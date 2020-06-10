@@ -210,6 +210,7 @@ class LogisticController extends Controller
             return ($user->isLogist() && $user->account) ?
                 $user->account->cities->pluck('id') : collect();
         });
+        $stockStatuses = OtherStatus::typeStockStatuses()->get();
 
         $orders = Order::with([
             'status',
@@ -349,9 +350,15 @@ class LogisticController extends Controller
                         view('front.logistic.parts.imei_table', ['realizations' => $order->realizations->pluck('imei')])
                         : "";
             })
-            ->editColumn('status_stock', function (Order $order) {
-                return $order->stockStatus ?
-                    view('front.logistic.parts.other_status_cell', ['status' => $order->stockStatus]) : "";
+            ->editColumn('status_stock', function (Order $order) use (&$stockStatuses){
+//                return $order->stockStatus ?
+//                    view('front.logistic.parts.other_status_cell', ['status' => $order->stockStatus]) : "";
+                return view('front.logistic.parts.table_select_stock_statuses',
+                    [
+                        'stockStatuses' => $stockStatuses,
+                        'order'         => $order
+                    ]
+                );
             })
 
             ->editColumn('status_logist', function (Order $order) {

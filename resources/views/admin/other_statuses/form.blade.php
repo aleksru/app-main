@@ -192,7 +192,7 @@
                         <div class="tab-pane {{$activeNav == \App\Enums\OtherStatusEnums::LOGISTIC_TYPE ? 'active' : ''}}" id="tab_3">
                             <div class="row">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Список статусов логистики</h3>
+                                    <h3 class="box-title">Причины отказа</h3>
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
