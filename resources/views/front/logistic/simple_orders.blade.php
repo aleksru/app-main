@@ -130,7 +130,7 @@
 
         $('#orders-table').on( 'draw.dt', function (e, settings) {
             $('.select-stock-statuses').on('change', function() {
-                axios.post(`/orders-logistic/${this.dataset.orderId}/update`, {
+                axios.post(`/orders-logistic-event/${this.dataset.orderId}/update`, {
                     stock_status_id: this.value
                 })
                 .then((res) => {

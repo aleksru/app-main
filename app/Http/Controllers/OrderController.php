@@ -277,6 +277,13 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
+    public function orderLogisticUpdateWithEvent(Order $order, OrderLogisticRequest $orderLogisticRequest)
+    {
+        $order->update($orderLogisticRequest->validated());
+        event(new LogistTableUpdateEvent());
+        return response()->json($order);
+    }
+
     public function orderMassStatusUpdate(OrderLogisticRequest $orderLogisticRequest)
     {
         if($stockStatusId = $orderLogisticRequest->get('stock_status_id')){
