@@ -19,4 +19,21 @@ class OrderStatusRepository
             return OrderStatus::getIdsStatusComplaining();
         });
     }
+
+    /**
+     * @return mixed
+     */
+    public function getIdsStatusConfirmed()
+    {
+        return Cache::remember('ID_ORDER_STATUS_CONFIRM', Carbon::now()->addHours(4) ,function(){
+            return OrderStatus::getIdStatusConfirm();
+        });
+    }
+
+    public function getIdStatusMissedOutCall()
+    {
+        return Cache::remember('ID_ORDER_STATUS_MISSED_CALL', Carbon::now()->addHours(4), function (){
+            return OrderStatus::getIdStatusForType(OrderStatus::STATUS_MISSED_PREFIX);
+        });
+    }
 }

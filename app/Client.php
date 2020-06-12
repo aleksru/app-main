@@ -145,7 +145,7 @@ class Client extends Model
      * @param int $statusId
      * @return int
      */
-    public function getOrdersCountForStatus(int $statusId) : int
+    public function getOrdersCountForStatus(int $statusId): int
     {
         return $this->orders()->where('status_id', $statusId)->count();
     }
@@ -153,9 +153,111 @@ class Client extends Model
     /**
      * @return bool
      */
-    public function isComplaining() : bool
+    public function isComplaining(): bool
     {
-        $ids = app(OrderStatusRepository::class)->getIdsStatusComplaining();
-        return $this->getOrdersCountForStatus($ids == null ? -1 : $ids) > 0;
+
+        return $this->storeComplaints()->count() > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccessSales(): bool
+    {
+        return $this->storeSuccess()->count() > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoyal(): bool
+    {
+        return $this->isSuccessSales() && ! $this->isComplaining();
+    }
+
+    public function storeInfo()
+    {
+        return $this->belongsToMany(
+            Store::class,
+            'client_store_info',
+            'client_id',
+            'store_id'
+        );
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function storeComplaints()
+    {
+        return $this->storeInfo()->wherePivot('is_complaint', 1);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function storeSuccess()
+    {
+        return $this->storeInfo()->wherePivot('is_success', 1);
+    }
+
+    /**
+     * @param int $storeId
+     * @return bool
+     */
+    public function isStoreComplaint(int $storeId) : bool
+    {
+        return $this->storeComplaints->pluck('id')->contains($storeId);
+    }
+
+    /**
+     * @param int $storeId
+     * @return bool
+     */
+    public function isStoreSuccess(int $storeId) : bool
+    {
+        return $this->storeSuccess->pluck('id')->contains($storeId);
+    }
+
+    /**
+     * @param int $storeId
+     * @return bool
+     */
+    public function isLoyalStore(int $storeId) : bool
+    {
+        return $this->isStoreSuccess($storeId) && ! $this->isStoreComplaint($storeId);
+    }
+
+    /**
+     * @param int $storeId
+     */
+    public function addComplaintStore(int $storeId)
+    {
+        $this->storeInfo()->syncWithoutDetaching([$storeId => ['is_complaint' => 1]]);
+    }
+
+    /**
+     * @param int $storeId
+     */
+    public function addSuccessStore(int $storeId)
+    {
+        $this->storeInfo()->syncWithoutDetaching([$storeId => ['is_success' => 1]]);
+    }
+
+    /**
+     * @return int
+     */
+    public function countOrders() : int
+    {
+        return $this->orders()->count();
+    }
+
+    /**
+     * @param int $storeId
+     * @return int
+     */
+    public function countOrdersInStore(int $storeId) : int
+    {
+        return $this->orders()->where('store_id', $storeId)->count();
     }
 }

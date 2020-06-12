@@ -6,6 +6,7 @@ use App\Client;
 use App\Enums\TypeCreatedOrder;
 use App\Models\OrderStatus;
 use App\Order;
+use App\Repositories\OrderStatusRepository;
 use App\Store;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -74,14 +75,8 @@ class CallCreateOrder implements ShouldQueue
         });
 
         if($statusNew && $client->getOrdersCountForStatus($statusNew) == 0) {
-            $isComplaining = false;
-            $idStatusComp = Cache::remember('ID_ORDER_STATUS_COMPLAINT', Carbon::now()->addHours(4) ,function(){
-                return OrderStatus::getIdStatusForType(OrderStatus::STATUS_COMPLAINT_PREFIX);
-            });
-
-            if($idStatusComp){
-                $isComplaining = $client->getOrdersCountForStatus($idStatusComp) > 0;
-            }
+            $isComplaining = $store->id ? $client->isStoreComplaint($store->id) : false;
+            $idStatusComp = app(OrderStatusRepository::class)->getIdsStatusComplaining();
             //Log::channel('custom')->error($data);
             Order::create([
                 'client_id'         => $client->id,

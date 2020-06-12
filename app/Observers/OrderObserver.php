@@ -11,6 +11,7 @@ use App\Jobs\SmsAction;
 use App\Models\OrderStatus;
 use App\Notifications\CreateOrder;
 use App\Order;
+use App\Repositories\OrderStatusRepository;
 use App\Services\Actions\SmsActionNoReach;
 use App\Services\Google\Sheets\Data\OrderLogistData;
 use Carbon\Carbon;
@@ -43,13 +44,9 @@ class OrderObserver
     public function updating(Order $order)
     {
         if($order->getAttributeValue('status_id') != $order->getOriginal('status_id')) {
-            $statusConfirm = Cache::remember('ID_ORDER_STATUS_CONFIRM', Carbon::now()->addHours(4), function (){
-                return OrderStatus::getIdStatusConfirm();
-            });
-
-            $statusNoReach = Cache::remember('ID_ORDER_STATUS_MISSED_CALL', Carbon::now()->addHours(4), function (){
-                return OrderStatus::getIdStatusForType(OrderStatus::STATUS_MISSED_PREFIX);
-            });
+            $statusConfirm = app(OrderStatusRepository::class)->getIdsStatusConfirmed();
+            $statusNoReach = app(OrderStatusRepository::class)->getIdStatusMissedOutCall();
+            $statusComplaint = app(OrderStatusRepository::class)->getIdsStatusComplaining();
 
             if($order->status_id == $statusNoReach){
                 dispatch(new SmsAction($order->client, new SmsActionNoReach($order->client, $order)));
@@ -60,10 +57,28 @@ class OrderObserver
                     $order->client->notify(new CreateOrder($order));
                     $order->flag_send_sms = true;
                 }
+                if($order->client && $order->client->countOrdersInStore($order->store_id) > 1){
+                    if ($order->client->isLoyalStore($order->store_id)){
+                        $order->comment = $order->comment . "\n Лояльный клиент(Были успешные заказы, нет жалоб)";
+                    }
+                    if ($order->client->isStoreComplaint($order->store_id)){
+                        $order->comment = $order->comment . "\n Негативный клиент(Были жалобы)";
+                    }
+                }
                 $order->confirmed_at = Carbon::now();
                 $logistOrderData = app(OrderLogistData::class, ['order' => $order]);
                 dispatch(new SendLogistGoogleTable($logistOrderData))->onQueue('google-tables');
                 event(new OrderConfirmedEvent($order));
+
+                if($order->store_id  && $order->client){
+                    $order->client->addSuccessStore($order->store_id);
+                }
+            }
+
+            if($order->status_id == $statusComplaint){
+                if($order->store_id  && $order->client){
+                    $order->client->addComplaintStore($order->store_id);
+                }
             }
         }
 
