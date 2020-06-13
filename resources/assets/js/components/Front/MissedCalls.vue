@@ -207,9 +207,13 @@
 
         mounted(){
             this.updateTable();
-            window.setInterval(() => {
-                this.updateTable();
-            }, 7000);
+            window.Echo.channel('missed-calls')
+                .listen('MissedCallEvent', (e) => {
+                    this.updateTable();
+                })
+//            window.setInterval(() => {
+//                this.updateTable();
+//            }, 7000);
         },
     }
 </script>

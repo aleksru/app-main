@@ -9,11 +9,11 @@ class MissedCall extends Model
     protected $guarded = ['id'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function clientCall()
     {
-        return $this->hasOne(ClientCall::class);
+        return $this->belongsTo(ClientCall::class);
     }
 
     public static function excludeOnNumber(string $number)
@@ -24,8 +24,19 @@ class MissedCall extends Model
             ->where('client_calls.from_number', $number)
             ->get();
         if( ! $ids->isEmpty() ){
-            MissedCall::query()->whereIn('id', $ids)->delete();
+            MissedCall::destroy($ids->pluck('id'));
         }
+    }
+
+    public static function hasNumber(string $number) : bool
+    {
+        $cnt = MissedCall::query()
+                ->select('missed_calls.id')
+                ->join('client_calls', 'missed_calls.client_call_id', '=', 'client_calls.id')
+                ->where('client_calls.from_number', $number)
+                ->count();
+
+        return $cnt > 0;
     }
 
     public static function excludeOnClientCall(ClientCall $clientCall)

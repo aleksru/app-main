@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Client;
 use App\Http\Composers\DeliveryWidget;
 use App\Http\Composers\StateStoreWidget;
+use App\MissedCall;
 use App\Models\ClientPhone;
 use App\Models\Realization;
 use App\Observers\LogObserver;
+use App\Observers\MissedCallObserver;
 use App\Observers\OrderObserver;
 use App\Order;
 use App\Services\Docs\DomPdfService;
@@ -75,6 +77,7 @@ class AppServiceProvider extends ServiceProvider
         Realization::observe(LogObserver::class);
         Client::observe(LogObserver::class);
         ClientPhone::observe(LogObserver::class);
+        MissedCall::observe(MissedCallObserver::class);
     }
 
     /**

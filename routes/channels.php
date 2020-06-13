@@ -43,6 +43,10 @@ Broadcast::channel('logistic-table', function () {
     return true;
 });
 
+Broadcast::channel('missed-calls', function () {
+    return true;
+});
+
 Broadcast::channel('logistic-table.{order_id}', function ($user) {
     return [
         'id'   => $user->id,

@@ -47,6 +47,7 @@ class ClientCallController extends Controller
         $mangoService = new MangoService();
         $mangoService->callback($callback);
         Log::channel('calls')->error(['ClientCallController', (array)$callback]);
+        MissedCall::excludeOnNumber($request->get('phone'));
 
         return response()->json(['command_id' => $uuid]);
     }

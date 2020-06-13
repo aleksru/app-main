@@ -169,10 +169,10 @@ class ClientCall extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function missedCall()
     {
-        return $this->belongsTo(MissedCall::class);
+        return $this->hasOne(MissedCall::class);
     }
 }
