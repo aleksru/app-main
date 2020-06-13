@@ -182,7 +182,7 @@ class Client extends Model
             'client_store_info',
             'client_id',
             'store_id'
-        );
+        )->withTimestamps();
     }
 
     /**

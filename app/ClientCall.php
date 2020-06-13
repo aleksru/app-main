@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\MangoCallEnums;
 use App\Models\Operator;
 use Illuminate\Database\Eloquent\Model;
 
@@ -71,6 +72,34 @@ class ClientCall extends Model
 
         return 'Не определен';
     }
+    /**
+     * @return bool
+     */
+    public function isOutgoing(): bool
+    {
+        return $this->type === self::outgoingCall;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIncoming(): bool
+    {
+        return $this->type === self::incomingCall;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMissed(): bool
+    {
+        return (int)$this->status_call === MangoCallEnums::CALL_RESULT_MISSED;
+    }
+
+    public function isSuccess(): bool
+    {
+        return (int)$this->status_call === MangoCallEnums::CALL_RESULT_SUCCESS;
+    }
 
     /**
      * Получение последнего звонка для номера
@@ -137,5 +166,13 @@ class ClientCall extends Model
         $resExp = explode(':', $value);
 
         $this->attributes['operator_text'] =  count($resExp) > 1 ? $resExp[1] : $value;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function missedCall()
+    {
+        return $this->belongsTo(MissedCall::class);
     }
 }

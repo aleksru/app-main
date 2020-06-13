@@ -31,4 +31,9 @@ class MangoCallEnums
 
     //Группа дозвона рекламаций
     const CALL_GROUP_COMPLAINT = 666;
+
+    /**
+     * Номера рекламаций
+     */
+    const COMPLAINT_NUMBERS = [666, 686];
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 
 use App\ClientCall;
+use App\Enums\MangoCallEnums;
+use App\MissedCall;
 use App\Models\Operator;
 use App\Repositories\CallsRepository;
 use App\Repositories\OrderRepository;
@@ -26,8 +28,9 @@ class ClientCallController extends Controller
         $this->authorize('view', ClientCall::class);
         $user =  Auth::user();
         $operator = ($user->isOperator() && $user->account) ? $user->account : null;
+        $complaintNumbers = MangoCallEnums::COMPLAINT_NUMBERS;
 
-        return view('front.calls.index', compact('operator'));
+        return view('front.calls.index', compact('operator', 'complaintNumbers'));
     }
 
     public function callback(Operator $operator, Request $request)
@@ -74,14 +77,20 @@ class ClientCallController extends Controller
         if($request->get('forDate')) {
             $toDate = Carbon::parse($request->get('forDate'));
         }
-        $key = md5('MISSED_CALLS_IDS_' . $toDate->toDateString());
-        $callsIds = Cache::remember($key, Carbon::today()->addSeconds(10), function () use ($callsRepository, $toDate){
-            return $callsRepository->getIdsMissedCallsForDate($toDate);
-        });
-        $calls = ClientCall::with('client', 'store')
-                            ->whereIn('id', $callsIds)
-                            ->orderBy('call_create_time', 'DESC')
-                            ->get();
+        $fromDate = clone $toDate;
+        $fromDate = $fromDate->subHours(3);
+        $toDate = $toDate->addDay();
+        $callsIds = MissedCall::query()
+            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->pluck('client_call_id');
+        $calls = ClientCall::with([
+            'client.storeComplaints' => function($query){
+                return $query->select('store_id');
+            },
+            'store'
+        ])->whereIn('id', $callsIds)
+            ->orderBy('call_create_time', 'DESC')
+            ->get();
         if(!$calls->isEmpty()){
             $uniquePhones = $calls->sum('is_first');
         }

@@ -35,7 +35,7 @@
                         <th>Магазин</th>
                         <th>Время</th>
                     </tr>
-                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="(parseInt(call.extension) !== 666)" v-show="!isComplaint">
+                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="! isComplaintCall(index)" v-show="!isComplaint">
                         <td>
                             <a :href="'/clients/' + call.client_id" target="_blank">
                                 {{call.client.name}}
@@ -76,7 +76,7 @@
                         <td>{{call.store ? call.store.name : ''}}</td>
                         <td>{{formatDateTimeCall(call.call_create_time)}}</td>
                     </tr>
-                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="(parseInt(call.extension) === 666)" v-show="isComplaint">
+                    <tr v-for="(call, index) in missedCalls" :key="call.id" v-if="isComplaintCall(index)" v-show="isComplaint">
                         <td>
                             <a :href="'/clients/' + call.client_id" target="_blank">
                                 {{call.client.name}}
@@ -131,6 +131,7 @@
     export default {
         props: {
             operator: [Object, null],
+            complaintNumbers: Array
         },
 
         data() {
@@ -187,8 +188,20 @@
 
             formatDateTimeCall(timestamp){
                 return moment.unix(timestamp).format('DD.MM HH:mm:ss');
-            }
+            },
 
+            isComplaintStore(index){
+                let storeId = this.missedCalls[index].store_id;
+                let storeComplaints = this.missedCalls[index].client.store_complaints;
+                let findIndex = storeComplaints.findIndex(storeComplaint => parseInt(storeId) === parseInt(storeComplaint.store_id));
+
+                return findIndex > -1;
+            },
+
+            isComplaintCall(index){
+                let numb = parseInt(this.missedCalls[index].extension);
+                return this.complaintNumbers.indexOf(numb) > -1 || this.isComplaintStore(index);
+            }
 
         },
 

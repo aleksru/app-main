@@ -26,8 +26,9 @@
 
     <div class="box box-warning">
         <div class="box-body">
-            <missed-calls :operator='@json($operator)'></missed-calls>
+            <missed-calls :operator='@json($operator)'
+                          :complaint-numbers='@json($complaintNumbers)'>
+            </missed-calls>
         </div>
-        <!-- /.box-body -->
     </div>
 @endsection
