@@ -134,7 +134,7 @@ class SaveCall implements ShouldQueue
         }
 
         if($clientCall ?? false){
-            CallMissedHandlerJob::dispatch($clientCall)->onQueue('calls');
+            CallMissedHandlerJob::dispatch($clientCall->id)->onQueue('calls');
         }
     }
 }
