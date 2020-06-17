@@ -75,7 +75,7 @@ class CallCreateOrder implements ShouldQueue
         });
 
         if($statusNew && $client->getOrdersCountForStatus($statusNew) == 0) {
-            $isComplaining = $store->id ? $client->isStoreComplaint($store->id) : false;
+            $isComplaining = $store ? $client->isStoreComplaint($store->id) : false;
             $idStatusComp = app(OrderStatusRepository::class)->getIdsStatusComplaining();
             //Log::channel('custom')->error($data);
             Order::create([
