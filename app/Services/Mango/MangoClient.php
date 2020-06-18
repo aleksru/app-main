@@ -43,7 +43,11 @@ class MangoClient
             $response = curl_exec($ch);
             curl_close($ch);
 
-            return json_decode($response, true);
+            $res = json_decode($response, true);
+            if( ! is_array($res) ){
+                Log::error(['Mango response not valid!', $res]);
+                throw new \Exception();
+            }
         }catch (\Exception $e){
             Log::error($e);
         }
