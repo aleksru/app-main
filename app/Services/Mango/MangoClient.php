@@ -48,6 +48,7 @@ class MangoClient
                 Log::error(['Mango response not valid!', $res]);
                 throw new \Exception();
             }
+            return $res;
         }catch (\Exception $e){
             Log::error($e);
         }
