@@ -498,4 +498,40 @@ class Order extends Model
 
         return $voucher;
     }
+
+    /**
+     * @return OrderBuilder
+     */
+    public static function getBuilder(): OrderBuilder
+    {
+        return new OrderBuilder();
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountRealizations(): int
+    {
+        return $this->realizations()->count();
+    }
+
+    /**
+     * @return array OrderProductTextData
+     */
+    public function getProductTextDataArray(): array
+    {
+        $result = [];
+        if( is_array($this->products_text) ){
+            foreach ($this->products_text as $item){
+                $result[] = new OrderProductTextData(
+                    $item['name'],
+                    $item['articul'],
+                    (int)($item['quantity'] ?? 1),
+                    (float)($item['price'] ?? 0)
+                );
+            }
+        }
+
+        return $result;
+    }
 }

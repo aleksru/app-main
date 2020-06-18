@@ -112,4 +112,12 @@ class Product extends Model
         return $this->category == ProductCategoryEnums::DELIVERY;
     }
 
+    /**
+     * @param string $article
+     * @return Product|null
+     */
+    public static function getFromArticle(string $article): ?self
+    {
+        return Product::byActicle($article)->first();
+    }
 }
