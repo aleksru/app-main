@@ -51,6 +51,7 @@ class MangoClient
             return $res;
         }catch (\Exception $e){
             Log::error($e);
+            throw new \Exception($e);
         }
     }
 
