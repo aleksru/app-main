@@ -37,6 +37,26 @@ class ClientCall extends Model
         return $this->belongsTo(Client::class);
     }
 
+    public function isReclamation(): bool
+    {
+        if($this->isExtensionReclamations()){
+            return true;
+        }
+        if($this->client && $this->store_id){
+            return $this->client->isStoreComplaint($this->store_id);
+        }
+
+        return false;
+    }
+
+    public function isExtensionReclamations(): bool
+    {
+        if( ! $this->extension ){
+            return false;
+        }
+        return in_array((int)$this->extension, MangoCallEnums::COMPLAINT_NUMBERS);
+    }
+
     /**
      * Оператор
      *

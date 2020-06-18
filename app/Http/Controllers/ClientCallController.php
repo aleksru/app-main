@@ -6,15 +6,14 @@ namespace App\Http\Controllers;
 use App\ClientCall;
 use App\Enums\MangoCallEnums;
 use App\MissedCall;
+use App\Models\CountMissedCall;
 use App\Models\Operator;
-use App\Repositories\CallsRepository;
 use App\Repositories\OrderRepository;
 use App\Services\Mango\Commands\Callback;
 use App\Services\Mango\MangoService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -69,20 +68,16 @@ class ClientCallController extends Controller
 
     /**
      * @param Request $request
-     * @param CallsRepository $callsRepository
      * @return \Illuminate\Http\JsonResponse
      */
-    public function datatable(Request $request, CallsRepository $callsRepository)
+    public function datatable(Request $request)
     {
         $toDate = Carbon::today();
         if($request->get('forDate')) {
             $toDate = Carbon::parse($request->get('forDate'));
         }
-        $fromDate = clone $toDate;
-        $fromDate = $fromDate->subHours(3);
-        $toDate = $toDate->addDay();
         $callsIds = MissedCall::query()
-            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->whereBetween('created_at', [(clone $toDate)->subHours(3), (clone $toDate)->addDay()])
             ->pluck('client_call_id');
         $calls = ClientCall::with([
             'client.storeComplaints' => function($query){
@@ -92,11 +87,13 @@ class ClientCallController extends Controller
         ])->whereIn('id', $callsIds)
             ->orderBy('call_create_time', 'DESC')
             ->get();
-        if(!$calls->isEmpty()){
-            $uniquePhones = $calls->sum('is_first');
-        }
 
-        return response()->json(['calls' => $calls, 'uniquePhones' => $uniquePhones ?? 0]);
+        return response()->json([
+            'calls'             => $calls,
+            'uniquePhones'      => $calls->sum('is_first'),
+            'countSimples'      => CountMissedCall::getCountSimplesByDate($toDate),
+            'countReclamations' => CountMissedCall::getCountReclamationsByDate($toDate)
+        ]);
     }
 
     public function callQueue(Request $request, OrderRepository $orderRepository)

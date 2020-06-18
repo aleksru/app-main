@@ -24,6 +24,18 @@
                 <small class="label pull-right bg-red" style="font-size: 150%;">{{uniqueCalls}}</small>
             </div>
 
+            <div class="col-md-2">
+                <small title="Кол-во чистых пропущенных" class="label pull-right bg-green" style="font-size: 150%;">{{countSimples}}</small>
+            </div>
+
+            <div class="col-md-1">
+                <small title="Кол-во пропущенных в рекламации" class="label pull-right bg-yellow" style="font-size: 150%;">{{countReclamations}}</small>
+            </div>
+
+            <div class="col-md-1">
+                <small title="Общее кол-во пропущенных" class="label pull-right bg-info" style="font-size: 150%;">{{sumMissed}}</small>
+            </div>
+
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -140,7 +152,9 @@
                 isComplaint: false,
                 phoneOtherCalls: {},
                 forDate: null,
-                uniqueCalls: 0
+                uniqueCalls: 0,
+                countSimples: 0,
+                countReclamations:0
             }
         },
 
@@ -180,7 +194,9 @@
             updateTable(){
                 this.getMissedCalls().then((res) => {
                     this.missedCalls = res.data.calls;
-                    this.uniqueCalls = res.data.uniquePhones
+                    this.uniqueCalls = res.data.uniquePhones;
+                    this.countSimples = res.data.countSimples;
+                    this.countReclamations = res.data.countReclamations;
                 }).catch((err) => {
                     console.log(err);
                 });
@@ -211,9 +227,13 @@
                 .listen('MissedCallEvent', (e) => {
                     this.updateTable();
                 })
-//            window.setInterval(() => {
-//                this.updateTable();
-//            }, 7000);
         },
+
+        computed: {
+            sumMissed(){
+                return this.countSimples + this.countReclamations
+            }
+
+        }
     }
 </script>
