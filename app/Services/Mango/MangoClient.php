@@ -45,7 +45,7 @@ class MangoClient
 
             $res = json_decode($response, true);
             if( ! is_array($res) ){
-                Log::error(['Mango response not valid!', $res]);
+                Log::error(['Mango response not valid!', $res, $this->data]);
                 throw new \Exception();
             }
             return $res;
