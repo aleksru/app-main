@@ -18,6 +18,7 @@ class CreateCountMissedCallsTable extends Migration
             $table->date('date');
             $table->integer('count')->default(0);
             $table->string('type');
+            $table->index(['date', 'type']);
         });
     }
 
