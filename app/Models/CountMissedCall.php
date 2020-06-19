@@ -6,6 +6,7 @@ use App\ClientCall;
 use App\Enums\CallTypes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class CountMissedCall extends Model
 {
@@ -29,6 +30,7 @@ class CountMissedCall extends Model
             self::increase(CallTypes::RECLAMATION);
         }else{
             self::increase(CallTypes::SIMPLE);
+            Log::channel('custom')->error($clientCall);
         }
     }
 
