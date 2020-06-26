@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Enums\TypeCreatedOrder;
 use App\Http\Requests\ClientRequest;
 use App\Models\ClientPhone;
 use App\Models\OrderStatus;
@@ -164,6 +165,7 @@ class ClientController extends Controller
             'comment' =>'-',
             'status_id' => null,
             'creator_user_id' => Auth::user()->id ?? null,
+            'type_created_order' => TypeCreatedOrder::CUSTOM
         ]);
 
         return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно создан!']);
