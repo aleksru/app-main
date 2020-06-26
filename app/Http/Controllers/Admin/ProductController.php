@@ -46,7 +46,7 @@ class ProductController extends Controller
      */
     public function datatable()
     {
-        return datatables() ->of(Product::query())
+        return datatables() ->of(Product::withoutIsActive())
             ->editColumn('type', function (Product $product) {
                 return $product->getTextType();
             })
@@ -60,7 +60,14 @@ class ProductController extends Controller
                     'id' => $product->id
                 ]);
             })
-            ->rawColumns(['actions'])
+            ->editColumn('state', function (Product $product) {
+                return view('datatable.toggle', [
+                    'check' => $product->isActive(),
+                    'id' => $product->id,
+                    'route' => route('admin.products.toggle.active'),
+                ]);
+            })
+            ->rawColumns(['actions', 'state'])
             ->make(true);
     }
 
@@ -92,4 +99,15 @@ class ProductController extends Controller
 
         return response()->json(['message' => "Категория изменена {$type}!"]);
     }
+
+    public function toggleActive(Request $request)
+    {
+        $product = Product::withoutIsActive()->findOrFail($request->get('id'));
+        $product->is_active = ! $product->is_active;
+        $product->save();
+
+        return response()->json(['message' => "Состояние успешно изменено!"]);
+    }
+
+
 }

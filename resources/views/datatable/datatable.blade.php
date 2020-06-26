@@ -117,7 +117,7 @@
                     id: toastID,
                 });
 
-                axios.post(route)
+                axios.post(route, {id})
                     .then((response) => {
                         table.ajax.reload(() => {
                             toast.hide(toastID);

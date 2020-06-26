@@ -229,6 +229,7 @@ Route::group(['middleware' =>['auth', 'role:change_price_list'], 'prefix' => 'ad
     Route::get('products-table', 'ProductController@datatable')->name('products.datatable');
     Route::post('products-toggle/{product}', 'ProductController@toggleSetType')->name('products.toggle.set-type');
     Route::post('products-category-toggle/{product}', 'ProductController@toggleSetCategory')->name('products.toggle.category');
+    Route::post('products-active-toggle/', 'ProductController@toggleActive')->name('products.toggle.active');
 });
 
 

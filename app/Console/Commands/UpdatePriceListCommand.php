@@ -82,8 +82,9 @@ class UpdatePriceListCommand extends Command
                         break;
                     }
                     //ищем\создаем сущность продукта
-                    $product = Product::firstOrNew(['article' => $productPriceList[Product::PRICE_LIST_ARTICUL]]);
+                    $product = Product::withoutIsActive()->firstOrNew(['article' => $productPriceList[Product::PRICE_LIST_ARTICUL]]);
                     $product->product_name = $productPriceList[Product::PRICE_LIST_PRODUCT];
+                    $product->setActivated();
                     $product->save();
                     ++$counter;
                     

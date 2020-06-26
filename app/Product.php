@@ -6,10 +6,13 @@ use App\Enums\ProductCategoryEnums;
 use App\Enums\ProductType;
 use App\Models\Realization;
 use App\Models\Supplier;
+use App\Models\Traits\ActiveTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use ActiveTrait;
+
     protected $guarded = ['id'];
 
     protected $hidden = ['pivot'];

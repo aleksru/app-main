@@ -67,6 +67,11 @@
                         'width' => '10%',
                         'orderable' => false
                     ],
+                    'state' => [
+                        'name' => 'Состояние',
+                        'width' => '2%',
+                        'orderable' => false
+                    ],
 
                 ],
             ])
