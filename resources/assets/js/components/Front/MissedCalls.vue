@@ -21,20 +21,25 @@
             </div>
 
             <div class="col-md-2">
-                <small class="label pull-right bg-red" style="font-size: 150%;">{{uniqueCalls}}</small>
+                <small class="label bg-red" style="font-size: 150%;">{{uniqueCalls}}</small>
             </div>
 
-            <div class="col-md-2">
-                <small title="Кол-во чистых пропущенных" class="label pull-right bg-green" style="font-size: 150%;">{{countSimples}}</small>
+            <div class="col-md-4">
+                <div class="col-md-4">
+                    <small title="Кол-во чистых пропущенных" class="label bg-green" style="font-size: 150%;">{{countSimples}}</small>
+                    <span class="badge bg-green" style="font-size: 100%;">{{percentSimples}}</span>
+                </div>
+
+                <div class="col-md-4">
+                    <small title="Кол-во пропущенных в рекламации" class="label bg-yellow" style="font-size: 150%;">{{countReclamations}}</small>
+                    <span class="badge bg-yellow" style="font-size: 100%;">{{percentReclamation}}</span>
+                </div>
+
+                <div class="col-md-4">
+                    <small title="Общее кол-во пропущенных" class="label bg-navy" style="font-size: 150%;">{{sumMissed}}</small>
+                </div>
             </div>
 
-            <div class="col-md-1">
-                <small title="Кол-во пропущенных в рекламации" class="label pull-right bg-yellow" style="font-size: 150%;">{{countReclamations}}</small>
-            </div>
-
-            <div class="col-md-1">
-                <small title="Общее кол-во пропущенных" class="label pull-right bg-info" style="font-size: 150%;">{{sumMissed}}</small>
-            </div>
 
         </div>
         <!-- /.box-header -->
@@ -232,8 +237,13 @@
         computed: {
             sumMissed(){
                 return this.countSimples + this.countReclamations
+            },
+            percentSimples(){
+                return this.sumMissed > 0 ? parseInt(this.countSimples / this.sumMissed * 100) + '%' : 0;
+            },
+            percentReclamation(){
+                return this.sumMissed > 0 ? parseInt(this.countReclamations / this.sumMissed * 100) + '%' : 0;
             }
-
         }
     }
 </script>
