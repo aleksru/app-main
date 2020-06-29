@@ -6,9 +6,9 @@ namespace App\Http\Controllers;
 use App\ClientCall;
 use App\Enums\MangoCallEnums;
 use App\MissedCall;
-use App\Models\CountMissedCall;
 use App\Models\Operator;
 use App\Repositories\OrderRepository;
+use App\Services\Calls\Missed\CounterMissed;
 use App\Services\Mango\Commands\Callback;
 use App\Services\Mango\MangoService;
 use Carbon\Carbon;
@@ -91,8 +91,8 @@ class ClientCallController extends Controller
         return response()->json([
             'calls'             => $calls,
             'uniquePhones'      => $calls->sum('is_first'),
-            'countSimples'      => CountMissedCall::getCountSimplesByDate($toDate),
-            'countReclamations' => CountMissedCall::getCountReclamationsByDate($toDate)
+            'countSimples'      => CounterMissed::getCountSimplesByDate($toDate),
+            'countReclamations' => CounterMissed::getCountReclamationsByDate($toDate)
         ]);
     }
 

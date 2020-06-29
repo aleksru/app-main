@@ -239,10 +239,10 @@
                 return this.countSimples + this.countReclamations
             },
             percentSimples(){
-                return this.sumMissed > 0 ? parseInt(this.countSimples / this.sumMissed * 100) + '%' : 0;
+                return this.sumMissed > 0 ? Math.round(this.countSimples / this.sumMissed * 100) + '%' : 0;
             },
             percentReclamation(){
-                return this.sumMissed > 0 ? parseInt(this.countReclamations / this.sumMissed * 100) + '%' : 0;
+                return this.sumMissed > 0 ? Math.round(this.countReclamations / this.sumMissed * 100) + '%' : 0;
             }
         }
     }

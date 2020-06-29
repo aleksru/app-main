@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Enums\MissedCallTypeEnums;
 use App\Events\MissedCallEvent;
 use App\MissedCall;
-use App\Models\CountMissedCall;
+use App\Services\Calls\Missed\CounterMissed;
 
 class MissedCallObserver
 {
@@ -17,7 +17,7 @@ class MissedCallObserver
      */
     public function created(MissedCall $missedCall)
     {
-        CountMissedCall::increaseFromCall($missedCall->clientCall);
+        CounterMissed::increaseFromCall($missedCall->clientCall);
         event(new MissedCallEvent($missedCall->clientCall, MissedCallTypeEnums::ADD));
     }
 
