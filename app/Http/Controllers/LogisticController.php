@@ -226,6 +226,7 @@ class LogisticController extends Controller
             'realizations' => function($query){
                 $query->withoutRefusal();
             },
+            'realizations.product',
             'stockStatus'
         ])->selectRaw('orders.*, delivery_periods.timeFrom, couriers.name as courier_name')
             ->leftJoin('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
@@ -342,7 +343,9 @@ class LogisticController extends Controller
             ->editColumn('products', function (Order $order) {
                 $products = [];
                 foreach ($order->realizations as $realization){
-                    $products[] = $realization->product->product_name;
+                    if($realization->product){
+                        $products[] = $realization->product->product_name;
+                    }
                 }
                 return view('front.logistic.parts.imei_table', ['realizations' => $products]);
             })
