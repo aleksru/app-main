@@ -235,6 +235,7 @@
 
             //инициализация таблицы
             $('#orders-table').on( 'init.dt', function () {
+                $('.dataTables_filter').hide();
                 rewriteSearchColumns();
                 $('.js-example-couriers-single').select2({
                     data: {!! json_encode($couriersSelect) !!},
