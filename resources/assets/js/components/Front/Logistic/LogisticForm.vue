@@ -8,7 +8,7 @@
 
                     <div class="input-group-btn">
                         <div class="col-sm-12">
-                            <button class="btn btn-primary pull-right" @click.prevent="submit">
+                            <button class="btn btn-primary pull-right" @click.prevent="submit" :disabled="disableBtnSubmit">
                                 <i class="fa fa-save"></i> Сохранить
                         </button>
                         </div>
@@ -218,7 +218,8 @@
         data() {
             return {
                 order: this.initial_order,
-                isShowRefusals: false
+                isShowRefusals: false,
+                disableBtnSubmit: false
             }
         },
         methods: {
@@ -257,6 +258,7 @@
 
             async submit(){
                 const idToastLoading  = toast.loading('Обновление...');
+                this.disableBtnSubmit = ! this.disableBtnSubmit;
                 try{
                     const responseOrder = await this.submitOrder();
                     const responseRealizations = [];
@@ -280,6 +282,7 @@
                     }
                     throw e;
                 }
+                this.disableBtnSubmit = ! this.disableBtnSubmit;
             },
             async submitOrder(){
                 const response = await axios.post(`/orders-logistic/${this.order.id}/update`, this.order);

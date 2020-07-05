@@ -137,10 +137,9 @@
 
             onUpdateOrder(e){
                 this.order = Object.assign(this.order, e);
-                setTimeout(() => {
+                this.createEventTableUpdate().then((res) => {
                     this.hideModal();
-                }, 1000);
-                this.createEventTableUpdate();
+                });
             },
 
             showModal () {

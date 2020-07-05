@@ -273,6 +273,8 @@ class OrderController extends Controller
     public function orderLogisticUpdate(Order $order, OrderLogisticRequest $orderLogisticRequest)
     {
         $order->update($orderLogisticRequest->validated());
+        $order->updated_at = Carbon::now();
+        $order->save();
 
         return response()->json($order);
     }
