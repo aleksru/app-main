@@ -139,6 +139,9 @@ class OrdersDatatable
             ->editColumn('operator', function (Order $order) {
                 return $order->operator->name ?? '';
             })
+            ->editColumn('comment', function (Order $order) {
+                return strlen($order->comment) > 150 ? (substr($order->comment, 0, 150) . '...') : $order->comment;
+            })
             ->editColumn('client_id', function (Order $order) {
                 return $order->client->id;
             })
