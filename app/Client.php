@@ -141,6 +141,19 @@ class Client extends Model
         return $client;
     }
 
+    public static function getOrCreateClientFromPhone(string $phone, string $name = 'Не указано'): self
+    {
+        $client = self::getClientByPhone($phone);
+        if( ! $client ){
+            $client = self::create([
+                'phone' => $phone,
+                'name'  => $name
+            ]);
+        }
+
+        return $client;
+    }
+
     /**
      * @param int $statusId
      * @return int
@@ -148,6 +161,22 @@ class Client extends Model
     public function getOrdersCountForStatus(int $statusId): int
     {
         return $this->orders()->where('status_id', $statusId)->count();
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrdersCountForStatusNew():int
+    {
+        return $this->getOrdersCountForStatus(app(OrderStatusRepository::class)->getIdStatusNew());
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrdersCountForStatusConfirmed():int
+    {
+        return $this->getOrdersCountForStatus(app(OrderStatusRepository::class)->getIdsStatusConfirmed());
     }
 
     /**
@@ -172,7 +201,7 @@ class Client extends Model
      */
     public function isLoyal(): bool
     {
-        return $this->isSuccessSales() && ! $this->isComplaining();
+        return $this->getOrdersCountForStatusConfirmed() > 1 ? $this->isSuccessSales() && ! $this->isComplaining() : false;
     }
 
     public function storeInfo()

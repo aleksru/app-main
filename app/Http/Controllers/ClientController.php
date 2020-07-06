@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Client;
-use App\Enums\TypeCreatedOrder;
 use App\Http\Requests\ClientRequest;
 use App\Models\ClientPhone;
-use App\Models\OrderStatus;
 use App\Order;
-use App\Product;
-use App\Repositories\ClientRepository;
+use App\Services\Order\CreateOrderFromCustomHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -139,10 +136,7 @@ class ClientController extends Controller
     }
 
     /**
-     * Создание клиента и заказа
-     *
      * @param Request $request
-     * @param ClientRepository $clientRepository
      * @return \Illuminate\Http\RedirectResponse
      */
     public function createOrderClient(Request $request)
@@ -153,20 +147,13 @@ class ClientController extends Controller
             return redirect()->back()->with(['error' => 'Не заполнено поле!']);
         }
 
-        $client = Client::getClientByPhone($request->get('phone'));
-
-        if (! $client) {
-            $client = Client::create(['phone' => $request->get('phone')]);
+        $builder = Order::getBuilder();
+        $builder->setUserCreator(Auth::user()->id ?? null);
+        $handler = new CreateOrderFromCustomHandler(Client::getOrCreateClientFromPhone($request->get('phone')), $builder);
+        $order = $handler->handle();
+        if( ! $order ){
+            return redirect()->back()->with(['error' => 'Создание заказа отклонено системой!']);
         }
-
-        $order = Order::create([
-            'client_id' => $client->id,
-            'store_text' => '',
-            'comment' =>'-',
-            'status_id' => null,
-            'creator_user_id' => Auth::user()->id ?? null,
-            'type_created_order' => TypeCreatedOrder::CUSTOM
-        ]);
 
         return redirect()->route('orders.edit', $order->id)->with(['success' => 'Успешно создан!']);
     }

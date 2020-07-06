@@ -36,4 +36,11 @@ class OrderStatusRepository
             return OrderStatus::getIdStatusForType(OrderStatus::STATUS_MISSED_PREFIX);
         });
     }
+
+    public function getIdStatusNew()
+    {
+        return Cache::remember('ID_ORDER_STATUS_NEW', Carbon::now()->addHours(4) ,function(){
+            return OrderStatus::getIdStatusNew();
+        });
+    }
 }
