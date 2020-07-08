@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Events\LogistTableUpdateEvent;
 use App\Events\RealizationCopyLogistEvent;
 use App\Http\Controllers\Datatable\OrdersDatatable;
-use App\Http\Controllers\Service\DocumentBuilder\OrderDocs\Report;
+use App\Http\Requests\DataTableRequest;
 use App\Jobs\SendLogistGoogleTable;
 use App\Jobs\SendOrderQuickJob;
 use App\Models\Courier;
@@ -18,7 +18,6 @@ use App\Models\Realization;
 use App\Order;
 use App\Repositories\DeliveryPeriodsRepository;
 use App\Services\Google\Sheets\Data\OrderLogistData;
-use App\Services\Google\Sheets\GoogleSheets;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -200,8 +199,17 @@ class LogisticController extends Controller
     /**
      * @return mixed
      */
-    public function simpleOrdersDatatable(Request $request)
+    public function simpleOrdersDatatable(DataTableRequest $request)
     {
+        $dateDeliverIndexColumn = $request->getColumnIndexByName('date_delivery');
+        $isDisabledPages = false;
+        if($dateDeliverIndexColumn !== null && $request->isColumnSearchable($dateDeliverIndexColumn)){
+            $columnKeyword = $request->columnKeyword($dateDeliverIndexColumn);
+            $columnKeywordArr = explode(',', $columnKeyword);
+            if(count($columnKeywordArr) === 1){
+                $isDisabledPages = true;
+            }
+        }
         $statusIds = Cache::remember('logistics.status.ids', Carbon::now()->addHours(4), function () {
             return OrderStatus::getIdsStatusesForLogistic();
         });
@@ -241,7 +249,7 @@ class LogisticController extends Controller
         if( ! $accessCitiesByLogistIds->isEmpty() ) {
             $orders->whereIn('orders.city_id', $accessCitiesByLogistIds);
         }
-        return datatables()->of($orders)
+        $datatable = datatables()->of($orders)
             ->filterColumn('client_phone', function (Builder $query, $keyword) use ($orders){
                 if (preg_match('/[0-9]{4,}/', $keyword)){
                     $orders->leftJoin('clients', 'orders.client_id', '=', 'clients.id');
@@ -269,7 +277,7 @@ class LogisticController extends Controller
             ->filterColumn('address', function ($query, $keyword){
                 return $query->whereRaw('LOWER(orders.address_street) like ?', "%{$keyword}%");
             })
-            ->filterColumn('date_delivery', function ($query, $keyword) {
+            ->filterColumn('date_delivery', function ($query, $keyword){
                 if (preg_match('/\d{4}.\d{2}.\d{2}/', $keyword)){
                     $dates = explode(',', $keyword);
                     if(count($dates) === 1){
@@ -437,7 +445,13 @@ class LogisticController extends Controller
                         ->orderBy('delivery_periods.timeFrom', 'ASC');
                 }
             })
-            ->make(true);
+            ;
+
+        if($isDisabledPages){
+            $datatable->skipPaging();
+        }
+
+        return $datatable->make(true);
     }
 
     /**
