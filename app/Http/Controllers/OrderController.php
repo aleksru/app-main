@@ -229,13 +229,19 @@ class OrderController extends Controller
      */
     public function getOrderWithRealizations(Request $request, Order $order)
     {
-        return response()->json($order->load([
+        $response = $order->load([
             'realizations' => function($query){
                 $query->orderBy('product_type');
             },
             'realizations.product',
             'deliveryType',
-            'realizations.supplier']),
+            'realizations.supplier']);
+        $realizations = $response->realizations = $response->realizations->filter(function ($value){
+            return $value->product !== null;
+        })->values();
+        $response->setRelation('realizations', $realizations);
+
+        return response()->json($response,
         200, [], JSON_NUMERIC_CHECK);
     }
 
