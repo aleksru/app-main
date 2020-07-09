@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Log;
 
 class CallCreateOrder implements ShouldQueue
 {
@@ -28,6 +29,7 @@ class CallCreateOrder implements ShouldQueue
     public function __construct(array $data)
     {
         $this->data = $data;
+        Log::channel('order-calls')->error('CallCreateOrder RUN', $data);
     }
 
     /**
@@ -46,6 +48,7 @@ class CallCreateOrder implements ShouldQueue
             $builder,
             Store::where('phone', $data['to']['number'])->first()
         );
-        $handler->handle();
+        $order = $handler->handle();
+        Log::channel('order-calls')->error('CallCreateOrder CREATE', $this->data, $order ? $order->id : $order);
     }
 }

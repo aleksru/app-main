@@ -52,6 +52,7 @@ class ApiMangoController extends Controller
         if($data['seq'] === 1 && $data['call_state'] === 'Appeared'){
             //проверка на входящий звонок
             if ($data['location'] === 'ivr') {
+                Log::channel('order-calls')->error('ApiMangoController', $data);
                 CallCreateOrder::dispatch($data)->onQueue('calls-order');
             }
         }

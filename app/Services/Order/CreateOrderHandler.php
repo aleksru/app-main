@@ -45,7 +45,7 @@ class CreateOrderHandler
     public function handle(): ?Order
     {
         if( ! $this->validateClientCountOrders() ){
-            Log::error(['Создание заказа отклонено. Кол-во НОВЫХ заказов: ' .  $this->client->id]);
+            Log::error('Создание заказа отклонено. Клиент ИД: ' .  $this->client->id);
             return null;
         }
         $this->setStatus();
