@@ -49,6 +49,6 @@ class CallCreateOrder implements ShouldQueue
             Store::where('phone', $data['to']['number'])->first()
         );
         $order = $handler->handle();
-        Log::channel('order-calls')->error('CallCreateOrder CREATE', $this->data, $order ? $order->id : $order);
+        Log::channel('order-calls')->error('CallCreateOrder CREATE', [$this->data, $order ? $order->id : $order]);
     }
 }
