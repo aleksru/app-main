@@ -82,10 +82,12 @@ abstract class BaseFullReport
             $value->realizations->each(function ($item) use (&$summaryMainProduct, &$summaryOther, &$summary, &$cntOrderRealiz) {
                 $summary += $item->price * $item->quantity;
                 $cntOrderRealiz++;
-                if($item->product->type === ProductType::TYPE_PRODUCT){
-                    $summaryMainProduct += $item->price * $item->quantity;
-                }else{
-                    $summaryOther += $item->price * $item->quantity;
+                if( $item->product ){
+                    if($item->product->type === ProductType::TYPE_PRODUCT){
+                        $summaryMainProduct += $item->price * $item->quantity;
+                    }else{
+                        $summaryOther += $item->price * $item->quantity;
+                    }
                 }
             });
         });
