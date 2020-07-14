@@ -203,13 +203,15 @@ class LogisticController extends Controller
     {
         $dateDeliverIndexColumn = $request->getColumnIndexByName('date_delivery');
         $isDisabledPages = false;
-        if($dateDeliverIndexColumn !== null && $request->isColumnSearchable($dateDeliverIndexColumn)){
+        $isDeliverColumnSearchable = $request->isColumnSearchable($dateDeliverIndexColumn);
+        if($dateDeliverIndexColumn !== null && $isDeliverColumnSearchable){
             $columnKeyword = $request->columnKeyword($dateDeliverIndexColumn);
             $columnKeywordArr = explode(',', $columnKeyword);
             if(count($columnKeywordArr) === 1){
                 $isDisabledPages = true;
             }
         }
+
         $statusIds = Cache::remember('logistics.status.ids', Carbon::now()->addHours(4), function () {
             return OrderStatus::getIdsStatusesForLogistic();
         });
@@ -240,12 +242,15 @@ class LogisticController extends Controller
             ->leftJoin('delivery_periods', 'orders.delivery_period_id', '=', 'delivery_periods.id')
             ->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id')
             ->leftJoin('other_statuses', 'orders.stock_status_id', '=', 'other_statuses.id')
-            ->where('orders.date_delivery', '>=', Carbon::now()->subDays(7)->toDateString())
             ->whereIn('orders.status_id', $statusIds);
 //            ->orderBy('orders.updated_at', 'DESC');
 //            ->orderBy('orders.date_delivery', 'ASC')
 //            ->orderBy('delivery_periods.timeFrom', 'ASC');
-
+        if( ! $isDeliverColumnSearchable ){
+            $orders->where('orders.date_delivery', '>=', Carbon::now()->subDays(7)->toDateString());
+        }else if($isDeliverColumnSearchable && ! $user->isArchiveRealizationsRole()){
+            $orders->where('orders.date_delivery', '>=', Carbon::now()->subDays(7)->toDateString());
+        }
         if( ! $accessCitiesByLogistIds->isEmpty() ) {
             $orders->whereIn('orders.city_id', $accessCitiesByLogistIds);
         }

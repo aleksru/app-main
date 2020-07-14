@@ -14,6 +14,7 @@ class RolesSeeder extends Seeder
         ['name' =>'view_logistics', 'description' =>'Просмотр логистики'],
         ['name' => \App\Enums\RoleOrderEnums::HEAD_STOCK, 'description' =>'Начальник склада'],
         ['name' => \App\Enums\RoleOrderEnums::FULL_LOGISTIC, 'description' =>'Полный доступ логистика'],
+        ['name' => \App\Enums\RoleOrderEnums::ARCHIVE_REALIZATIONS, 'description' =>'Архив реализаций'],
     ];
 
     public function run()

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\RoleOrderEnums;
 use App\Enums\UserGroupsEnums;
 use App\Models\Operator;
 use App\Models\Traits\UserDynamicType;
@@ -188,7 +189,16 @@ class User extends Authenticatable
      * @param string $role
      * @return bool
      */
-    public function hasRole(string $role){
+    public function hasRole(string $role)
+    {
+        if($this->is_admin){
+            return true;
+        }
         return $this->roles->pluck('name')->contains($role);
+    }
+
+    public function isArchiveRealizationsRole(): bool
+    {
+        return $this->hasRole(RoleOrderEnums::ARCHIVE_REALIZATIONS);
     }
 }
