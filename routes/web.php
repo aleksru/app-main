@@ -115,6 +115,8 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('pickup-table', 'PickUpController@datatable')->name('pickup.table');
         Route::get('product-stores', 'ProductStoreController@index')->name('product_stores');
         Route::get('product-stores-table', 'ProductStoreController@datatable')->name('product_stores.table');
+        Route::get('type-create-orders', 'TypeCreateOrderController@index')->name('type_create_orders');
+        Route::get('type-create-orders-table', 'TypeCreateOrderController@datatable')->name('type_create_orders.table');
     });
 
     //логи

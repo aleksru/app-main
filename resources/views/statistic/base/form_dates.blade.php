@@ -8,6 +8,7 @@
             <label>Дата окончания</label>
             <input type="date" name="dateTo" class="form-control">
         </div>
+        {{ $slot ?? '' }}
         <div class="col-md-2">
             <label></label>
             <button type="submit" class="btn btn-primary form-control">

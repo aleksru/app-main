@@ -27,7 +27,7 @@ abstract class BaseStatistic
     {
         $field = $this->container->getField($key);
         if( ! $field ){
-            $this->container->addField($field, static::createDataItem($key));
+            $this->container->addField($key, static::createDataItem($key));
         }
 
         return $this->container->getField($key);
