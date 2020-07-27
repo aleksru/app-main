@@ -66,15 +66,15 @@ class CreateOrderHandler
         $isStoreComplaint = $this->store ? $this->client->isStoreComplaint($this->store->id) : false;
         if($isStoreComplaint){
             $this->orderBuilder->setStatusComplaint();
-            $this->orderBuilder->addComment('Обращение клиента по претензии!');
+            $this->orderBuilder->addComment('Система: Обращение клиента по претензии!');
         }
 
         if($this->client->isLoyal()){
-            $this->orderBuilder->addComment('Лояльный клиент');
+            $this->orderBuilder->addComment('Система: Лояльный клиент');
         }
 
         if( $this->client->isComplaining() && ! $isStoreComplaint ){
-            $this->orderBuilder->addComment('Негатив. Были жалобы в магазинах.');
+            $this->orderBuilder->addComment('Система: Негатив. Были жалобы в магазинах.');
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\TypeCreatedOrder;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -107,5 +108,21 @@ class Store extends Model
     public function isOnline() : bool
     {
         return $this->active_at > Carbon::now()->subMinutes(60);
+    }
+
+    /**
+     * @param Carbon $time
+     * @param string|null $type
+     * @return int
+     */
+    public function getCountOrderAfterTime(Carbon $time, string $type = null): int
+    {
+        $query = $this->orders()
+                    ->where('created_at', '>', $time->toDateTimeString());
+        if($type){
+            $query->where('type_created_order', $type);
+        }
+
+       return $query->count();
     }
 }
