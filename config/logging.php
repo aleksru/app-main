@@ -127,6 +127,13 @@ return [
             'path' => storage_path('logs/metro.log'),
             'level' => 'debug',
         ],
+
+        'upload_realizations' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/uploads/upload_realizations.log'),
+            'days' => 2,
+            'permission' => 0777,
+        ],
     ],
 
 ];

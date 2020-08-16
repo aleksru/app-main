@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'api.key' => \App\Http\Middleware\Api::class,
         'role' => \App\Http\Middleware\Role::class,
         'api.v2' => \App\Http\Middleware\ApiV2::class,
+        'group' => \App\Http\Middleware\Group::class,
     ];
 }

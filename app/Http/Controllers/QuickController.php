@@ -15,7 +15,7 @@ class QuickController extends Controller
      */
     public function sendOrder(Order $order)
     {
-        SendOrderQuickJob::dispatch($order);
+        //SendOrderQuickJob::dispatch($order);
 
         return response()->json(['message' => 'Заказ отправлен в бегунок!']);
     }

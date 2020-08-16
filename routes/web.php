@@ -18,7 +18,15 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::group(['middleware' =>'auth'], function() {
 
     Route::get('/', 'HomeController@index')->name('main.index');
-
+    //tests
+    Route::group( [
+        'prefix' => 'test',
+        'as' => 'test',
+        'namespace' => 'Test',
+        'middleware' =>['auth', 'role:admin']
+    ], function (){
+        Route::get('/', 'TestController@index')->name('index');
+    });
     //загрузка прайса
     Route::get('product', 'ProductController@index')->name('product.index');
     Route::post('product', 'ProductController@uploadPrice')->name('upload-price');
@@ -148,6 +156,18 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('delivery-widget', 'LogisticController@deliveriesForWidget')->name('deliveries.widget');
         Route::get('on-update-logist-table/{order?}', 'LogisticController@onLogistTableUpdate')->name('on.update.logist-table');
         Route::get('send-google-tables/{order}', 'LogisticController@sendGoogleTables')->name('send.google-tables');
+        Route::group([
+            'prefix' => 'uploads',
+            'as' => 'uploads.',
+            'middleware' =>['auth',  'group:' . \App\Enums\UserGroupsEnums::LOGIST]
+        ], function(){
+            Route::group(['prefix' => 'realizations', 'as' => 'realizations.', 'namespace' => 'Logistic'], function(){
+                Route::get('/', 'UploadRealizationsController@index')->name('index');
+                Route::post('/upload', 'UploadRealizationsController@upload')->name('upload');
+                Route::get('/datatable', 'UploadRealizationsController@datatable')->name('datatable');
+                Route::get('/log/{file}', 'UploadRealizationsController@log')->name('log');
+            });
+        });
     });
 
     //звонки

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Log;
 use App\Order;
 use App\Product;
+use App\Scopes\ActiveScope;
 use App\Services\Quickrun\Orders\QuickSetOrderData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,14 @@ class Realization extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function anyProduct()
+    {
+        return $this->product()->withoutGlobalScope(ActiveScope::class);
     }
 
     public function getStringProductName()

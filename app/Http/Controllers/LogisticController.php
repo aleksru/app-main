@@ -478,8 +478,8 @@ class LogisticController extends Controller
         }
 
         if(!$order->is_send_quick || $isForcedSendQuick){
-            SendOrderQuickJob::dispatch($order);
-            $message .= '. Заказ отправлен в "Бегунок"!';
+            //SendOrderQuickJob::dispatch($order);
+            //$message .= '. Заказ отправлен в "Бегунок"!';
         }
 
         $realiz->is_copy_logist = true;
