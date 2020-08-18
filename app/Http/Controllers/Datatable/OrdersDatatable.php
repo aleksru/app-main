@@ -177,10 +177,11 @@ class OrdersDatatable
             })
             ->editColumn('name_customer', function (Order $order) {
                 if ($order->client){
-                    return view('datatable.customer', [
-                        'route' => route('clients.show', $order->client->id),
-                        'name_customer' => $order->client->name ?? 'Не указано'
-                    ]);
+//                    return view('datatable.customer', [
+//                        'route' => route('clients.show', $order->client->id),
+//                        'name_customer' => $order->client->name ?? 'Не указано'
+//                    ]);
+                    return $order->client->name;
                 }
             })
             ->editColumn('store_text', function (Order $order) {
