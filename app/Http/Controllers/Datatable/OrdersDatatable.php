@@ -150,6 +150,9 @@ class OrdersDatatable
                 return $order->operator->name ?? '';
             })
             ->editColumn('comment', function (Order $order) {
+                if($order->isNew()){
+                    return 'XXXXXXXX';
+                }
                 return strlen($order->comment) > 150 ? (substr($order->comment, 0, 150) . '...') : $order->comment;
             })
             ->editColumn('client_id', function (Order $order) {
@@ -169,6 +172,9 @@ class OrdersDatatable
                 ]);
             })
             ->editColumn('products', function (Order $order) {
+                if($order->isNew()){
+                    return 'XXXXXXXX';
+                }
                 $products = $order->products->pluck('product_name')->toArray();
                 return !empty($products) ? implode(', ', $products) :
                     view('datatable.products', [
