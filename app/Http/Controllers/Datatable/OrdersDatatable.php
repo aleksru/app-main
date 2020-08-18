@@ -181,7 +181,8 @@ class OrdersDatatable
 //                        'route' => route('clients.show', $order->client->id),
 //                        'name_customer' => $order->client->name ?? 'Не указано'
 //                    ]);
-                    return $order->client->name;
+
+                    return $order->isNew() ? 'XXXXXXXX' : ($order->client->name ?? 'Не указано');
                 }
             })
             ->editColumn('store_text', function (Order $order) {
