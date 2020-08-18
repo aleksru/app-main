@@ -15,6 +15,7 @@ use App\Models\Metro;
 use App\Models\OtherStatus;
 use App\Models\Realization;
 use App\Models\Traits\HasSms;
+use App\Repositories\OrderStatusRepository;
 use App\Services\Docs\Client\VoucherData;
 use App\Services\Quickrun\Orders\QuickSetOrderData;
 use Carbon\Carbon;
@@ -32,7 +33,7 @@ class Order extends Model
                             'stock_status_id', 'logistic_status_id', 'city_id', 'utm_source', 'creator_user_id', 'full_address', 'confirmed_at', 'type_created_order', 'entry_id',
                             'comment_stock', 'courier_payment'
     ];
-    
+
     protected $casts = [
         'products_text' => 'array',
         'flag_send_sms' => 'boolean',
@@ -383,6 +384,14 @@ class Order extends Model
     public function isConfirmed() : bool
     {
         return $this->status_id == OrderStatus::getIdStatusConfirm();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNew() : bool
+    {
+        return $this->status_id == (new OrderStatusRepository)->getIdStatusNew();
     }
 
     /**

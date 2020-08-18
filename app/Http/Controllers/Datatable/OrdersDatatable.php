@@ -130,7 +130,17 @@ class OrdersDatatable
                         ->OrWhereRaw('client_phones.phone like ?', "%{$keyword}%");
                 }
             })
+            ->editColumn('phone', function (Order $order) {
+                if($order->isNew()){
+                    return 'XXXXXXXX';
+                }
+                return $order->client->phone ?? '';
+
+            })
             ->editColumn('additional_phones', function (Order $order) {
+                if($order->isNew()){
+                    return 'XXXXXXXX';
+                }
                 return $order->client->allAdditionalPhones;
             })
             ->editColumn('courier', function (Order $order) {
@@ -172,10 +182,6 @@ class OrdersDatatable
                         'name_customer' => $order->client->name ?? 'Не указано'
                     ]);
                 }
-            })
-            ->editColumn('phone', function (Order $order) {
-                return $order->client->phone ?? '';
-
             })
             ->editColumn('store_text', function (Order $order) {
                 return $order->store->name ?? $order->store_text;
