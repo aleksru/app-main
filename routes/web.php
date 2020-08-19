@@ -159,7 +159,7 @@ Route::group(['middleware' =>'auth'], function() {
         Route::group([
             'prefix' => 'uploads',
             'as' => 'uploads.',
-            'middleware' =>['auth',  'group:' . \App\Enums\UserGroupsEnums::LOGIST]
+            'middleware' =>['auth']
         ], function(){
             Route::group(['prefix' => 'realizations', 'as' => 'realizations.', 'namespace' => 'Logistic'], function(){
                 Route::get('/', 'UploadRealizationsController@index')->name('index');
