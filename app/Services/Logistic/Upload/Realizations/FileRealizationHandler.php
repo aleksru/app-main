@@ -43,10 +43,10 @@ class FileRealizationHandler
         }catch (\Exception $exception){
             $this->updStatusFile(FileStatusesEnums::ERROR);
             Log::channel('upload_realizations')->error($exception);
-            throw new \Exception($exception);
+            //throw new \Exception($exception);
         } finally {
             Log::channel('upload_realizations')->error('Конец обработки файла ' . $this->fileRealization->name);
-            Storage::disk('local')->delete($this->fileRealization->path);
+            //Storage::disk('local')->delete($this->fileRealization->path);
         }
     }
 
