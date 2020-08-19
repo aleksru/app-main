@@ -54,7 +54,7 @@ class UpdateOrderFromRow extends AbstractUpdateFromRow
      */
     public function update()
     {
-        if($this->order->id !== $this->row->getOrderId()){
+        if($this->order->id != $this->row->getOrderId()){
             throw new OrderUpdateFromRowException(
                 "Order #{$this->order->id} not belong Row order_id #{$this->row->getOrderId()}"
             );
