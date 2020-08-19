@@ -26,7 +26,7 @@ class UpdateRealizationFromRow extends AbstractUpdateFromRow
      */
     public function update()
     {
-        if($this->realization->order_id !== $this->row->getOrderId()){
+        if($this->realization->order_id != $this->row->getOrderId()){
             throw new RealizationsUpdateFromRowException(
         "Realization order_id #{$this->realization->order_id} not belong Row order_id #{$this->row->getOrderId()}"
             );
