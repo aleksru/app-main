@@ -218,11 +218,11 @@
             });
         });
 
-        let operators = {!!   json_encode(\App\Models\Operator::query()->isActive()->select('id', 'name as text')->get()->toArray()) !!}
+        let operators = {!! json_encode($listOperators) !!}
         $(function() {
             $('.js-example-operator-single').select2({
                 data: operators,
-                allowClear: true,
+                allowClear: false,
                 placeholder: "Выберите оператора...",
             });
         });

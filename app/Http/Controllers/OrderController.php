@@ -11,6 +11,7 @@ use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Requests\CommentLogistRequst;
 use App\Http\Requests\OrderLogisticRequest;
 use App\Http\Requests\RealizationLogisticRequest;
+use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Models\OtherStatus;
 use App\Models\Realization;
@@ -89,6 +90,23 @@ class OrderController extends Controller
         $subStatuses = OtherStatus::typeSubStatuses()->get();
         $stockStatuses = OtherStatus::typeStockStatuses()->get();
         $logisticStatuses = OtherStatus::typeLogisticStatuses()->get();
+        $listOperators = [];
+
+        if($authUser->isOperator()){
+            if($order->operator){
+                $listOperators[] = ['id' => $order->operator->id, 'text' =>  $order->operator->name];
+            }
+
+            if( ! $order->isConfirmed() ){
+                $listOperators[] = ['id' => $authUser->account->id, 'text' =>  $authUser->account->name];
+            }
+        }else{
+            $listOperators = Operator::query()
+                ->isActive()
+                ->select('id', 'name as text')
+                ->get()
+                ->toArray();
+        }
 
         return view('front.orders.form', [
                 'order' => $order->load(['client.orders' => function($query){
@@ -100,7 +118,8 @@ class OrderController extends Controller
             'operator' => $order->operator,
             'subStatuses' => $subStatuses,
             'stockStatuses' => $stockStatuses,
-            'logisticStatuses' => $logisticStatuses
+            'logisticStatuses' => $logisticStatuses,
+            'listOperators' => $listOperators
         ]);
     }
 
