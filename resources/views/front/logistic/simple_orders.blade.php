@@ -46,7 +46,7 @@
                                             <label for="" class="col-sm-4 control-label">Статус склада</label>
 
                                             <div class="col-sm-8">
-                                                <select class="js-example-status-stock-single form-control" name="stock_status_id">
+                                                <select class="js-example-status-stock-single-form form-control" name="stock_status_id">
                                                     <option value="" selected>Не выбран</option>
                                                 </select>
                                             </div>
@@ -142,7 +142,7 @@
             });
 
             $('.select-courier').select2({
-                minimumResultsForSearch: Infinity,
+                minimumResultsForSearch: 5,
                 dropdownAutoWidth: true,
                 ajax: {
                     url: function (params) {
@@ -177,7 +177,8 @@
 
         $(function() {
             let stockStatuses = {!! json_encode(\App\Models\OtherStatus::typeStockStatuses()->select('id', 'name as text')->get()->toArray()) !!};
-            $('.js-example-status-stock-single').select2({
+            stockStatuses.push({id: 0, text: 'Без статуса'});
+            $('.js-example-status-stock-single-form').select2({
                 data: stockStatuses,
                 allowClear: true,
                 placeholder: "Выберите статус...",
@@ -186,11 +187,6 @@
             $("#mass_change_stock_status").on("submit", function(e){
                 e.preventDefault();
                 const formData = new FormData(e.target);
-
-                if(formData.get('stock_status_id') == false){
-                    toast.error('Не выбран статус!');
-                    return false;
-                }
                 sendMassChange(formData).then((res) => {
                     toast.success('Успешно обновлено!');
                 }).catch((err) => {

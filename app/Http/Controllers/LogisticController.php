@@ -360,7 +360,7 @@ class LogisticController extends Controller
                         $products[] = $realization->product->product_name;
                     }
                 }
-                return view('front.logistic.parts.imei_table', ['realizations' => $products]);
+                return view('front.logistic.parts.table_products', ['products' => $products]);
             })
             ->editColumn('imei', function (Order $order) {
                 return $order->realizations ?

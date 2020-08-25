@@ -9,6 +9,7 @@ use App\Events\UpdatedOrderEvent;
 use App\Events\UpdateRealizationsConfirmedOrderEvent;
 use App\Http\Controllers\Datatable\OrdersDatatable;
 use App\Http\Requests\CommentLogistRequst;
+use App\Http\Requests\OrderLogisticMassChange;
 use App\Http\Requests\OrderLogisticRequest;
 use App\Http\Requests\RealizationLogisticRequest;
 use App\Models\Operator;
@@ -311,9 +312,13 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
-    public function orderMassStatusUpdate(OrderLogisticRequest $orderLogisticRequest)
+    public function orderMassStatusUpdate(OrderLogisticMassChange $orderLogisticRequest)
     {
-        if($stockStatusId = $orderLogisticRequest->get('stock_status_id')){
+        $stockStatusId = $orderLogisticRequest->get('stock_status_id');
+        if($stockStatusId !== null){
+            if($stockStatusId == 0){
+                $stockStatusId = null;
+            }
             Order::whereIn('id', $orderLogisticRequest->get('order_ids'))->update(['stock_status_id' => $stockStatusId]);
             event(new LogistTableUpdateEvent());
         }
