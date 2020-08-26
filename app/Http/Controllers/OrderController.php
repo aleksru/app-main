@@ -93,7 +93,7 @@ class OrderController extends Controller
         $logisticStatuses = OtherStatus::typeLogisticStatuses()->get();
         $listOperators = [];
 
-        if($authUser->isOperator()){
+        if( ! $authUser->isSuperOperator() && $authUser->isOperator() ){
             if($order->operator){
                 $listOperators[] = ['id' => $order->operator->id, 'text' =>  $order->operator->name];
             }
