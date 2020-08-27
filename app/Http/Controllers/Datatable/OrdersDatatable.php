@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Datatable;
 
+use App\Enums\OrderDatatablePrivilegesEnums;
 use App\Models\ClientPhone;
 use App\Product;
 use App\Order;
+use Carbon\Carbon;
 use \Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class OrdersDatatable
 {
@@ -42,6 +46,13 @@ class OrdersDatatable
 
     public function datatable()
     {
+        $user = Auth::user();
+        $isShowHiddenFields = Cache::remember(
+            'SHOWING_HIDDEN_FIELDS_USER_ID_' . $user->id,
+            Carbon::now()->addHours(4) ,
+            function () use ($user){
+            return $user->hasRole(OrderDatatablePrivilegesEnums::SHOWING_HIDDEN_FIELDS);
+        });
         return datatables() ->of(
             $this->orderQuery->with(
                 'status',
@@ -130,15 +141,15 @@ class OrdersDatatable
                         ->OrWhereRaw('client_phones.phone like ?', "%{$keyword}%");
                 }
             })
-            ->editColumn('phone', function (Order $order) {
-                if($order->isNew()){
+            ->editColumn('phone', function (Order $order) use ($isShowHiddenFields){
+                if( ! $isShowHiddenFields && $order->isNew()){
                     return 'XXXXXXXX';
                 }
                 return $order->client->phone ?? '';
 
             })
-            ->editColumn('additional_phones', function (Order $order) {
-                if($order->isNew()){
+            ->editColumn('additional_phones', function (Order $order) use ($isShowHiddenFields) {
+                if( ! $isShowHiddenFields && $order->isNew()){
                     return 'XXXXXXXX';
                 }
                 return $order->client->allAdditionalPhones;
@@ -149,8 +160,8 @@ class OrdersDatatable
             ->editColumn('operator', function (Order $order) {
                 return $order->operator->name ?? '';
             })
-            ->editColumn('comment', function (Order $order) {
-                if($order->isNew()){
+            ->editColumn('comment', function (Order $order) use ($isShowHiddenFields) {
+                if(! $isShowHiddenFields && $order->isNew()){
                     return 'XXXXXXXX';
                 }
                 return strlen($order->comment) > 150 ? (substr($order->comment, 0, 150) . '...') : $order->comment;
@@ -171,8 +182,8 @@ class OrdersDatatable
                     'status' => $order->status
                 ]);
             })
-            ->editColumn('products', function (Order $order) {
-                if($order->isNew()){
+            ->editColumn('products', function (Order $order) use ($isShowHiddenFields) {
+                if(! $isShowHiddenFields && $order->isNew()){
                     return 'XXXXXXXX';
                 }
                 $products = $order->products->pluck('product_name')->toArray();
@@ -181,14 +192,14 @@ class OrdersDatatable
                         'products' => $order->products_text ?? [],
                     ]);
             })
-            ->editColumn('name_customer', function (Order $order) {
+            ->editColumn('name_customer', function (Order $order) use ($isShowHiddenFields) {
                 if ($order->client){
 //                    return view('datatable.customer', [
 //                        'route' => route('clients.show', $order->client->id),
 //                        'name_customer' => $order->client->name ?? 'Не указано'
 //                    ]);
 
-                    return $order->isNew() ? 'XXXXXXXX' : ($order->client->name ?? 'Не указано');
+                    return (! $isShowHiddenFields && $order->isNew()) ? 'XXXXXXXX' : ($order->client->name ?? 'Не указано');
                 }
             })
             ->editColumn('store_text', function (Order $order) {
