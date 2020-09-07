@@ -126,6 +126,10 @@
                 className: 'js-example-status-logist-single',
                 data: []
             },
+            delivery_time: {
+                className: 'js-example-delivery-time-single',
+                data: []
+            }
         };
 
         $('#orders-table').on( 'draw.dt', function (e, settings) {
@@ -243,6 +247,10 @@
                 });
                 $('.js-example-status-logist-single').select2({
                     data: {!! json_encode($statusesLogisticSelect) !!},
+                    dropdownCssClass: 'fs-12',
+                });
+                $('.js-example-delivery-time-single').select2({
+                    data: {!! json_encode($deliveryTimeSelect) !!},
                     dropdownCssClass: 'fs-12',
                 });
                 let tableOrders = $('#orders-table').DataTable();

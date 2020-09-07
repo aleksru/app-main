@@ -10,6 +10,7 @@ use App\Http\Requests\DataTableRequest;
 use App\Jobs\SendLogistGoogleTable;
 use App\Jobs\SendOrderQuickJob;
 use App\Models\Courier;
+use App\Models\DeliveryPeriod;
 use App\Models\FailDeliveryDate;
 use App\Models\Logist;
 use App\Models\OrderStatus;
@@ -35,7 +36,7 @@ class LogisticController extends Controller
             'delivery_time' => [
                 'name' => 'Время доставки',
                 'width' => '1%',
-                'searchable' => false,
+                'searchable' => true,
                 'orderable' => true
             ],
             'id' => [
@@ -188,11 +189,14 @@ class LogisticController extends Controller
         $statusesLogisticSelect[] = ['id' => 0, 'text' => 'Без статуса'];
         $statusesLogisticSelect = array_merge($statusesLogisticSelect, OtherStatus::typeLogisticStatuses()->select('id', 'name as text')->orderBy('name')->get()->toArray());
 
+        $deliveryTimeSelect = DeliveryPeriod::query()->selectRaw("id, CONCAT(timeFrom, '-', timeTo, ' ' ,period) as text")->orderBy('text')->get()->toArray();
+
         return view('front.logistic.simple_orders', [
             'routeDatatable'         => route('logistics.simple.orders.datatable'),
             'couriersSelect'         => $couriersSelect,
             'statusesStockSelect'    => $statusesStockSelect,
-            'statusesLogisticSelect' => $statusesLogisticSelect
+            'statusesLogisticSelect' => $statusesLogisticSelect,
+            'deliveryTimeSelect'     => $deliveryTimeSelect
         ]);
     }
 
@@ -265,6 +269,9 @@ class LogisticController extends Controller
                 if (preg_match('/[A-Za-zА-Яа-я]{3,}/', $keyword)) {
                     return $query->whereRaw('LOWER(client.name) like ?', "%{$keyword}%");
                 }
+            })
+            ->filterColumn('delivery_time', function ($query, $keyword) {
+                return $query->where('delivery_periods.id', $keyword);
             })
             ->filterColumn('imei', function ($query, $keyword) use ($orders){
                 $orders->leftJoin('realizations', 'orders.id', '=', 'realizations.order_id');
