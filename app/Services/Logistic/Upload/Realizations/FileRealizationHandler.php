@@ -35,7 +35,9 @@ class FileRealizationHandler
             $orderRowHandler = new OrderRowHandler();
             $rowCreator = new RowCreatorFromArray();
             $sheetHandler = new SheetHandler($orderRowHandler, $rowCreator, []);
+            $number = 0;
             foreach ($arrSheets as $sheet){
+                Log::channel('upload_realizations')->error('Обработка листа ' . ++$number);
                 $sheetHandler->setArrRowData($sheet);
                 $sheetHandler->handle();
             }
