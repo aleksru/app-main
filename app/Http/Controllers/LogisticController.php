@@ -225,6 +225,7 @@ class LogisticController extends Controller
                 $user->account->cities->pluck('id') : collect();
         });
         $stockStatuses = OtherStatus::typeStockStatuses()->get();
+        $isSelectedCourier = false;
 
         $orders = Order::with([
             'status',
@@ -277,7 +278,8 @@ class LogisticController extends Controller
                 $orders->leftJoin('realizations', 'orders.id', '=', 'realizations.order_id');
                 return $query->whereRaw('LOWER(realizations.imei) like ?', "%{$keyword}%");
             })
-            ->filterColumn('courier_name', function ($query, $keyword) use ($orders){
+            ->filterColumn('courier_name', function ($query, $keyword) use ($orders, &$isSelectedCourier){
+                $isSelectedCourier = true;
                 if((int)$keyword > 0){
                     //$orders->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id');
                     return $query->where('couriers.id', $keyword);
@@ -403,17 +405,19 @@ class LogisticController extends Controller
                     return $order->id;
                 }
             ])
-            ->withQuery('total_price', function($query) {
+            ->withQuery('total_price', function($query) use (&$isSelectedCourier){
                 $queryClone = clone $query->getQuery();
                 $queryClone->limit = null;
                 $queryClone->offset = null;
                 $sum =  Realization::query()
                     ->withoutRefusal()
                     ->whereIn('order_id', $queryClone->pluck('orders.id'))
-                    ->whereNull('deleted_at')
-                    ->where('price_opt', '<>', 0)
-                    ->sum('price');
-                return $sum;
+                    ->whereNull('deleted_at');
+                if( ! $isSelectedCourier ){
+                    $sum->where('price_opt', '<>', 0);
+                }
+
+                return $sum->sum('price');
             })
             ->withQuery('total_price_opt', function($query) {
                 $queryClone = clone $query;
