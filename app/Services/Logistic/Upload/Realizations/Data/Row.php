@@ -15,6 +15,7 @@ class Row
     protected $productPrice;
     protected $courierPrice;
     protected $courierName;
+    protected $supplierName;
 
     /**
      * Row constructor.
@@ -29,7 +30,7 @@ class Row
      * @param string|null $courierName
      */
     public function __construct(
-         $orderId,
+        $orderId,
         $operatorName,
         $statusText,
         $productName,
@@ -37,7 +38,8 @@ class Row
         $supplierPrice,
         $productPrice,
         $courierPrice,
-        $courierName
+        $courierName,
+        $supplierName
     )
     {
         $this->orderId = $orderId;
@@ -49,6 +51,7 @@ class Row
         $this->productPrice = $productPrice;
         $this->courierPrice = $courierPrice;
         $this->courierName = $courierName;
+        $this->supplierName = $supplierName;
     }
 
     /**
@@ -121,6 +124,14 @@ class Row
     public function getCourierName()
     {
         return $this->courierName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSupplierName()
+    {
+        return $this->supplierName;
     }
 
     public static function builder(): RowBuilder

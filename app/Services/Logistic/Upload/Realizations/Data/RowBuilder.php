@@ -15,6 +15,7 @@ class RowBuilder
     protected $productPrice = null;
     protected $courierPrice = null;
     protected $courierName = null;
+    protected $supplierName = null;
 
     /**
      * @param mixed $orderId
@@ -98,6 +99,15 @@ class RowBuilder
         return $this;
     }
 
+    /**
+     * @param null $supplierName
+     */
+    public function setSupplierName($supplierName): self
+    {
+        $this->supplierName = $supplierName;
+        return $this;
+    }
+
 
 
     public function reset()
@@ -111,6 +121,7 @@ class RowBuilder
         $this->productPrice = null;
         $this->courierPrice = null;
         $this->courierName = null;
+        $this->supplierName = null;
     }
 
     public function build(): Row
@@ -124,7 +135,8 @@ class RowBuilder
             $this->supplierPrice,
             $this->productPrice,
             $this->courierPrice,
-            $this->courierName
+            $this->courierName,
+            $this->supplierName
         );
         $this->reset();
 
