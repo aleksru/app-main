@@ -27,13 +27,31 @@ class ProductController extends Controller
         return view('admin.products.form');
     }
 
+    /**
+     * @param Product $product
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function edit(Product $product)
+    {
+        return view('admin.products.form', ['product' => $product]);
+    }
+
+    public function update(CreateProductRequest $productRequest, Product $product)
+    {
+        $data = $productRequest->validated();
+        if(empty($data['article'])){
+            $data['article'] = Product::createCustomArticle();
+        }
+        $product->update($data);
+
+        return redirect()->route('admin.products.edit', $product->id);
+    }
+
     public function store(CreateProductRequest $productRequest)
     {
         $data = $productRequest->validated();
         if(empty($data['article'])){
-            $article = Product::where('article', 'LIKE', '%'.Product::PREFIX_CUSTOM_PRODUCT.'%')->orderBy('id', 'desc')->first();
-            $article = $article ? ((int)$article->article + 1).Product::PREFIX_CUSTOM_PRODUCT : '1000'.Product::PREFIX_CUSTOM_PRODUCT;
-            $data['article'] = $article;
+            $data['article'] = Product::createCustomArticle();
         }
         Product::create($data);
 
@@ -67,7 +85,14 @@ class ProductController extends Controller
                     'route' => route('admin.products.toggle.active'),
                 ]);
             })
-            ->rawColumns(['actions', 'state'])
+            ->editColumn('edit', function (Product $product) {
+                return view('datatable.actions', [
+                    'edit' => [
+                        'route' => route('admin.products.edit', $product->id)
+                    ],
+                ]);
+            })
+            ->rawColumns(['actions', 'state', 'edit'])
             ->make(true);
     }
 

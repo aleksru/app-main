@@ -16,7 +16,7 @@ class Product extends Model
     protected $guarded = ['id'];
 
     protected $hidden = ['pivot'];
-    
+
     const PRICE_LIST_ARTICUL = 'Артикул';
     const PRICE_LIST_PRODUCT = 'Товар';
     const PRICE_LIST_PRICE = 'Цена';
@@ -39,7 +39,7 @@ class Product extends Model
      */
     public function priceList()
     {
-      return $this->belongsToMany(PriceType::class)->withTimestamps();
+        return $this->belongsToMany(PriceType::class)->withTimestamps();
     }
 
     /**
@@ -81,7 +81,7 @@ class Product extends Model
      */
     public function getTextType()
     {
-        switch ($this->type){
+        switch ($this->type) {
             case ProductType::TYPE_PRODUCT:
                 return 'Товар';
             case ProductType::TYPE_ACCESSORY:
@@ -93,21 +93,22 @@ class Product extends Model
         }
     }
 
-    public function getTextCategory(){
+    public function getTextCategory()
+    {
         return ProductCategoryEnums::getCategoriesDescription()[$this->category] ?? '';
     }
 
-    public function isAirPods() : bool
+    public function isAirPods(): bool
     {
         return $this->type == ProductType::TYPE_PRODUCT && preg_match('/AirPods/', $this->product_name);
     }
 
-    public function isMiBand() : bool
+    public function isMiBand(): bool
     {
         return $this->type == ProductType::TYPE_PRODUCT && preg_match('/Mi Band/', $this->product_name);
     }
 
-    public function isDelivery() : bool
+    public function isDelivery(): bool
     {
         return $this->category == ProductCategoryEnums::DELIVERY;
     }
@@ -119,5 +120,18 @@ class Product extends Model
     public static function getFromArticle(string $article): ?self
     {
         return Product::byActicle($article)->first();
+    }
+
+    public function isFixPrice(): bool
+    {
+        return $this->fix_price !== null;
+    }
+
+    public static function createCustomArticle(): string
+    {
+        $article = Product::where('article', 'LIKE', '%'.Product::PREFIX_CUSTOM_PRODUCT.'%')->orderBy('id', 'desc')->first();
+        $article = $article ? ((int)$article->article + 1).Product::PREFIX_CUSTOM_PRODUCT : '1000'.Product::PREFIX_CUSTOM_PRODUCT;
+
+        return $article;
     }
 }

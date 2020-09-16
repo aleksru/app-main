@@ -23,11 +23,13 @@ class CreateProductRequest extends FormRequest
      */
     public function rules()
     {
+        $article = $this->route('product') ? ",{$this->route('product')->id},id" : '';
         return [
-            'article' => 'string|nullable|unique:products,article',
+            'article' => 'string|nullable|unique:products,article' . $article,
             'product_name' => 'string|required',
             'category' => 'string|nullable',
             'type' => 'string|required',
+            'fix_price' => 'numeric|nullable'
         ];
     }
 }

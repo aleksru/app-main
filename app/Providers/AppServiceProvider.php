@@ -11,6 +11,7 @@ use App\Models\Realization;
 use App\Observers\LogObserver;
 use App\Observers\MissedCallObserver;
 use App\Observers\OrderObserver;
+use App\Observers\RealizationObserver;
 use App\Order;
 use App\Services\Docs\DomPdfService;
 use App\Services\Docs\PdfServiceInterface;
@@ -75,6 +76,7 @@ class AppServiceProvider extends ServiceProvider
         Order::observe(LogObserver::class);
         Order::observe(OrderObserver::class);
         Realization::observe(LogObserver::class);
+        Realization::observe(RealizationObserver::class);
         Client::observe(LogObserver::class);
         ClientPhone::observe(LogObserver::class);
         MissedCall::observe(MissedCallObserver::class);

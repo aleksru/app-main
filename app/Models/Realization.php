@@ -117,4 +117,19 @@ class Realization extends Model
     {
         return $query->whereNull('reason_refusal_id');
     }
+
+    public function setPriceAttribute($value)
+    {
+        $this->attributes['price'] = $value;
+        if($this->product){
+            $this->setPriceFromProduct($this->product);
+        }
+    }
+
+    public function setPriceFromProduct(Product $product)
+    {
+        if($product->isFixPrice()) {
+            $this->attributes['price'] = $product->fix_price;
+        }
+    }
 }

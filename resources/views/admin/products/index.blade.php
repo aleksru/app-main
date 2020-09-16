@@ -52,6 +52,11 @@
                         'width' => '10%',
                         'searchable' => true,
                     ],
+                    'fix_price' => [
+                        'name' => 'Фикс цена',
+                        'width' => '5%',
+                        'searchable' => false,
+                    ],
                     'type' => [
                         'name' => 'Тип',
                         'width' => '5%',
@@ -72,7 +77,11 @@
                         'width' => '2%',
                         'orderable' => false
                     ],
-
+                    'edit' => [
+                        'name' => 'Конфиг',
+                        'width' => '2%',
+                        'orderable' => false
+                    ],
                 ],
             ])
         </div>

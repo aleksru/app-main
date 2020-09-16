@@ -29,9 +29,8 @@
                     @endforeach
                 </div>
             @endif
-
             <form id="user-form" role="form" method="post" class="form-horizontal" action="{{
-                isset($product) ? '' : route('admin.products.store')
+                isset($product) ? route('admin.products.update', $product->id) : route('admin.products.store')
             }}">
                 {{ csrf_field() }}
 
@@ -69,7 +68,14 @@
                         <select name="type">
                             <option value="">НЕТ</option>
                             @foreach(\App\Enums\ProductType::getConstantsForDescription() as $type)
-                                <option value="{{$type['name']}}">{{$type['desc']}}</option>
+                                <option value="{{$type['name']}}"
+                                        @if(isset($product) && $product->type == $type['name'])
+                                            selected
+                                        @endif
+                                >
+                                    {{$type['desc']}}
+                                </option>
+
                             @endforeach
                         </select>
                     </div>
@@ -82,9 +88,26 @@
                         <select name="category">
                             <option value="">НЕТ</option>
                             @foreach(\App\Enums\ProductCategoryEnums::getConstantsForDescription() as $category)
-                                <option value="{{$category['name']}}">{{$category['desc']}}</option>
+                                <option value="{{$category['name']}}"
+                                        @if(isset($product) && $product->category == $category['name'])
+                                            selected
+                                        @endif
+                                >{{$category['desc']}}</option>
                             @endforeach
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-sm-2 control-label">Фикс цена</label>
+
+                    <div class="col-sm-4">
+                        <input type="number"
+                               min="0"
+                               step="any"
+                               class="form-control"
+                               name="fix_price"
+                               placeholder="Фикс цена"
+                               value="{{ old('fix_price', $product->fix_price ?? '') }}">
                     </div>
                 </div>
             </form>
