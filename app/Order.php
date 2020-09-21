@@ -543,4 +543,13 @@ class Order extends Model
 
         return $result;
     }
+
+    public function isAllowedSetCourier(Courier $courier): bool
+    {
+        if($courier->isUnLimit()){
+            return true;
+        }
+
+        return $this->full_sum <= $courier->getMaxAllowedOrderSummary();
+    }
 }

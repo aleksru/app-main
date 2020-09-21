@@ -22,12 +22,7 @@ class CourierController extends Controller
 
     public function forOrder(Order $order, Request $request)
     {
-        $sumOrder = $order->full_sum;
-        $couriers = Courier::query()
-                ->selectRaw('couriers.*')
-                ->leftJoin('courier_statuses', 'couriers.courier_status_id', '=', 'courier_statuses.id')
-                ->where('courier_statuses.max_sum_order', '>=', $sumOrder)
-                ->orWhereNull('courier_statuses.max_sum_order');
+        $couriers = Courier::bySummary($order->full_sum);
         if($query = $request->get('term')){
             $couriers->where('couriers.name', 'like', "%{$query}%");
         }

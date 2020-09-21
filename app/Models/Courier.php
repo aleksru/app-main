@@ -6,7 +6,9 @@ use App\Order;
 use App\Services\Docs\Courier\CheckListData;
 use App\Services\Docs\Courier\RouteListData;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class Courier extends Model
 {
@@ -72,5 +74,41 @@ class Courier extends Model
         $checkListData->setRealizations($realizations);
 
         return $checkListData;
+    }
+
+    /**
+     * @param $summary
+     * @return Collection
+     */
+    public static function getBySummary($summary): Collection
+    {
+        return Courier::bySummary($summary)->get();
+    }
+
+    /**
+     * @param Builder $query
+     * @param $summary
+     * @return Builder
+     */
+    public function scopeBySummary(Builder $query, $summary): Builder
+    {
+        return $query->selectRaw('couriers.*')
+                    ->leftJoin('courier_statuses', 'couriers.courier_status_id', '=', 'courier_statuses.id')
+                    ->where('courier_statuses.max_sum_order', '>=', $summary)
+                    ->orWhereNull('courier_statuses.max_sum_order');
+    }
+
+    public function isUnLimit(): bool
+    {
+        if( ! $this->status || ! $this->status->max_sum_order){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getMaxAllowedOrderSummary(): ?int
+    {
+        return $this->status ? $this->status->max_sum_order : null;
     }
 }

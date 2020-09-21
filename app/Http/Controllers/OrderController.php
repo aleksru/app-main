@@ -12,6 +12,7 @@ use App\Http\Requests\CommentLogistRequst;
 use App\Http\Requests\OrderLogisticMassChange;
 use App\Http\Requests\OrderLogisticRequest;
 use App\Http\Requests\RealizationLogisticRequest;
+use App\Models\Courier;
 use App\Models\Operator;
 use App\Models\OrderStatus;
 use App\Models\OtherStatus;
@@ -330,8 +331,18 @@ class OrderController extends Controller
         if($courierId !== null){
             if($courierId == 0){
                 $courierId = null;
+                Order::whereIn('id', $orderLogisticRequest->get('order_ids'))->update(['courier_id' => $courierId]);
+                event(new LogistTableUpdateEvent());
+                return response()->json('ok');
             }
-            Order::whereIn('id', $orderLogisticRequest->get('order_ids'))->update(['courier_id' => $courierId]);
+            $orders = Order::whereIn('id', $orderLogisticRequest->get('order_ids'))->get();
+            foreach ($orders as $order){
+                if($order->isAllowedSetCourier(Courier::findOrFail($courierId))){
+                    $order->unsetEventDispatcher();
+                    $order->courier_id = $courierId;
+                    $order->save();
+                }
+            }
             event(new LogistTableUpdateEvent());
         }
         return response()->json('ok');
