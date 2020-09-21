@@ -324,7 +324,18 @@ class OrderController extends Controller
         }
         return response()->json('ok');
     }
-
+    public function orderMassCourierUpdate(OrderLogisticMassChange $orderLogisticRequest)
+    {
+        $courierId = $orderLogisticRequest->get('courier_id');
+        if($courierId !== null){
+            if($courierId == 0){
+                $courierId = null;
+            }
+            Order::whereIn('id', $orderLogisticRequest->get('order_ids'))->update(['courier_id' => $courierId]);
+            event(new LogistTableUpdateEvent());
+        }
+        return response()->json('ok');
+    }
     /**
      * @param Realization $realization
      * @param RealizationLogisticRequest $realizationLogisticRequest

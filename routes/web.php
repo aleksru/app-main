@@ -49,6 +49,7 @@ Route::group(['middleware' =>'auth'], function() {
     Route::post('orders-logistic/{order}/update', 'OrderController@orderLogisticUpdate')->name('order.logistic.update');
     Route::post('orders-logistic-event/{order}/update', 'OrderController@orderLogisticUpdateWithEvent')->name('order.logistic.update.event');
     Route::post('orders-logistic-mass-change-status/update', 'OrderController@orderMassStatusUpdate')->name('order.logistic.mass.statuses.update');
+    Route::post('orders-logistic-mass-change-courier/update', 'OrderController@orderMassCourierUpdate')->name('order.logistic.mass.courier.update');
     Route::post('realizations-logistic/{realization}/update', 'OrderController@realizationLogisticUpdate')->name('realization.logistic.update');
 
     //бегунок

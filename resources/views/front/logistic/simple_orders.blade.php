@@ -28,7 +28,7 @@
         <div class="col-md-6">
             <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Статус склада</h3>
+                    <h3 class="box-title">Заполнение</h3>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
@@ -51,6 +51,28 @@
                                                 </select>
                                             </div>
                                         </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-success">
+                                            <i class="fa fa-save"></i> Сохранить
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <form id="mass_change_courier" type="submit" method="POST" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-4 control-label">Курьер</label>
+
+                                        <div class="col-sm-8">
+                                            <select class="js-example-mass-courier-single-form form-control" name="courier_id">
+                                                <option value="" selected>Не выбран</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -188,10 +210,18 @@
                 placeholder: "Выберите статус...",
             });
 
+            let massCouriers = {!! json_encode(\App\Models\Courier::select('id', 'name as text')->get()->toArray()) !!};
+            massCouriers.push({id: 0, text: 'Без курьера'});
+            $('.js-example-mass-courier-single-form').select2({
+                data: massCouriers,
+                allowClear: true,
+                placeholder: "Выберите курьера...",
+            });
+
             $("#mass_change_stock_status").on("submit", function(e){
                 e.preventDefault();
                 const formData = new FormData(e.target);
-                sendMassChange(formData).then((res) => {
+                sendMassChange(formData, '/orders-logistic-mass-change-status/update').then((res) => {
                     toast.success('Успешно обновлено!');
                 }).catch((err) => {
                     if(err instanceof ErrorValidateException){
@@ -200,22 +230,42 @@
                         toast.error('Что то пошло не так (');
                     }
                 });
-
             });
 
-            async function sendMassChange(formData) {
-                let isAppendForm = false;
-                $("input[name='checked_order']").each(function () {
-                    if(this.checked){
-                        formData.append('order_ids[]', $(this).parent().parent().data("order-id"));
-                        isAppendForm = true;
+            $("#mass_change_courier").on("submit", function(e){
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                sendMassChange(formData, '/orders-logistic-mass-change-courier/update').then((res) => {
+                    toast.success('Успешно обновлено!');
+                }).catch((err) => {
+                    if(err instanceof ErrorValidateException){
+                        toast.error(err.toString());
+                    }else{
+                        toast.error('Что то пошло не так (');
                     }
                 });
-                if( ! isAppendForm ){
+            });
+
+            function getSelectedOrders(){
+                let data = [];
+                $("input[name='checked_order']").each(function () {
+                    if(this.checked){
+                        data.push($(this).parent().parent().data("order-id"));
+                    }
+                });
+
+                return data;
+            }
+
+            async function sendMassChange(formData, route) {
+                let ordersIds = getSelectedOrders();
+                if(ordersIds.length === 0){
                     throw new ErrorValidateException('Не выбраны заказы!');
                 }
-
-                const response = await axios.post('/orders-logistic-mass-change-status/update', formData);
+                for(let id of ordersIds){
+                    formData.append('order_ids[]', id);
+                }
+                const response = await axios.post(route, formData);
 
                 return response;
             }
