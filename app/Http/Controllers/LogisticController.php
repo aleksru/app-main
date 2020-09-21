@@ -319,9 +319,9 @@ class LogisticController extends Controller
                 }
             })
 
-//            ->editColumn('operator', function (Order $order){
-//                return $order->operator ? $order->operator->name : '';
-//            })
+            ->editColumn('comment', function (Order $order){
+                return view('front.logistic.parts.sub_comment', ['comment' => $order->comment]);
+            })
 //            ->editColumn('store', function (Order $order){
 //                return $order->store ? $order->store->name : '';
 //            })
@@ -394,7 +394,7 @@ class LogisticController extends Controller
             ->editColumn('checkbox', function (Order $order){
                 return '<input name="checked_order" type="checkbox" style="height: 25px;width: 25px">';
             })
-            ->rawColumns(['btn_details', 'imei', 'products', 'status_stock', 'status_logist', 'checkbox', 'courier_name'])
+            ->rawColumns(['btn_details', 'imei', 'products', 'status_stock', 'status_logist', 'checkbox', 'courier_name', 'comment'])
             ->setRowClass(function (Order $order) {
                 $class = ($order->stockStatus ? ' bg-' . $order->stockStatus->color : '');
 
