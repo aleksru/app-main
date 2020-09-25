@@ -1,9 +1,11 @@
 
-<div title="{{implode("\n", $products)}}">
+<div title="{{implode("\n", $products)}}"
+     style="overflow:hidden;text-overflow: ellipsis;white-space: nowrap;max-width:120px"
+>
     @foreach($products as $product)
         @if($loop->iteration > 3)
             @break
         @endif
-        {{ strlen($product) > 50 ? (substr($product, 0, 50) . '...') : $product }}<br/>
+        {{ $product }}<br/>
     @endforeach
 </div>
