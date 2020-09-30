@@ -552,4 +552,9 @@ class Order extends Model
 
         return $this->full_sum <= $courier->getMaxAllowedOrderSummary();
     }
+
+    public function getPriceProductFromPriceList($productId)
+    {
+        return $this->store ? $this->store->getPriceProduct($productId) : null;
+    }
 }

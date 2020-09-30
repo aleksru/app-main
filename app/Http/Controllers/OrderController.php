@@ -358,4 +358,14 @@ class OrderController extends Controller
 
         return response()->json($realization->load('product'));
     }
+
+    /**
+     * @param Order $order
+     * @param Product $product
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPriceProduct(Order $order, Product $product)
+    {
+        return response()->json(['price' => $order->getPriceProductFromPriceList($product->id)]);
+    }
 }

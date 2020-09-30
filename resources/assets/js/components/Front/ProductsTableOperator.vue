@@ -1,7 +1,7 @@
 <template>
     <div>
         <search-product v-if="show_search"
-                        @addproduct="products.push($event)"
+                        @addproduct="addProduct($event)"
                         :initial_product_types="initial_product_types"
         ></search-product>
         <div class="box">
@@ -98,6 +98,25 @@
                     toast.error('Ошибка при обновлении товаров!');
                     console.log(err);
                 });
+            },
+
+            addProduct(product){
+                this.getPriceFromPriceList(product.product.id).then(res => {
+                    if(res != null){
+                        product.price = res;
+                    }
+                    this.products.push(product);
+                }).catch(err => {
+                    this.products.push(product);
+                    console.log(err);
+                })
+            },
+
+            async getPriceFromPriceList(productId){
+                let res = await axios.get(`/orders/${this.initial_order}/price/${productId}`)
+                                    .then(res => res.data.price);
+
+                return res;
             },
 
             submit(){

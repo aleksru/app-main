@@ -67,7 +67,7 @@
                                 :show_search="true"
                                 :initial_product_types="{{  json_encode(array_values(\App\Enums\ProductType::getConstantsForDescription())) }}"
                 >
-                </products-table>
+                </products-table-operator>
             </order-form>
         </div>
     </div>

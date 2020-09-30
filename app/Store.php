@@ -59,6 +59,11 @@ class Store extends Model
         return $this->belongsTo(PriceType::class);
     }
 
+    public function getPriceProduct($productId)
+    {
+        return $this->priceType ? $this->priceType->getPrice($productId) : null;
+    }
+
     /**
      * @param string $number
      * @return mixed
