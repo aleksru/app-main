@@ -15,11 +15,15 @@ class PriceType extends Model
 
     public function products()
     {
-      return $this->belongsToMany(Product::class)->withPivot(['price'])->withTimestamps();
+      return $this->belongsToMany(Product::class)->withPivot(['price', 'price_special'])->withTimestamps();
     }
 
     public function getPrice($productId)
     {
-        return $this->products()->where('product_id', $productId)->value('price');
+        if($product = $this->products()->where('product_id', $productId)->first()){
+            return $product->pivot->price_special !== null ? $product->pivot->price_special : $product->pivot->price;
+        }
+
+        return null;
     }
 }
