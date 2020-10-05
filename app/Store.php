@@ -17,6 +17,7 @@ class Store extends Model
     protected $casts = [
         'is_hidden' => 'bool',
         'active_at' => 'datetime',
+        'last_request_prices' => 'datetime',
         'is_disable_api_price' => 'bool'
     ];
 
@@ -129,5 +130,11 @@ class Store extends Model
         }
 
        return $query->count();
+    }
+
+    public function updateLastRequestPrices()
+    {
+        $this->last_request_prices = Carbon::now();
+        $this->save();
     }
 }

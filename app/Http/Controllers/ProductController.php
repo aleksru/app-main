@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FileStatusesEnums;
+use App\Jobs\ImportPricesJob;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\UploadPrice;
-use App\PriceType;
 use App\File;
 
 class ProductController extends Controller
@@ -17,7 +18,7 @@ class ProductController extends Controller
     {
         $this->authorize(Product::class);
 
-        return view('price-upload', ['priceLists' => PriceType::all()]);
+        return view('price-upload');
     }
 
     /**
@@ -30,7 +31,12 @@ class ProductController extends Controller
 
         $origName = $request->file('file')->getClientOriginalName();
         $path = $request->file('file')->store('prices');
-        File::create(['name' => $origName, 'path' => $path]);
+        $file = File::create([
+            'name'          => $origName,
+            'path'          => $path,
+            'price_list_id' => $request->get('price_list_id')
+        ]);
+        ImportPricesJob::dispatch($file->id)->onQueue('files');
 
         return redirect()->route('product.index')->with(['message' => 'Файл успешно загружен']);
     }
@@ -72,7 +78,16 @@ class ProductController extends Controller
 
         return response()->json(['product' => $product, 'message' => 'Товар создан и добавлен в заказ!']);
     }
-    
-    
-    
+
+    public function filesDatatable(Request $request)
+    {
+        return datatables() ->of(File::query())
+            ->editColumn('status', function (File $file) {
+                return FileStatusesEnums::getDesc($file->status);
+            })
+            ->editColumn('created_at', function (File $file) {
+                return $file->created_at->format('d.m.Y H:i:s');
+            })
+            ->make(true);
+    }
 }

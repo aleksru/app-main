@@ -26,4 +26,9 @@ class PriceType extends Model
 
         return null;
     }
+
+    public function clearPrices()
+    {
+        $this->products()->detach();
+    }
 }
