@@ -48,6 +48,10 @@ class CreateOrderHandler
             Log::error('Создание заказа отклонено. Клиент ИД: ' .  $this->client->id);
             return null;
         }
+        if($this->store && $this->store->is_disable){
+            Log::error('Создание заказа отклонено. Магазин отключен ' .  $this->store->name);
+            return null;
+        }
         $this->setStatus();
         $this->orderBuilder->setClient($this->client);
         $this->orderBuilder->setStore($this->store);

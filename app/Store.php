@@ -17,7 +17,8 @@ class Store extends Model
     protected $casts = [
         'is_hidden' => 'bool',
         'active_at' => 'datetime',
-        'is_disable_api_price' => 'bool'
+        'is_disable_api_price' => 'bool',
+        'is_disable' => 'bool'
     ];
 
     /**

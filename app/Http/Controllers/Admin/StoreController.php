@@ -92,10 +92,17 @@ class StoreController extends Controller
                     'check' => $store->is_hidden
                 ]);
             })
+            ->editColumn('is_disable', function (Store $store) {
+                return view('datatable.toggle', [
+                    'route' => route('admin.stores.toggle.disable', $store->id),
+                    'id' => $store->id,
+                    'check' => $store->is_disable
+                ]);
+            })
             ->editColumn('is_disable_api_price', function (Store $store) {
                 return $store->is_disable_api_price ? 'НЕТ' : 'ДА';
             })
-            ->rawColumns(['actions', 'is_hidden'])
+            ->rawColumns(['actions', 'is_hidden', 'is_disable'])
             ->make(true);
     }
 
@@ -106,6 +113,18 @@ class StoreController extends Controller
     public function toggleHidden(Store $store)
     {
         $store->is_hidden = ! $store->is_hidden;
+        $store->save();
+
+        return response()->json(['message' => 'Успешно обновлен!']);
+    }
+
+    /**
+     * @param Store $store
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function toggleDisable(Store $store)
+    {
+        $store->is_disable = ! $store->is_disable;
         $store->save();
 
         return response()->json(['message' => 'Успешно обновлен!']);

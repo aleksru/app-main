@@ -132,7 +132,9 @@ class SaveCall implements ShouldQueue
                 'entry_id'          => $data['entry_id'] ?? null
             ]);
         }
-
+        if(($store ?? false) && $store->is_disable){
+            return ;
+        }
         if($clientCall ?? false){
             CallMissedHandlerJob::dispatch($clientCall->id)->onQueue('calls');
         }
