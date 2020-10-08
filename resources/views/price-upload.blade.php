@@ -106,6 +106,10 @@
                                 'name' => 'Файл',
                                 'width' => '10%',
                             ],
+                            'price_list_name' => [
+                                'name' => 'Прайс',
+                                'width' => '10%',
+                            ],
                             'status' => [
                                 'name' => 'Статус',
                                 'width' => '10%',

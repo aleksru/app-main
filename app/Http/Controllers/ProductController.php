@@ -81,7 +81,10 @@ class ProductController extends Controller
 
     public function filesDatatable(Request $request)
     {
-        return datatables() ->of(File::query())
+        return datatables() ->of(
+            File::query()
+                ->selectRaw('files.*, price_types.name as price_list_name')
+                ->leftJoin('price_types', 'files.price_list_id', '=', 'price_types.id'))
             ->editColumn('status', function (File $file) {
                 return FileStatusesEnums::getDesc($file->status);
             })
