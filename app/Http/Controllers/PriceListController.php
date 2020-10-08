@@ -37,9 +37,12 @@ class PriceListController extends Controller
     {
         return datatables() ->of(PriceType::query())
                             ->editColumn('actions', function (PriceType $priceType) {
-                                return '<a href="'.route('price-lists.show', $priceType->id).'">
+                                return '<a href="'.route('price-lists.show', $priceType->id).'" target="_blank">
                                             <i class="fa fa fa-sign-in btn btn-xs btn-success"></i>
                                         </a>';
+                            })
+                            ->editColumn('updated_at', function (PriceType $priceType) {
+                                return $priceType->updated_at->format('d.m.Y H:i:s');
                             })
                             ->rawColumns(['actions'])
                             ->make(true);

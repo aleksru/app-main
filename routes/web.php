@@ -29,6 +29,7 @@ Route::group(['middleware' =>'auth'], function() {
     });
     //загрузка прайса
     Route::get('product', 'ProductController@index')->name('product.index');
+    Route::get('product/files-datatable', 'ProductController@filesDatatable')->name('product.files.datatable');
     Route::post('product', 'ProductController@uploadPrice')->name('upload-price');
     Route::post('product-search', 'ProductController@search')->name('product.search');
     Route::post('product-create', 'ProductController@create')->name('product.create');
@@ -272,6 +273,15 @@ Route::group(['middleware' =>['auth', 'role:view_logistics'], 'prefix' => 'admin
     Route::post('warranty-text', 'CorporateInfoController@storeText')->name('warranty-text.store');
 });
 
+Route::group(['middleware' =>['auth', 'role:change_price_list'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function()
+{
+    //Магазины
+    Route::resource('stores', 'StoreController')->except('show');
+    Route::get('stores-table', 'StoreController@datatable')->name('stores.datatable');
+    Route::post('stores-hidden-toggle/{store}', 'StoreController@toggleHidden')->name('stores.toggle.hidden');
+    Route::post('stores-disable-toggle/{store}', 'StoreController@toggleDisable')->name('stores.toggle.disable');
+});
+
 //Админка
 Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
     //Пользователи
@@ -280,12 +290,6 @@ Route::group(['middleware' =>['auth',  'role:admin'], 'prefix' => 'admin', 'name
 
     //Лог админки
     Route::get('logs', 'LogController@index')->name('logs.index');
-
-    //Магазины
-    Route::resource('stores', 'StoreController')->except('show');
-    Route::get('stores-table', 'StoreController@datatable')->name('stores.datatable');
-    Route::post('stores-hidden-toggle/{store}', 'StoreController@toggleHidden')->name('stores.toggle.hidden');
-    Route::post('stores-disable-toggle/{store}', 'StoreController@toggleDisable')->name('stores.toggle.disable');
 
     //Периоды доставки
     Route::resource('delivery-periods', 'DeliveryPeriodsController')->only('index', 'store', 'destroy');

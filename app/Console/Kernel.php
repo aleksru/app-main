@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('update-price-lists')->everyTenMinutes();
+        //$schedule->command('update-price-lists')->everyTenMinutes();
         $schedule->command('logs:prepare')->everyThirtyMinutes();
         $schedule->command('avito:mail-parse')->everyTenMinutes();
         $schedule->command('metro:update-stations')->monthlyOn(26, '02:00');

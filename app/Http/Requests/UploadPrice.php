@@ -24,7 +24,8 @@ class UploadPrice extends FormRequest
     public function rules()
     {
         return [
-            'file' =>'required|file|mimes:xls,xlsx'
+            'file' =>'required|file|mimes:xls,xlsx',
+            'price_list_id' => 'required|integer'
         ];
     }
 }

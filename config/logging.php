@@ -134,6 +134,13 @@ return [
             'days' => 2,
             'permission' => 0777,
         ],
+        'import_prices' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/import_prices.log'),
+            'days' => 2,
+            'permission' => 0777,
+        ],
+
     ],
 
 ];

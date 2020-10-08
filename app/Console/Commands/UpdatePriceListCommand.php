@@ -47,7 +47,7 @@ class UpdatePriceListCommand extends Command
          */
         //счетчик
         $counter = 0;
-        
+
 //        foreach (PriceType::getPriceTypesName() as $priceType){
 //           PriceType::firstOrCreate(['name' => $priceType]);
 //        }
@@ -55,7 +55,7 @@ class UpdatePriceListCommand extends Command
         $files = File::where('status', 0)->get();
         if ( !$files->isEmpty() ) {
             foreach ($files as $file) {
-                $priceList = PriceType::where('name', explode('_', $file->name)[0])->first();
+                $priceList = $file->priceList;
 
                 if (!$priceList){
                     Log::error("Не найден прайс: ".$file->name." ИМЯ ПРАЙС-ЛИСТА НЕ ОБНАРУЖЕНО.");
@@ -65,7 +65,7 @@ class UpdatePriceListCommand extends Command
 
                     continue;
                 }
-                
+
                 //отсоединяем все продукты от прайса
                 $priceList->products()->detach();
 
@@ -75,8 +75,8 @@ class UpdatePriceListCommand extends Command
                 $arrPriceList = ExelService::excelToArray(storage_path('app/'.$file->path));
 
                 foreach ($this->genExelContent($arrPriceList) as $productPriceList) {
-                    if (!isset($productPriceList[Product::PRICE_LIST_ARTICUL])|| 
-                        !isset($productPriceList[Product::PRICE_LIST_PRODUCT])|| 
+                    if (!isset($productPriceList[Product::PRICE_LIST_ARTICUL])||
+                        !isset($productPriceList[Product::PRICE_LIST_PRODUCT])||
                         !isset($productPriceList[Product::PRICE_LIST_PRICE])){
                         Log::error("Ошибка файла. Отсутствуют свойства в таблице. Имя файла ".$file->name);
                         break;
@@ -87,7 +87,7 @@ class UpdatePriceListCommand extends Command
                     $product->setActivated();
                     $product->save();
                     ++$counter;
-                    
+
                     $product->priceList()->attach($priceList->id, [
                         'price' => $productPriceList[Product::PRICE_LIST_PRICE],
                         'price_special' => $productPriceList[Product::PRICE_LIST_PRICE_SPECIAL] ?? null,
