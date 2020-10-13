@@ -16,6 +16,16 @@ class RowBuilder
     protected $courierPrice = null;
     protected $courierName = null;
     protected $supplierName = null;
+    protected $orderStatus = null;
+
+    /**
+     * @param null $orderStatus
+     */
+    public function setOrderStatus($orderStatus): self
+    {
+        $this->orderStatus = $orderStatus;
+        return $this;
+    }
 
     /**
      * @param mixed $orderId
@@ -108,8 +118,6 @@ class RowBuilder
         return $this;
     }
 
-
-
     public function reset()
     {
         $this->orderId = null;
@@ -122,6 +130,7 @@ class RowBuilder
         $this->courierPrice = null;
         $this->courierName = null;
         $this->supplierName = null;
+        $this->orderStatus = null;
     }
 
     public function build(): Row
@@ -136,7 +145,8 @@ class RowBuilder
             $this->productPrice,
             $this->courierPrice,
             $this->courierName,
-            $this->supplierName
+            $this->supplierName,
+            $this->orderStatus
         );
         $this->reset();
 

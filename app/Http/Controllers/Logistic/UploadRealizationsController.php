@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Logistic;
 
 use App\Enums\FileStatusesEnums;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadPrice;
+use App\Http\Requests\Logistic\UploadFileRealizationsRequest;
 use App\Jobs\FileRealizationJob;
 use App\Models\FileRealization;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class UploadRealizationsController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function upload(UploadPrice $request)
+    public function upload(UploadFileRealizationsRequest $request)
     {
         $origName = $request->file('file')->getClientOriginalName();
         $path = $request->file('file')->store('realizations');

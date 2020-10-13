@@ -29,6 +29,8 @@ class UpdateOrderFromRow extends AbstractUpdateFromRow
      */
     protected $couriersContainer;
 
+    protected $stockStatuses;
+
     /**
      * UpdateRealizationFromRow constructor.
      */
@@ -36,7 +38,8 @@ class UpdateOrderFromRow extends AbstractUpdateFromRow
     {
         $this->logisticStatusesContainer = new OtherStatusesContainer();
         $this->logisticStatusesContainer->addAll(OtherStatus::typeLogisticStatuses()->get());
-
+        $this->stockStatuses = new OtherStatusesContainer();
+        $this->stockStatuses->addAll(OtherStatus::typeStockStatuses()->get());
         $this->couriersContainer = new CouriersContainer();
         $this->couriersContainer->addAll(Courier::query()->get());
     }
@@ -67,7 +70,9 @@ class UpdateOrderFromRow extends AbstractUpdateFromRow
         if($status = $this->getStatus()){
             $this->order->logistic_status_id = $status->id;
         }
-
+        if($orderStatus = $this->getOrderStatus()){
+            $this->order->stock_status_id = $orderStatus->id;
+        }
         if($courier = $this->getCourier()){
             $this->order->courier_id = $courier->id;
         }
@@ -99,6 +104,19 @@ class UpdateOrderFromRow extends AbstractUpdateFromRow
                  Log::channel('upload_realizations')->error('Courier not found - ' . $courier);
              }
              return $result;
+        }
+
+        return null;
+    }
+
+    private function getOrderStatus(): ?OtherStatus
+    {
+        if($status = $this->row->getOrderStatus()){
+            $result = $this->stockStatuses->getByName($status);
+            if( ! $result ){
+                Log::channel('upload_realizations')->error('Order Status not found - ' . $status);
+            }
+            return $result;
         }
 
         return null;

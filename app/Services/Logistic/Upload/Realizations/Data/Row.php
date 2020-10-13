@@ -16,18 +16,21 @@ class Row
     protected $courierPrice;
     protected $courierName;
     protected $supplierName;
+    protected $orderStatus;
 
     /**
      * Row constructor.
-     * @param int $orderId
-     * @param string|null $operatorName
-     * @param string|null $statusText
-     * @param string $productName
-     * @param string|null $productImei
-     * @param int|null $supplierPrice
-     * @param int|null $productPrice
-     * @param int|null $courierPrice
-     * @param string|null $courierName
+     * @param $orderId
+     * @param $operatorName
+     * @param $statusText
+     * @param $productName
+     * @param $productImei
+     * @param $supplierPrice
+     * @param $productPrice
+     * @param $courierPrice
+     * @param $courierName
+     * @param $supplierName
+     * @param $orderStatus
      */
     public function __construct(
         $orderId,
@@ -39,7 +42,8 @@ class Row
         $productPrice,
         $courierPrice,
         $courierName,
-        $supplierName
+        $supplierName,
+        $orderStatus
     )
     {
         $this->orderId = $orderId;
@@ -52,6 +56,7 @@ class Row
         $this->courierPrice = $courierPrice;
         $this->courierName = $courierName;
         $this->supplierName = $supplierName;
+        $this->orderStatus = $orderStatus;
     }
 
     /**
@@ -132,6 +137,14 @@ class Row
     public function getSupplierName()
     {
         return $this->supplierName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderStatus()
+    {
+        return $this->orderStatus;
     }
 
     public static function builder(): RowBuilder

@@ -48,6 +48,7 @@ class RowCreatorFromArray implements RowCreatorImp
                        ->setProductPrice($this->rowArr['product.price'] === null ? null : (int)$this->rowArr['product.price'])
                        ->setCourierName($this->rowArr['courier.name'] ?? null)
                        ->setSupplierName($this->rowArr['supplier.name'] ?? null)
+                       ->setOrderStatus($this->rowArr['order.status'] ?? null)
                        ->build();
     }
 
