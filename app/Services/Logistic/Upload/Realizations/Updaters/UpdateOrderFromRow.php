@@ -22,7 +22,7 @@ class UpdateOrderFromRow extends AbstractUpdateFromRow
     /**
      * @var OtherStatusesContainer
      */
-    protected $logisticStatusesContainer;
+//    protected $logisticStatusesContainer;
 
     /**
      * @var CouriersContainer
@@ -36,8 +36,8 @@ class UpdateOrderFromRow extends AbstractUpdateFromRow
      */
     public function __construct()
     {
-        $this->logisticStatusesContainer = new OtherStatusesContainer();
-        $this->logisticStatusesContainer->addAll(OtherStatus::typeLogisticStatuses()->get());
+//        $this->logisticStatusesContainer = new OtherStatusesContainer();
+//        $this->logisticStatusesContainer->addAll(OtherStatus::typeLogisticStatuses()->get());
         $this->stockStatuses = new OtherStatusesContainer();
         $this->stockStatuses->addAll(OtherStatus::typeStockStatuses()->get());
         $this->couriersContainer = new CouriersContainer();
@@ -67,9 +67,9 @@ class UpdateOrderFromRow extends AbstractUpdateFromRow
         if($this->row->getCourierPrice()){
             $this->order->courier_payment = $this->row->getCourierPrice();
         }
-        if($status = $this->getStatus()){
-            $this->order->logistic_status_id = $status->id;
-        }
+//        if($status = $this->getStatus()){
+//            $this->order->logistic_status_id = $status->id;
+//        }
         if($orderStatus = $this->getOrderStatus()){
             $this->order->stock_status_id = $orderStatus->id;
         }
@@ -82,18 +82,18 @@ class UpdateOrderFromRow extends AbstractUpdateFromRow
         $this->order->save();
     }
 
-    private function getStatus(): ?OtherStatus
-    {
-        if($status = $this->row->getStatusText()){
-            $result = $this->logisticStatusesContainer->getByName($status);
-            if( ! $result ){
-                Log::channel('upload_realizations')->error('Status not found - ' . $status);
-            }
-            return $result;
-        }
-
-        return null;
-    }
+//    private function getStatus(): ?OtherStatus
+//    {
+//        if($status = $this->row->getStatusText()){
+//            $result = $this->logisticStatusesContainer->getByName($status);
+//            if( ! $result ){
+//                Log::channel('upload_realizations')->error('Status not found - ' . $status);
+//            }
+//            return $result;
+//        }
+//
+//        return null;
+//    }
 
 
     private function getCourier(): ?Courier
