@@ -61,10 +61,8 @@ class UpdateRealizationFromRow extends AbstractUpdateFromRow
         $this->realization->price = number_format( (float) $this->row->getProductPrice(), 2, '.', '');
         $this->realization->price_opt = number_format( (float) $this->row->getSupplierPrice(), 2, '.', '');
         $this->realization->supplier_id = ($supplier = $this->checkSupplier()) ? $supplier->id : null;
+        $this->realization->reason_refusal_id = ($status = $this->getStatus()) ? $status->id : null;
         $changes = http_build_query($this->realization->getDirty(), null, ',');
-        if($status = $this->getStatus()){
-            $this->realization->reason_refusal_id = $status->id;
-        }
         Log::channel('upload_realizations')->error('Update order_id #'.$this->realization->order_id.' realization #' .
             $this->realization->id. ' ' . $changes);
         $this->realization->save();
