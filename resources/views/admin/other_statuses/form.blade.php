@@ -41,7 +41,10 @@
                             <a href="#tab_2" data-toggle="tab" aria-expanded="{{$activeNav == \App\Enums\OtherStatusEnums::STOCK_TYPE ? 'true' : 'false'}}">Склад</a>
                         </li>
                         <li class="{{$activeNav == \App\Enums\OtherStatusEnums::LOGISTIC_TYPE ? 'active' : ''}}">
-                            <a href="#tab_3" data-toggle="tab" aria-expanded="{{$activeNav == \App\Enums\OtherStatusEnums::LOGISTIC_TYPE ? 'true' : 'false'}}">Логистика</a>
+                            <a href="#tab_3" data-toggle="tab" aria-expanded="{{$activeNav == \App\Enums\OtherStatusEnums::LOGISTIC_TYPE ? 'true' : 'false'}}">Причины отказа</a>
+                        </li>
+                        <li class="{{$activeNav == \App\Enums\OtherStatusEnums::REALIZATION_STATUS_TYPE ? 'active' : ''}}">
+                            <a href="#tab_4" data-toggle="tab" aria-expanded="{{$activeNav == \App\Enums\OtherStatusEnums::REALIZATION_STATUS_TYPE ? 'true' : 'false'}}">Статусы реализаций</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -267,6 +270,83 @@
                             </div>
                         </div>
                         <!-- /.tab-pane -->
+                        <div class="tab-pane {{$activeNav == \App\Enums\OtherStatusEnums::REALIZATION_STATUS_TYPE ? 'active' : ''}}" id="tab_4">
+                            <div class="row">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Статусы реализаций</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <table class="table table-bordered" id="table-prices">
+                                        <tbody>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>Название</th>
+                                            <th>Сортировка</th>
+                                            <th>Цвет</th>
+                                            <th>Роль в статистике</th>
+                                            <th>Действия</th>
+                                        </tr>
+                                        @foreach ($realizationStatuses as $realizationStatus)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $realizationStatus->name }}</td>
+                                                <td>{{ $realizationStatus->ordering }}</td>
+                                                <td>
+                                                    <span class="badge bg-{{$realizationStatus->color}}" style="padding: 10px;">
+                                                    {{ $realizationStatus->color }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ $realizationStatus->result !== null ? \App\Enums\StatusResults::getDescription($realizationStatus->result) : ''}}</td>
+                                                <td>
+                                                    @include('datatable.actions', [
+                                                        'edit' => [
+                                                            'route' => route('admin.other-statuses.edit', $realizationStatus->id),
+                                                        ],
+                                                        'delete' => [
+                                                        'id' => $realizationStatus->id,
+                                                        'name' =>  $realizationStatus->name,
+                                                        'route' => route('admin.other-statuses.destroy', $realizationStatus->id)
+                                                        ]
+                                                    ])
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <form id="realization-statuses-form" role="form" method="post" class="form-horizontal" action="{{route('admin.other-statuses.store')}}">
+                                        {{ csrf_field() }}
+
+                                        <div class="form-group">
+                                            <label for="name" class="col-sm-2 control-label">Название</label>
+
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="name" placeholder="Название" value="{{ old('name') }}">
+                                                <input type="text" class="form-control" name="type"  value="{{ \App\Enums\OtherStatusEnums::REALIZATION_STATUS_TYPE }}" style="display: none">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="name" class="col-sm-2 control-label">Цвет</label>
+
+                                            <div class="col-sm-4">
+                                                @include('admin.parts.select_color', ['name' => 'color'])
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="box-footer">
+                                    <button form="realization-statuses-form" type="submit" class="btn btn-primary pull-right">
+                                        <i class="fa fa-save"></i> Добавить
+                                    </button>
+                                </div>
+                                <!-- /.box-body -->
+                                <div class="box-footer clearfix">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.tab-content -->
                 </div>

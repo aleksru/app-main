@@ -42,4 +42,15 @@ class OtherStatus extends Model
     {
         return $query->where('type', OtherStatusEnums::LOGISTIC_TYPE);
     }
+
+    /**
+     * Статус реализации
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeTypeRealizationStatuses($query)
+    {
+        return $query->where('type', OtherStatusEnums::REALIZATION_STATUS_TYPE);
+    }
 }

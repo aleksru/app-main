@@ -21,6 +21,11 @@ class OtherStatusEnums
     const LOGISTIC_TYPE = 'LOGISTIC';
 
     /**
+     * Тип статуса реализация
+     */
+    const REALIZATION_STATUS_TYPE = 'REALIZATION_STATUS';
+
+    /**
      * Получение всех типов статусов
      *
      * @return array
@@ -30,7 +35,8 @@ class OtherStatusEnums
         return [
             self::SUBSTATUS_TYPE,
             self::LOGISTIC_TYPE,
-            self::STOCK_TYPE
+            self::STOCK_TYPE,
+            self::REALIZATION_STATUS_TYPE
         ];
     }
 }

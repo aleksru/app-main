@@ -18,10 +18,18 @@ class OtherStatusController extends Controller
         $subStatuses = OtherStatus::typeSubStatuses()->get();
         $stockStatuses = OtherStatus::typeStockStatuses()->get();
         $logisticStatuses = OtherStatus::typeLogisticStatuses()->get();
+        $realizationStatuses = OtherStatus::typeRealizationStatuses()->get();
         $activeNav = \request()->get('type') !== NULL ? \request()->get('type') : OtherStatusEnums::SUBSTATUS_TYPE;
 
         return view('admin.other_statuses.form',
-                    compact('subStatuses', 'stockStatuses', 'logisticStatuses', 'activeNav'));
+                    compact(
+                        'subStatuses',
+                        'stockStatuses',
+                        'logisticStatuses',
+                        'realizationStatuses',
+                        'activeNav'
+                    )
+        );
     }
 
     /**
