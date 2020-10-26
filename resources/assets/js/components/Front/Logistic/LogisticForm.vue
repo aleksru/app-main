@@ -110,6 +110,7 @@
                                 <th>Закупка</th>
                                 <th>Продажа</th>
                                 <th>Поставщик</th>
+                                <th>Статус</th>
                                 <th>Причина отказа</th>
                             </tr>
                         </thead>
@@ -150,6 +151,14 @@
                                               index="id"
                                               :options="initial_suppliers"
                                               v-model="order.realizations[index].supplier_id">
+                                    </v-select>
+                                </td>
+                                <td style="width: 10%">
+                                    <v-select v-show=" ! isService(index) "
+                                              label="name"
+                                              index="id"
+                                              :options="realization_statuses"
+                                              v-model="order.realizations[index].realization_status_id">
                                     </v-select>
                                 </td>
                                 <td style="width: 10%">
@@ -205,6 +214,7 @@
             initial_couriers: Array,
             stock_statuses: Array,
             logistic_statuses: Array,
+            realization_statuses: Array,
             minMargin: {
                 type: Number,
                 default: 0

@@ -105,6 +105,7 @@
                 <fast-order :table-id="'orders-table'"
                             :stock-statuses='@json(\App\Models\OtherStatus::typeStockStatuses()->get())'
                             :logistic-statuses='@json(\App\Models\OtherStatus::typeLogisticStatuses()->get())'
+                            :realization-statuses='@json(\App\Models\OtherStatus::typeRealizationStatuses()->get())'
                             :min-margin="{{config('realization.min_margin_order')}}"
                             :min-margin-product="{{config('realization.min_margin_product')}}">
                 </fast-order>

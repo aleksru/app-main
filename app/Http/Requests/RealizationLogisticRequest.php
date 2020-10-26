@@ -33,7 +33,8 @@ class RealizationLogisticRequest extends FormRequest
                 'supplier_id' => 'integer|nullable',
                 'imei' => 'string|nullable',
                 'price_opt' => 'numeric|nullable',
-                'reason_refusal_id' => 'integer|nullable'
+                'reason_refusal_id' => 'integer|nullable',
+                'realization_status_id' => 'integer|nullable',
             ];
         }
         if(Auth::user()->isCourier()) {
@@ -46,7 +47,8 @@ class RealizationLogisticRequest extends FormRequest
                 'supplier_id' => 'integer|nullable',
                 'imei' => 'string|nullable',
                 'price_opt' => 'numeric|nullable',
-                'reason_refusal_id' => 'integer|nullable'
+                'reason_refusal_id' => 'integer|nullable',
+                'realization_status_id' => 'integer|nullable',
             ];
         }
 

@@ -59,6 +59,7 @@
                             :initial_couriers="couriers"
                             :stock_statuses="stockStatuses"
                             :logistic_statuses="logisticStatuses"
+                            :realization_statuses="realizationStatuses"
                             @update-order="onUpdateOrder($event)"
                             :min-margin="minMargin"
                             :min-margin-product="minMarginProduct">
@@ -85,6 +86,7 @@
             tableId: null,
             stockStatuses: Array,
             logisticStatuses: Array,
+            realizationStatuses: Array,
             minMargin: {
                 type: Number,
                 default: 0
