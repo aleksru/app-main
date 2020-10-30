@@ -32,10 +32,10 @@ class CloseOrders extends Command
      */
     public function handle(OrderRepository $orderRepository)
     {
-        $denialId = OrderStatus::getIdStatusForType(OrderStatus::STATUS_DENIAL_PREFIX);
-        $ids = $orderRepository->getOrdersForRecall(Carbon::today(), false)->pluck('id');
-        if($denialId && ! $ids->isEmpty()) {
-            Order::query()->whereIn('id', $ids)->update(['status_id' => $denialId]);
-        }
+//        $denialId = OrderStatus::getIdStatusForType(OrderStatus::STATUS_DENIAL_PREFIX);
+//        $ids = $orderRepository->getOrdersForRecall(Carbon::today(), false)->pluck('id');
+//        if($denialId && ! $ids->isEmpty()) {
+//            Order::query()->whereIn('id', $ids)->update(['status_id' => $denialId]);
+//        }
     }
 }
