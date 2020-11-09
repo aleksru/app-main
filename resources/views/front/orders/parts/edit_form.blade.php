@@ -36,7 +36,7 @@
             </div>
 
             <div class="row">
-                @include('front.orders.parts.statuses', ['order' => $order, ])
+                @include('front.orders.parts.statuses', ['order' => $order, 'operatorStatuses' => $operatorStatuses])
             </div>
             <div class="row">
                 <div class="col-sm-4">

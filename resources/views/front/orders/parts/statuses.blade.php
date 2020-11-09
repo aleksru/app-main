@@ -25,7 +25,7 @@
 
 @push('scripts')
 <script>
-    let statuses = {!!   json_encode(\App\Models\OrderStatus::select('id', 'status as text', 'color')->get()->toArray()) !!};
+    let statuses = {!!   json_encode($operatorStatuses) !!};
     let substatus = {!!  json_encode($order->subStatus) !!};
     let substatuses = {!!  json_encode($order->status ? $order->status->subStatuses : []) !!};
 

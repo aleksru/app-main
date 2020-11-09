@@ -92,17 +92,26 @@ class OrderController extends Controller
         $subStatuses = OtherStatus::typeSubStatuses()->get();
         $stockStatuses = OtherStatus::typeStockStatuses()->get();
         $logisticStatuses = OtherStatus::typeLogisticStatuses()->get();
+        $operatorStatuses = [];
         $listOperators = [];
 
         if( ! $authUser->isSuperOperator() && $authUser->isOperator() ){
             if($order->operator){
                 $listOperators[] = ['id' => $order->operator->id, 'text' =>  $order->operator->name];
+                if($authUser->account && $order->operator->id == $authUser->account->id){
+                    $operatorStatuses = OrderStatus::select('id', 'status as text', 'color')->get()->toArray();
+                }else{
+                    $operatorStatuses = $order->status ? ['id' => $order->status->id, 'text' => $order->status->status] : [];
+                }
+            }else{
+                $operatorStatuses = OrderStatus::select('id', 'status as text', 'color')->get()->toArray();
             }
 
             if( ! $order->isConfirmed() ){
                 $listOperators[] = ['id' => $authUser->account->id, 'text' =>  $authUser->account->name];
             }
         }else{
+            $operatorStatuses = OrderStatus::select('id', 'status as text', 'color')->get()->toArray();
             $listOperators = Operator::query()
                 ->isActive()
                 ->select('id', 'name as text')
@@ -121,7 +130,8 @@ class OrderController extends Controller
             'subStatuses' => $subStatuses,
             'stockStatuses' => $stockStatuses,
             'logisticStatuses' => $logisticStatuses,
-            'listOperators' => $listOperators
+            'listOperators' => $listOperators,
+            'operatorStatuses' => $operatorStatuses
         ]);
     }
 
