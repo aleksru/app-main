@@ -8,6 +8,7 @@ use App\Exceptions\Realizations\RealizationsUpdateFromRowException;
 use App\Models\OtherStatus;
 use App\Models\Realization;
 use App\Models\Supplier;
+use App\Services\Logistic\Upload\Realizations\Data\Row;
 use App\Services\Statuses\OtherStatusesContainer;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -30,6 +31,30 @@ class UpdateRealizationFromRow extends AbstractUpdateFromRow
     protected $logisticStatusesContainer;
 
     /**
+     * @var OtherStatusesContainer
+     */
+    protected $realizationStatusesContainer;
+
+    /**
+     * @var ?OtherStatus
+     */
+    protected $denialReason = null;
+
+
+    public function resetDenialReazon()
+    {
+        $this->denialReason = null;
+    }
+
+    public function setRow(Row $row)
+    {
+        parent::setRow($row);
+        if($status = $this->getStatus()){
+            $this->denialReason = $status;
+        }
+    }
+
+    /**
      * UpdateRealizationFromRow constructor.
      */
     public function __construct()
@@ -37,6 +62,9 @@ class UpdateRealizationFromRow extends AbstractUpdateFromRow
         $this->suppliers = Supplier::all();
         $this->logisticStatusesContainer = new OtherStatusesContainer();
         $this->logisticStatusesContainer->addAll(OtherStatus::typeLogisticStatuses()->get());
+
+        $this->realizationStatusesContainer = new OtherStatusesContainer();
+        $this->realizationStatusesContainer->addAll(OtherStatus::typeRealizationStatuses()->get());
     }
 
 
@@ -61,7 +89,10 @@ class UpdateRealizationFromRow extends AbstractUpdateFromRow
         $this->realization->price = number_format( (float) $this->row->getProductPrice(), 2, '.', '');
         $this->realization->price_opt = number_format( (float) $this->row->getSupplierPrice(), 2, '.', '');
         $this->realization->supplier_id = ($supplier = $this->checkSupplier()) ? $supplier->id : null;
-        $this->realization->reason_refusal_id = ($status = $this->getStatus()) ? $status->id : null;
+        if($this->denialReason){
+            $this->realization->reason_refusal_id = $this->denialReason->id;
+        }
+        $this->realization->realization_status_id = ($statusR = $this->getRealizationStatus()) ? $statusR->id : null;
         $changes = http_build_query($this->realization->getDirty(), null, ',');
         Log::channel('upload_realizations')->error('Update order_id #'.$this->realization->order_id.' realization #' .
             $this->realization->id. ' ' . $changes);
@@ -95,4 +126,16 @@ class UpdateRealizationFromRow extends AbstractUpdateFromRow
         return null;
     }
 
+    private function getRealizationStatus(): ?OtherStatus
+    {
+        if($status = $this->row->getRealizationStatus()){
+            $result = $this->realizationStatusesContainer->getByName($status);
+            if( ! $result ){
+                Log::channel('upload_realizations')->error('Не найден статус реализации - ' . $status);
+            }
+            return $result;
+        }
+
+        return null;
+    }
 }

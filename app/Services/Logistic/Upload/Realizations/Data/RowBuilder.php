@@ -17,6 +17,7 @@ class RowBuilder
     protected $courierName = null;
     protected $supplierName = null;
     protected $orderStatus = null;
+    protected $realizationStatus = null;
 
     /**
      * @param null $orderStatus
@@ -118,6 +119,16 @@ class RowBuilder
         return $this;
     }
 
+    /**
+     * @param $realizationStatus
+     * @return $this
+     */
+    public function setRealizationStatus($realizationStatus): self
+    {
+        $this->realizationStatus = $realizationStatus;
+        return $this;
+    }
+
     public function reset()
     {
         $this->orderId = null;
@@ -131,6 +142,7 @@ class RowBuilder
         $this->courierName = null;
         $this->supplierName = null;
         $this->orderStatus = null;
+        $this->realizationStatus = null;
     }
 
     public function build(): Row
@@ -146,7 +158,8 @@ class RowBuilder
             $this->courierPrice,
             $this->courierName,
             $this->supplierName,
-            $this->orderStatus
+            $this->orderStatus,
+            $this->realizationStatus
         );
         $this->reset();
 

@@ -17,6 +17,7 @@ class Row
     protected $courierName;
     protected $supplierName;
     protected $orderStatus;
+    protected $realizationStatus;
 
     /**
      * Row constructor.
@@ -43,7 +44,8 @@ class Row
         $courierPrice,
         $courierName,
         $supplierName,
-        $orderStatus
+        $orderStatus,
+        $realizationStatus
     )
     {
         $this->orderId = $orderId;
@@ -57,6 +59,15 @@ class Row
         $this->courierName = $courierName;
         $this->supplierName = $supplierName;
         $this->orderStatus = $orderStatus;
+        $this->realizationStatus = $realizationStatus;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRealizationStatus()
+    {
+        return $this->realizationStatus;
     }
 
     /**

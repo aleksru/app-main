@@ -65,6 +65,7 @@ class OrderRowHandler implements RowHandlerImp
         $this->orderUpdater->setRow($row);
         if($this->order === null || $this->order->id !== $this->row->getOrderId()){
             $this->findOrder($row->getOrderId());
+            $this->realizationsUpdater->resetDenialReazon();
         }
     }
 

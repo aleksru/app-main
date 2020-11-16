@@ -49,6 +49,7 @@ class RowCreatorFromArray implements RowCreatorImp
                        ->setCourierName($this->rowArr['courier.name'] ?? null)
                        ->setSupplierName($this->rowArr['supplier.name'] ?? null)
                        ->setOrderStatus($this->rowArr['order.status'] ?? null)
+                       ->setRealizationStatus($this->rowArr['status.reliz'] ?? null)
                        ->build();
     }
 
