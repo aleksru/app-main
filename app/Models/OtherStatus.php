@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OtherStatusEnums;
+use App\Enums\StatusResults;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,5 +53,23 @@ class OtherStatus extends Model
     public function scopeTypeRealizationStatuses($query)
     {
         return $query->where('type', OtherStatusEnums::REALIZATION_STATUS_TYPE);
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeTypeRealizationStatusSuccess($query)
+    {
+        return $query->typeRealizationStatuses()->where('result', StatusResults::SUCCESS);
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeTypeRealizationStatusRefusal($query)
+    {
+        return $query->typeRealizationStatuses()->where('result', StatusResults::REFUSAL);
     }
 }

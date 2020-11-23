@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Log;
 use App\Order;
 use App\Product;
+use App\Repositories\RealizationStatusesRepository;
 use App\Scopes\ActiveScope;
 use App\Services\Quickrun\Orders\QuickSetOrderData;
 use Illuminate\Database\Eloquent\Builder;
@@ -117,6 +118,9 @@ class Realization extends Model
 
     public function scopeWithoutRefusal(Builder $query)
     {
+        if($statusRealization = (new RealizationStatusesRepository())->getRefusalStatus()){
+            $query->whereRaw('IFNULL(realization_status_id, "qwe") <> ?', [$statusRealization->id]);
+        }
         return $query->whereNull('reason_refusal_id');
     }
 

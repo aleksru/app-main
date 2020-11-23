@@ -88,14 +88,14 @@
                                 <input type="number" min="0" step="50" class="form-control" v-model="order.courier_payment">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" v-model="isShowRefusals">
-                                    Показать отказы
-                                 </label>
-                            </div>
-                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <div class="checkbox">-->
+<!--                                <label>-->
+<!--                                    <input type="checkbox" v-model="isShowRefusals">-->
+<!--                                    Показать отказы-->
+<!--                                 </label>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                 </form>
             </div>
@@ -118,8 +118,7 @@
                             <tr v-for="(product, index) in order.realizations"
                                 :key="product.id"
                                 :class="productMarginCheckByProductType(index) ? '' : 'bg-red'"
-                                :style="order.realizations[index].reason_refusal_id !== null ? {opacity: 0.4} : ''"
-                                v-show="showRealizationRefusal(index)">
+                                :style="order.realizations[index].reason_refusal_id !== null ? {opacity: 0.4} : ''">
                                 <td style="width: 2%">{{ index + 1  }}</td>
                                 <!--//Model-->
                                 <td style="width: 15%"> {{ order.realizations[index].product.product_name }} </td>

@@ -238,9 +238,7 @@ class LogisticController extends Controller
             'operator',
             'products',
             'logisticStatus',
-            'realizations' => function($query){
-                $query->withoutRefusal();
-            },
+            'realizations',
             'realizations.product',
             'stockStatus'
         ])->selectRaw('orders.*, delivery_periods.timeFrom, couriers.name as courier_name')
