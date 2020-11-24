@@ -126,14 +126,7 @@ class OrderRowHandler implements RowHandlerImp
 
     private function hasRowRealization(Realization $realization): bool
     {
-        if( (int)($realization->price) !== (int)($this->row->getProductPrice()) ){
-            return false;
-        }
-        if( ! $this->checkNamesProducts($realization->anyProduct) ){
-            return false;
-        }
-
-        return true;
+        return $this->checkNamesProducts($realization->anyProduct);
     }
 
 
@@ -142,7 +135,6 @@ class OrderRowHandler implements RowHandlerImp
         $strProductName = mb_strtolower(str_replace(' ', '', $product->product_name));
         $strRowProductName = mb_strtolower(str_replace(' ', '', $this->row->getProductName()));
         similar_text($strProductName, $strRowProductName, $p);
-
         return self::$PERCENT_SIMILAR_TEXT < ceil($p);
     }
 }
