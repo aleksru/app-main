@@ -109,6 +109,7 @@
                                 <th>IMEI</th>
                                 <th>Закупка</th>
                                 <th>Продажа</th>
+                                <th>Прибыль</th>
                                 <th>Поставщик</th>
                                 <th>Статус</th>
                                 <th>Причина отказа</th>
@@ -143,6 +144,10 @@
                                 <td style="width: 7%">
                                     <!--//price-->
                                     <input disabled type="number" min="0" step="50" class="form-control" v-model="order.realizations[index].price">
+                                </td>
+                                <td style="width: 7%">
+                                    <!--//price-->
+                                    <input disabled class="form-control" :value="getProfitOnPosition(index)">
                                 </td>
                                 <td style="width: 10%">
                                     <v-select v-if="showSuppliersForProduct(index)"
@@ -246,6 +251,13 @@
             },
             isService(i){
                 return this.order.realizations[i].product_type === SERVICE_TYPE
+            },
+
+            getProfitOnPosition(index){
+                if(this.isService(index) && this.order.realizations[index].product.product_name.toLowerCase().includes("доставка")){
+                    return this.order.realizations[index].price - this.order.courier_payment;
+                }
+                return this.order.realizations[index].price - this.order.realizations[index].price_opt
             },
 
             showSuppliersForProduct(index){
