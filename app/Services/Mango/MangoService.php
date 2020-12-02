@@ -43,7 +43,7 @@ class MangoService
     public function route(Route $route)
     {
         Log::channel('calls_route')->error(json_encode($route));
-        $res = (new MangoClient((array)$route,'commands/route'))->send();
+        $res = (new MangoClient($route,'commands/route'))->send();
         Log::channel('calls_route')->error($res);
         return $res;
     }
