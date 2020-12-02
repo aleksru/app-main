@@ -9,6 +9,7 @@ use App\Enums\MangoResultCodes;
 use App\Events\ResultCallBack;
 use App\Jobs\CallCreateOrder;
 use App\Jobs\ClientCallConnected;
+use App\Jobs\RouteReclamationCall;
 use App\Jobs\SaveCall;
 use App\Models\Operator;
 use App\Models\OrderStatus;
@@ -53,6 +54,12 @@ class ApiMangoController extends Controller
             //проверка на входящий звонок
             if ($data['location'] === 'ivr') {
                 Log::channel('order-calls')->error('ApiMangoController', $data);
+                $storeNum = $data['to']['number'] ?? null;
+                $clientNum = $data['from']['number'] ?? null;
+                $callId = $data['call_id'] ?? null;
+                if($storeNum && $clientNum && $callId){
+                    RouteReclamationCall::dispatch($clientNum, $storeNum, $callId)->onQueue('calls-route');
+                }
                 CallCreateOrder::dispatch($data)->onQueue('calls-order');
             }
         }
