@@ -20,4 +20,8 @@ return [
      * Включение\отключение отправки смс через манго
      */
     'enable_send_sms' => true,
+
+    'numbers' => [
+        'reclamations_group' => '666'
+    ]
 ];

@@ -100,6 +100,14 @@ return [
             'level' => 'debug',
         ],
 
+        'calls_route' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/calls_route.log'),
+            'days' => 2,
+            'permission' => 0777,
+            'level' => 'debug',
+        ],
+
         'order-calls' => [
             'driver' => 'daily',
             'path' => storage_path('logs/order-calls.log'),

@@ -21,10 +21,10 @@ class MangoClient
 
     /**
      * MangoClient constructor.
-     * @param array $data
+     * @param $data
      * @param string $uri
      */
-    public function __construct(array $data, string $uri)
+    public function __construct($data, string $uri)
     {
         $this->data = json_encode($data);
         $this->uri = $uri;

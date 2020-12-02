@@ -5,7 +5,9 @@ namespace App\Services\Mango;
 
 
 use App\Services\Mango\Commands\Callback;
+use App\Services\Mango\Commands\Route;
 use App\Services\Mango\Commands\SendSms;
+use Illuminate\Support\Facades\Log;
 
 class MangoService
 {
@@ -31,6 +33,19 @@ class MangoService
     public function callback(Callback $callback)
     {
         return (new MangoClient((array)$callback,'commands/callback'))->send();
+    }
+
+    /**
+     * @param Route $route
+     * @return array
+     * @throws \Exception
+     */
+    public function route(Route $route)
+    {
+        Log::channel('calls_route')->error(serialize($route));
+        $res = (new MangoClient((array)$route,'commands/route'))->send();
+        Log::channel('calls_route')->error($res);
+        return $res;
     }
 
     /**

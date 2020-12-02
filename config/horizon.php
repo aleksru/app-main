@@ -143,7 +143,7 @@ return [
         'production' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['default', 'calls', 'sms', 'calls-order', 'google-tables', 'files'],
+                'queue' => ['default', 'calls', 'sms', 'calls-order', 'google-tables', 'files', 'calls-route'],
                 'balance' => 'auto',
                 'processes' => 10,
                 'tries' => 3,
