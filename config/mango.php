@@ -22,6 +22,6 @@ return [
     'enable_send_sms' => true,
 
     'numbers' => [
-        'reclamations_group' => '666'
+        'reclamations_group' => '676'
     ]
 ];
