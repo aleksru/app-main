@@ -237,7 +237,8 @@ class OrderController extends Controller
     }
 
     /**
-     * @return json
+     * @param OrdersDatatable $ordersDatatable
+     * @return mixed
      */
     public function datatable(OrdersDatatable $ordersDatatable)
     {

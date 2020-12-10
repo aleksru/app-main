@@ -85,6 +85,10 @@ class OrdersDatatable
                 }
             })
             ->filterColumn('status_text', function ($query, $keyword) {
+                $values = array_filter(explode(',', $keyword));
+                if(count($values) > 0){
+                    return $query->whereIn('orders.status_id', $values);
+                }
                 if (preg_match('/[0-9]/', $keyword)){
                     return $query->whereRaw('orders.status_id = ' . $keyword);
                 }

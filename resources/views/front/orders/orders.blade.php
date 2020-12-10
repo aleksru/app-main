@@ -213,7 +213,8 @@
             data: {!! json_encode(App\Store::active()->select('id', 'name')->get()->toArray()) !!}
         },
         status_text: {
-            data: {!! json_encode(App\Models\OrderStatus::select('id', 'status as name')->get()->toArray()) !!}
+            data: {!! json_encode(App\Models\OrderStatus::select('id', 'status as name')->get()->toArray()) !!},
+            multi: true
         },
         courier: {
             data: {!! json_encode(App\Models\Courier::select('id', 'name')->get()->toArray()) !!}
@@ -255,7 +256,14 @@
             }
 
             if(columnName in individualSearchingColumnsSelect) {
-                let select = $('<select><option value=""></option></select>');
+                const isMulti = individualSearchingColumnsSelect[columnName]['multi'] === true;
+                let arrMultiNames = [];
+                let select = $('<select><option value="-"></option></select>');
+                if(isMulti){
+                    select.addClass(`js-${columnName}-basic-multiple`);
+                    select.attr('multiple', "multiple");
+                    arrMultiNames.push(columnName);
+                }
                 $(this).html(select);
                 for(let key in individualSearchingColumnsSelect[columnName]['data']) {
                     select.append( '<option value="' + individualSearchingColumnsSelect[columnName]['data'][key]['id'] + '">'
@@ -266,13 +274,24 @@
                     lockUpdate = true;
                     tableOrders.columns(i).search($(this).val()).draw();//, tableOrders.settings()[0].searchDelay;
                 });
+                for(let name of arrMultiNames){
+                    $(`.js-${name}-basic-multiple`).select2({
+                        allowClear: true,
+                        placeholder: "",
+                    });
+                }
             }
         } );
 
         $('thead').find('select').css('width', '80%').css('min-height', '32px');
         $('thead').find('input').css('width', '100%').css('padding', '3px').css('box-sizing', 'border-box');
     }
-
 </script>
 @endpush
-
+@push('css')
+    <style>
+        .select2-selection.select2-selection--multiple .select2-selection__choice{
+            font-size: 80%
+        }
+    </style>
+@endpush
