@@ -39,8 +39,18 @@ class ClientCallConnected implements ShouldQueue
         $operator = Operator::getOperatorBySipLogin($this->data['to']['number']);
         if($operator && $client && $user = $operator->user){
             $lastOrder = $client->orders()->max('id');
-            //Log::channel('custom')->error([$user->id, $client->phone, $lastOrder]);
+            Log::channel('calls_connected')->error('Operator: ' . $operator->sip_login . ', from number: ', $client->phone . ' connected');
             event(new OperatorCallConnected($user, $client, $lastOrder));
+        }else{
+            if(!$operator){
+                Log::channel('calls_connected')->error('Error: Operator: ' . $this->data['to']['number'] . ' Not found!');
+            }
+            if(!$client){
+                Log::channel('calls_connected')->error('Error: Client: ' . $this->data['from']['number'] . ' Not found!');
+            }
+            if(!$operator->user){
+                Log::channel('calls_connected')->error('Error: Operator: ' . $operator->id . ' account user Not found!');
+            }
         }
     }
 }
