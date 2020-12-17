@@ -99,7 +99,13 @@ return [
             'permission' => 0777,
             'level' => 'debug',
         ],
-
+        'calls_result_callback' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/calls_result_callback.log'),
+            'days' => 2,
+            'permission' => 0777,
+            'level' => 'debug',
+        ],
         'calls_route' => [
             'driver' => 'daily',
             'path' => storage_path('logs/calls_route.log'),
