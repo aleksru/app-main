@@ -48,7 +48,7 @@ class ClientCallConnected implements ShouldQueue
             if(!$client){
                 Log::channel('calls_connected')->error(['Error: Client: ' . $this->data['from']['number'] . ' Not found!']);
             }
-            if(!$operator->user){
+            if($operator && !$operator->user){
                 Log::channel('calls_connected')->error(['Error: Operator: ' . $operator->id . ' account user Not found!']);
             }
         }

@@ -41,7 +41,8 @@
             process(index){
                 this.send(index).then((res) => {
                     this.commandId = res.data.command_id;
-                    this.toastLoadingId = toast.loading('', {title: 'Соединение...'});
+                    toast.success(res.data.result, {timeout: 10 * 1000});
+                    this.toastLoadingId = toast.loading('', {title: 'Соединение...', timeout: 60 * 1000});
                     this.listenChannelCallResult();
                 }).catch((err) => {
                     toast.hide(this.toastLoadingId);

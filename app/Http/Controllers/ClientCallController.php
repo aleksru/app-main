@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\ClientCall;
 use App\Enums\MangoCallEnums;
+use App\Enums\MangoResultCodes;
 use App\MissedCall;
 use App\Models\Operator;
 use App\Repositories\OrderRepository;
@@ -44,10 +45,17 @@ class ClientCallController extends Controller
                 ->extension($operator->extension)
                 ->to_number($request->get('phone'));
         $mangoService = new MangoService();
-        $mangoService->callback($callback);
-        MissedCall::excludeOnNumber($request->get('phone'));
-
-        return response()->json(['command_id' => $uuid]);
+        try {
+            $res = $mangoService->callback($callback);
+            MissedCall::excludeOnNumber($request->get('phone'));
+            return response()->json([
+                'command_id' => $res['command_id'],
+                'result'     => MangoResultCodes::getDescriptionCode($res['result'])
+            ]);
+        }catch (\Exception $e){
+            Log::channel('calls')->error(['Exception', $res, $e]);
+            throw new \Exception('Ошибка передачи в Mango');
+        }
     }
 
     /**
