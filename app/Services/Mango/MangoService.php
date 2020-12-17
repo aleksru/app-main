@@ -32,7 +32,10 @@ class MangoService
      */
     public function callback(Callback $callback)
     {
-        return (new MangoClient((array)$callback,'commands/callback'))->send();
+        Log::channel('calls')->error([json_encode($callback)]);
+        $res = (new MangoClient((array)$callback,'commands/callback'))->send();
+        Log::channel('calls')->error($res);
+        return $res;
     }
 
     /**

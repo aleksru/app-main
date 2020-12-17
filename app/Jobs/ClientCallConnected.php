@@ -40,7 +40,7 @@ class ClientCallConnected implements ShouldQueue
         if($operator && $client && $user = $operator->user){
             $lastOrder = $client->orders()->max('id');
             event(new OperatorCallConnected($user, $client, $lastOrder));
-            Log::channel('calls_connected')->error(['Operator: ' . $operator->sip_login . ', from number: ', $client->phone . ' connected']);
+            Log::channel('calls_connected')->error(['Operator: ' . $operator->sip_login . ', from number: '. $client->phone . ' connected']);
         }else{
             if(!$operator){
                 Log::channel('calls_connected')->error(['Error: Operator: ' . $this->data['to']['number'] . ' Not found!']);

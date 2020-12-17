@@ -4,7 +4,7 @@
 namespace App\Services\Mango\Commands;
 
 
-class Callback
+class Callback implements \JsonSerializable
 {
     /**
      * Id command mango
@@ -86,4 +86,8 @@ class Callback
         return $this;
     }
 
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }
