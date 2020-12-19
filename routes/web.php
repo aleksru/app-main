@@ -54,6 +54,10 @@ Route::group(['middleware' =>'auth'], function() {
     Route::post('realizations-logistic/{realization}/update', 'OrderController@realizationLogisticUpdate')->name('realization.logistic.update');
     Route::get('orders/{order}/price/{product}', 'OrderController@getPriceProduct')->name('order.price.product');
 
+    //Reclamations
+    Route::get('reclamations', 'ReclamationController@index')->middleware('auth', 'role:reclamations')->name('reclamations.index');
+    Route::get('reclamations/datatable', 'ReclamationController@datatable')->middleware('auth', 'role:reclamations')->name('reclamations.datatable');
+
     //бегунок
     Route::post('quick/send/order/{order}', 'QuickController@sendOrder')->name('quick.send.order');
     Route::post('quick/check/order/{order}', 'QuickController@checkSendOrder')->name('quick.send.order.check');

@@ -10,4 +10,5 @@ class RoleOrderEnums
   const HEAD_STOCK = 'head_stock';
   const FULL_LOGISTIC = 'full_logistic';
   const ARCHIVE_REALIZATIONS = 'archive_realizations';
+  const RECLAMATIONS = 'reclamations';
 }

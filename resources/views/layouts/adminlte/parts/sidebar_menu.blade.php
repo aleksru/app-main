@@ -25,6 +25,7 @@
 
     @can('view', App\Order::class)
         <li><a href="{{ route('orders.index') }}"><i class="fa fa-newspaper-o"></i> <span>Заказы</span></a></li>
+        <li><a href="{{ route('reclamations.index') }}"><i class="fa fa-newspaper-o"></i> <span>Рекламации</span></a></li>
         <li><a href="{{ route('docs.index') }}"><i class="fa fa-print" aria-hidden="true"></i> <span>Принт-форм</span> </a></li>
         <li class="treeview">
             <a href="#"><i class="fa fa-book"></i> <span>Работа с заказом</span>

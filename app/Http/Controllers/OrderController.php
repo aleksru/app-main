@@ -19,6 +19,7 @@ use App\Models\OtherStatus;
 use App\Models\Realization;
 use App\Notifications\ClientCallBack;
 use App\Product;
+use App\Repositories\OrderStatusRepository;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -245,9 +246,11 @@ class OrderController extends Controller
         $isOperator = Cache::remember('is_operator_user_id_' . Auth::user()->id, Carbon::now()->addHours(2), function (){
             return Auth::user()->isOperator();
         });
+        $idStatusReclamation = (new OrderStatusRepository())->getIdsStatusComplaining();
         $ordersDatatable->setQuery(
             $ordersDatatable->getOrderQuery()
                             ->whereNotNull($isOperator ? 'orders.status_id' : 'orders.id')
+                            ->where('orders.status_id', '<>', $idStatusReclamation)
                             ->orderBy('updated_at', 'DESC')
                             ->orderBy('id', 'DESC'));
 
