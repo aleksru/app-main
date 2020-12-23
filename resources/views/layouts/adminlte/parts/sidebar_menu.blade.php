@@ -148,17 +148,23 @@
                 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{{ route('statistic.sales') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Продажи</span></a></li>
-                        <li><a href="{{ route('statistic.delivery_time') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Время доставки</span></a></li>
-                        <li><a href="{{ route('statistic.couriers') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Курьеры</span></a></li>
-                        <li><a href="{{ route('statistic.dates') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Даты</span></a></li>
-                        <li><a href="{{ route('statistic.operators') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Операторы</span></a></li>
-                        <li><a href="{{ route('statistic.stores') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Магазины</span></a></li>
-                        <li><a href="{{ route('statistic.products_categories') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Категории товара</span></a></li>
-                        <li><a href="{{ route('statistic.couriers_acc') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Курьеры аксы</span></a></li>
-                        <li><a href="{{ route('statistic.suppliers') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Поставщики</span></a></li>
-                        <li><a href="{{ route('statistic.pickup') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Самовывоз</span></a></li>
-                        <li><a href="{{ route('statistic.product_stores') }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Товары по магазинам</span></a></li>
+                        @php
+                            $dateFrom = request()->get('dateFrom');
+                            $dateTo = request()->get('dateTo');
+                            $isParamsDates = ($dateFrom != null && $dateTo != null);
+                        @endphp
+                        <li><a href="{{ route('statistic.sales', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}">
+                                <i class="fa fa-recycle" aria-hidden="true"></i> <span>Продажи</span></a></li>
+                        <li><a href="{{ route('statistic.delivery_time', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Время доставки</span></a></li>
+                        <li><a href="{{ route('statistic.couriers', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Курьеры</span></a></li>
+                        <li><a href="{{ route('statistic.dates', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Даты</span></a></li>
+                        <li><a href="{{ route('statistic.operators', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Операторы</span></a></li>
+                        <li><a href="{{ route('statistic.stores', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Магазины</span></a></li>
+                        <li><a href="{{ route('statistic.products_categories', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Категории товара</span></a></li>
+                        <li><a href="{{ route('statistic.couriers_acc', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Курьеры аксы</span></a></li>
+                        <li><a href="{{ route('statistic.suppliers', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Поставщики</span></a></li>
+                        <li><a href="{{ route('statistic.pickup', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Самовывоз</span></a></li>
+                        <li><a href="{{ route('statistic.product_stores', $isParamsDates ? ['dateFrom' => $dateFrom, 'dateTo' => $dateTo] : []) }}"><i class="fa fa-recycle" aria-hidden="true"></i> <span>Товары по магазинам</span></a></li>
                     </ul>
                 </li>
             </ul>
