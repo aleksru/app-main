@@ -206,7 +206,10 @@ class OrdersDatatable
                     return (! $isShowHiddenFields && $order->isNew()) ? 'XXXXXXXX' : ($order->client->name ?? 'Не указано');
                 }
             })
-            ->editColumn('store_text', function (Order $order) {
+            ->editColumn('store_text', function (Order $order)  use ($isShowHiddenFields) {
+                if(! $isShowHiddenFields && $order->isNew()){
+                    return 'XXXXXXXX';
+                }
                 return $order->store->name ?? $order->store_text;
 
             })
