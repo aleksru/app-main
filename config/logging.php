@@ -113,6 +113,13 @@ return [
             'permission' => 0777,
             'level' => 'debug',
         ],
+        'calls_missed' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/calls_missed.log'),
+            'days' => 2,
+            'permission' => 0777,
+            'level' => 'debug',
+        ],
         'calls_connected' => [
             'driver' => 'daily',
             'path' => storage_path('logs/calls_connected.log'),
