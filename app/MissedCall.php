@@ -53,7 +53,7 @@ class MissedCall extends Model
         if( ! $clientCall->isIncoming() ){
             throw new \InvalidArgumentException('ClientCall missed is only incoming!');
         }
-        \Illuminate\Support\Facades\Log::error($clientCall->from_number . ' ' . $clientCall->entry_id);
+        \Illuminate\Support\Facades\Log::channel('calls_missed')->error($clientCall->from_number . ' ' . $clientCall->entry_id);
         return self::create([
             'client_call_id' => $clientCall->id
         ]);
