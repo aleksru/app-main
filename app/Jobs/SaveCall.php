@@ -62,6 +62,10 @@ class SaveCall implements ShouldQueue
                 Log::channel('calls_missed_data')->error($data);
                 //Log::channel('custom')->error($data);
 
+                if(!isset($data['to']['extension'])){
+                    return ;
+                }
+
                 $clientCall = ClientCall::create([
                     'type'              => ClientCall::incomingCall,
                     'from_number'       => $data['from']['number'] ?? null,
