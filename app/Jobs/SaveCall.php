@@ -13,6 +13,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Log;
 
 class SaveCall implements ShouldQueue
 {
@@ -58,7 +59,7 @@ class SaveCall implements ShouldQueue
                 if($callRepository->getCountCallsFromNumber($data['from']['number']) === 0){
                     $isFirst = true;
                 }
-                //Log::channel('custom')->error('///////////////////////////пропущенный');
+                Log::channel('calls_missed_data')->error($data);
                 //Log::channel('custom')->error($data);
 
                 $clientCall = ClientCall::create([
