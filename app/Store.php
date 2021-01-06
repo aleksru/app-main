@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Enums\TypeCreatedOrder;
+use App\Models\OrderStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -137,5 +138,15 @@ class Store extends Model
     {
         $this->last_request_prices = Carbon::now();
         $this->save();
+    }
+
+    public function defaultOrderStatus()
+    {
+        return $this->belongsTo(OrderStatus::class, 'default_order_status_id', 'id');
+    }
+
+    public function hasDefaultOrderStatus(): bool
+    {
+        return $this->default_order_status_id != null;
     }
 }

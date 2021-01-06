@@ -102,6 +102,27 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="price_type_id" class="col-sm-2 control-label">Статус заказа по-умолчанию</label>
+
+                    <div class="col-sm-6">
+                        <select class="js-example-dosi-single form-control" name="default_order_status_id">
+                            @if(old('default_order_status_id'))
+                                <option value="{{ old('default_order_status_id') }}" selected>
+                                    {{ \App\Models\OrderStatus::find(old('default_order_status_id'))->status ?? '' }}
+                                </option>
+                            @else
+                                <option value="{{ old('default_order_status_id', $store->defaultOrderStatus->id ?? null) }}" selected>
+                                    {{ old('default_order_status_id', $store->defaultOrderStatus->status ?? 'Не выбран') }}
+                                </option>
+                            @endif
+                            <option value="">
+                                Не выбран
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="price_type_id" class="col-sm-2 control-label"></label>
                     <div class="col-sm-6">
                         <div class="pretty p-default p-curve p-thick">
@@ -142,6 +163,11 @@
                 data: pricelists,
             });
         });
-
+        let orderStatuses = {!!   json_encode(\App\Models\OrderStatus::select('id', 'status as text')->get()->toArray()) !!}
+        $(function() {
+            $('.js-example-dosi-single').select2({
+                data: orderStatuses,
+            });
+        });
     </script>
 @endpush

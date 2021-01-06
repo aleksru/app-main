@@ -31,6 +31,7 @@ class StoreRequest extends FormRequest
             'price_type_id' => 'integer|nullable',
             'url' => 'url|nullable',
             'is_disable_api_price' => 'integer|nullable',
+            'default_order_status_id' => 'integer|nullable',
         ];
     }
 }

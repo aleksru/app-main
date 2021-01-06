@@ -52,6 +52,11 @@
                         'width' => '10%',
                         'searchable' => true,
                     ],
+                    'default_order_status_id' => [
+                        'name' => 'Статус заказа',
+                        'width' => '10%',
+                        'searchable' => true,
+                    ],
                     'is_hidden' => [
                         'name' => 'Скрыть\показать',
                         'width' => '10%',

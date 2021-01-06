@@ -35,6 +35,18 @@ class OrderBuilder
         return $this;
     }
 
+    public function setStatusSpam(): self
+    {
+        $this->order->status_id = app(OrderStatusRepository::class)->getIdStatusSpam();
+        return $this;
+    }
+
+    public function setStatusId(int $id): self
+    {
+        $this->order->status_id = $id;
+        return $this;
+    }
+
     /**
      * @param Store|null $store
      * @return OrderBuilder

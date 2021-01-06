@@ -43,4 +43,11 @@ class OrderStatusRepository
             return OrderStatus::getIdStatusNew();
         });
     }
+
+    public function getIdStatusSpam(): ?int
+    {
+        return Cache::remember('ID_ORDER_STATUS_SPAM', Carbon::now()->addHours(4) ,function(){
+            return ($status = OrderStatus::getStatusSpam()) ? $status->id : null;
+        });
+    }
 }

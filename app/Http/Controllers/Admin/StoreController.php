@@ -74,7 +74,9 @@ class StoreController extends Controller
     {
         return datatables()
             ->of(
-                Store::query()->selectRaw('stores.*, price_types.name as price_list')
+                Store::query()
+                    ->with('defaultOrderStatus')
+                    ->selectRaw('stores.*, price_types.name as price_list')
                     ->leftJoin('price_types', 'stores.price_type_id', '=', 'price_types.id'))
             ->editColumn('actions', function (Store $store) {
                 return view('datatable.actions', [
@@ -104,6 +106,9 @@ class StoreController extends Controller
             })
             ->editColumn('is_disable_api_price', function (Store $store) {
                 return $store->is_disable_api_price ? 'НЕТ' : 'ДА';
+            })
+            ->editColumn('default_order_status_id', function (Store $store) {
+                return $store->hasDefaultOrderStatus() ? $store->defaultOrderStatus->status : '';
             })
             ->editColumn('last_request_prices', function (Store $store) {
                 return $store->last_request_prices ? $store->last_request_prices->format('d.m.Y H:i:s'): null;

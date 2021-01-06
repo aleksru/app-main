@@ -62,6 +62,13 @@ class CreateOrderHandler
 
     protected function setStatus()
     {
+        if( ! $this->store ){
+            $this->orderBuilder->setStatusSpam();
+            return;
+        }else if($this->store->hasDefaultOrderStatus()){
+            $this->orderBuilder->setStatusId($this->store->default_order_status_id);
+            return;
+        }
         $this->orderBuilder->setStatusNew();
     }
 

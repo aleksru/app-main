@@ -97,6 +97,11 @@ class OrderStatus extends Model
         return OrderStatus::where('status', 'like', '%' . Logist::STATUS_PREFIX . '%' )->pluck('id');
     }
 
+    public static function getStatusSpam(): ?self
+    {
+        return self::getStatusForType(self::STATUS_SPAM_PREFIX);
+    }
+
     /**
      * Ид для типа
      *
@@ -120,13 +125,7 @@ class OrderStatus extends Model
      */
     public static function getStatusForType(string $type)
     {
-        $status = OrderStatus::where('status', 'like', '%' . $type . '%' )->first();
-
-        if(!$status) {
-            return null;
-        }
-
-        return $status;
+        return OrderStatus::where('status', 'like', '%' . $type . '%' )->first();
     }
 
     /**
