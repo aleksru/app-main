@@ -27,8 +27,11 @@ class ReportController extends Controller
      */
     public function operators()
     {
-        return view('front.reports.index', ['table' => view('front.reports.tables.operators', ['tableName' => 'reportOperators']),
-                    'tableName' => 'reportOperators']);
+        return view('front.reports.index', [
+            'table' => view('front.reports.tables.operators', ['tableName' => 'reportOperators']),
+            'dopView' => view('front.operators.call_formula'),
+            'tableName' => 'reportOperators'
+        ]);
     }
 
     /**

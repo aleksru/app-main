@@ -29,32 +29,37 @@
                 <h3 class="box-title">Выберите даты</h3>
             </div>
             <div class="box-body">
-                <form id="report" method="post" action="{{ route('docs.report-full') }}">
-                    {{ csrf_field() }}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label>Дата начала</label>
-                            <input type="date" class="form-control" name="dateFrom" id="dateFrom">
-                        </div>
-                        <div class="col-md-2">
-                            <label>Дата окончания</label>
-                            <input type="date" name="dateTo" class="form-control" id="dateTo">
-                        </div>
-                        <div class="col-md-2">
-                            <label></label>
-                            <button type="submit" class="btn btn-primary form-control" id="btn-result">
-                                <p>Вывести</p>
-                                <img src="/images/preloader3.gif" style="display: none">
-                            </button>
-                        </div>
-                        <div class="col-md-2">
-                            <label></label>
-                            <button form="report" type="submit" class="btn btn-success form-control">
-                                Скачать полный отчет
-                            </button>
-                        </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <form id="report" method="post" action="{{ route('docs.report-full') }}">
+                            {{ csrf_field() }}
+                                <div class="col-md-3">
+                                    <label>Дата начала</label>
+                                    <input type="date" class="form-control" name="dateFrom" id="dateFrom">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Дата окончания</label>
+                                    <input type="date" name="dateTo" class="form-control" id="dateTo">
+                                </div>
+                                <div class="col-md-3">
+                                    <label></label>
+                                    <button type="submit" class="btn btn-primary form-control" id="btn-result">
+                                        <p>Вывести</p>
+                                        <img src="/images/preloader3.gif" style="display: none">
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <label></label>
+                                    <button form="report" type="submit" class="btn btn-success form-control">
+                                        Скачать полный отчет
+                                    </button>
+                                </div>
+                        </form>
                     </div>
-                </form>
+                    <div class="col-md-4">
+                        {!! $dopView ?? '' !!}
+                    </div>
+                </div>
             </div>
         </div>
 

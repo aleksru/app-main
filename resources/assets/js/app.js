@@ -73,6 +73,8 @@ Vue.component('CourierPrint', require('./components/Front/Logistic/CourierPrint.
 
 Vue.component('FastChanges', require('./components/Front/Logistic/FastChanges.vue'));
 
+Vue.component('CallFormula', require('./components/Front/Operators/CallFormula'));
+
 const app = new Vue({
     el: '#app'
 });
