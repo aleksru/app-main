@@ -30,7 +30,14 @@
 
             </div>
             <div class="box-body">
-                @include('front.reports.parts.dates', ['route' => route('reports.operators.evening')])
+                <div class="row">
+                    <div class="col-md-9">
+                        @include('front.reports.parts.dates', ['route' => route('reports.operators.evening')])
+                    </div>
+                    <div class="col-md-3">
+                        <call-formula></call-formula>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="box">
