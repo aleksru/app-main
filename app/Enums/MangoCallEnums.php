@@ -30,7 +30,7 @@ class MangoCallEnums
     const CALL_RESULT_MISSED   = 0;
 
     //Группа дозвона рекламаций
-    const CALL_GROUP_COMPLAINT = 666;
+    const CALL_GROUP_COMPLAINT = 676;
 
     /**
      * Номера рекламаций
