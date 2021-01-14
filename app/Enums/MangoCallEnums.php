@@ -35,5 +35,5 @@ class MangoCallEnums
     /**
      * Номера рекламаций
      */
-    const COMPLAINT_NUMBERS = [666, 686, 676];
+    const COMPLAINT_NUMBERS = [687, 688, 676];
 }
