@@ -18,3 +18,5 @@ yarn-error.log
 /public/js/*.*
 laravel-echo-server.json
 laravel-echo-server.lock
+/public/css/
+/public/js/

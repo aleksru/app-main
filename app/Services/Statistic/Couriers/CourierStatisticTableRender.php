@@ -13,14 +13,17 @@ class CourierStatisticTableRender extends GeneralReportTableRender
             'courierPayment' => [
                 'name' => 'ЗП курьера',
                 'width' => '5%',
+                'className' => 'sum',
             ],
             'sumPriceOpt' => [
                 'name' => 'Сумма закупки',
                 'width' => '5%',
+                'className' => 'sum',
             ],
             'sumPriceSales' => [
                 'name' => 'Сумма продажи',
                 'width' => '5%',
+                'className' => 'sum',
             ],
         ];
 

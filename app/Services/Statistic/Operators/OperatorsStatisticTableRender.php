@@ -19,14 +19,17 @@ class OperatorsStatisticTableRender extends GeneralReportTableRender
             'totalSumSalesAccessory' => [
                 'name' => 'Сумма продаж аксессуаров',
                 'width' => '5%',
+                'className' => 'sum',
             ],
             'countSalesAirPods' => [
                 'name' => 'Кол-во проданных аирподсов',
                 'width' => '5%',
+                'className' => 'sum',
             ],
             'totalSumSalesAirPods' => [
                 'name' => 'Сумма продаж аирподсов',
                 'width' => '5%',
+                'className' => 'sum',
             ],
         ];
 

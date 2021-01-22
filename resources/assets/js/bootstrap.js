@@ -23,6 +23,7 @@ try {
     require('bootstrap-sass');
     require('datatables.net');
     require('datatables.net-fixedcolumns-bs');
+    require('datatables.net-fixedheader-bs/js/fixedHeader.bootstrap.min');
     require('jquery-datatables-checkboxes');
     require ('admin-lte');
     require('jquery-slimscroll');

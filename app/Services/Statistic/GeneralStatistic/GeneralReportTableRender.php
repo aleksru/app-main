@@ -19,14 +19,17 @@ class GeneralReportTableRender extends BaseReportTableRender
         'done' => [
             'name' => 'Выполен',
             'width' => '5%',
+            'className' => 'sum',
         ],
         'missed' => [
             'name' => 'Отказ',
             'width' => '5%',
+            'className' => 'sum',
         ],
         'sumOrders' => [
             'name' => 'Итого',
             'width' => '5%',
+            'className' => 'sum',
         ],
         'percentDone' => [
             'name' => '% выполнен',
@@ -39,18 +42,22 @@ class GeneralReportTableRender extends BaseReportTableRender
         'profit' => [
             'name' => 'Прибыль',
             'width' => '5%',
+            'className' => 'sum',
         ],
         'avgInvoice' => [
             'name' => 'Средний чек',
             'width' => '5%',
+            'className' => 'avg',
         ],
         'avgMainInvoice' => [
             'name' => 'Средний чек(общ)',
             'width' => '5%',
+            'className' => 'avg',
         ],
         'avgProfit' => [
             'name' => 'Средняя прибыль',
             'width' => '5%',
+            'className' => 'avg',
         ],
         'percentOfTotal' => [
             'name' => '% прибыли от общего объема',
