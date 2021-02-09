@@ -18,7 +18,7 @@ class ChatMessageController extends Controller
     {
         $message = $chat->messages()->create($chatMessageRequest->validated());
         event(new NewChatMessage($message));
-
+        $message->notifyNewMessage();
         return response()->json(['message' => 'Успешно отправлено!']);
     }
 }

@@ -93,8 +93,13 @@
             //Пользовательский канал
             window.Echo.private(`App.User.${this.user.id}`)
                 .notification((notification) => {
+                    console.log(notification);
                     this.count = ++this.count;
-                    toast.warning('У вас есть новые уведомления!', {
+                    let text = 'У вас есть новые уведомления!';
+                    if(notification.message){
+                        text = text + "<br/>" + notification.message;
+                    }
+                    toast.warning(text, {
                         title: 'Внимание!',
                         timeout: 300 * 1000
                     });

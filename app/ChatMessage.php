@@ -4,6 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class ChatMessage
+ * @package App
+ */
 class ChatMessage extends Model
 {
     protected $guarded = ['id'];
@@ -22,5 +26,10 @@ class ChatMessage extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function notifyNewMessage()
+    {
+        $this->chat->notifyOnNewMessage($this);
     }
 }

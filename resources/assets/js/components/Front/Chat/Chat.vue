@@ -7,7 +7,7 @@
             <div class="direct-chat-messages">
                 <div v-for="(message) in messages" :class="'direct-chat-msg' + (message.user_id == init_user.id ? ' right' : '')" :key="message.id">
                     <div class="direct-chat-info clearfix">
-                        <span :class="'direct-chat-name' + (message.user_id == init_user.id ? ' pull-right' : ' pull-left')">{{message.user.description}}</span>
+                        <span :class="'direct-chat-name' + (message.user_id == init_user.id ? ' pull-right' : ' pull-left')">{{message.user ? message.user.description : 'Delete Profile'}}</span>
                         <span :class="'direct-chat-timestamp' + (message.user_id == init_user.id ? ' pull-left' : ' pull-right')">{{dateFormat(message.created_at)}}</span>
                     </div>
                     <div class="direct-chat-text">
