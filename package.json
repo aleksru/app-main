@@ -23,7 +23,7 @@
         "admin-lte": "^2.4.8",
         "air-datepicker": "^2.2.3",
         "awesome-bootstrap-checkbox": "^1.0.1",
-        "datatables.net": "^1.10.19",
+        "datatables.net": "^1.11.3",
         "datatables.net-buttons": "^1.5.3",
         "datatables.net-dt": "^1.10.19",
         "datatables.net-fixedcolumns-bs": "^3.2.6",
